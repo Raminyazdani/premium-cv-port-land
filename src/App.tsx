@@ -8,6 +8,7 @@ import { SkillsSection } from '@/components/sections/SkillsSection'
 import { ExperiencesSection } from '@/components/sections/ExperiencesSection'
 import { ProjectsSection } from '@/components/sections/ProjectsSection'
 import { PublicationsSection } from '@/components/sections/PublicationsSection'
+import { ReferencesSection } from '@/components/sections/ReferencesSection'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <LanguagesSection />
       <WorkshopAndCertificationsSection />
       <SkillsSection />
+      <ReferencesSection />
       <Toaster position="bottom-right" />
     </>
   )

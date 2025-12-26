@@ -220,9 +220,14 @@ export interface Certificate {
 
 export interface Reference {
   name?: string | null
-  reference?: string | null
-  email?: string | null
-  phone?: string | null
+  position?: string | null
+  department?: string | null
+  institution?: string | null
+  location?: string | null
+  email?: string[] | null
+  phone?: Phone[] | string | null
+  URL?: string | null
+  type_key?: string[] | null
 }
 
 export interface Experience {
