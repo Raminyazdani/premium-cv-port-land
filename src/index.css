@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
+@import './styles/themes.css';
 
 html {
   scroll-behavior: smooth;
@@ -12,41 +13,41 @@ html {
 }
 
 :root {
-  --background: oklch(1.00 0 0);
-  --foreground: oklch(0.10 0.005 240);
+  --background: var(--theme-background);
+  --foreground: var(--theme-text-primary);
 
-  --card: oklch(1.00 0 0);
-  --card-foreground: oklch(0.10 0.005 240);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-text-primary);
   
-  --popover: oklch(1.00 0 0);
-  --popover-foreground: oklch(0.10 0.005 240);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-text-primary);
 
-  --primary: oklch(0.45 0.15 260);
+  --primary: var(--theme-primary);
   --primary-foreground: oklch(1.00 0 0);
 
-  --secondary: oklch(0.98 0.002 240);
-  --secondary-foreground: oklch(0.35 0.008 240);
+  --secondary: var(--theme-secondary);
+  --secondary-foreground: oklch(1.00 0 0);
 
-  --muted: oklch(0.96 0.005 240);
-  --muted-foreground: oklch(0.45 0.01 240);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-text-secondary);
 
-  --accent: oklch(0.10 0.005 240);
+  --accent: var(--theme-accent);
   --accent-foreground: oklch(1.00 0 0);
 
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(1.00 0 0);
 
-  --border: oklch(0.88 0.01 240);
-  --input: oklch(1.00 0 0);
-  --ring: oklch(0.45 0.15 260);
+  --border: var(--theme-border);
+  --input: var(--theme-border);
+  --ring: var(--theme-primary);
 
   --radius: 0.5rem;
 
-  --font-sans: Inter;
+  --font-sans: var(--theme-font-family);
 
-  --font-serif: Noto Serif;
+  --font-serif: 'Noto Serif', Georgia, 'Times New Roman', serif;
 
-  --font-mono: JetBrains Mono;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
   --chart-1: oklch(0.45 0.15 260);
 
@@ -58,23 +59,23 @@ html {
 
   --chart-5: oklch(0.55 0.22 25);
 
-  --sidebar: oklch(0.96 0.005 240);
+  --sidebar: var(--theme-surface);
 
-  --sidebar-foreground: oklch(0.10 0.005 240);
+  --sidebar-foreground: var(--theme-text-primary);
 
-  --sidebar-primary: oklch(0.45 0.15 260);
+  --sidebar-primary: var(--theme-primary);
 
   --sidebar-primary-foreground: oklch(1.00 0 0);
 
-  --sidebar-accent: oklch(0.10 0.005 240);
+  --sidebar-accent: var(--theme-accent);
 
   --sidebar-accent-foreground: oklch(1.00 0 0);
 
-  --sidebar-border: oklch(0.88 0.01 240);
+  --sidebar-border: var(--theme-border);
 
-  --sidebar-ring: oklch(0.45 0.15 260);
+  --sidebar-ring: var(--theme-primary);
 
-  --shadow-color: oklch(0.10 0.005 240);
+  --shadow-color: var(--theme-text-primary);
 
   --shadow-opacity: 0.05;
 
@@ -85,36 +86,6 @@ html {
   --shadow-offset-x: 0px;
 
   --shadow-offset-y: 4px;
-}
-
-.dark {
-  --background: oklch(1.00 0 0);
-  --foreground: oklch(0.10 0.005 240);
-
-  --card: oklch(1.00 0 0);
-  --card-foreground: oklch(0.10 0.005 240);
-  
-  --popover: oklch(1.00 0 0);
-  --popover-foreground: oklch(0.10 0.005 240);
-
-  --primary: oklch(0.45 0.15 260);
-  --primary-foreground: oklch(1.00 0 0);
-
-  --secondary: oklch(0.98 0.002 240);
-  --secondary-foreground: oklch(0.35 0.008 240);
-
-  --muted: oklch(0.96 0.005 240);
-  --muted-foreground: oklch(0.45 0.01 240);
-
-  --accent: oklch(0.10 0.005 240);
-  --accent-foreground: oklch(1.00 0 0);
-
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(1.00 0 0);
-
-  --border: oklch(0.88 0.01 240);
-  --input: oklch(1.00 0 0);
-  --ring: oklch(0.45 0.15 260);
 }
 
 @theme {
@@ -147,7 +118,7 @@ html {
 }
 
 body {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family: var(--theme-font-family);
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -1,0 +1,137 @@
+/* Theme System - 6 Presets with CSS Custom Properties */
+
+/* ============================================
+   Default Theme Variables (Normal)
+   Clean, professional, neutral palette
+   ============================================ */
+:root {
+  --theme-primary: oklch(0.45 0.15 260);
+  --theme-secondary: oklch(0.35 0.008 240);
+  --theme-background: oklch(1.00 0 0);
+  --theme-surface: oklch(0.98 0.002 240);
+  --theme-text-primary: oklch(0.10 0.005 240);
+  --theme-text-secondary: oklch(0.45 0.01 240);
+  --theme-accent: oklch(0.45 0.15 260);
+  --theme-border: oklch(0.88 0.01 240);
+  --theme-shadow: oklch(0.10 0.005 240 / 0.05);
+  
+  --theme-font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   THEME: Normal (Default)
+   Clean, professional, neutral palette
+   ============================================ */
+[data-theme="normal"] {
+  --theme-primary: oklch(0.45 0.15 260);
+  --theme-secondary: oklch(0.35 0.008 240);
+  --theme-background: oklch(1.00 0 0);
+  --theme-surface: oklch(0.98 0.002 240);
+  --theme-text-primary: oklch(0.10 0.005 240);
+  --theme-text-secondary: oklch(0.45 0.01 240);
+  --theme-accent: oklch(0.45 0.15 260);
+  --theme-border: oklch(0.88 0.01 240);
+  --theme-shadow: oklch(0.10 0.005 240 / 0.05);
+  
+  --theme-font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   THEME: Academic
+   Scholarly, serif-based, traditional feel
+   ============================================ */
+[data-theme="academic"] {
+  --theme-primary: oklch(0.25 0.04 260);
+  --theme-secondary: oklch(0.40 0.03 30);
+  --theme-background: oklch(0.99 0.01 60);
+  --theme-surface: oklch(0.96 0.01 60);
+  --theme-text-primary: oklch(0.15 0.01 260);
+  --theme-text-secondary: oklch(0.40 0.02 260);
+  --theme-accent: oklch(0.50 0.12 30);
+  --theme-border: oklch(0.85 0.01 260);
+  --theme-shadow: oklch(0.15 0.01 260 / 0.08);
+  
+  --theme-font-family: 'Noto Serif', Georgia, 'Times New Roman', serif;
+}
+
+/* ============================================
+   THEME: Apple-like
+   Sleek, minimal, refined aesthetics
+   ============================================ */
+[data-theme="apple"] {
+  --theme-primary: oklch(0.50 0.18 270);
+  --theme-secondary: oklch(0.70 0.02 240);
+  --theme-background: oklch(0.98 0.002 240);
+  --theme-surface: oklch(1.00 0 0);
+  --theme-text-primary: oklch(0.12 0.005 240);
+  --theme-text-secondary: oklch(0.50 0.01 240);
+  --theme-accent: oklch(0.60 0.20 210);
+  --theme-border: oklch(0.90 0.005 240);
+  --theme-shadow: oklch(0.12 0.005 240 / 0.04);
+  
+  --theme-font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+}
+
+/* ============================================
+   THEME: Dark
+   High contrast, modern dark mode
+   ============================================ */
+[data-theme="dark"] {
+  --theme-primary: oklch(0.70 0.18 260);
+  --theme-secondary: oklch(0.60 0.10 240);
+  --theme-background: oklch(0.15 0.01 240);
+  --theme-surface: oklch(0.20 0.01 240);
+  --theme-text-primary: oklch(0.95 0.005 240);
+  --theme-text-secondary: oklch(0.65 0.01 240);
+  --theme-accent: oklch(0.75 0.20 210);
+  --theme-border: oklch(0.30 0.01 240);
+  --theme-shadow: oklch(0.05 0.01 240 / 0.3);
+  
+  --theme-font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   THEME: Bright
+   Vibrant, energetic, high saturation
+   ============================================ */
+[data-theme="bright"] {
+  --theme-primary: oklch(0.55 0.25 290);
+  --theme-secondary: oklch(0.65 0.20 50);
+  --theme-background: oklch(0.99 0.01 100);
+  --theme-surface: oklch(0.97 0.02 100);
+  --theme-text-primary: oklch(0.10 0.01 260);
+  --theme-text-secondary: oklch(0.40 0.05 260);
+  --theme-accent: oklch(0.60 0.28 160);
+  --theme-border: oklch(0.80 0.05 100);
+  --theme-shadow: oklch(0.55 0.25 290 / 0.12);
+  
+  --theme-font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   THEME: Futuristic
+   Tech-forward, neon accents, sci-fi vibe
+   ============================================ */
+[data-theme="futuristic"] {
+  --theme-primary: oklch(0.65 0.25 200);
+  --theme-secondary: oklch(0.60 0.22 310);
+  --theme-background: oklch(0.12 0.02 240);
+  --theme-surface: oklch(0.18 0.02 240);
+  --theme-text-primary: oklch(0.92 0.03 200);
+  --theme-text-secondary: oklch(0.70 0.08 200);
+  --theme-accent: oklch(0.70 0.30 150);
+  --theme-border: oklch(0.30 0.08 200);
+  --theme-shadow: oklch(0.65 0.25 200 / 0.2);
+  
+  --theme-font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* ============================================
+   Apply theme to body
+   ============================================ */
+body {
+  font-family: var(--theme-font-family);
+  background-color: var(--theme-background);
+  color: var(--theme-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

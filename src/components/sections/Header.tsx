@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, X } from '@phosphor-icons/react'
 import { getBasics, getFullName } from '@/lib/cv-data'
+import { ThemeSelector } from '@/components/ThemeSelector'
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -72,29 +73,35 @@ export function Header() {
                 {item.label}
               </a>
             ))}
+            <div className="ml-2">
+              <ThemeSelector />
+            </div>
           </nav>
 
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" aria-label="Open menu">
-                <List size={24} weight="bold" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-64">
-              <div className="flex flex-col gap-4 mt-8">
-                {navItems.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
-                    className="px-4 py-3 text-base font-medium text-foreground hover:bg-accent rounded-md transition-colors"
-                  >
-                    {item.label}
-                  </a>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeSelector />
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Open menu">
+                  <List size={24} weight="bold" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-64">
+                <div className="flex flex-col gap-4 mt-8">
+                  {navItems.map((item) => (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href)}
+                      className="px-4 py-3 text-base font-medium text-foreground hover:bg-accent rounded-md transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>
