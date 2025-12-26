@@ -102,9 +102,31 @@ export interface Publication {
   type_key?: TypeKey[] | null
 }
 
+export interface LanguageProficiency {
+  level?: string | null
+  CEFR?: string | null
+  status?: string | null
+}
+
+export interface LanguageCertification {
+  test?: string | null
+  organization?: string | null
+  overall?: number | null
+  reading?: number | null
+  writing?: number | null
+  listening?: number | null
+  speaking?: number | null
+  maxScore?: number | null
+  minScore?: number | null
+  examDate?: string | null
+  URL?: string | null
+}
+
 export interface Language {
   language?: string | null
   fluency?: string | null
+  proficiency?: LanguageProficiency | null
+  certifications?: LanguageCertification[] | null
 }
 
 export interface Certificate {
