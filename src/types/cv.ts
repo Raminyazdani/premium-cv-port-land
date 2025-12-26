@@ -61,6 +61,24 @@ export interface Education {
   type_key?: string[] | null
 }
 
+export interface SkillItem {
+  long_name: string
+  short_name: string
+  type_key: string[]
+}
+
+export interface SkillSubcategory {
+  [subcategoryName: string]: SkillItem[]
+}
+
+export interface SkillCategory {
+  [categoryName: string]: SkillSubcategory
+}
+
+export interface Skills {
+  [topCategoryName: string]: SkillCategory
+}
+
 export interface Skill {
   name?: string | null
   level?: string | null
@@ -164,7 +182,7 @@ export interface CVData {
   profiles?: Profile[] | null
   work?: Work[] | null
   education?: Education[] | null
-  skills?: Skill[] | null
+  skills?: Skills | Skill[] | null
   projects?: Project[] | null
   publications?: Publication[] | null
   languages?: Language[] | null

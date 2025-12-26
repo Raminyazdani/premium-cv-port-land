@@ -5,6 +5,7 @@ import { ProfilesSection } from '@/components/sections/ProfilesSection'
 import { EducationSection } from '@/components/sections/EducationSection'
 import { LanguagesSection } from '@/components/sections/LanguagesSection'
 import { WorkshopAndCertificationsSection } from '@/components/sections/WorkshopAndCertificationsSection'
+import { SkillsSection } from '@/components/sections/SkillsSection'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <EducationSection />
       <LanguagesSection />
       <WorkshopAndCertificationsSection />
+      <SkillsSection />
       <Toaster position="bottom-right" />
     </>
   )
