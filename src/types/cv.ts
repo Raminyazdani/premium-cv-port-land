@@ -129,6 +129,21 @@ export interface Language {
   certifications?: LanguageCertification[] | null
 }
 
+export interface Certification {
+  name?: string | null
+  date?: string | null
+  duration?: string | null
+  certificate?: boolean | null
+  URL?: string | null
+  type_key?: string[] | null
+  date_parse_error?: boolean | null
+}
+
+export interface WorkshopIssuer {
+  issuer?: string | null
+  certifications?: Certification[] | null
+}
+
 export interface Certificate {
   name?: string | null
   date?: string | null
@@ -153,7 +168,7 @@ export interface CVData {
   projects?: Project[] | null
   publications?: Publication[] | null
   languages?: Language[] | null
-  workshop_and_certifications?: Certificate[] | null
+  workshop_and_certifications?: WorkshopIssuer[] | null
   references?: Reference[] | null
   experiences?: Work[] | null
 }
