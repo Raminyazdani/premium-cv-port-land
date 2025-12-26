@@ -173,6 +173,16 @@ export interface Reference {
   phone?: string | null
 }
 
+export interface Experience {
+  role?: string | null
+  institution?: string | null
+  duration?: string | null
+  primaryFocus?: string | null
+  description?: string | null
+  startDate?: string | null
+  endDate?: string | null
+}
+
 export interface CVData {
   basics?: Basics[] | Basics | null
   profiles?: Profile[] | null
@@ -184,5 +194,5 @@ export interface CVData {
   languages?: Language[] | null
   workshop_and_certifications?: WorkshopIssuer[] | null
   references?: Reference[] | null
-  experiences?: Work[] | null
+  experiences?: Experience[] | null
 }
