@@ -1,13 +1,30 @@
-import type { CVData } from '@/types/cv'
+import type { CVData, Basics, Location } from '@/types/cv'
 import cvDataJson from '@/data/cv.json'
 
 export function getCVData(): CVData {
-  return cvDataJson as CVData
+  return cvDataJson as unknown as CVData
 }
 
-export function getBasics() {
+export function getBasics(): Basics | null {
   const data = getCVData()
-  return data.basics ?? null
+  
+  if (!data.basics) return null
+  
+  if (Array.isArray(data.basics)) {
+    return data.basics[0] ?? null
+  }
+  
+  return data.basics
+}
+
+export function getFullName(basics: Basics | null): string {
+  if (!basics) return ''
+  
+  if (basics.fname || basics.lname) {
+    return [basics.fname, basics.lname].filter(Boolean).join(' ').trim() || 'Unknown'
+  }
+  
+  return basics.name ?? 'Unknown'
 }
 
 export function getProfilePhotoUrl(): string | null {
@@ -34,9 +51,22 @@ export function getInitials(name?: string | null): string {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
 }
 
-export function formatLocation(location?: { city?: string | null, region?: string | null, country?: string | null } | null): string {
+export function formatLocation(location?: Location | Location[] | null): string {
   if (!location) return ''
   
-  const parts = [location.city, location.region, location.country].filter(Boolean)
+  const loc = Array.isArray(location) ? location[0] : location
+  if (!loc) return ''
+  
+  const parts = [loc.city, loc.region, loc.country].filter(Boolean)
   return parts.join(', ')
+}
+
+export function getRoles(label?: string | string[] | null): string[] {
+  if (!label) return []
+  
+  if (Array.isArray(label)) {
+    return label.filter(Boolean)
+  }
+  
+  return label.split('·').map(r => r.trim()).filter(Boolean)
 }

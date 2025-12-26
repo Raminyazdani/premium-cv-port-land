@@ -19,14 +19,16 @@ export interface Location {
 }
 
 export interface Basics {
+  fname?: string | null
+  lname?: string | null
   name?: string | null
-  label?: string | null
+  label?: string | string[] | null
   image?: string | null
   email?: string | null
   phone?: Phone | null
   url?: string | null
   summary?: string | null
-  location?: Location | null
+  location?: Location | Location[] | null
   profiles?: Profile[] | null
   birthDate?: string | null
   Pictures?: Picture[] | null
@@ -117,7 +119,8 @@ export interface Reference {
 }
 
 export interface CVData {
-  basics?: Basics | null
+  basics?: Basics[] | Basics | null
+  profiles?: Profile[] | null
   work?: Work[] | null
   education?: Education[] | null
   skills?: Skill[] | null
@@ -126,4 +129,5 @@ export interface CVData {
   languages?: Language[] | null
   workshop_and_certifications?: Certificate[] | null
   references?: Reference[] | null
+  experiences?: Work[] | null
 }

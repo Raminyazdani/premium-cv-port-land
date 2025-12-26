@@ -16,7 +16,7 @@ import {
   Eye,
   EyeSlash
 } from '@phosphor-icons/react'
-import { getBasics, getProfilePhotoUrl, getInitials, formatLocation } from '@/lib/cv-data'
+import { getBasics, getProfilePhotoUrl, getInitials, formatLocation, getFullName, getRoles } from '@/lib/cv-data'
 import { copyToClipboard } from '@/lib/clipboard'
 import type { Profile } from '@/types/cv'
 
@@ -94,12 +94,12 @@ export function BasicsSection() {
   }
   
   const photoUrl = getProfilePhotoUrl()
-  const initials = getInitials(basics.name)
+  const fullName = getFullName(basics)
+  const initials = getInitials(fullName)
   const location = formatLocation(basics.location)
-  const roles = basics.label?.split('·').map(r => r.trim()) ?? []
+  const roles = getRoles(basics.label)
   
   const summary = basics.summary ?? ''
-  const summaryLines = summary.split('\n').filter(Boolean)
   const shouldTruncate = summary.length > 200
   const displaySummary = summaryExpanded || !shouldTruncate 
     ? summary 
@@ -121,7 +121,7 @@ export function BasicsSection() {
         <div className="grid lg:grid-cols-[300px_1fr] gap-12 items-center">
           <div className="flex flex-col items-center lg:items-start gap-6">
             <Avatar className="h-64 w-64 border-4 border-background shadow-2xl">
-              <AvatarImage src={photoUrl ?? undefined} alt={basics.name ?? 'Profile'} />
+              <AvatarImage src={photoUrl ?? undefined} alt={fullName ?? 'Profile'} />
               <AvatarFallback className="text-6xl font-bold bg-primary text-primary-foreground">
                 {initials}
               </AvatarFallback>
@@ -139,7 +139,7 @@ export function BasicsSection() {
           <div className="flex flex-col gap-6 text-center lg:text-left">
             <div>
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-4">
-                {basics.name ?? 'Unknown'}
+                {fullName}
               </h1>
               
               {roles.length > 0 && (
