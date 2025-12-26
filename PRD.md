@@ -19,6 +19,13 @@ This is a content-rich portfolio site with filtering, search, privacy toggles, a
 - **Progression**: View hero → Reveal phone (optional) → Copy contact info → Navigate to sections
 - **Success criteria**: All contact actions work; privacy toggle functions; responsive across devices
 
+### Profiles Section
+- **Functionality**: Display professional and academic social profiles (LinkedIn, GitHub, Google Scholar, ORCID) as interactive icon links
+- **Purpose**: Enable visitors to connect across multiple platforms and verify professional identity
+- **Trigger**: Loads after hero section
+- **Progression**: View profile icons → Hover for tooltip → Click to visit profile → Optional: Open menu to copy link
+- **Success criteria**: Icons display with tooltips; links open in new tabs with rel="me"; copy action works; profiles ordered by importance (LinkedIn/GitHub first, then academic)
+
 ### Navigation & Routing
 - **Functionality**: Smooth section navigation with active states
 - **Purpose**: Allow quick access to any CV section
@@ -50,7 +57,11 @@ This is a content-rich portfolio site with filtering, search, privacy toggles, a
 ## Edge Case Handling
 
 - **Missing profile photo**: Show elegant placeholder with initials
-- **No social profiles**: Hide social section gracefully
+- **No social profiles**: Hide social section gracefully with empty state message
+- **Empty profiles section**: Display contextual message "No profiles available"
+- **Invalid profile URLs**: Validate and omit profiles without valid URLs
+- **Missing network names**: Display as "Profile" with globe icon
+- **Network name variants**: Normalize variants (e.g., "ORCHID" → "ORCID")
 - **Empty sections**: Display "Coming soon" or contextual message
 - **Long names/titles**: Truncate with ellipsis; show full on hover/focus
 - **Invalid URLs**: Validate and show fallback or omit

@@ -38,6 +38,7 @@ export interface Profile {
   network?: string | null
   username?: string | null
   url?: string | null
+  uuid?: string | null
 }
 
 export interface TypeKey {
