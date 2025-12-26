@@ -48,14 +48,17 @@ export interface TypeKey {
 
 export interface Education {
   institution?: string | null
+  location?: string | null
   url?: string | null
   area?: string | null
   studyType?: string | null
   startDate?: string | null
   endDate?: string | null
+  gpa?: string | null
   score?: string | null
+  logo_url?: string | null
   courses?: string[] | null
-  type_key?: TypeKey[] | null
+  type_key?: string[] | null
 }
 
 export interface Skill {
