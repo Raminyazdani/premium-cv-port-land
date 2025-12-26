@@ -3,76 +3,76 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {
   Code,
   MagnifyingGlass,
   X,
   Tag,
   Info,
+  CaretRight,
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
 import type { SkillItem, Skills } from '@/types/cv'
 import { useIsMobile } from '@/hooks/use-mobile'
 
-interface SkillChipProps {
+interface SkillBadgeProps {
   skill: SkillItem
 }
 
-function SkillChip({ skill }: SkillChipProps) {
+function SkillBadge({ skill }: SkillBadgeProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const hasDetails = skill.long_name !== skill.short_name || (skill.type_key && skill.type_key.filter(k => k !== 'Full CV').length > 0)
+
+  if (!hasDetails) {
+    return (
+      <Badge 
+        variant="secondary"
+        className="text-xs font-medium px-2 py-0.5"
+      >
+        {skill.short_name}
+      </Badge>
+    )
+  }
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-auto py-2 px-3 hover:bg-accent hover:text-accent-foreground transition-all duration-200 group"
-          aria-label={`View details for ${skill.short_name}`}
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Badge 
+          variant="secondary"
+          className="text-xs font-medium px-2 py-0.5 cursor-pointer hover:bg-accent transition-colors"
         >
-          <span className="font-medium text-sm">{skill.short_name}</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="right" className="w-full sm:max-w-lg">
-        <SheetHeader>
-          <SheetTitle className="text-2xl font-bold">{skill.long_name}</SheetTitle>
-          <SheetDescription className="text-sm text-muted-foreground">
-            Skill details and categories
-          </SheetDescription>
-        </SheetHeader>
+          {skill.short_name}
+        </Badge>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>{skill.long_name}</DialogTitle>
+          <DialogDescription>Skill details</DialogDescription>
+        </DialogHeader>
         
-        <div className="mt-6 space-y-6">
-          <div>
-            <h4 className="font-semibold text-sm text-muted-foreground mb-2 flex items-center gap-2">
-              <Tag size={16} weight="fill" />
-              Short Name
-            </h4>
-            <p className="text-base">{skill.short_name}</p>
-          </div>
-
-          {skill.type_key && skill.type_key.length > 0 && (
+        <div className="space-y-4 pt-4">
+          {skill.type_key && skill.type_key.filter(k => k !== 'Full CV').length > 0 && (
             <div>
-              <h4 className="font-semibold text-sm text-muted-foreground mb-3 flex items-center gap-2">
-                <Code size={16} weight="fill" />
+              <h4 className="text-sm font-semibold mb-2 flex items-center gap-1.5">
+                <Tag size={14} weight="fill" className="text-muted-foreground" />
                 Categories
               </h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {skill.type_key
                   .filter(key => key !== 'Full CV')
                   .map((key, idx) => (
                     <Badge 
                       key={idx} 
-                      variant="secondary"
+                      variant="outline"
                       className="text-xs"
                     >
                       {key}
@@ -82,31 +82,28 @@ function SkillChip({ skill }: SkillChipProps) {
             </div>
           )}
         </div>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   )
 }
 
-interface SubcategoryCardProps {
+interface SkillGroupProps {
   subcategoryName: string
   skills: SkillItem[]
 }
 
-function SubcategoryCard({ subcategoryName, skills }: SubcategoryCardProps) {
+function SkillGroup({ subcategoryName, skills }: SkillGroupProps) {
   return (
-    <Card className="hover:shadow-md transition-all duration-200">
-      <CardContent className="p-5">
-        <h4 className="font-semibold text-base mb-4 text-foreground flex items-center gap-2">
-          <Code size={18} weight="duotone" className="text-primary" />
-          {subcategoryName}
-        </h4>
-        <div className="flex flex-wrap gap-2">
-          {skills.map((skill, idx) => (
-            <SkillChip key={idx} skill={skill} />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="border-l-2 border-primary/20 pl-4 py-2">
+      <h4 className="text-sm font-semibold text-foreground mb-2">
+        {subcategoryName}
+      </h4>
+      <div className="flex flex-wrap gap-1.5">
+        {skills.map((skill, idx) => (
+          <SkillBadge key={idx} skill={skill} />
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -117,7 +114,6 @@ export function SkillsSection() {
   
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
-  const [selectedTopCategory, setSelectedTopCategory] = useState<string>('')
 
   const allTypeKeys = useMemo(() => {
     const keysSet = new Set<string>()
@@ -152,20 +148,12 @@ export function SkillsSection() {
   const clearFilters = () => {
     setSelectedFilters([])
     setSearchQuery('')
-    setSelectedTopCategory('')
   }
 
   const filteredSkills = useMemo(() => {
     const result: Skills = {}
 
-    const topCategoriesToProcess = selectedTopCategory 
-      ? [selectedTopCategory] 
-      : topCategories
-
-    topCategoriesToProcess.forEach(topCat => {
-      const category = skills[topCat]
-      if (!category) return
-
+    Object.entries(skills).forEach(([topCat, category]) => {
       const filteredCategory: typeof category = {}
 
       Object.entries(category).forEach(([skillGroupName, skillsList]) => {
@@ -193,7 +181,7 @@ export function SkillsSection() {
     })
 
     return result
-  }, [skills, searchQuery, selectedFilters, selectedTopCategory, topCategories])
+  }, [skills, searchQuery, selectedFilters])
 
   const totalSkillsCount = useMemo(() => {
     let count = 0
@@ -209,7 +197,7 @@ export function SkillsSection() {
 
   if (!skills || Object.keys(skills).length === 0) {
     return (
-      <section className="w-full min-h-screen bg-gradient-to-b from-background to-muted/30 py-16 px-4">
+      <section className="w-full py-16 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-12">
             <Code size={48} weight="duotone" className="mx-auto mb-4 text-muted-foreground" />
@@ -222,140 +210,118 @@ export function SkillsSection() {
   }
 
   return (
-    <section id="skills" className="w-full min-h-screen bg-gradient-to-b from-background via-muted/10 to-background py-16 px-4">
+    <section id="skills" className="w-full py-16 px-4 bg-background">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+        <div className="mb-8">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-3">
             Technical Skills
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore my diverse technical expertise across programming, bioinformatics, data science, and laboratory techniques
+          <p className="text-base text-muted-foreground">
+            Comprehensive technical expertise across multiple domains
           </p>
         </div>
 
-        <Card className="mb-8 shadow-lg">
-          <CardContent className="p-6 space-y-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1 relative">
-                <MagnifyingGlass 
-                  size={20} 
-                  weight="bold" 
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" 
-                />
-                <Input
-                  type="text"
-                  placeholder="Search skills (e.g., Python, React, BLAST...)"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-10"
-                  aria-label="Search skills"
-                />
-                {searchQuery && (
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                    aria-label="Clear search"
-                  >
-                    <X size={16} />
-                  </Button>
-                )}
-              </div>
-
-              {(selectedFilters.length > 0 || searchQuery || selectedTopCategory) && (
+        <div className="mb-6 space-y-4">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex-1 relative">
+              <MagnifyingGlass 
+                size={18} 
+                weight="bold" 
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" 
+              />
+              <Input
+                type="text"
+                placeholder="Search skills..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-9 h-10"
+                aria-label="Search skills"
+              />
+              {searchQuery && (
                 <Button
-                  variant="outline"
-                  onClick={clearFilters}
-                  className="shrink-0"
-                  aria-label="Clear all filters"
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                  aria-label="Clear search"
                 >
-                  <X size={16} className="mr-2" />
-                  Clear All
+                  <X size={14} />
                 </Button>
               )}
             </div>
 
-            {topCategories.length > 1 && (
-              <div>
-                <h3 className="text-sm font-semibold text-muted-foreground mb-3">Filter by Domain</h3>
-                <div className="flex flex-wrap gap-2">
-                  {topCategories.map(topCat => (
-                    <Button
-                      key={topCat}
-                      size="sm"
-                      variant={selectedTopCategory === topCat ? 'default' : 'outline'}
-                      onClick={() => setSelectedTopCategory(selectedTopCategory === topCat ? '' : topCat)}
-                      className="transition-all duration-200"
-                    >
-                      {topCat}
-                    </Button>
-                  ))}
-                </div>
-              </div>
+            {(selectedFilters.length > 0 || searchQuery) && (
+              <Button
+                variant="outline"
+                onClick={clearFilters}
+                size="sm"
+                className="shrink-0"
+                aria-label="Clear all filters"
+              >
+                <X size={14} className="mr-1.5" />
+                Clear
+              </Button>
             )}
+          </div>
 
-            {allTypeKeys.length > 0 && (
-              <div>
-                <h3 className="text-sm font-semibold text-muted-foreground mb-3">Filter by Category</h3>
-                <div className="flex flex-wrap gap-2">
-                  {allTypeKeys.map(key => (
-                    <Badge
-                      key={key}
-                      variant={selectedFilters.includes(key) ? 'default' : 'outline'}
-                      className="cursor-pointer hover:opacity-80 transition-all duration-200"
-                      onClick={() => toggleFilter(key)}
-                    >
-                      {key}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between text-sm text-muted-foreground pt-2">
-              <div className="flex items-center gap-2">
-                <Info size={16} weight="fill" />
-                <span>{totalSkillsCount} skill{totalSkillsCount !== 1 ? 's' : ''} found</span>
-              </div>
+          {allTypeKeys.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {allTypeKeys.map(key => (
+                <Badge
+                  key={key}
+                  variant={selectedFilters.includes(key) ? 'default' : 'outline'}
+                  className="cursor-pointer hover:opacity-80 transition-opacity text-xs"
+                  onClick={() => toggleFilter(key)}
+                >
+                  {key}
+                </Badge>
+              ))}
             </div>
-          </CardContent>
-        </Card>
+          )}
+
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Info size={14} weight="fill" />
+            <span>{totalSkillsCount} skill{totalSkillsCount !== 1 ? 's' : ''}</span>
+          </div>
+        </div>
 
         {Object.keys(filteredSkills).length === 0 ? (
-          <Card className="shadow-lg">
-            <CardContent className="py-16 text-center">
-              <MagnifyingGlass size={48} weight="duotone" className="mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-lg font-semibold mb-2">No skills match your filters</h3>
-              <p className="text-sm text-muted-foreground mb-4">Try adjusting your search or filters</p>
-              <Button variant="outline" onClick={clearFilters}>
+          <Card>
+            <CardContent className="py-12 text-center">
+              <MagnifyingGlass size={40} weight="duotone" className="mx-auto mb-3 text-muted-foreground" />
+              <h3 className="text-base font-semibold mb-1">No matching skills</h3>
+              <p className="text-sm text-muted-foreground mb-3">Try adjusting your filters</p>
+              <Button variant="outline" size="sm" onClick={clearFilters}>
                 Clear Filters
               </Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-12">
+          <Tabs defaultValue={topCategories[0]} className="w-full">
+            <TabsList className="w-full justify-start h-auto flex-wrap gap-1 bg-muted/50 p-1">
+              {topCategories.map(topCat => (
+                <TabsTrigger 
+                  key={topCat} 
+                  value={topCat}
+                  className="text-xs px-3 py-1.5 data-[state=active]:bg-background"
+                >
+                  {topCat}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
             {Object.entries(filteredSkills).map(([topCategory, category]) => (
-              <div key={topCategory}>
-                <h3 className="text-2xl sm:text-3xl font-bold mb-6 flex items-center gap-3">
-                  <Code size={28} weight="bold" className="text-primary" />
-                  {topCategory}
-                </h3>
-
-                <div className="grid gap-4 grid-cols-1">
-                  {Object.entries(category).map(([skillGroupName, skillsList]) => (
-                    <SubcategoryCard
-                      key={skillGroupName}
-                      subcategoryName={skillGroupName}
-                      skills={skillsList}
-                    />
-                  ))}
-                </div>
-
-                <Separator className="mt-12" />
-              </div>
+              <TabsContent key={topCategory} value={topCategory} className="mt-6 space-y-4">
+                {Object.entries(category).map(([skillGroupName, skillsList]) => (
+                  <SkillGroup
+                    key={skillGroupName}
+                    subcategoryName={skillGroupName}
+                    skills={skillsList}
+                  />
+                ))}
+              </TabsContent>
             ))}
-          </div>
+          </Tabs>
         )}
       </div>
     </section>
