@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, X } from '@phosphor-icons/react'
 import { getBasics, getFullName } from '@/lib/cv-data'
 import { ThemeSelector } from '@/components/ThemeSelector'
+import { LanguageSelector } from '@/components/LanguageSelector'
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -73,12 +74,14 @@ export function Header() {
                 {item.label}
               </a>
             ))}
-            <div className="ml-2">
+            <div className="flex items-center gap-2 ml-2">
+              <LanguageSelector />
               <ThemeSelector />
             </div>
           </nav>
 
           <div className="flex items-center gap-2 md:hidden">
+            <LanguageSelector />
             <ThemeSelector />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>

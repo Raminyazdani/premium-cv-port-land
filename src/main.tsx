@@ -9,6 +9,12 @@ import "./main.css"
 import "./styles/theme.css"
 import "./index.css"
 
+import { initializeLanguage } from './lib/languageManager'
+import { initializeTheme } from './lib/themeManager'
+
+initializeLanguage()
+initializeTheme()
+
 createRoot(document.getElementById('root')!).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
     <App />
