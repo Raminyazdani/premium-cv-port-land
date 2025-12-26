@@ -168,7 +168,7 @@ export function EducationSection() {
   
   if (education.length === 0) {
     return (
-      <section className="py-16 bg-background" aria-labelledby="education-heading">
+      <section id="education" className="py-16 bg-background" aria-labelledby="education-heading">
         <div className="container max-w-6xl px-4">
           <div className="text-center">
             <GraduationCap size={48} weight="duotone" className="mx-auto mb-4 text-muted-foreground" />
@@ -183,7 +183,7 @@ export function EducationSection() {
   }
   
   return (
-    <section className="py-16 bg-background" aria-labelledby="education-heading">
+    <section id="education" className="py-16 bg-background" aria-labelledby="education-heading">
       <div className="container max-w-6xl px-4">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">

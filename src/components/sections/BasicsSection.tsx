@@ -106,7 +106,7 @@ export function BasicsSection() {
     : summary.slice(0, 200) + '...'
   
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="about" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div 
         className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-accent/5 to-background"
         style={{

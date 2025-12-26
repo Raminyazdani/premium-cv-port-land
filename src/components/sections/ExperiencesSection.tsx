@@ -214,7 +214,7 @@ export function ExperiencesSection() {
   }
 
   return (
-    <section className="w-full min-h-screen bg-gradient-to-b from-muted/30 to-background px-4 py-16 md:py-24">
+    <section id="experience" className="w-full min-h-screen bg-gradient-to-b from-muted/30 to-background px-4 py-16 md:py-24">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-4">

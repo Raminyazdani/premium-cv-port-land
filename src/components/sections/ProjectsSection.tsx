@@ -206,7 +206,7 @@ export function ProjectsSection() {
   }
 
   return (
-    <section className="w-full min-h-screen bg-gradient-to-b from-background via-muted/20 to-background px-4 py-16 md:py-24">
+    <section id="projects" className="w-full min-h-screen bg-gradient-to-b from-background via-muted/20 to-background px-4 py-16 md:py-24">
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="space-y-4">
           <div className="space-y-2">

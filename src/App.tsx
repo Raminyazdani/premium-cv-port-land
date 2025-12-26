@@ -1,4 +1,6 @@
 import { Toaster } from 'sonner'
+import { Header } from '@/components/sections/Header'
+import { HeroSection } from '@/components/sections/HeroSection'
 import { BasicsSection } from '@/components/sections/BasicsSection'
 import { ProfilesSection } from '@/components/sections/ProfilesSection'
 import { EducationSection } from '@/components/sections/EducationSection'
@@ -9,10 +11,13 @@ import { ExperiencesSection } from '@/components/sections/ExperiencesSection'
 import { ProjectsSection } from '@/components/sections/ProjectsSection'
 import { PublicationsSection } from '@/components/sections/PublicationsSection'
 import { ReferencesSection } from '@/components/sections/ReferencesSection'
+import { Footer } from '@/components/sections/Footer'
 
 function App() {
   return (
-    <>
+    <div className="relative">
+      <Header />
+      <HeroSection />
       <BasicsSection />
       <ProfilesSection />
       <EducationSection />
@@ -23,8 +28,9 @@ function App() {
       <WorkshopAndCertificationsSection />
       <SkillsSection />
       <ReferencesSection />
+      <Footer />
       <Toaster position="bottom-right" />
-    </>
+    </div>
   )
 }
 

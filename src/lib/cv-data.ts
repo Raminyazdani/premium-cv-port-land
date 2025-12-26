@@ -40,6 +40,22 @@ export function getProfilePhotoUrl(): string | null {
   return null
 }
 
+export function getCoverPhotoUrl(): string | null {
+  const basics = getBasics()
+  
+  if (basics?.Pictures && Array.isArray(basics.Pictures)) {
+    const coverPic = basics.Pictures.find(pic => pic.type_of === 'cover')
+    if (coverPic?.URL) return coverPic.URL
+  }
+  
+  return null
+}
+
+export function getProfiles() {
+  const data = getCVData()
+  return data.profiles ?? []
+}
+
 export function getInitials(name?: string | null): string {
   if (!name) return '??'
   
