@@ -108,13 +108,64 @@ export interface Project {
   type_key?: string[] | null
 }
 
+export interface PublicationIdentifiers {
+  doi?: string | null
+  isbn?: string | null
+  issn?: string | null
+  pmid?: string | null
+  pmcid?: string | null
+  arxiv?: string | null
+}
+
+export interface AuthorStructured {
+  literal?: string | null
+  given?: string | null
+  family?: string | null
+}
+
 export interface Publication {
+  title?: string | null
   name?: string | null
-  publisher?: string | null
-  releaseDate?: string | null
+  authors?: string[] | null
+  authors_structured?: AuthorStructured[] | null
+  type?: string | null
+  status?: string | null
+  year?: number | null
+  month?: number | null
+  day?: number | null
+  date?: string | null
+  journal?: string | null
+  volume?: string | null
+  issue?: string | null
+  pages?: string | null
+  article_number?: string | null
+  doi?: string | null
+  issn?: string | null
   url?: string | null
+  URL?: string | null
+  access_date?: string | null
+  language?: string | null
+  publisher?: string | null
+  place?: string | null
+  editors?: string[] | null
+  book_title?: string | null
+  chapter_pages?: string | null
+  edition?: string | null
+  conference?: string | null
+  degree_type?: string | null
+  repository_url?: string | null
+  correspondent?: string | null
+  supervisors?: string[] | null
+  institution?: string | null
+  faculty?: string | null
+  school?: string | null
+  isbn?: string | null
+  submissionDate?: string | null
+  identifiers?: PublicationIdentifiers | null
+  notes?: string | null
+  releaseDate?: string | null
   summary?: string | null
-  type_key?: TypeKey[] | null
+  type_key?: string[] | TypeKey[] | null
 }
 
 export interface LanguageProficiency {
