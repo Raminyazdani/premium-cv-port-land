@@ -5,6 +5,7 @@ import { List, X } from '@phosphor-icons/react'
 import { getBasics, getFullName } from '@/lib/cv-data'
 import { ThemeSelector } from '@/components/ThemeSelector'
 import { LanguageSelector } from '@/components/LanguageSelector'
+import { FocusFilterSelector } from '@/components/FocusFilterSelector'
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -75,12 +76,14 @@ export function Header() {
               </a>
             ))}
             <div className="flex items-center gap-2 ml-2">
+              <FocusFilterSelector />
               <LanguageSelector />
               <ThemeSelector />
             </div>
           </nav>
 
           <div className="flex items-center gap-2 md:hidden">
+            <FocusFilterSelector />
             <LanguageSelector />
             <ThemeSelector />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
