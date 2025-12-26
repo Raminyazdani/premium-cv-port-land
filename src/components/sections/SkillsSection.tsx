@@ -3,117 +3,35 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import {
   Code,
   MagnifyingGlass,
   X,
-  Tag,
-  Info,
-  CaretRight,
+  Funnel,
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
 import type { SkillItem, Skills } from '@/types/cv'
-import { useIsMobile } from '@/hooks/use-mobile'
-
-interface SkillBadgeProps {
-  skill: SkillItem
-}
-
-function SkillBadge({ skill }: SkillBadgeProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const hasDetails = skill.long_name !== skill.short_name || (skill.type_key && skill.type_key.filter(k => k !== 'Full CV').length > 0)
-
-  if (!hasDetails) {
-    return (
-      <Badge 
-        variant="secondary"
-        className="text-xs font-medium px-2 py-0.5"
-      >
-        {skill.short_name}
-      </Badge>
-    )
-  }
-
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Badge 
-          variant="secondary"
-          className="text-xs font-medium px-2 py-0.5 cursor-pointer hover:bg-accent transition-colors"
-        >
-          {skill.short_name}
-        </Badge>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{skill.long_name}</DialogTitle>
-          <DialogDescription>Skill details</DialogDescription>
-        </DialogHeader>
-        
-        <div className="space-y-4 pt-4">
-          {skill.type_key && skill.type_key.filter(k => k !== 'Full CV').length > 0 && (
-            <div>
-              <h4 className="text-sm font-semibold mb-2 flex items-center gap-1.5">
-                <Tag size={14} weight="fill" className="text-muted-foreground" />
-                Categories
-              </h4>
-              <div className="flex flex-wrap gap-1.5">
-                {skill.type_key
-                  .filter(key => key !== 'Full CV')
-                  .map((key, idx) => (
-                    <Badge 
-                      key={idx} 
-                      variant="outline"
-                      className="text-xs"
-                    >
-                      {key}
-                    </Badge>
-                  ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-interface SkillGroupProps {
-  subcategoryName: string
-  skills: SkillItem[]
-}
-
-function SkillGroup({ subcategoryName, skills }: SkillGroupProps) {
-  return (
-    <div className="border-l-2 border-primary/20 pl-4 py-2">
-      <h4 className="text-sm font-semibold text-foreground mb-2">
-        {subcategoryName}
-      </h4>
-      <div className="flex flex-wrap gap-1.5">
-        {skills.map((skill, idx) => (
-          <SkillBadge key={idx} skill={skill} />
-        ))}
-      </div>
-    </div>
-  )
-}
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 
 export function SkillsSection() {
   const data = getCVData()
   const skills = (data.skills as Skills) ?? {}
-  const isMobile = useIsMobile()
   
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
+  const [filterOpen, setFilterOpen] = useState(false)
 
   const allTypeKeys = useMemo(() => {
     const keysSet = new Set<string>()
@@ -131,10 +49,6 @@ export function SkillsSection() {
     })
     
     return Array.from(keysSet).sort()
-  }, [skills])
-
-  const topCategories = useMemo(() => {
-    return Object.keys(skills).sort()
   }, [skills])
 
   const toggleFilter = (filter: string) => {
@@ -197,8 +111,8 @@ export function SkillsSection() {
 
   if (!skills || Object.keys(skills).length === 0) {
     return (
-      <section className="w-full py-16 px-4 bg-background">
-        <div className="max-w-7xl mx-auto">
+      <section className="w-full py-12 px-4 bg-background">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center py-12">
             <Code size={48} weight="duotone" className="mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-semibold text-muted-foreground">No skills data available</h3>
@@ -210,79 +124,96 @@ export function SkillsSection() {
   }
 
   return (
-    <section id="skills" className="w-full py-16 px-4 bg-background">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-3">
+    <section id="skills" className="w-full py-12 px-4 bg-muted/30">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2">
             Technical Skills
           </h2>
-          <p className="text-base text-muted-foreground">
-            Comprehensive technical expertise across multiple domains
+          <p className="text-sm text-muted-foreground">
+            {totalSkillsCount} skill{totalSkillsCount !== 1 ? 's' : ''} across {Object.keys(filteredSkills).length} categories
           </p>
         </div>
 
-        <div className="mb-6 space-y-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1 relative">
-              <MagnifyingGlass 
-                size={18} 
-                weight="bold" 
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" 
-              />
-              <Input
-                type="text"
-                placeholder="Search skills..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-9 h-10"
-                aria-label="Search skills"
-              />
-              {searchQuery && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                  aria-label="Clear search"
-                >
-                  <X size={14} />
-                </Button>
-              )}
-            </div>
-
-            {(selectedFilters.length > 0 || searchQuery) && (
+        <div className="mb-6 flex flex-col sm:flex-row gap-3">
+          <div className="flex-1 relative">
+            <MagnifyingGlass 
+              size={16} 
+              weight="bold" 
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" 
+            />
+            <Input
+              type="text"
+              placeholder="Search skills..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 pr-9 h-9 text-sm"
+              aria-label="Search skills"
+            />
+            {searchQuery && (
               <Button
-                variant="outline"
-                onClick={clearFilters}
-                size="sm"
-                className="shrink-0"
-                aria-label="Clear all filters"
+                size="icon"
+                variant="ghost"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6"
+                aria-label="Clear search"
               >
-                <X size={14} className="mr-1.5" />
-                Clear
+                <X size={12} />
               </Button>
             )}
           </div>
 
-          {allTypeKeys.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {allTypeKeys.map(key => (
-                <Badge
-                  key={key}
-                  variant={selectedFilters.includes(key) ? 'default' : 'outline'}
-                  className="cursor-pointer hover:opacity-80 transition-opacity text-xs"
-                  onClick={() => toggleFilter(key)}
-                >
-                  {key}
-                </Badge>
-              ))}
-            </div>
-          )}
-
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Info size={14} weight="fill" />
-            <span>{totalSkillsCount} skill{totalSkillsCount !== 1 ? 's' : ''}</span>
-          </div>
+          <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="shrink-0 h-9 gap-2"
+              >
+                <Funnel size={16} weight="bold" />
+                Filters
+                {selectedFilters.length > 0 && (
+                  <Badge variant="secondary" className="ml-1 px-1.5 py-0 text-xs">
+                    {selectedFilters.length}
+                  </Badge>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-3" align="end">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-semibold">Categories</h4>
+                  {selectedFilters.length > 0 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearFilters}
+                      className="h-auto py-1 px-2 text-xs"
+                    >
+                      Clear
+                    </Button>
+                  )}
+                </div>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {allTypeKeys.map(key => (
+                    <div key={key} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`filter-${key}`}
+                        checked={selectedFilters.includes(key)}
+                        onCheckedChange={() => toggleFilter(key)}
+                      />
+                      <Label
+                        htmlFor={`filter-${key}`}
+                        className="text-sm font-normal cursor-pointer flex-1"
+                      >
+                        {key}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         {Object.keys(filteredSkills).length === 0 ? (
@@ -297,31 +228,49 @@ export function SkillsSection() {
             </CardContent>
           </Card>
         ) : (
-          <Tabs defaultValue={topCategories[0]} className="w-full">
-            <TabsList className="w-full justify-start h-auto flex-wrap gap-1 bg-muted/50 p-1">
-              {topCategories.map(topCat => (
-                <TabsTrigger 
-                  key={topCat} 
-                  value={topCat}
-                  className="text-xs px-3 py-1.5 data-[state=active]:bg-background"
-                >
-                  {topCat}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
+          <Accordion type="multiple" className="w-full space-y-2">
             {Object.entries(filteredSkills).map(([topCategory, category]) => (
-              <TabsContent key={topCategory} value={topCategory} className="mt-6 space-y-4">
-                {Object.entries(category).map(([skillGroupName, skillsList]) => (
-                  <SkillGroup
-                    key={skillGroupName}
-                    subcategoryName={skillGroupName}
-                    skills={skillsList}
-                  />
-                ))}
-              </TabsContent>
+              <AccordionItem 
+                key={topCategory} 
+                value={topCategory}
+                className="border rounded-lg bg-card px-4"
+              >
+                <AccordionTrigger className="hover:no-underline py-3">
+                  <div className="flex items-center gap-3 text-left">
+                    <h3 className="font-semibold text-sm">
+                      {topCategory}
+                    </h3>
+                    <Badge variant="secondary" className="text-xs">
+                      {Object.values(category).reduce((acc, skills) => acc + skills.length, 0)}
+                    </Badge>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-4 pt-2">
+                  <div className="space-y-3">
+                    {Object.entries(category).map(([skillGroupName, skillsList]) => (
+                      <div key={skillGroupName} className="space-y-1.5">
+                        <h4 className="text-xs font-medium text-muted-foreground">
+                          {skillGroupName}
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {skillsList.map((skill, idx) => (
+                            <Badge 
+                              key={idx}
+                              variant="secondary"
+                              className="text-xs font-normal px-2 py-0.5"
+                              title={skill.long_name !== skill.short_name ? skill.long_name : undefined}
+                            >
+                              {skill.short_name}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
             ))}
-          </Tabs>
+          </Accordion>
         )}
       </div>
     </section>
