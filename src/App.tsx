@@ -7,6 +7,7 @@ import { LanguagesSection } from '@/components/sections/LanguagesSection'
 import { WorkshopAndCertificationsSection } from '@/components/sections/WorkshopAndCertificationsSection'
 import { SkillsSection } from '@/components/sections/SkillsSection'
 import { ExperiencesSection } from '@/components/sections/ExperiencesSection'
+import { ProjectsSection } from '@/components/sections/ProjectsSection'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <ProfilesSection />
       <EducationSection />
       <ExperiencesSection />
+      <ProjectsSection />
       <LanguagesSection />
       <WorkshopAndCertificationsSection />
       <SkillsSection />

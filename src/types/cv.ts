@@ -94,6 +94,7 @@ export interface Work {
 }
 
 export interface Project {
+  title?: string | null
   name?: string | null
   description?: string | null
   highlights?: string[] | null
@@ -104,7 +105,7 @@ export interface Project {
   roles?: string[] | null
   entity?: string | null
   type?: string | null
-  type_key?: TypeKey[] | null
+  type_key?: string[] | null
 }
 
 export interface Publication {
