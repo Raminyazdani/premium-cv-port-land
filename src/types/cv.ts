@@ -67,12 +67,8 @@ export interface SkillItem {
   type_key: string[]
 }
 
-export interface SkillSubcategory {
-  [subcategoryName: string]: SkillItem[]
-}
-
 export interface SkillCategory {
-  [categoryName: string]: SkillSubcategory
+  [skillGroupName: string]: SkillItem[]
 }
 
 export interface Skills {

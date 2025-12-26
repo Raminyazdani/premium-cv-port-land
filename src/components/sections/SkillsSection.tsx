@@ -123,16 +123,14 @@ export function SkillsSection() {
     const keysSet = new Set<string>()
     
     Object.values(skills).forEach(category => {
-      Object.values(category).forEach(subcategory => {
-        Object.values(subcategory).forEach(skillsList => {
-          if (Array.isArray(skillsList)) {
-            skillsList.forEach(skill => {
-              skill.type_key?.forEach(key => {
-                if (key !== 'Full CV') keysSet.add(key)
-              })
+      Object.values(category).forEach(skillsList => {
+        if (Array.isArray(skillsList)) {
+          skillsList.forEach(skill => {
+            skill.type_key?.forEach(key => {
+              if (key !== 'Full CV') keysSet.add(key)
             })
-          }
-        })
+          })
+        }
       })
     })
     
@@ -170,30 +168,22 @@ export function SkillsSection() {
 
       const filteredCategory: typeof category = {}
 
-      Object.entries(category).forEach(([subCatName, subcategory]) => {
-        const filteredSubcategory: { [key: string]: SkillItem[] } = {}
+      Object.entries(category).forEach(([skillGroupName, skillsList]) => {
+        if (!Array.isArray(skillsList)) return
 
-        Object.entries(subcategory).forEach(([skillGroupName, skillsList]) => {
-          if (!Array.isArray(skillsList)) return
+        const matchingSkills = skillsList.filter(skill => {
+          const matchesSearch = !searchQuery || 
+            skill.long_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            skill.short_name.toLowerCase().includes(searchQuery.toLowerCase())
 
-          const matchingSkills = skillsList.filter(skill => {
-            const matchesSearch = !searchQuery || 
-              skill.long_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              skill.short_name.toLowerCase().includes(searchQuery.toLowerCase())
+          const matchesFilters = selectedFilters.length === 0 ||
+            selectedFilters.some(filter => skill.type_key?.includes(filter))
 
-            const matchesFilters = selectedFilters.length === 0 ||
-              selectedFilters.some(filter => skill.type_key?.includes(filter))
-
-            return matchesSearch && matchesFilters
-          })
-
-          if (matchingSkills.length > 0) {
-            filteredSubcategory[skillGroupName] = matchingSkills
-          }
+          return matchesSearch && matchesFilters
         })
 
-        if (Object.keys(filteredSubcategory).length > 0) {
-          filteredCategory[subCatName] = filteredSubcategory
+        if (matchingSkills.length > 0) {
+          filteredCategory[skillGroupName] = matchingSkills
         }
       })
 
@@ -208,12 +198,10 @@ export function SkillsSection() {
   const totalSkillsCount = useMemo(() => {
     let count = 0
     Object.values(filteredSkills).forEach(category => {
-      Object.values(category).forEach(subcategory => {
-        Object.values(subcategory).forEach(skillsList => {
-          if (Array.isArray(skillsList)) {
-            count += skillsList.length
-          }
-        })
+      Object.values(category).forEach(skillsList => {
+        if (Array.isArray(skillsList)) {
+          count += skillsList.length
+        }
       })
     })
     return count
@@ -354,23 +342,13 @@ export function SkillsSection() {
                   {topCategory}
                 </h3>
 
-                <div className="space-y-8">
-                  {Object.entries(category).map(([subcategoryName, subcategory]) => (
-                    <div key={subcategoryName}>
-                      <h4 className="text-lg font-semibold mb-4 text-muted-foreground pl-1">
-                        {subcategoryName}
-                      </h4>
-                      
-                      <div className="grid gap-4 grid-cols-1">
-                        {Object.entries(subcategory).map(([skillGroupName, skillsList]) => (
-                          <SubcategoryCard
-                            key={skillGroupName}
-                            subcategoryName={skillGroupName}
-                            skills={skillsList}
-                          />
-                        ))}
-                      </div>
-                    </div>
+                <div className="grid gap-4 grid-cols-1">
+                  {Object.entries(category).map(([skillGroupName, skillsList]) => (
+                    <SubcategoryCard
+                      key={skillGroupName}
+                      subcategoryName={skillGroupName}
+                      skills={skillsList}
+                    />
                   ))}
                 </div>
 
