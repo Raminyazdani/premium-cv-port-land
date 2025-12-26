@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -70,37 +70,35 @@ function ProfileLink({ profile }: { profile: Profile }) {
 
   return (
     <div className="flex items-center gap-1">
-      <TooltipProvider delayDuration={300}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              asChild
-              className="hover:scale-105 transition-transform hover:border-primary hover:bg-primary/5"
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            asChild
+            className="hover:scale-105 transition-transform hover:border-primary hover:bg-primary/5"
+          >
+            <a
+              href={profile.url}
+              target="_blank"
+              rel="me noopener noreferrer"
+              aria-label={`Visit ${network} profile`}
             >
-              <a
-                href={profile.url}
-                target="_blank"
-                rel="me noopener noreferrer"
-                aria-label={`Visit ${network} profile`}
-              >
-                <Icon size={20} weight="fill" />
-              </a>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p className="text-sm">
-              {network}
-              {profile.username && (
-                <span className="text-muted-foreground ml-1">
-                  @{profile.username}
-                </span>
-              )}
-            </p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+              <Icon size={20} weight="fill" />
+            </a>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="text-sm">
+            {network}
+            {profile.username && (
+              <span className="text-muted-foreground ml-1">
+                @{profile.username}
+              </span>
+            )}
+          </p>
+        </TooltipContent>
+      </Tooltip>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -166,18 +164,20 @@ export function ProfilesSection() {
   })
 
   return (
-    <section className="py-12 bg-muted/30" aria-labelledby="profiles-heading">
-      <div className="container max-w-6xl px-4">
-        <h2 id="profiles-heading" className="text-3xl font-bold mb-6 text-center">
-          Connect With Me
-        </h2>
-        
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          {sortedProfiles.map((profile, idx) => (
-            <ProfileLink key={idx} profile={profile} />
-          ))}
+    <TooltipProvider delayDuration={300}>
+      <section className="py-12 bg-muted/30" aria-labelledby="profiles-heading">
+        <div className="container max-w-6xl px-4">
+          <h2 id="profiles-heading" className="text-3xl font-bold mb-6 text-center">
+            Connect With Me
+          </h2>
+          
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {sortedProfiles.map((profile, idx) => (
+              <ProfileLink key={idx} profile={profile} />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </TooltipProvider>
   )
 }
