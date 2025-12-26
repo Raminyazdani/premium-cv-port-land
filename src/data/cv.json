@@ -1,0 +1,43 @@
+{
+  "basics": {
+    "name": "Jane Developer",
+    "label": "Full Stack Engineer · Technical Lead",
+    "image": "https://via.placeholder.com/400",
+    "email": "jane.developer@example.com",
+    "phone": {
+      "countryCode": "+1",
+      "number": "5551234567",
+      "formatted": "+1 (555) 123-4567"
+    },
+    "url": "https://janedeveloper.com",
+    "summary": "Experienced software engineer with 8+ years building scalable web applications. Passionate about creating intuitive user experiences and mentoring junior developers. Specialized in React, TypeScript, and cloud architecture.",
+    "location": {
+      "city": "San Francisco",
+      "region": "California",
+      "country": "United States"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "janedev",
+        "url": "https://github.com/janedev"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "jane-developer",
+        "url": "https://linkedin.com/in/jane-developer"
+      },
+      {
+        "network": "Twitter",
+        "username": "janedevs",
+        "url": "https://twitter.com/janedevs"
+      }
+    ],
+    "Pictures": [
+      {
+        "type_of": "profile",
+        "URL": "https://via.placeholder.com/400"
+      }
+    ]
+  }
+}
