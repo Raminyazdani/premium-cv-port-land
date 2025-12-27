@@ -36,8 +36,26 @@ export function loadAndValidateData(lang: Language = 'en'): LoadDataResult {
   // Load raw data for language
   const rawData = loadCVDataForLanguage(lang)
   
+  if (import.meta.env.DEV) {
+    console.log(`📂 [loadAndValidateData] Loaded raw data for language: ${lang}`)
+    console.log(`📂 [loadAndValidateData] Raw data keys:`, Object.keys(rawData))
+    console.log(`📂 [loadAndValidateData] Raw data sample (first 3 keys):`, 
+      Object.fromEntries(Object.entries(rawData).slice(0, 3).map(([k, v]) => [
+        k,
+        Array.isArray(v) ? `array[${v.length}]` : typeof v
+      ]))
+    )
+  }
+  
   // Normalize to canonical English schema
   const normalized = normalizeCVData(rawData, lang)
+  
+  if (import.meta.env.DEV) {
+    console.log(`🔄 [loadAndValidateData] After normalization:`)
+    console.log(`   - Normalized keys:`, Object.keys(normalized))
+    console.log(`   - education:`, Array.isArray(normalized.education) ? `array[${normalized.education.length}]` : typeof normalized.education)
+    console.log(`   - projects:`, Array.isArray(normalized.projects) ? `array[${normalized.projects.length}]` : typeof normalized.projects)
+  }
   
   // Validate normalized data
   const validator = new DataValidator()
@@ -53,6 +71,12 @@ export function loadAndValidateData(lang: Language = 'en'): LoadDataResult {
 
   // Sanitize normalized data
   const sanitizedData = sanitizeData(normalized as CVData)
+  
+  if (import.meta.env.DEV) {
+    console.log(`🧹 [loadAndValidateData] After sanitization:`)
+    console.log(`   - education:`, Array.isArray(sanitizedData.education) ? `array[${sanitizedData.education.length}]` : typeof sanitizedData.education)
+    console.log(`   - projects:`, Array.isArray(sanitizedData.projects) ? `array[${sanitizedData.projects.length}]` : typeof sanitizedData.projects)
+  }
 
   return {
     data: sanitizedData,

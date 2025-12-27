@@ -40,6 +40,19 @@ export function CVDataProvider({ children }: { children: React.ReactNode }) {
         references: data.references?.length || 0
       })
       
+      // Additional diagnostic: show first item of each array section
+      if (data.education && data.education.length > 0) {
+        console.log(`📝 [CVDataContext] First education entry:`, data.education[0])
+      } else {
+        console.warn(`⚠️  [CVDataContext] Education array is empty or undefined`)
+      }
+      
+      if (data.projects && data.projects.length > 0) {
+        console.log(`📝 [CVDataContext] First project entry:`, data.projects[0])
+      } else {
+        console.warn(`⚠️  [CVDataContext] Projects array is empty or undefined`)
+      }
+      
       if (validationResult.errors.length > 0) {
         console.error('❌ CV Data validation errors:', validationResult.errors)
       }

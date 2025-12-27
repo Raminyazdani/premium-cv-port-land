@@ -38,12 +38,12 @@ export const SECTION_KEYS: Record<string, KeyMapping> = {
   },
   workshop_and_certifications: {
     en: 'workshop_and_certifications',
-    de: 'workshops_und_zertifizierungen',
+    de: 'schulungen_und_zertifikate',
     fa: 'کارگاه‌ها_و_گواهینامه‌ها'
   },
   skills: {
     en: 'skills',
-    de: 'fähigkeiten',
+    de: 'faehigkeiten',
     fa: 'مهارت‌ها'
   },
   experiences: {
@@ -224,7 +224,7 @@ export const EDUCATION_KEYS: Record<string, KeyMapping> = {
   },
   location: {
     en: 'location',
-    de: 'ort',
+    de: 'standort',
     fa: 'موقعیت'
   },
   area: {
@@ -234,7 +234,7 @@ export const EDUCATION_KEYS: Record<string, KeyMapping> = {
   },
   studyType: {
     en: 'studyType',
-    de: 'studientyp',
+    de: 'abschlussart',
     fa: 'نوع_تحصیل'
   },
   startDate: {
@@ -249,7 +249,7 @@ export const EDUCATION_KEYS: Record<string, KeyMapping> = {
   },
   gpa: {
     en: 'gpa',
-    de: 'notendurchschnitt',
+    de: 'note',
     fa: 'معدل'
   },
   logo_url: {
@@ -259,7 +259,7 @@ export const EDUCATION_KEYS: Record<string, KeyMapping> = {
   },
   type_key: {
     en: 'type_key',
-    de: 'typ_schlüssel',
+    de: 'typ_schluessel',
     fa: 'کلید_نوع'
   }
 }
@@ -373,12 +373,12 @@ export const CERTIFICATION_KEYS: Record<string, KeyMapping> = {
 export const WORKSHOP_ISSUER_KEYS: Record<string, KeyMapping> = {
   issuer: {
     en: 'issuer',
-    de: 'aussteller',
+    de: 'anbieter',
     fa: 'صادرکننده'
   },
   certifications: {
     en: 'certifications',
-    de: 'zertifizierungen',
+    de: 'zertifikate',
     fa: 'گواهینامه‌ها'
   }
 }
@@ -409,12 +409,12 @@ export const WORKSHOP_CERT_KEYS: Record<string, KeyMapping> = {
   },
   URL: {
     en: 'URL',
-    de: 'URL',
+    de: 'url',
     fa: 'نشانی_وب'
   },
   type_key: {
     en: 'type_key',
-    de: 'typ_schlüssel',
+    de: 'typ_schluessel',
     fa: 'کلید_نوع'
   }
 }
@@ -425,17 +425,17 @@ export const WORKSHOP_CERT_KEYS: Record<string, KeyMapping> = {
 export const SKILL_KEYS: Record<string, KeyMapping> = {
   long_name: {
     en: 'long_name',
-    de: 'langname',
+    de: 'voller_name',
     fa: 'نام_کامل'
   },
   short_name: {
     en: 'short_name',
-    de: 'kurzname',
+    de: 'kurzer_name',
     fa: 'نام_کوتاه'
   },
   type_key: {
     en: 'type_key',
-    de: 'typ_schlüssel',
+    de: 'typ_schluessel',
     fa: 'کلید_نوع'
   }
 }
@@ -471,7 +471,7 @@ export const EXPERIENCE_KEYS: Record<string, KeyMapping> = {
   },
   type_key: {
     en: 'type_key',
-    de: 'typ_schlüssel',
+    de: 'typ_schluessel',
     fa: 'کلید_نوع'
   }
 }
@@ -497,7 +497,7 @@ export const PROJECT_KEYS: Record<string, KeyMapping> = {
   },
   type_key: {
     en: 'type_key',
-    de: 'typ_schlüssel',
+    de: 'typ_schluessel',
     fa: 'کلید_نوع'
   }
 }
@@ -638,7 +638,7 @@ export const PUBLICATION_KEYS: Record<string, KeyMapping> = {
   },
   type_key: {
     en: 'type_key',
-    de: 'typ_schlüssel',
+    de: 'typ_schluessel',
     fa: 'کلید_نوع'
   }
 }
@@ -689,7 +689,7 @@ export const REFERENCE_KEYS: Record<string, KeyMapping> = {
   },
   type_key: {
     en: 'type_key',
-    de: 'typ_schlüssel',
+    de: 'typ_schluessel',
     fa: 'کلید_نوع'
   }
 }

@@ -38,17 +38,45 @@ export function normalizeCVData(rawData: any, sourceLang: Language): CVData {
     return rawData as CVData
   }
 
+  if (import.meta.env.DEV) {
+    console.log(`🔧 [normalizeCVData] Starting normalization for language: ${sourceLang}`)
+    console.log(`📥 [normalizeCVData] Raw data keys:`, Object.keys(rawData))
+  }
+
   const normalized: any = {}
 
   Object.keys(SECTION_KEYS).forEach((enKey) => {
     const mapping = SECTION_KEYS[enKey]
     const sourceKey = mapping[sourceLang]
     
+    if (import.meta.env.DEV) {
+      console.log(`🔍 [normalizeCVData] Section: ${enKey}`)
+      console.log(`   - Looking for source key: "${sourceKey}"`)
+      console.log(`   - Found in raw data: ${rawData[sourceKey] !== undefined}`)
+      if (rawData[sourceKey] !== undefined) {
+        const sectionData = rawData[sourceKey]
+        console.log(`   - Data type: ${Array.isArray(sectionData) ? `array[${sectionData.length}]` : typeof sectionData}`)
+      }
+    }
+    
     if (rawData[sourceKey] !== undefined) {
       const sectionData = rawData[sourceKey]
       normalized[enKey] = normalizeSectionData(enKey, sectionData, sourceLang)
+      
+      if (import.meta.env.DEV) {
+        const result = normalized[enKey]
+        console.log(`   ✅ Normalized result type: ${Array.isArray(result) ? `array[${result.length}]` : typeof result}`)
+      }
+    } else {
+      if (import.meta.env.DEV) {
+        console.log(`   ⚠️  Source key "${sourceKey}" not found in raw data`)
+      }
     }
   })
+
+  if (import.meta.env.DEV) {
+    console.log(`📤 [normalizeCVData] Normalized data keys:`, Object.keys(normalized))
+  }
 
   return normalized as CVData
 }
@@ -245,6 +273,10 @@ function normalizeObject(
   Object.keys(obj).forEach((sourceKey) => {
     const enKey = getEnglishKey(keyMap, sourceKey, sourceLang)
     normalized[enKey] = obj[sourceKey]
+    
+    if (import.meta.env.DEV && enKey === sourceKey && sourceLang !== 'en') {
+      console.warn(`⚠️  [normalizeObject] Key "${sourceKey}" not found in keyMap, using as-is`)
+    }
   })
 
   return normalized
