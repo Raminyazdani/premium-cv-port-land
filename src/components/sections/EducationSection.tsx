@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -10,6 +11,7 @@ import {
   TrendUp,
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
+import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 import type { Education } from '@/types/cv'
 
 function formatDateRange(startDate?: string | null, endDate?: string | null): string {
@@ -45,11 +47,44 @@ function parseDate(dateStr?: string | null): Date | null {
 
 interface EducationCardProps {
   education: Education
+  index: number
 }
 
-function EducationCard({ education }: EducationCardProps) {
+const MotionCard = motion.create(Card)
+
+function EducationCard({ education, index }: EducationCardProps) {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 30,
+      scale: 0.95
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        delay: index * 0.1,
+        ease: [0.25, 0.4, 0.25, 1] as const
+      }
+    }
+  }
+
+  const CardComponent = prefersReducedMotion ? Card : MotionCard
+
   return (
-    <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <CardComponent 
+      className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+      {...(!prefersReducedMotion && {
+        initial: "hidden",
+        whileInView: "visible",
+        viewport: { once: true, margin: "-50px" },
+        variants: cardVariants
+      })}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
@@ -121,7 +156,7 @@ function EducationCard({ education }: EducationCardProps) {
           </div>
         )}
       </CardContent>
-    </Card>
+    </CardComponent>
   )
 }
 
@@ -130,10 +165,29 @@ export function EducationSection() {
   const education = cvData.education ?? []
   
   const [selectedFilter, setSelectedFilter] = useState<string>('All')
+  const [globalFocus, setGlobalFocus] = useState<FocusFilter>(getStoredFocusFilter())
+  
+  useEffect(() => {
+    const handleFocusFilterChange = (e: Event) => {
+      const customEvent = e as CustomEvent<{ filter: FocusFilter }>
+      setGlobalFocus(customEvent.detail.filter)
+    }
+    
+    window.addEventListener('focusFilterChange', handleFocusFilterChange)
+    return () => window.removeEventListener('focusFilterChange', handleFocusFilterChange)
+  }, [])
+  
+  const filteredByGlobalFocus = useMemo(() => {
+    if (globalFocus === 'Full CV') {
+      return education
+    }
+    
+    return education.filter(edu => isVisibleWithFilter(edu.type_key, globalFocus))
+  }, [education, globalFocus])
   
   const allTags = useMemo(() => {
     const tagSet = new Set<string>()
-    education.forEach(edu => {
+    filteredByGlobalFocus.forEach(edu => {
       if (edu.type_key) {
         edu.type_key
           .filter(key => key !== 'Full CV')
@@ -141,17 +195,17 @@ export function EducationSection() {
       }
     })
     return ['All', ...Array.from(tagSet).sort()]
-  }, [education])
+  }, [filteredByGlobalFocus])
   
   const filteredEducation = useMemo(() => {
     if (selectedFilter === 'All') {
-      return education
+      return filteredByGlobalFocus
     }
     
-    return education.filter(edu => 
+    return filteredByGlobalFocus.filter(edu => 
       edu.type_key?.includes(selectedFilter)
     )
-  }, [education, selectedFilter])
+  }, [filteredByGlobalFocus, selectedFilter])
   
   const sortedEducation = useMemo(() => {
     return [...filteredEducation].sort((a, b) => {
@@ -214,12 +268,12 @@ export function EducationSection() {
                       {tag}
                       {tag === 'All' && (
                         <Badge variant="secondary" className="ml-2 px-1.5 py-0 text-xs">
-                          {education.length}
+                          {filteredByGlobalFocus.length}
                         </Badge>
                       )}
                       {tag !== 'All' && (
                         <Badge variant="secondary" className="ml-2 px-1.5 py-0 text-xs">
-                          {education.filter(edu => edu.type_key?.includes(tag)).length}
+                          {filteredByGlobalFocus.filter(edu => edu.type_key?.includes(tag)).length}
                         </Badge>
                       )}
                     </Button>
@@ -254,7 +308,7 @@ export function EducationSection() {
                   <div className="hidden md:block absolute left-8 top-6 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-background" />
                   
                   <div className="md:pl-20">
-                    <EducationCard education={edu} />
+                    <EducationCard education={edu} index={idx} />
                   </div>
                 </div>
               ))}
