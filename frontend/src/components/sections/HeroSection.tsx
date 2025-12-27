@@ -14,6 +14,7 @@ import { useCVData } from '@/context/CVDataContext'
 import { optimizeCloudinaryImage } from '@/utils/imageOptimizer'
 import type { Profile } from '@/types/cv'
 import { useTranslation } from '@/context/LanguageContext'
+import { useParallax } from '@/hooks/use-parallax'
 
 const iconMap: Record<string, typeof LinkedinLogo> = {
   linkedin: LinkedinLogo,
@@ -59,6 +60,12 @@ export function HeroSection() {
     : null
   const location = basics?.location?.[0] ? formatLocation(basics.location[0]) : null
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
+  
+  // Add parallax effect to cover image
+  const { ref: parallaxRef, style: parallaxStyle } = useParallax({ 
+    speed: 0.5, 
+    disableOnMobile: true 
+  })
 
   useEffect(() => {
     if (roles.length <= 1) return
@@ -85,18 +92,24 @@ export function HeroSection() {
 
   return (
     <section
+      ref={parallaxRef as React.RefObject<HTMLElement>}
       id="hero"
       data-hero
       className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-14 sm:pt-16 lg:pt-20"
-      style={{
-        backgroundImage: optimizedCover
-          ? `linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${optimizedCover})`
-          : undefined,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundColor: optimizedCover ? 'transparent' : 'var(--background)',
-      }}
     >
+      {/* Parallax background layer */}
+      {optimizedCover && (
+        <div 
+          className="absolute inset-0 -z-10"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${optimizedCover})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            ...parallaxStyle,
+          }}
+        />
+      )}
+      
       {!optimizedCover && (
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-background" />
       )}

@@ -1,12 +1,15 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { MagnifyingGlass, X, CaretDown } from '@phosphor-icons/react'
+import { MagnifyingGlass, X, CaretDown, SquaresFour, ListBullets } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
 import type { Skills } from '@/types/cv'
 import { Button } from '@/components/ui/button'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
+import { SkillsCarousel } from '@/components/SkillsCarousel'
+
+type ViewMode = 'list' | 'carousel'
 
 export function SkillsSection() {
   const data = useCV()
@@ -15,6 +18,7 @@ export function SkillsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const [currentFilter, setCurrentFilter] = useState<FocusFilter>(getStoredFocusFilter())
+  const [viewMode, setViewMode] = useState<ViewMode>('list')
   const { ref, isVisible } = useScrollAnimation()
 
   useEffect(() => {
@@ -148,24 +152,50 @@ export function SkillsSection() {
           </div>
 
           <div className="flex gap-2">
-            <Button 
-              size="sm" 
-              variant="outline"
-              onClick={expandAll}
-              disabled={allExpanded}
-              className="text-xs sm:text-sm"
-            >
-              Expand All
-            </Button>
-            <Button 
-              size="sm" 
-              variant="outline"
-              onClick={collapseAll}
-              disabled={noneExpanded}
-              className="text-xs sm:text-sm"
-            >
-              Collapse All
-            </Button>
+            {/* View mode toggle */}
+            <div className="flex gap-1 border border-border rounded-md p-1">
+              <Button 
+                size="sm" 
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                onClick={() => setViewMode('list')}
+                className="h-8 w-8 p-0"
+                aria-label="List view"
+              >
+                <ListBullets size={16} weight="bold" />
+              </Button>
+              <Button 
+                size="sm" 
+                variant={viewMode === 'carousel' ? 'default' : 'ghost'}
+                onClick={() => setViewMode('carousel')}
+                className="h-8 w-8 p-0"
+                aria-label="Carousel view"
+              >
+                <SquaresFour size={16} weight="bold" />
+              </Button>
+            </div>
+            
+            {viewMode === 'list' && (
+              <>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={expandAll}
+                  disabled={allExpanded}
+                  className="text-xs sm:text-sm"
+                >
+                  Expand All
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={collapseAll}
+                  disabled={noneExpanded}
+                  className="text-xs sm:text-sm"
+                >
+                  Collapse All
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
@@ -176,6 +206,8 @@ export function SkillsSection() {
               No skills found matching "{searchQuery}"
             </p>
           </div>
+        ) : viewMode === 'carousel' ? (
+          <SkillsCarousel skills={filteredSkills} />
         ) : (
           <div className="space-y-3">
             {skillsArray.map(({ category, groups, totalCount }) => {

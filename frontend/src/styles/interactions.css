@@ -1,0 +1,160 @@
+/**
+ * Premium Button & Interactive Elements System
+ * Provides reusable interaction patterns with accessibility support
+ */
+
+/* Check for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .btn-interactive,
+  .btn-magnetic,
+  .btn-ripple {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Base interactive button styles */
+.btn-interactive {
+  position: relative;
+  overflow: hidden;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+.btn-interactive:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-interactive:active:not(:disabled) {
+  transform: scale(0.95);
+  transition-duration: 75ms;
+}
+
+.btn-interactive:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Focus-visible styles with animated border */
+.btn-interactive:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 0 0 0) / 0.2);
+  animation: focus-pulse 2s ease-in-out infinite;
+}
+
+@keyframes focus-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 0 0 0) / 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(var(--primary-rgb, 0 0 0) / 0.1);
+  }
+}
+
+/* Ripple effect container */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease-out, height 0.6s ease-out, opacity 0.6s ease-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.btn-ripple:active::after {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+  transition: width 0s, height 0s, opacity 0.6s;
+}
+
+/* Loading state */
+.btn-loading {
+  pointer-events: none;
+  opacity: 0.7;
+  position: relative;
+}
+
+.btn-loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: btn-spinner 0.8s linear infinite;
+}
+
+@keyframes btn-spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Magnetic button effect - subtle cursor follow */
+.btn-magnetic {
+  transition: transform 150ms ease-out;
+  will-change: transform;
+}
+
+/* Card hover effects */
+.card-interactive {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Link hover effects */
+.link-interactive {
+  position: relative;
+  transition: color 150ms ease-out;
+}
+
+.link-interactive::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 200ms ease-out;
+}
+
+.link-interactive:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Icon animations */
+.icon-hover {
+  transition: transform 150ms ease-out;
+}
+
+.icon-hover:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Smooth color transitions */
+.color-transition {
+  transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out;
+}
