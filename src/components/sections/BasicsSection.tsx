@@ -106,7 +106,7 @@ export function BasicsSection() {
     : summary.slice(0, 200) + '...'
   
   return (
-    <section id="about" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="about" className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-labelledby="about-heading">
       <div 
         className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-accent/5 to-background"
         style={{
@@ -138,9 +138,9 @@ export function BasicsSection() {
           
           <div className="flex flex-col gap-6 text-center lg:text-left">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-4">
+              <h2 id="about-heading" className="text-5xl md:text-6xl font-bold tracking-tight mb-4">
                 {fullName}
-              </h1>
+              </h2>
               
               {roles.length > 0 && (
                 <div className="flex gap-2 flex-wrap justify-center lg:justify-start mb-4">

@@ -31,6 +31,7 @@ export function ContactForm() {
 
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const [statusMessage, setStatusMessage] = useState<string>('')
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -105,10 +106,12 @@ export function ContactForm() {
     e.preventDefault()
 
     if (!validateForm()) {
+      setStatusMessage('Form has errors. Please review and correct the highlighted fields.')
       toast.error('Please fix the errors in the form')
       return
     }
 
+    setStatusMessage('Form submitted successfully. Backend integration pending.')
     toast.info('Backend not implemented yet', {
       description: 'The contact form submission functionality will be added once the backend API is available.',
     })
@@ -125,6 +128,14 @@ export function ContactForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="sr-only"
+        >
+          {statusMessage}
+        </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
           <div className="flex flex-col gap-2">
             <Label htmlFor="name">
