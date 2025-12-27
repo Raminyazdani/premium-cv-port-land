@@ -131,7 +131,7 @@ export function ContactForm() {
       
       setStatusMessage(t.forms.sent)
       toast.success(t.forms.sent, {
-        description: 'Thank you for reaching out. I\'ll get back to you as soon as possible.',
+        description: t.forms.success_message,
       })
       
       setFormData({ name: '', email: '', subject: '', message: '' })
@@ -144,7 +144,7 @@ export function ContactForm() {
     } catch (error) {
       setStatusMessage(t.forms.error)
       toast.error(t.forms.error, {
-        description: 'There was a problem sending your message. Please try again later or email directly.',
+        description: t.forms.error_message,
       })
     } finally {
       setIsSubmitting(false)
@@ -158,7 +158,7 @@ export function ContactForm() {
       <CardHeader>
         <CardTitle>{t.sections.contact}</CardTitle>
         <CardDescription>
-          Send me a message and I'll get back to you as soon as possible
+          {t.forms.contact_description}
         </CardDescription>
       </CardHeader>
       <CardContent>

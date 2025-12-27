@@ -19,6 +19,7 @@ import {
 import { useCV } from '@/context/CVDataContext'
 import { extractBasics, extractProfilePhotoUrl, getInitials, formatLocation, getFullName, getRoles } from '@/lib/cv-data'
 import { copyToClipboard } from '@/lib/clipboard'
+import { useTranslation } from '@/context/LanguageContext'
 import type { Profile } from '@/types/cv'
 
 const iconMap: Record<string, typeof LinkedinLogo> = {
@@ -84,13 +85,14 @@ function CopyButton({ text, label }: { text: string; label: string }) {
 export function BasicsSection() {
   const cvData = useCV()
   const basics = extractBasics(cvData)
+  const t = useTranslation()
   const [showPhone, setShowPhone] = useState(false)
   const [summaryExpanded, setSummaryExpanded] = useState(false)
   
   if (!basics) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">No profile data available</p>
+        <p className="text-muted-foreground">{t.empty.no_profile_data}</p>
       </div>
     )
   }
@@ -177,7 +179,7 @@ export function BasicsSection() {
                     onClick={() => setSummaryExpanded(!summaryExpanded)}
                     className="mt-2 px-0"
                   >
-                    {summaryExpanded ? 'Show less' : 'Read more'}
+                    {summaryExpanded ? t.actions.show_less : t.actions.read_more}
                   </Button>
                 )}
               </div>
@@ -195,7 +197,7 @@ export function BasicsSection() {
                   >
                     {basics.email}
                   </a>
-                  <CopyButton text={basics.email} label="Email" />
+                  <CopyButton text={basics.email} label={t.forms.email} />
                 </div>
               )}
               
@@ -209,7 +211,7 @@ export function BasicsSection() {
                       </span>
                       <CopyButton 
                         text={basics.phone.formatted ?? basics.phone.number ?? ''} 
-                        label="Phone" 
+                        label={t.actions.phone}
                       />
                       <Button
                         variant="ghost"
@@ -228,7 +230,7 @@ export function BasicsSection() {
                       className="h-8"
                     >
                       <Eye size={16} className="mr-2" />
-                      Show phone
+                      {t.actions.show_phone}
                     </Button>
                   )}
                 </div>

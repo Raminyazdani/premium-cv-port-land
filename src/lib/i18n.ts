@@ -57,6 +57,12 @@ export interface UIStrings {
     get_in_touch: string
     contact: string
     learn_more: string
+    read_more: string
+    show_less: string
+    show_phone: string
+    hide_phone: string
+    email: string
+    phone: string
   }
 
   // Forms
@@ -69,6 +75,9 @@ export interface UIStrings {
     sending: string
     sent: string
     error: string
+    success_message: string
+    error_message: string
+    contact_description: string
   }
 
   // Education
@@ -175,6 +184,7 @@ export interface UIStrings {
     no_languages: string
     no_certifications: string
     no_references: string
+    no_profile_data: string
   }
 
   // Accessibility
@@ -277,7 +287,13 @@ const translations: Record<Language, UIStrings> = {
       clear: 'Clear',
       get_in_touch: 'Get in Touch',
       contact: 'Contact',
-      learn_more: 'Learn More'
+      learn_more: 'Learn More',
+      read_more: 'Read more',
+      show_less: 'Show less',
+      show_phone: 'Show phone',
+      hide_phone: 'Hide phone',
+      email: 'Email',
+      phone: 'Phone'
     },
     forms: {
       name: 'Name',
@@ -287,7 +303,10 @@ const translations: Record<Language, UIStrings> = {
       send: 'Send',
       sending: 'Sending...',
       sent: 'Message sent!',
-      error: 'An error occurred'
+      error: 'An error occurred',
+      success_message: 'Thank you for reaching out. I\'ll get back to you as soon as possible.',
+      error_message: 'There was a problem sending your message. Please try again later or email directly.',
+      contact_description: 'Send me a message and I\'ll get back to you as soon as possible'
     },
     education: {
       institution: 'Institution',
@@ -373,7 +392,8 @@ const translations: Record<Language, UIStrings> = {
       no_skills: 'No skills listed',
       no_languages: 'No languages listed',
       no_certifications: 'No certifications',
-      no_references: 'No references'
+      no_references: 'No references',
+      no_profile_data: 'No profile data available'
     },
     a11y: {
       skip_to_content: 'Skip to main content',
@@ -467,7 +487,13 @@ const translations: Record<Language, UIStrings> = {
       clear: 'Löschen',
       get_in_touch: 'Kontakt aufnehmen',
       contact: 'Kontakt',
-      learn_more: 'Mehr erfahren'
+      learn_more: 'Mehr erfahren',
+      read_more: 'Mehr lesen',
+      show_less: 'Weniger anzeigen',
+      show_phone: 'Telefon anzeigen',
+      hide_phone: 'Telefon ausblenden',
+      email: 'E-Mail',
+      phone: 'Telefon'
     },
     forms: {
       name: 'Name',
@@ -477,7 +503,10 @@ const translations: Record<Language, UIStrings> = {
       send: 'Senden',
       sending: 'Wird gesendet...',
       sent: 'Nachricht gesendet!',
-      error: 'Ein Fehler ist aufgetreten'
+      error: 'Ein Fehler ist aufgetreten',
+      success_message: 'Vielen Dank für Ihre Nachricht. Ich werde mich so schnell wie möglich bei Ihnen melden.',
+      error_message: 'Beim Senden Ihrer Nachricht ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut oder senden Sie eine direkte E-Mail.',
+      contact_description: 'Senden Sie mir eine Nachricht und ich werde mich so schnell wie möglich bei Ihnen melden'
     },
     education: {
       institution: 'Institution',
@@ -563,7 +592,8 @@ const translations: Record<Language, UIStrings> = {
       no_skills: 'Keine Fähigkeiten aufgeführt',
       no_languages: 'Keine Sprachen aufgeführt',
       no_certifications: 'Keine Zertifizierungen',
-      no_references: 'Keine Referenzen'
+      no_references: 'Keine Referenzen',
+      no_profile_data: 'Keine Profildaten verfügbar'
     },
     a11y: {
       skip_to_content: 'Zum Hauptinhalt springen',
@@ -657,7 +687,13 @@ const translations: Record<Language, UIStrings> = {
       clear: 'پاک کردن',
       get_in_touch: 'تماس بگیرید',
       contact: 'تماس',
-      learn_more: 'اطلاعات بیشتر'
+      learn_more: 'اطلاعات بیشتر',
+      read_more: 'ادامه مطلب',
+      show_less: 'کمتر نمایش بده',
+      show_phone: 'نمایش تلفن',
+      hide_phone: 'مخفی کردن تلفن',
+      email: 'ایمیل',
+      phone: 'تلفن'
     },
     forms: {
       name: 'نام',
@@ -667,7 +703,10 @@ const translations: Record<Language, UIStrings> = {
       send: 'ارسال',
       sending: 'در حال ارسال...',
       sent: 'پیام ارسال شد!',
-      error: 'خطایی رخ داد'
+      error: 'خطایی رخ داد',
+      success_message: 'از تماس شما متشکرم. در اسرع وقت پاسخ خواهم داد.',
+      error_message: 'مشکلی در ارسال پیام شما به وجود آمد. لطفاً بعداً دوباره تلاش کنید یا مستقیماً ایمیل بزنید.',
+      contact_description: 'پیام خود را برای من بفرستید و من در اسرع وقت پاسخ خواهم داد'
     },
     education: {
       institution: 'موسسه',
@@ -753,7 +792,8 @@ const translations: Record<Language, UIStrings> = {
       no_skills: 'مهارتی ثبت نشده',
       no_languages: 'زبانی ثبت نشده',
       no_certifications: 'گواهینامه‌ای ثبت نشده',
-      no_references: 'مرجعی ثبت نشده'
+      no_references: 'مرجعی ثبت نشده',
+      no_profile_data: 'اطلاعات پروفایل موجود نیست'
     },
     a11y: {
       skip_to_content: 'پرش به محتوای اصلی',
