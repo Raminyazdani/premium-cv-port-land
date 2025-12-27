@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render } from '@testing-library/react'
+import { render, cleanup, waitFor } from '@testing-library/react'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { CVDataProvider, useCVData } from '@/context/CVDataContext'
 import { FilterProvider } from '@/context/FilterContext'
@@ -58,10 +58,13 @@ function TestDataComponent() {
 describe('Language Content Verification - All Three Languages', () => {
   beforeEach(() => {
     localStorage.clear()
+    // Reset document attributes to ensure clean state
+    document.documentElement.removeAttribute('lang')
+    document.documentElement.removeAttribute('dir')
   })
   
   describe('English (EN) - Default Language', () => {
-    it('should load English data with all sections populated', () => {
+    it('should load English data with all sections populated', async () => {
       localStorage.setItem('cv-language', 'en')
       
       const TestComponent = () => (
@@ -76,9 +79,11 @@ describe('Language Content Verification - All Three Languages', () => {
       
       const { getByTestId } = render(<TestComponent />)
       
-      // Language and direction
-      expect(document.documentElement.getAttribute('lang')).toBe('en')
-      expect(document.documentElement.getAttribute('dir')).toBe('ltr')
+      // Language and direction - wait for effects
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('lang')).toBe('en')
+        expect(document.documentElement.getAttribute('dir')).toBe('ltr')
+      })
       
       // Validation status
       expect(getByTestId('is-valid').textContent).toBe('true')
@@ -121,7 +126,7 @@ describe('Language Content Verification - All Three Languages', () => {
   })
   
   describe('German (DE) - Should Load and Normalize Correctly', () => {
-    it('should load German data with all sections populated', () => {
+    it('should load German data with all sections populated', async () => {
       localStorage.setItem('cv-language', 'de')
       
       const TestComponent = () => (
@@ -136,9 +141,11 @@ describe('Language Content Verification - All Three Languages', () => {
       
       const { getByTestId } = render(<TestComponent />)
       
-      // Language and direction (German is LTR)
-      expect(document.documentElement.getAttribute('lang')).toBe('de')
-      expect(document.documentElement.getAttribute('dir')).toBe('ltr')
+      // Language and direction (German is LTR) - wait for effects
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('lang')).toBe('de')
+        expect(document.documentElement.getAttribute('dir')).toBe('ltr')
+      })
       
       // Validation status
       expect(getByTestId('is-valid').textContent).toBe('true')
@@ -202,7 +209,7 @@ describe('Language Content Verification - All Three Languages', () => {
   })
   
   describe('Persian (FA) - Should Load and Normalize Correctly with RTL', () => {
-    it('should load Persian data with all sections populated', () => {
+    it('should load Persian data with all sections populated', async () => {
       localStorage.setItem('cv-language', 'fa')
       
       const TestComponent = () => (
@@ -217,9 +224,11 @@ describe('Language Content Verification - All Three Languages', () => {
       
       const { getByTestId } = render(<TestComponent />)
       
-      // Language and direction (Persian is RTL)
-      expect(document.documentElement.getAttribute('lang')).toBe('fa')
-      expect(document.documentElement.getAttribute('dir')).toBe('rtl')
+      // Language and direction (Persian is RTL) - wait for effects
+      await waitFor(() => {
+        expect(document.documentElement.getAttribute('lang')).toBe('fa')
+        expect(document.documentElement.getAttribute('dir')).toBe('rtl')
+      })
       
       // Validation status
       expect(getByTestId('is-valid').textContent).toBe('true')
@@ -283,12 +292,18 @@ describe('Language Content Verification - All Three Languages', () => {
   })
   
   describe('Cross-Language Consistency', () => {
-    it('should have same number of sections across all languages', () => {
+    it('should have same number of sections across all languages', async () => {
       const languages = ['en', 'de', 'fa']
       const results: Record<string, Record<string, number>> = {}
       
-      languages.forEach(lang => {
+      for (const lang of languages) {
+        // Full cleanup before each render to avoid state leakage
+        cleanup()
+        localStorage.clear()
         localStorage.setItem('cv-language', lang)
+        document.documentElement.removeAttribute('lang')
+        document.documentElement.removeAttribute('dir')
+        window.history.replaceState({}, '', '/') // Reset URL parameter
         
         const TestComponent = () => (
           <LanguageProvider>
@@ -300,6 +315,11 @@ describe('Language Content Verification - All Three Languages', () => {
         
         const { getByTestId } = render(<TestComponent />)
         
+        // Wait for effects to run
+        await waitFor(() => {
+          expect(document.documentElement.getAttribute('lang')).toBe(lang)
+        })
+        
         results[lang] = {
           basics: parseInt(getByTestId('basics-count').textContent || '0'),
           profiles: parseInt(getByTestId('profiles-count').textContent || '0'),
@@ -310,7 +330,7 @@ describe('Language Content Verification - All Three Languages', () => {
           languages: parseInt(getByTestId('languages-count').textContent || '0'),
           workshops: parseInt(getByTestId('workshops-count').textContent || '0')
         }
-      })
+      }
       
       console.log('Cross-Language Comparison:', results)
       
@@ -327,11 +347,17 @@ describe('Language Content Verification - All Three Languages', () => {
   })
   
   describe('No Silent Failures', () => {
-    it('should not have validation errors in any language', () => {
+    it('should not have validation errors in any language', async () => {
       const languages = ['en', 'de', 'fa']
       
-      languages.forEach(lang => {
+      for (const lang of languages) {
+        // Full cleanup before each render to avoid state leakage
+        cleanup()
+        localStorage.clear()
         localStorage.setItem('cv-language', lang)
+        document.documentElement.removeAttribute('lang')
+        document.documentElement.removeAttribute('dir')
+        window.history.replaceState({}, '', '/') // Reset URL parameter
         
         const TestComponent = () => (
           <LanguageProvider>
@@ -343,9 +369,14 @@ describe('Language Content Verification - All Three Languages', () => {
         
         const { getByTestId } = render(<TestComponent />)
         
+        // Wait for effects to run
+        await waitFor(() => {
+          expect(document.documentElement.getAttribute('lang')).toBe(lang)
+        })
+        
         expect(getByTestId('is-valid').textContent).toBe('true')
         expect(getByTestId('errors-count').textContent).toBe('0')
-      })
+      }
     })
   })
 })

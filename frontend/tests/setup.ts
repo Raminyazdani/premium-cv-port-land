@@ -1,10 +1,15 @@
 import '@testing-library/jest-dom'
-import { expect, afterEach, vi } from 'vitest'
+import { afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 
 afterEach(() => {
   cleanup()
   localStorage.clear()
+  // Reset document attributes to ensure clean state between tests
+  document.documentElement.removeAttribute('lang')
+  document.documentElement.removeAttribute('dir')
+  // Reset URL to remove language parameter (set by applyLanguageToDOM)
+  window.history.replaceState({}, '', '/')
 })
 
 global.ResizeObserver = vi.fn().mockImplementation(() => ({

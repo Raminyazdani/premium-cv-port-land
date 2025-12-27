@@ -20,8 +20,6 @@ describe('I18N Integration Tests', () => {
   it('should render with default language (English)', async () => {
     render(<App />)
     
-    const strings = getUIStrings('en')
-    
     await waitFor(() => {
       expect(document.documentElement.getAttribute('lang')).toBe('en')
       expect(document.documentElement.getAttribute('dir')).toBe('ltr')
