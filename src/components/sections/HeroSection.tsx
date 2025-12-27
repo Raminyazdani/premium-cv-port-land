@@ -149,9 +149,15 @@ export function HeroSection() {
               </Button>
             )}
 
-            {profiles.slice(0, 2).map((profile) => (
-              <SocialButton key={profile.network} profile={profile} />
-            ))}
+            {profiles.slice(0, 2).map((profile, index) => {
+              const profileData = profile as Profile
+              return (
+                <SocialButton 
+                  key={profileData?.network || `profile-${index}`} 
+                  profile={profileData} 
+                />
+              )
+            })}
           </div>
 
           <button

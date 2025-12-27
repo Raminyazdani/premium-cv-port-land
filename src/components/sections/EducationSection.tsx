@@ -13,37 +13,14 @@ import {
 import { getCVData } from '@/lib/cv-data'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import type { Education } from '@/types/cv'
-
-function formatDateRange(startDate?: string | null, endDate?: string | null): string {
-  if (!startDate) return ''
-  
-  const formatDate = (dateStr: string) => {
-    if (dateStr.toLowerCase() === 'present') return 'Present'
-    
-    try {
-      const date = new Date(dateStr)
-      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
-    } catch {
-      return dateStr
-    }
-  }
-  
-  const start = formatDate(startDate)
-  const end = endDate ? formatDate(endDate) : 'Present'
-  
-  return `${start} – ${end}`
-}
-
-function parseDate(dateStr?: string | null): Date | null {
-  if (!dateStr) return null
-  if (dateStr.toLowerCase() === 'present') return new Date()
-  
-  try {
-    return new Date(dateStr)
-  } catch {
-    return null
-  }
-}
+import { 
+  formatDateRangeSafe, 
+  parseDateSafe, 
+  safeString, 
+  safeArray,
+  safeUrl,
+  hasContent
+} from '@/utils/dataValidation'
 
 interface EducationCardProps {
   education: Education
@@ -54,6 +31,14 @@ const MotionCard = motion.create(Card)
 
 function EducationCard({ education, index }: EducationCardProps) {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  
+  const institution = safeString(education.institution, 'Unknown Institution')
+  const studyType = safeString(education.studyType)
+  const area = safeString(education.area)
+  const location = safeString(education.location)
+  const gpa = safeString(education.gpa)
+  const logoUrl = education.logo_url ? safeUrl(education.logo_url) : null
+  const typeKeys = safeArray<string>(education.type_key)
 
   const cardVariants = {
     hidden: { 
@@ -89,43 +74,43 @@ function EducationCard({ education, index }: EducationCardProps) {
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <CardTitle className="text-xl mb-1 break-words">
-              {education.institution ?? 'Unknown Institution'}
+              {institution}
             </CardTitle>
             <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-              <div className="font-medium text-foreground">
-                {education.studyType && education.area && (
-                  <span>{education.studyType} in {education.area}</span>
-                )}
-                {education.studyType && !education.area && (
-                  <span>{education.studyType}</span>
-                )}
-                {!education.studyType && education.area && (
-                  <span>{education.area}</span>
-                )}
-              </div>
+              {(studyType || area) && (
+                <div className="font-medium text-foreground">
+                  {studyType && area && <span>{studyType} in {area}</span>}
+                  {studyType && !area && <span>{studyType}</span>}
+                  {!studyType && area && <span>{area}</span>}
+                </div>
+              )}
               
-              {education.location && (
+              {location && (
                 <div className="flex items-center gap-1.5">
                   <MapPin size={14} weight="fill" className="shrink-0" />
-                  <span>{education.location}</span>
+                  <span>{location}</span>
                 </div>
               )}
               
               {(education.startDate || education.endDate) && (
                 <div className="flex items-center gap-1.5">
                   <Calendar size={14} weight="fill" className="shrink-0" />
-                  <span>{formatDateRange(education.startDate, education.endDate)}</span>
+                  <span>{formatDateRangeSafe(education.startDate, education.endDate)}</span>
                 </div>
               )}
             </div>
           </div>
           
-          {education.logo_url && (
+          {logoUrl && (
             <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
               <img 
-                src={education.logo_url} 
-                alt={`${education.institution} logo`}
+                src={logoUrl} 
+                alt={`${institution} logo`}
                 className="w-full h-full object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement
+                  target.style.display = 'none'
+                }}
               />
             </div>
           )}
@@ -133,16 +118,16 @@ function EducationCard({ education, index }: EducationCardProps) {
       </CardHeader>
       
       <CardContent className="pt-0">
-        {education.gpa && (
+        {gpa && (
           <div className="flex items-center gap-2 text-sm mb-3">
             <TrendUp size={16} weight="bold" className="text-primary" />
-            <span className="font-medium">GPA: {education.gpa}</span>
+            <span className="font-medium">GPA: {gpa}</span>
           </div>
         )}
         
-        {education.type_key && education.type_key.length > 0 && (
+        {typeKeys.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {education.type_key
+            {typeKeys
               .filter(key => key !== 'Full CV')
               .map((key, idx) => (
                 <Badge 
@@ -195,8 +180,8 @@ export function EducationSection() {
   
   const sortedEducation = useMemo(() => {
     return [...filteredEducation].sort((a, b) => {
-      const dateA = parseDate(a.startDate)
-      const dateB = parseDate(b.startDate)
+      const dateA = parseDateSafe(a.startDate)
+      const dateB = parseDateSafe(b.startDate)
       
       if (!dateA && !dateB) return 0
       if (!dateA) return 1

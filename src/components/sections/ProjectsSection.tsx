@@ -13,39 +13,42 @@ import {
 import { getCVData } from '@/lib/cv-data'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import type { Project } from '@/types/cv'
+import { safeString, safeUrl, safeArray, isImageUrl } from '@/utils/dataValidation'
 
 interface ProjectCardProps {
   project: Project
 }
 
 function ProjectCard({ project }: ProjectCardProps) {
-  const displayTitle = project.title || project.name || 'Untitled Project'
-  const hasLink = !!project.url
-
-  const typeKeys = useMemo(() => {
-    return project.type_key || []
-  }, [project.type_key])
+  const title = safeString(project.title || project.name, 'Untitled Project')
+  const description = safeString(project.description)
+  const url = project.url ? safeUrl(project.url) : null
+  const typeKeys = safeArray<string>(project.type_key)
 
   const uniqueDomains = useMemo(() => {
     const domains = new Set<string>()
     typeKeys.forEach(key => {
-      if (key.toLowerCase() === 'programming') domains.add('Programming')
-      else if (key.toLowerCase() === 'bioinformatics') domains.add('Bioinformatics')
-      else if (key.toLowerCase() === 'biotechnology') domains.add('Biotechnology')
-      else if (key.toLowerCase() === 'academic') domains.add('Academic')
-      else if (key.toLowerCase() === 'student projects') domains.add('Student Projects')
-      else if (key.toLowerCase() === 'robotics') domains.add('Robotics')
-      else if (key.toLowerCase() === 'embedded systems') domains.add('Embedded Systems')
+      const normalized = key.toLowerCase()
+      if (normalized === 'programming') domains.add('Programming')
+      else if (normalized === 'bioinformatics') domains.add('Bioinformatics')
+      else if (normalized === 'biotechnology') domains.add('Biotechnology')
+      else if (normalized === 'academic') domains.add('Academic')
+      else if (normalized === 'student projects') domains.add('Student Projects')
+      else if (normalized === 'robotics') domains.add('Robotics')
+      else if (normalized === 'embedded systems') domains.add('Embedded Systems')
     })
     return Array.from(domains)
   }, [typeKeys])
 
   const detectImageUrl = useMemo(() => {
-    const description = project.description || ''
+    if (!description) return null
     const imageRegex = /https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg)/i
     const match = description.match(imageRegex)
-    return match ? match[0] : null
-  }, [project.description])
+    if (!match) return null
+    
+    const detectedUrl = safeUrl(match[0])
+    return detectedUrl && isImageUrl(detectedUrl) ? detectedUrl : null
+  }, [description])
 
   return (
     <Card className="group hover:border-primary/50 transition-all duration-200 h-full flex flex-col overflow-hidden">
@@ -53,7 +56,7 @@ function ProjectCard({ project }: ProjectCardProps) {
         <div className="w-full h-48 overflow-hidden bg-muted">
           <img
             src={detectImageUrl}
-            alt={displayTitle}
+            alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
             onError={(e) => {
@@ -68,7 +71,7 @@ function ProjectCard({ project }: ProjectCardProps) {
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 space-y-1.5">
             <CardTitle className="text-lg font-semibold leading-tight group-hover:text-primary transition-colors">
-              {displayTitle}
+              {title}
             </CardTitle>
             <div className="flex flex-wrap gap-1.5">
               {uniqueDomains.map((domain, idx) => (
@@ -83,14 +86,14 @@ function ProjectCard({ project }: ProjectCardProps) {
       
       <CardContent className="flex-1 flex flex-col">
         <div className="flex-1">
-          {project.description && (
+          {description && (
             <CardDescription className="text-sm leading-relaxed line-clamp-4">
-              {project.description}
+              {description}
             </CardDescription>
           )}
         </div>
         
-        {hasLink && (
+        {url && (
           <div className="mt-4 pt-4 border-t">
             <Button
               variant="outline"
@@ -99,10 +102,10 @@ function ProjectCard({ project }: ProjectCardProps) {
               asChild
             >
               <a
-                href={project.url!}
+                href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`View project: ${displayTitle}`}
+                aria-label={`View project: ${title}`}
               >
                 <GithubLogo className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
                 View Repository

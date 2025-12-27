@@ -1,88 +1,159 @@
 import type { CVData, Basics, Location } from '@/types/cv'
 import cvDataJson from '@/data/cv.json'
+import { safeArray, safeString, safeUrl } from '@/utils/dataValidation'
 
 export function getCVData(): CVData {
-  return cvDataJson as unknown as CVData
+  try {
+    return cvDataJson as unknown as CVData
+  } catch {
+    return {}
+  }
 }
 
 export function getBasics(): Basics | null {
-  const data = getCVData()
-  
-  if (!data.basics) return null
-  
-  if (Array.isArray(data.basics)) {
-    return data.basics[0] ?? null
+  try {
+    const data = getCVData()
+    
+    if (!data.basics) return null
+    
+    if (Array.isArray(data.basics)) {
+      return data.basics[0] ?? null
+    }
+    
+    return data.basics
+  } catch {
+    return null
   }
-  
-  return data.basics
 }
 
-export function getFullName(basics: Basics | null): string {
-  if (!basics) return ''
+export function getFullName(basics: Basics | null | undefined): string {
+  if (!basics) return 'Unknown'
   
-  if (basics.fname || basics.lname) {
-    return [basics.fname, basics.lname].filter(Boolean).join(' ').trim() || 'Unknown'
+  const fname = safeString(basics.fname).trim()
+  const lname = safeString(basics.lname).trim()
+  const fullName = safeString(basics.name).trim()
+  
+  if (fname || lname) {
+    const name = [fname, lname].filter(Boolean).join(' ').trim()
+    return name || 'Unknown'
   }
   
-  return basics.name ?? 'Unknown'
+  return fullName || 'Unknown'
 }
 
 export function getProfilePhotoUrl(): string | null {
-  const basics = getBasics()
-  
-  if (basics?.Pictures && Array.isArray(basics.Pictures)) {
-    const profilePic = basics.Pictures.find(pic => pic.type_of === 'profile')
-    if (profilePic?.URL) return profilePic.URL
+  try {
+    const basics = getBasics()
+    
+    if (basics?.Pictures && Array.isArray(basics.Pictures)) {
+      const profilePic = basics.Pictures.find(pic => 
+        pic && typeof pic === 'object' && pic.type_of === 'profile'
+      )
+      if (profilePic?.URL) {
+        const validUrl = safeUrl(profilePic.URL)
+        if (validUrl) return validUrl
+      }
+    }
+    
+    if (basics?.image) {
+      const validUrl = safeUrl(basics.image)
+      if (validUrl) return validUrl
+    }
+    
+    return null
+  } catch {
+    return null
   }
-  
-  if (basics?.image) return basics.image
-  
-  return null
 }
 
 export function getCoverPhotoUrl(): string | null {
-  const basics = getBasics()
-  
-  if (basics?.Pictures && Array.isArray(basics.Pictures)) {
-    const coverPic = basics.Pictures.find(pic => pic.type_of === 'cover')
-    if (coverPic?.URL) return coverPic.URL
+  try {
+    const basics = getBasics()
+    
+    if (basics?.Pictures && Array.isArray(basics.Pictures)) {
+      const coverPic = basics.Pictures.find(pic => 
+        pic && typeof pic === 'object' && pic.type_of === 'cover'
+      )
+      if (coverPic?.URL) {
+        const validUrl = safeUrl(coverPic.URL)
+        if (validUrl) return validUrl
+      }
+    }
+    
+    return null
+  } catch {
+    return null
   }
-  
-  return null
 }
 
 export function getProfiles() {
-  const data = getCVData()
-  return data.profiles ?? []
+  try {
+    const data = getCVData()
+    return safeArray(data.profiles)
+  } catch {
+    return []
+  }
 }
 
 export function getInitials(name?: string | null): string {
-  if (!name) return '??'
+  if (!name || typeof name !== 'string') return '?'
   
-  const parts = name.trim().split(/\s+/)
+  const trimmed = name.trim()
+  if (!trimmed) return '?'
+  
+  const parts = trimmed.split(/\s+/)
+  if (parts.length === 0) return '?'
   if (parts.length === 1) {
-    return parts[0].substring(0, 2).toUpperCase()
+    const firstWord = parts[0]
+    return firstWord.length >= 2 
+      ? firstWord.substring(0, 2).toUpperCase()
+      : firstWord.charAt(0).toUpperCase()
   }
   
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+  const first = parts[0].charAt(0)
+  const last = parts[parts.length - 1].charAt(0)
+  return (first + last).toUpperCase()
 }
 
 export function formatLocation(location?: Location | Location[] | null): string {
-  if (!location) return ''
-  
-  const loc = Array.isArray(location) ? location[0] : location
-  if (!loc) return ''
-  
-  const parts = [loc.city, loc.region, loc.country].filter(Boolean)
-  return parts.join(', ')
+  try {
+    if (!location) return ''
+    
+    const loc = Array.isArray(location) ? location[0] : location
+    if (!loc) return ''
+    
+    const parts = [
+      safeString(loc.city),
+      safeString(loc.region),
+      safeString(loc.country)
+    ].filter(Boolean)
+    
+    return parts.join(', ')
+  } catch {
+    return ''
+  }
 }
 
 export function getRoles(label?: string | string[] | null): string[] {
-  if (!label) return []
-  
-  if (Array.isArray(label)) {
-    return label.filter(Boolean)
+  try {
+    if (!label) return []
+    
+    if (Array.isArray(label)) {
+      return label
+        .filter(item => typeof item === 'string')
+        .map(item => item.trim())
+        .filter(Boolean)
+    }
+    
+    if (typeof label === 'string') {
+      return label
+        .split(/[·•|]/)
+        .map(r => r.trim())
+        .filter(Boolean)
+    }
+    
+    return []
+  } catch {
+    return []
   }
-  
-  return label.split('·').map(r => r.trim()).filter(Boolean)
 }

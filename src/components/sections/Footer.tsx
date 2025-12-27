@@ -82,9 +82,15 @@ export function Footer() {
             </Button>
 
             <div className="flex flex-wrap items-center justify-center gap-2">
-              {profiles.map((profile) => (
-                <SocialLink key={profile.network} profile={profile} />
-              ))}
+              {profiles.map((profile, index) => {
+                const profileData = profile as Profile
+                return (
+                  <SocialLink 
+                    key={profileData?.network || `profile-${index}`} 
+                    profile={profileData} 
+                  />
+                )
+              })}
             </div>
           </div>
         </div>

@@ -25,43 +25,25 @@ import {
 import { getCVData } from '@/lib/cv-data'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 import type { WorkshopIssuer, Certification } from '@/types/cv'
-
-function formatDate(dateStr?: string | null): string {
-  if (!dateStr) return ''
-  
-  try {
-    const date = new Date(dateStr)
-    if (isNaN(date.getTime())) {
-      return `${dateStr} (Invalid Date)`
-    }
-    
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short',
-      day: 'numeric'
-    })
-  } catch {
-    return `${dateStr} (Invalid Date)`
-  }
-}
-
-function parseDate(dateStr?: string | null): Date | null {
-  if (!dateStr) return null
-  
-  try {
-    const date = new Date(dateStr)
-    return isNaN(date.getTime()) ? null : date
-  } catch {
-    return null
-  }
-}
+import { 
+  formatDateSafe, 
+  parseDateSafe, 
+  safeString, 
+  safeArray,
+  isPdfUrl,
+  safeUrl 
+} from '@/utils/dataValidation'
 
 interface CertificationItemProps {
   certification: Certification
 }
 
 function CertificationItem({ certification }: CertificationItemProps) {
-  const isPDF = certification.URL?.toLowerCase().endsWith('.pdf')
+  const certUrl = certification.URL ? safeUrl(certification.URL) : null
+  const isPDF = certUrl ? isPdfUrl(certUrl) : false
+  const certName = safeString(certification.name, 'Unnamed Certification')
+  const duration = safeString(certification.duration)
+  const typeKeys = safeArray<string>(certification.type_key)
   
   return (
     <Card className="hover:shadow-md transition-all duration-200">
@@ -78,28 +60,28 @@ function CertificationItem({ certification }: CertificationItemProps) {
               </div>
               <div className="flex-1 min-w-0">
                 <h4 className="font-semibold text-base mb-1 break-words leading-snug">
-                  {certification.name ?? 'Unnamed Certification'}
+                  {certName}
                 </h4>
                 
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground mb-2">
                   {certification.date && (
                     <div className="flex items-center gap-1.5">
                       <CalendarBlank size={14} weight="fill" className="shrink-0" />
-                      <span>{formatDate(certification.date)}</span>
+                      <span>{formatDateSafe(certification.date, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                     </div>
                   )}
                   
-                  {certification.duration && (
+                  {duration && (
                     <div className="flex items-center gap-1.5">
                       <Clock size={14} weight="fill" className="shrink-0" />
-                      <span>{certification.duration}</span>
+                      <span>{duration}</span>
                     </div>
                   )}
                 </div>
                 
-                {certification.type_key && certification.type_key.length > 0 && (
+                {typeKeys.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-2">
-                    {certification.type_key
+                    {typeKeys
                       .filter(key => key !== 'Full CV')
                       .map((key, idx) => (
                         <Badge 
@@ -116,15 +98,15 @@ function CertificationItem({ certification }: CertificationItemProps) {
             </div>
           </div>
           
-          {certification.URL && (
+          {certUrl && (
             <div className="shrink-0 flex flex-col gap-2">
               {isPDF && (
                 <a
-                  href={certification.URL}
+                  href={certUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-16 h-20 rounded border-2 border-border hover:border-primary transition-colors overflow-hidden bg-muted relative group"
-                  aria-label={`View PDF certificate for ${certification.name}`}
+                  aria-label={`View PDF certificate for ${certName}`}
                 >
                   <div className="absolute inset-0 flex items-center justify-center">
                     <FilePdf size={32} weight="duotone" className="text-destructive group-hover:text-primary transition-colors" />
@@ -140,10 +122,10 @@ function CertificationItem({ certification }: CertificationItemProps) {
                 asChild
               >
                 <a
-                  href={certification.URL}
+                  href={certUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`View certificate for ${certification.name}`}
+                  aria-label={`View certificate for ${certName}`}
                 >
                   <LinkIcon size={16} weight="bold" />
                   <span className="ml-1.5 hidden sm:inline">View</span>
@@ -193,8 +175,8 @@ function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOn
   
   const sortedCertifications = useMemo(() => {
     return [...filteredCertifications].sort((a, b) => {
-      const dateA = parseDate(a.date)
-      const dateB = parseDate(b.date)
+      const dateA = parseDateSafe(a.date)
+      const dateB = parseDateSafe(b.date)
       
       if (!dateA && !dateB) return 0
       if (!dateA) return 1
