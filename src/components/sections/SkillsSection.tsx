@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { MagnifyingGlass, X, CaretDown } from '@phosphor-icons/react'
@@ -10,6 +10,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 
 export function SkillsSection() {
   const data = getCVData()
@@ -17,6 +18,17 @@ export function SkillsSection() {
   
   const [searchQuery, setSearchQuery] = useState('')
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set())
+  const [currentFilter, setCurrentFilter] = useState<FocusFilter>(getStoredFocusFilter())
+
+  useEffect(() => {
+    const handleFilterChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ filter: FocusFilter }>
+      setCurrentFilter(customEvent.detail.filter)
+    }
+
+    window.addEventListener('focusFilterChange', handleFilterChange)
+    return () => window.removeEventListener('focusFilterChange', handleFilterChange)
+  }, [])
 
   const toggleCategory = (category: string) => {
     setOpenCategories(prev => {
@@ -31,10 +43,7 @@ export function SkillsSection() {
   }
 
   const filteredSkills = useMemo(() => {
-    if (!searchQuery) return skills
-
     const result: Skills = {}
-    const query = searchQuery.toLowerCase()
 
     Object.entries(skills).forEach(([topCat, category]) => {
       const filteredCategory: typeof category = {}
@@ -42,10 +51,15 @@ export function SkillsSection() {
       Object.entries(category).forEach(([skillGroupName, skillsList]) => {
         if (!Array.isArray(skillsList)) return
 
-        const matchingSkills = skillsList.filter(skill => 
-          skill.long_name.toLowerCase().includes(query) ||
-          skill.short_name.toLowerCase().includes(query)
-        )
+        const matchingSkills = skillsList.filter(skill => {
+          const matchesSearch = !searchQuery || 
+            skill.long_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            skill.short_name.toLowerCase().includes(searchQuery.toLowerCase())
+          
+          const matchesFilter = isVisibleWithFilter(skill.type_key, currentFilter)
+          
+          return matchesSearch && matchesFilter
+        })
 
         if (matchingSkills.length > 0) {
           filteredCategory[skillGroupName] = matchingSkills
@@ -58,7 +72,7 @@ export function SkillsSection() {
     })
 
     return result
-  }, [skills, searchQuery])
+  }, [skills, searchQuery, currentFilter])
 
   const skillsArray = useMemo(() => {
     return Object.entries(filteredSkills).map(([category, subcategories]) => {
