@@ -12,11 +12,13 @@ afterEach(() => {
   window.history.replaceState({}, '', '/')
 })
 
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}))
+// Mock ResizeObserver for components that use it
+global.ResizeObserver = class MockResizeObserver implements ResizeObserver {
+  constructor(_callback: ResizeObserverCallback) {}
+  observe(_target: Element, _options?: ResizeObserverOptions): void {}
+  unobserve(_target: Element): void {}
+  disconnect(): void {}
+} as unknown as typeof ResizeObserver
 
 global.matchMedia = vi.fn().mockImplementation((query) => ({
   matches: false,
@@ -30,17 +32,15 @@ global.matchMedia = vi.fn().mockImplementation((query) => ({
 }))
 
 // Mock IntersectionObserver for components that use it
-class MockIntersectionObserver {
-  readonly root: Element | null = null
+global.IntersectionObserver = class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | Document | null = null
   readonly rootMargin: string = ''
   readonly thresholds: readonly number[] = []
 
-  constructor() {}
+  constructor(_callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {}
   
-  observe = vi.fn()
-  unobserve = vi.fn()
-  disconnect = vi.fn()
-  takeRecords = vi.fn().mockReturnValue([])
-}
-
-global.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver
+  observe(_target: Element): void {}
+  unobserve(_target: Element): void {}
+  disconnect(): void {}
+  takeRecords(): IntersectionObserverEntry[] { return [] }
+} as unknown as typeof IntersectionObserver
