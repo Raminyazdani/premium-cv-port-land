@@ -1,4 +1,5 @@
 import { Toaster } from 'sonner'
+import { FilterProvider } from '@/context/FilterContext'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { BasicsSection } from '@/components/sections/BasicsSection'
@@ -15,22 +16,24 @@ import { Footer } from '@/components/sections/Footer'
 
 function App() {
   return (
-    <div className="relative">
-      <Header />
-      <HeroSection />
-      <BasicsSection />
-      <ProfilesSection />
-      <EducationSection />
-      <ExperiencesSection />
-      <ProjectsSection />
-      <PublicationsSection />
-      <LanguagesSection />
-      <WorkshopAndCertificationsSection />
-      <SkillsSection />
-      <ReferencesSection />
-      <Footer />
-      <Toaster position="bottom-right" />
-    </div>
+    <FilterProvider>
+      <div className="relative">
+        <Header />
+        <HeroSection />
+        <BasicsSection />
+        <ProfilesSection />
+        <EducationSection />
+        <ExperiencesSection />
+        <ProjectsSection />
+        <PublicationsSection />
+        <LanguagesSection />
+        <WorkshopAndCertificationsSection />
+        <SkillsSection />
+        <ReferencesSection />
+        <Footer />
+        <Toaster position="bottom-right" />
+      </div>
+    </FilterProvider>
   )
 }
 

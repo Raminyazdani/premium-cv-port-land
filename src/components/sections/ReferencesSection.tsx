@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -14,19 +14,19 @@ import {
   FilePdf,
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
+import { useFilter, shouldShowEntry } from '@/context/FilterContext'
+import { MediaThumbnail } from '@/components/MediaThumbnail'
+import { MediaModal } from '@/components/MediaModal'
+import { useMediaModal } from '@/hooks/use-media-modal'
 import type { Reference } from '@/types/cv'
 import { toast } from 'sonner'
-import { 
-  type FocusFilter, 
-  getStoredFocusFilter, 
-  isVisibleWithFilter 
-} from '@/lib/focusFilterManager'
 
 interface ReferenceCardProps {
   reference: Reference
+  onOpenMedia: (url: string, alt: string) => void
 }
 
-function ReferenceCard({ reference }: ReferenceCardProps) {
+function ReferenceCard({ reference, onOpenMedia }: ReferenceCardProps) {
   const [contactVisible, setContactVisible] = useState(false)
 
   const copyToClipboard = (text: string, label: string) => {
@@ -51,22 +51,12 @@ function ReferenceCard({ reference }: ReferenceCardProps) {
             </p>
           </div>
           {reference.URL && (
-            <Button
-              variant="outline"
-              size="sm"
-              asChild
-              className="shrink-0"
-            >
-              <a
-                href={reference.URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5"
-              >
-                <FilePdf weight="duotone" />
-                Reference Letter
-              </a>
-            </Button>
+            <MediaThumbnail
+              url={reference.URL}
+              alt={`${reference.name} - Reference Letter`}
+              className="w-24 h-24"
+              onClick={() => onOpenMedia(reference.URL!, `${reference.name} - Reference Letter`)}
+            />
           )}
         </div>
       </CardHeader>
@@ -178,20 +168,11 @@ function ReferenceCard({ reference }: ReferenceCardProps) {
 export function ReferencesSection() {
   const cvData = getCVData()
   const allReferences = cvData.references || []
-  const [currentFilter, setCurrentFilter] = useState<FocusFilter>(getStoredFocusFilter())
-
-  useEffect(() => {
-    const handleFilterChange = (event: Event) => {
-      const customEvent = event as CustomEvent<{ filter: FocusFilter }>
-      setCurrentFilter(customEvent.detail.filter)
-    }
-
-    window.addEventListener('focusFilterChange', handleFilterChange)
-    return () => window.removeEventListener('focusFilterChange', handleFilterChange)
-  }, [])
+  const { selectedFocus } = useFilter()
+  const mediaModal = useMediaModal()
 
   const filteredReferences = allReferences.filter(reference => 
-    isVisibleWithFilter(reference.type_key, currentFilter)
+    shouldShowEntry(reference.type_key, selectedFocus)
   )
 
   if (filteredReferences.length === 0) {
@@ -217,9 +198,23 @@ export function ReferencesSection() {
 
       <div className="grid gap-6 md:grid-cols-2">
         {filteredReferences.map((reference, index) => (
-          <ReferenceCard key={index} reference={reference} />
+          <ReferenceCard 
+            key={index} 
+            reference={reference} 
+            onOpenMedia={mediaModal.openModal}
+          />
         ))}
       </div>
+
+      <MediaModal
+        url={mediaModal.currentUrl}
+        alt={mediaModal.currentAlt}
+        isOpen={mediaModal.isOpen}
+        onClose={mediaModal.closeModal}
+        mediaList={mediaModal.mediaList}
+        currentIndex={mediaModal.currentIndex}
+        onNavigate={mediaModal.navigateToIndex}
+      />
     </section>
   )
 }

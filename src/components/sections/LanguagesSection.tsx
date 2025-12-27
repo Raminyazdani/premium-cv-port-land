@@ -19,6 +19,9 @@ import {
   DownloadSimple,
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
+import { MediaThumbnail } from '@/components/MediaThumbnail'
+import { MediaModal } from '@/components/MediaModal'
+import { detectMediaType } from '@/utils/mediaDetector'
 import type { Language, LanguageCertification } from '@/types/cv'
 
 function getProficiencyLevel(level?: string | null, cefr?: string | null): number {
@@ -69,6 +72,7 @@ interface CertificationDetailsProps {
 }
 
 function CertificationDetails({ certification, language }: CertificationDetailsProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const hasScores = certification.overall !== null || 
     certification.reading !== null || 
     certification.listening !== null || 
@@ -76,27 +80,29 @@ function CertificationDetails({ certification, language }: CertificationDetailsP
     certification.speaking !== null
   
   const hasValidTest = certification.test && certification.test !== 'Mother Tongue'
+  const mediaType = certification.URL ? detectMediaType(certification.URL) : null
   
   if (!hasValidTest) return null
   
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <Certificate size={16} weight="duotone" />
-          {certification.test}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Certificate size={24} weight="duotone" className="text-primary" />
-            {certification.test} - {language}
-          </DialogTitle>
-          <DialogDescription>
-            {certification.organization && `Issued by ${certification.organization}`}
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline" size="sm" className="gap-2">
+            <Certificate size={16} weight="duotone" />
+            {certification.test}
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Certificate size={24} weight="duotone" className="text-primary" />
+              {certification.test} - {language}
+            </DialogTitle>
+            <DialogDescription>
+              {certification.organization && `Issued by ${certification.organization}`}
+            </DialogDescription>
+          </DialogHeader>
         
         <div className="space-y-6 py-4">
           {hasScores && (
@@ -199,21 +205,39 @@ function CertificationDetails({ certification, language }: CertificationDetailsP
             </div>
           )}
           
-          {certification.URL && (
-            <Button asChild className="w-full gap-2">
-              <a 
-                href={certification.URL} 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <DownloadSimple size={18} weight="bold" />
-                View Certificate
-              </a>
-            </Button>
+          {certification.URL && mediaType && (
+            <div className="space-y-3">
+              <MediaThumbnail
+                url={certification.URL}
+                alt={`${certification.test} Certificate - ${language}`}
+                className="w-full h-32"
+                onClick={() => setIsModalOpen(true)}
+              />
+              <Button asChild className="w-full gap-2">
+                <a 
+                  href={certification.URL} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <DownloadSimple size={18} weight="bold" />
+                  View Certificate
+                </a>
+              </Button>
+            </div>
           )}
         </div>
       </DialogContent>
     </Dialog>
+    
+    {certification.URL && mediaType && (
+      <MediaModal
+        url={certification.URL}
+        alt={`${certification.test} Certificate - ${language}`}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    )}
+  </>
   )
 }
 

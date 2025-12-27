@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -11,7 +11,7 @@ import {
   TrendUp,
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
-import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
+import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import type { Education } from '@/types/cv'
 
 function formatDateRange(startDate?: string | null, endDate?: string | null): string {
@@ -163,27 +163,13 @@ function EducationCard({ education, index }: EducationCardProps) {
 export function EducationSection() {
   const cvData = getCVData()
   const education = cvData.education ?? []
+  const { selectedFocus } = useFilter()
   
   const [selectedFilter, setSelectedFilter] = useState<string>('All')
-  const [globalFocus, setGlobalFocus] = useState<FocusFilter>(getStoredFocusFilter())
-  
-  useEffect(() => {
-    const handleFocusFilterChange = (e: Event) => {
-      const customEvent = e as CustomEvent<{ filter: FocusFilter }>
-      setGlobalFocus(customEvent.detail.filter)
-    }
-    
-    window.addEventListener('focusFilterChange', handleFocusFilterChange)
-    return () => window.removeEventListener('focusFilterChange', handleFocusFilterChange)
-  }, [])
   
   const filteredByGlobalFocus = useMemo(() => {
-    if (globalFocus === 'Full CV') {
-      return education
-    }
-    
-    return education.filter(edu => isVisibleWithFilter(edu.type_key, globalFocus))
-  }, [education, globalFocus])
+    return education.filter(edu => shouldShowEntry(edu.type_key, selectedFocus))
+  }, [education, selectedFocus])
   
   const allTags = useMemo(() => {
     const tagSet = new Set<string>()
