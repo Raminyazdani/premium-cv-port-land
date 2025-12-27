@@ -1,15 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { MagnifyingGlass, X, CaretDown } from '@phosphor-icons/react'
+import { MagnifyingGlass, X } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
 import type { Skills } from '@/types/cv'
 import { Button } from '@/components/ui/button'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 
 export function SkillsSection() {
@@ -17,7 +13,7 @@ export function SkillsSection() {
   const skills = (data.skills as Skills) ?? {}
   
   const [searchQuery, setSearchQuery] = useState('')
-  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set())
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [currentFilter, setCurrentFilter] = useState<FocusFilter>(getStoredFocusFilter())
 
   useEffect(() => {
@@ -29,18 +25,6 @@ export function SkillsSection() {
     window.addEventListener('focusFilterChange', handleFilterChange)
     return () => window.removeEventListener('focusFilterChange', handleFilterChange)
   }, [])
-
-  const toggleCategory = (category: string) => {
-    setOpenCategories(prev => {
-      const next = new Set(prev)
-      if (next.has(category)) {
-        next.delete(category)
-      } else {
-        next.add(category)
-      }
-      return next
-    })
-  }
 
   const filteredSkills = useMemo(() => {
     const result: Skills = {}
@@ -85,17 +69,25 @@ export function SkillsSection() {
     })
   }, [filteredSkills])
 
+  useEffect(() => {
+    if (skillsArray.length > 0 && !selectedCategory) {
+      setSelectedCategory(skillsArray[0].category)
+    }
+  }, [skillsArray, selectedCategory])
+
   if (!skills || Object.keys(skills).length === 0) {
     return null
   }
 
+  const totalSkills = skillsArray.reduce((sum, cat) => sum + cat.totalCount, 0)
+
   return (
-    <section id="skills" className="w-full py-12 sm:py-16 px-3 sm:px-4 bg-muted/30">
-      <div className="max-w-5xl mx-auto">
+    <section id="skills" className="w-full py-12 sm:py-16 px-3 sm:px-4 bg-background">
+      <div className="max-w-6xl mx-auto">
         <div className="mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold mb-2">Skills & Expertise</h2>
           <p className="text-sm sm:text-base text-muted-foreground">
-            {skillsArray.reduce((sum, cat) => sum + cat.totalCount, 0)} skills across {skillsArray.length} domains
+            {totalSkills} skills across {skillsArray.length} domains
           </p>
         </div>
 
@@ -130,59 +122,46 @@ export function SkillsSection() {
             <p className="text-base sm:text-lg px-4">No skills found matching "{searchQuery}"</p>
           </div>
         ) : (
-          <div className="space-y-2 sm:space-y-3">
-            {skillsArray.map(({ category, groups, totalCount }) => (
-              <Collapsible
-                key={category}
-                open={openCategories.has(category)}
-                onOpenChange={() => toggleCategory(category)}
-              >
-                <div className="border rounded-lg bg-card overflow-hidden">
-                  <CollapsibleTrigger className="w-full px-3 sm:px-4 py-3 sm:py-3.5 flex items-center justify-between hover:bg-accent/50 transition-colors group touch-manipulation">
-                    <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                      <CaretDown
-                        size={16}
-                        weight="bold"
-                        className={`text-muted-foreground transition-transform flex-shrink-0 sm:w-[18px] sm:h-[18px] ${
-                          openCategories.has(category) ? 'rotate-0' : '-rotate-90'
-                        }`}
-                      />
-                      <h3 className="text-sm sm:text-base font-semibold text-left truncate">
-                        {category}
-                      </h3>
-                    </div>
-                    <Badge variant="secondary" className="text-xs ml-2 flex-shrink-0">
-                      {totalCount}
-                    </Badge>
-                  </CollapsibleTrigger>
-                  
-                  <CollapsibleContent>
-                    <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2 space-y-3 sm:space-y-4">
-                      {groups.map((group) => (
-                        <div key={group.name} className="space-y-2">
-                          <h4 className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                            {group.name}
-                          </h4>
-                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            {group.items.map((skill, idx) => (
-                              <Badge
-                                key={idx}
-                                variant="outline"
-                                className="text-xs font-normal hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors cursor-default py-1 px-2 sm:px-2.5"
-                                title={skill.long_name !== skill.short_name ? skill.long_name : undefined}
-                              >
-                                {skill.short_name}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
+          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
+            <TabsList className="w-full flex-wrap h-auto gap-1 sm:gap-2 mb-6 bg-muted/50 p-2">
+              {skillsArray.map(({ category, totalCount }) => (
+                <TabsTrigger
+                  key={category}
+                  value={category}
+                  className="text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <span className="truncate max-w-[120px] sm:max-w-none">{category}</span>
+                  <Badge variant="secondary" className="ml-1.5 sm:ml-2 text-[10px] sm:text-xs px-1 sm:px-1.5 py-0">
+                    {totalCount}
+                  </Badge>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            {skillsArray.map(({ category, groups }) => (
+              <TabsContent key={category} value={category} className="mt-0 space-y-6">
+                {groups.map((group) => (
+                  <div key={group.name} className="space-y-3">
+                    <h3 className="text-sm sm:text-base font-semibold text-foreground border-l-4 border-primary pl-3">
+                      {group.name}
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {group.items.map((skill, idx) => (
+                        <Badge
+                          key={idx}
+                          variant="secondary"
+                          className="text-xs sm:text-sm font-normal hover:bg-primary hover:text-primary-foreground transition-colors cursor-default py-1.5 px-3"
+                          title={skill.long_name !== skill.short_name ? skill.long_name : undefined}
+                        >
+                          {skill.short_name}
+                        </Badge>
                       ))}
                     </div>
-                  </CollapsibleContent>
-                </div>
-              </Collapsible>
+                  </div>
+                ))}
+              </TabsContent>
             ))}
-          </div>
+          </Tabs>
         )}
       </div>
     </section>
