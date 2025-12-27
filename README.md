@@ -13,6 +13,57 @@
 
 ---
 
+## 🚀 Quickstart
+
+### Local Development (3 minutes)
+
+```bash
+# Clone repository
+git clone https://github.com/Raminyazdani/premium-cv-port-land.git
+cd premium-cv-port-land
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+**Full guide**: [docs/local_dev.md](./docs/local_dev.md)
+
+### Deploy to Production (5 minutes)
+
+Choose your platform:
+
+**Option 1: Vercel** (Recommended - Zero Config)
+1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
+2. Click "New Project" and import this repository
+3. Click "Deploy" - That's it! ✅
+
+**Option 2: Netlify**
+1. Go to [netlify.com](https://netlify.com) and sign in with GitHub
+2. Click "Add new site" → "Import an existing project"
+3. Select this repository and click "Deploy" ✅
+
+**Option 3: Cloudflare Pages**
+1. Go to [pages.cloudflare.com](https://pages.cloudflare.com)
+2. Create application → Connect to Git → Select repository
+3. Click "Save and Deploy" ✅
+
+All platforms provide:
+- ✅ Automatic production deployments (push to main)
+- ✅ PR preview URLs (automatic for each pull request)
+- ✅ Free HTTPS/SSL
+- ✅ Global CDN
+
+**Full guides**: 
+- [Production Deployment](./docs/deploy_production.md)
+- [PR Preview Deployments](./docs/deploy_preview_pr.md)
+
+---
+
 ## 📖 Table of Contents
 
 - [Overview](#-overview)
