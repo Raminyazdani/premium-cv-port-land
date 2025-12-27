@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, X } from '@phosphor-icons/react'
 import { extractBasics, getFullName } from '@/lib/cv-data'
 import { useCVData } from '@/context/CVDataContext'
+import { useKonami } from '@/context/KonamiContext'
 import { ThemeSelector } from '@/components/ThemeSelector'
 import { LanguageSelector } from '@/components/LanguageSelector'
 import { FocusFilterSelector } from '@/components/FocusFilterSelector'
@@ -14,6 +15,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const { data } = useCVData()
+  const { isUnlocked } = useKonami()
   const basics = extractBasics(data)
   const fullName = getFullName(basics)
   const t = useTranslation()
@@ -82,7 +84,7 @@ export function Header() {
             <div className="flex items-center gap-2 ml-2">
               <FocusFilterSelector />
               <LanguageSelector />
-              <ThemeSelector />
+              <ThemeSelector konamiUnlocked={isUnlocked} />
             </div>
           </nav>
 
@@ -91,7 +93,7 @@ export function Header() {
               <FocusFilterSelector />
               <LanguageSelector />
             </div>
-            <ThemeSelector />
+            <ThemeSelector konamiUnlocked={isUnlocked} />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label={t.a11y.menu} className="h-9 w-9 sm:h-10 sm:w-10">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Check, Palette } from '@phosphor-icons/react'
+import { Check, Palette, Lock } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -12,15 +12,21 @@ import {
 import { Spinner } from '@/components/ui/spinner'
 import { 
   type ThemeName, 
-  THEME_OPTIONS, 
+  getAvailableThemes,
   setTheme, 
   initializeTheme 
 } from '@/lib/themeManager'
 
-export function ThemeSelector() {
+interface ThemeSelectorProps {
+  konamiUnlocked?: boolean
+}
+
+export function ThemeSelector({ konamiUnlocked = false }: ThemeSelectorProps = {}) {
   const [currentTheme, setCurrentTheme] = useState<ThemeName>('normal')
   const [isChanging, setIsChanging] = useState(false)
   const [announcement, setAnnouncement] = useState('')
+
+  const availableThemes = getAvailableThemes(konamiUnlocked)
 
   useEffect(() => {
     const theme = initializeTheme()
@@ -31,7 +37,7 @@ export function ThemeSelector() {
     if (isChanging) return
     
     setIsChanging(true)
-    const selectedTheme = THEME_OPTIONS.find(t => t.id === theme)
+    const selectedTheme = availableThemes.find(t => t.id === theme)
     
     setTheme(theme)
     setCurrentTheme(theme)
@@ -60,6 +66,7 @@ export function ThemeSelector() {
             className="relative"
             aria-label="Select theme"
             disabled={isChanging}
+            data-theme-selector
           >
             {isChanging ? (
               <Spinner size={20} label="Changing theme" />
@@ -71,7 +78,7 @@ export function ThemeSelector() {
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>Theme Presets</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {THEME_OPTIONS.map((option) => (
+          {availableThemes.map((option) => (
             <DropdownMenuItem
               key={option.id}
               onClick={() => handleThemeChange(option.id)}
@@ -81,12 +88,21 @@ export function ThemeSelector() {
               aria-checked={currentTheme === option.id}
             >
               <div className="flex items-center justify-center w-5 h-5 mt-0.5">
-                {currentTheme === option.id && (
+                {currentTheme === option.id ? (
                   <Check className="h-4 w-4 text-primary" weight="bold" aria-hidden="true" />
-                )}
+                ) : option.secret && !konamiUnlocked ? (
+                  <Lock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                ) : null}
               </div>
               <div className="flex-1">
-                <div className="font-medium">{option.label}</div>
+                <div className="font-medium flex items-center gap-2">
+                  {option.label}
+                  {option.secret && konamiUnlocked && (
+                    <span className="text-xs px-1.5 py-0.5 rounded-full bg-primary/20 text-primary">
+                      Secret
+                    </span>
+                  )}
+                </div>
                 <div className="text-xs text-muted-foreground">
                   {option.description}
                 </div>
