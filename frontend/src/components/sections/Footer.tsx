@@ -54,6 +54,25 @@ export function Footer() {
   const t = useTranslation()
 
   const handlePdfExport = () => {
+    // TODO: Replace with backend API call for LaTeX PDF generation
+    // Once backend is implemented, this should:
+    // 1. Send CV data to backend endpoint (e.g., POST /api/generate-pdf)
+    // 2. Backend generates high-quality PDF using LaTeX
+    // 3. Return PDF file for download
+    // Example:
+    // const response = await fetch('/api/generate-pdf', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ language: currentLanguage, focusFilter: selectedFocus })
+    // })
+    // const blob = await response.blob()
+    // const url = window.URL.createObjectURL(blob)
+    // const a = document.createElement('a')
+    // a.href = url
+    // a.download = `${fullName}-CV.pdf`
+    // a.click()
+    
+    // For now, using browser print dialog
     window.print()
   }
 

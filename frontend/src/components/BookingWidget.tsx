@@ -64,6 +64,29 @@ export function BookingWidget() {
     setStatusMessage(t.booking.booking)
 
     try {
+      // TODO: Integrate Calendly or custom booking backend
+      // Option 1: Integrate with Calendly API
+      // Example:
+      // const response = await fetch('https://calendly.com/api/v2/scheduled_events', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Authorization': `Bearer ${CALENDLY_API_TOKEN}`,
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({
+      //     event_type: selectedType,
+      //     start_time: `${selectedDate}T${selectedTime}:00`,
+      //   })
+      // })
+      //
+      // Option 2: POST to custom backend booking API
+      // const response = await fetch('/api/bookings', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ type: selectedType, date: selectedDate, time: selectedTime })
+      // })
+      
+      // Simulating backend call for now
       await new Promise(resolve => setTimeout(resolve, 1500))
       
       const meetingLabel = meetingTypes.find((m) => m.id === selectedType)?.label
