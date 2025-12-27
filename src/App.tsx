@@ -1,8 +1,11 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useMemo } from 'react'
 import { Toaster } from 'sonner'
-import { FilterProvider } from '@/context/FilterContext'
+import { FilterProvider, useFilter } from '@/context/FilterContext'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
+import { loadAndValidateData, extractAllTypeKeys } from '@/utils/dataLoader'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorFallback } from '@/components/ErrorFallback'
 
 const BasicsSection = lazy(() => import('@/components/sections/BasicsSection').then(m => ({ default: m.BasicsSection })))
 const ProfilesSection = lazy(() => import('@/components/sections/ProfilesSection').then(m => ({ default: m.ProfilesSection })))
@@ -29,59 +32,89 @@ function SectionSkeleton() {
   )
 }
 
+function AppContent() {
+  const { setAvailableFocusOptions } = useFilter()
+
+  const { data, validationResult } = useMemo(() => loadAndValidateData(), [])
+
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      if (validationResult.errors.length > 0) {
+        console.error('❌ Data validation errors:', validationResult.errors)
+      }
+      if (validationResult.warnings.length > 0) {
+        console.warn('⚠️  Data validation warnings:', validationResult.warnings)
+      }
+    }
+
+    const focusOptions = extractAllTypeKeys(data)
+    setAvailableFocusOptions(focusOptions)
+  }, [data, validationResult, setAvailableFocusOptions])
+
+  if (!validationResult.isValid) {
+    console.error('Data validation failed. Displaying with best effort.')
+  }
+
+  return (
+    <div className="relative">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+      <Header />
+      <main id="main-content">
+        <HeroSection />
+        <Suspense fallback={<SectionSkeleton />}>
+          <BasicsSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <ProfilesSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <EducationSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <ExperiencesSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <ProjectsSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <PublicationsSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <LanguagesSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <WorkshopAndCertificationsSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <SkillsSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <ReferencesSection />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <ContactSection />
+        </Suspense>
+      </main>
+      <Suspense fallback={<div className="h-16" />}>
+        <Footer />
+      </Suspense>
+      <Toaster position="bottom-right" />
+    </div>
+  )
+}
+
 function App() {
   return (
-    <FilterProvider>
-      <div className="relative">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
-        >
-          Skip to main content
-        </a>
-        <Header />
-        <main id="main-content">
-          <HeroSection />
-          <Suspense fallback={<SectionSkeleton />}>
-            <BasicsSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <ProfilesSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <EducationSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <ExperiencesSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <ProjectsSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <PublicationsSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <LanguagesSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <WorkshopAndCertificationsSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <SkillsSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <ReferencesSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <ContactSection />
-          </Suspense>
-        </main>
-        <Suspense fallback={<div className="h-16" />}>
-          <Footer />
-        </Suspense>
-        <Toaster position="bottom-right" />
-      </div>
-    </FilterProvider>
+    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
+      <FilterProvider>
+        <AppContent />
+      </FilterProvider>
+    </ErrorBoundary>
   )
 }
 
