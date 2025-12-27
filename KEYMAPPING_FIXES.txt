@@ -1,0 +1,27 @@
+/**
+ * CRITICAL KEY MAPPING FIXES
+ * 
+ * The keyMappings.ts file has several Farsi character mismatches.
+ * This file documents all the fixes needed.
+ * 
+ * ROOT CAUSE: The Farsi JSON uses 'مؤسسه' (with hamza on waw: ؤ)
+ * but the key mappings use 'موسسه' (without hamza).
+ * These are different Unicode characters!
+ * 
+ * FIX LIST:
+ * 1. EDUCATION_KEYS: institution: 'موسسه' → 'مؤسسه'
+ * 2. EDUCATION_KEYS: area: 'حوزه' → 'رشته' 
+ * 3. EDUCATION_KEYS: studyType: 'نوع_تحصیل' → 'مقطع'
+ * 4. SECTION_KEYS: experiences: 'تجربیات' → 'سوابق'
+ * 5. EXPERIENCE_KEYS: institution: 'موسسه' → 'مؤسسه'
+ * 6. PUBLICATION_KEYS: institution: 'موسسه' → 'مؤسسه'
+ * 7. REFERENCE_KEYS: institution (if exists): 'موسسه' → 'مؤسسه'
+ * 8. PROJECT_KEYS: url (DE): 'url' → 'link'
+ * 
+ * APPLY THESE MANUALLY TO keyMappings.ts OR USE SEARCH-REPLACE WITH EXACT UNICODE
+ */
+
+// Exact Unicode characters for reference:
+// WRONG: 'موسسه' (U+0645 U+0648 U+0633 U+0633 U+0647)
+// RIGHT: 'مؤسسه' (U+0645 U+0624 U+0633 U+0633 U+0647)
+// The difference is U+0648 (waw) vs U+0624 (waw with hamza above)

@@ -49,7 +49,7 @@ export const SECTION_KEYS: Record<string, KeyMapping> = {
   experiences: {
     en: 'experiences',
     de: 'erfahrungen',
-    fa: 'تجربیات'
+    fa: 'سوابق'
   },
   projects: {
     en: 'projects',
@@ -220,7 +220,7 @@ export const EDUCATION_KEYS: Record<string, KeyMapping> = {
   institution: {
     en: 'institution',
     de: 'institution',
-    fa: 'موسسه'
+    fa: 'مؤسسه'
   },
   location: {
     en: 'location',
@@ -230,12 +230,12 @@ export const EDUCATION_KEYS: Record<string, KeyMapping> = {
   area: {
     en: 'area',
     de: 'fachgebiet',
-    fa: 'حوزه'
+    fa: 'رشته'
   },
   studyType: {
     en: 'studyType',
     de: 'abschlussart',
-    fa: 'نوع_تحصیل'
+    fa: 'مقطع'
   },
   startDate: {
     en: 'startDate',
@@ -374,12 +374,12 @@ export const WORKSHOP_ISSUER_KEYS: Record<string, KeyMapping> = {
   issuer: {
     en: 'issuer',
     de: 'anbieter',
-    fa: 'صادرکننده'
+    fa: 'برگزارکننده'
   },
   certifications: {
     en: 'certifications',
     de: 'zertifikate',
-    fa: 'گواهینامه‌ها'
+    fa: 'گواهی‌ها'
   }
 }
 
@@ -405,7 +405,7 @@ export const WORKSHOP_CERT_KEYS: Record<string, KeyMapping> = {
   certificate: {
     en: 'certificate',
     de: 'zertifikat',
-    fa: 'گواهی'
+    fa: 'گواهی_دارد'
   },
   URL: {
     en: 'URL',
@@ -452,7 +452,7 @@ export const EXPERIENCE_KEYS: Record<string, KeyMapping> = {
   institution: {
     en: 'institution',
     de: 'institution',
-    fa: 'موسسه'
+    fa: 'مؤسسه'
   },
   duration: {
     en: 'duration',
@@ -492,7 +492,7 @@ export const PROJECT_KEYS: Record<string, KeyMapping> = {
   },
   url: {
     en: 'url',
-    de: 'url',
+    de: 'link',
     fa: 'پیوند'
   },
   type_key: {
@@ -519,7 +519,7 @@ export const PUBLICATION_KEYS: Record<string, KeyMapping> = {
   authors_structured: {
     en: 'authors_structured',
     de: 'autoren_strukturiert',
-    fa: 'نویسندگان_ساختاریافته'
+    fa: 'نویسندگان_ساخت‌یافته'
   },
   type: {
     en: 'type',
@@ -599,7 +599,7 @@ export const PUBLICATION_KEYS: Record<string, KeyMapping> = {
   institution: {
     en: 'institution',
     de: 'institution',
-    fa: 'موسسه'
+    fa: 'مؤسسه'
   },
   faculty: {
     en: 'faculty',
@@ -665,7 +665,7 @@ export const REFERENCE_KEYS: Record<string, KeyMapping> = {
   institution: {
     en: 'institution',
     de: 'institution',
-    fa: 'موسسه'
+    fa: 'مؤسسه'
   },
   location: {
     en: 'location',
