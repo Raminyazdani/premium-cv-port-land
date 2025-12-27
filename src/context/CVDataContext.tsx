@@ -26,6 +26,20 @@ export function CVDataProvider({ children }: { children: React.ReactNode }) {
     const { data, validationResult } = loadAndValidateData(language)
 
     if (import.meta.env.DEV) {
+      console.log(`🔄 [CVDataContext] Loading data for language: ${language}`)
+      console.log(`📊 [CVDataContext] Data summary:`, {
+        basics: Array.isArray(data.basics) ? data.basics.length : (data.basics ? 1 : 0),
+        profiles: data.profiles?.length || 0,
+        education: data.education?.length || 0,
+        experiences: data.experiences?.length || 0,
+        projects: data.projects?.length || 0,
+        publications: data.publications?.length || 0,
+        skills: Object.keys(data.skills || {}).length,
+        languages: data.languages?.length || 0,
+        certifications: data.workshop_and_certifications?.length || 0,
+        references: data.references?.length || 0
+      })
+      
       if (validationResult.errors.length > 0) {
         console.error('❌ CV Data validation errors:', validationResult.errors)
       }

@@ -2,14 +2,14 @@ import { useState, useMemo, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { MagnifyingGlass, X, CaretDown } from '@phosphor-icons/react'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import type { Skills } from '@/types/cv'
 import { Button } from '@/components/ui/button'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 
 export function SkillsSection() {
-  const data = getCVData()
+  const data = useCV()
   const skills = (data.skills as Skills) ?? {}
   
   const [searchQuery, setSearchQuery] = useState('')

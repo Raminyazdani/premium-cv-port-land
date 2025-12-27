@@ -6,7 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import { copyToClipboard } from '@/lib/clipboard'
 import { toast } from 'sonner'
 import type { Profile } from '@/types/cv'
@@ -115,7 +115,7 @@ function ProfileLink({ profile }: { profile: Profile }) {
 }
 
 export function ProfilesSection() {
-  const cvData = getCVData()
+  const cvData = useCV()
   const profiles = cvData.profiles ?? []
 
   if (profiles.length === 0) {

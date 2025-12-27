@@ -16,7 +16,8 @@ import {
   Eye,
   EyeSlash
 } from '@phosphor-icons/react'
-import { getBasics, getProfilePhotoUrl, getInitials, formatLocation, getFullName, getRoles } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
+import { extractBasics, extractProfilePhotoUrl, getInitials, formatLocation, getFullName, getRoles } from '@/lib/cv-data'
 import { copyToClipboard } from '@/lib/clipboard'
 import type { Profile } from '@/types/cv'
 
@@ -81,7 +82,8 @@ function CopyButton({ text, label }: { text: string; label: string }) {
 }
 
 export function BasicsSection() {
-  const basics = getBasics()
+  const cvData = useCV()
+  const basics = extractBasics(cvData)
   const [showPhone, setShowPhone] = useState(false)
   const [summaryExpanded, setSummaryExpanded] = useState(false)
   
@@ -93,7 +95,7 @@ export function BasicsSection() {
     )
   }
   
-  const photoUrl = getProfilePhotoUrl()
+  const photoUrl = extractProfilePhotoUrl(basics)
   const fullName = getFullName(basics)
   const initials = getInitials(fullName)
   const location = formatLocation(basics.location)

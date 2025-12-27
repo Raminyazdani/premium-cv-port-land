@@ -14,7 +14,7 @@ import {
   CalendarBlank,
   FileText,
 } from '@phosphor-icons/react'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
@@ -182,7 +182,7 @@ export function PublicationsSection() {
   
   const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
-  const data = getCVData()
+  const data = useCV()
   const publications = data.publications || []
 
   useEffect(() => {

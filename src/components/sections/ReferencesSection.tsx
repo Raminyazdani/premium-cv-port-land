@@ -13,7 +13,7 @@ import {
   EyeSlash,
   FilePdf,
 } from '@phosphor-icons/react'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
@@ -166,7 +166,7 @@ function ReferenceCard({ reference, onOpenMedia }: ReferenceCardProps) {
 }
 
 export function ReferencesSection() {
-  const cvData = getCVData()
+  const cvData = useCV()
   const allReferences = cvData.references || []
   const { selectedFocus } = useFilter()
   const mediaModal = useMediaModal()

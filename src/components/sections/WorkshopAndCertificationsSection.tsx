@@ -22,7 +22,7 @@ import {
   X,
   FilePdf,
 } from '@phosphor-icons/react'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
@@ -192,7 +192,7 @@ function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOn
 }
 
 export function WorkshopAndCertificationsSection() {
-  const cvData = getCVData()
+  const cvData = useCV()
   const workshopsData = cvData.workshop_and_certifications ?? []
   
   const [searchQuery, setSearchQuery] = useState('')

@@ -18,7 +18,7 @@ import {
   CaretUp,
   DownloadSimple,
 } from '@phosphor-icons/react'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { detectMediaType } from '@/utils/mediaDetector'
@@ -335,7 +335,7 @@ function LanguageCard({ language }: LanguageCardProps) {
 }
 
 export function LanguagesSection() {
-  const cvData = getCVData()
+  const cvData = useCV()
   const languages = cvData.languages ?? []
   
   const { containerRef, getItemStyle } = useStaggeredScrollAnimation(languages.length, {

@@ -11,7 +11,7 @@ import {
   CaretDown,
   CaretUp,
 } from '@phosphor-icons/react'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import { isVisibleWithFilter, type FocusFilter, getStoredFocusFilter } from '@/lib/focusFilterManager'
 import type { Experience } from '@/types/cv'
 
@@ -171,7 +171,7 @@ export function ExperiencesSection() {
   const [groupBy, setGroupBy] = useState<'none' | 'category'>('category')
   const [currentFilter, setCurrentFilter] = useState<FocusFilter>('Full CV')
   
-  const data = getCVData()
+  const data = useCV()
   const experiences = data.experiences ?? []
 
   useEffect(() => {

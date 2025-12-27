@@ -10,7 +10,7 @@ import {
   Calendar,
   TrendUp,
 } from '@phosphor-icons/react'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import type { Education } from '@/types/cv'
 import { 
@@ -146,7 +146,7 @@ function EducationCard({ education, index }: EducationCardProps) {
 }
 
 export function EducationSection() {
-  const cvData = getCVData()
+  const cvData = useCV()
   const education = cvData.education ?? []
   const { selectedFocus } = useFilter()
   

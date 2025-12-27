@@ -10,7 +10,7 @@ import {
   MagnifyingGlass,
   X,
 } from '@phosphor-icons/react'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
@@ -139,7 +139,7 @@ export function ProjectsSection() {
   
   const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
-  const data = getCVData()
+  const data = useCV()
   const projects = data.projects ?? []
 
   const allDomains = useMemo(() => {
