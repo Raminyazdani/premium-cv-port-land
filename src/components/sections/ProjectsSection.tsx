@@ -53,7 +53,7 @@ function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Card className="group hover:border-primary/50 transition-all duration-200 h-full flex flex-col overflow-hidden">
       {detectImageUrl && (
-        <div className="w-full h-48 overflow-hidden bg-muted">
+        <div className="w-full h-40 sm:h-48 overflow-hidden bg-muted">
           <img
             src={detectImageUrl}
             alt={title}
@@ -67,15 +67,15 @@ function ProjectCard({ project }: ProjectCardProps) {
         </div>
       )}
       
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 px-4 sm:px-6 pt-4 sm:pt-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 space-y-1.5">
-            <CardTitle className="text-lg font-semibold leading-tight group-hover:text-primary transition-colors">
+            <CardTitle className="text-base sm:text-lg font-semibold leading-tight group-hover:text-primary transition-colors">
               {title}
             </CardTitle>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1 sm:gap-1.5">
               {uniqueDomains.map((domain, idx) => (
-                <Badge key={idx} variant="secondary" className="text-xs">
+                <Badge key={idx} variant="secondary" className="text-[10px] sm:text-xs py-0.5 px-1.5 sm:px-2">
                   {domain}
                 </Badge>
               ))}
@@ -84,10 +84,10 @@ function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </CardHeader>
       
-      <CardContent className="flex-1 flex flex-col">
+      <CardContent className="flex-1 flex flex-col px-4 sm:px-6 pb-4 sm:pb-6">
         <div className="flex-1">
           {description && (
-            <CardDescription className="text-sm leading-relaxed line-clamp-4">
+            <CardDescription className="text-xs sm:text-sm leading-relaxed line-clamp-4">
               {description}
             </CardDescription>
           )}
@@ -98,7 +98,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             <Button
               variant="outline"
               size="sm"
-              className="w-full group/btn"
+              className="w-full group/btn h-10 sm:h-9 text-sm touch-manipulation"
               asChild
             >
               <a
@@ -237,51 +237,51 @@ export function ProjectsSection() {
   }
 
   return (
-    <section id="projects" className="w-full min-h-screen bg-gradient-to-b from-background via-muted/20 to-background px-4 py-16 md:py-24">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="space-y-4">
+    <section id="projects" className="w-full min-h-screen bg-gradient-to-b from-background via-muted/20 to-background px-3 sm:px-4 py-12 sm:py-16 md:py-24">
+      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
+        <div className="space-y-3 sm:space-y-4">
           <div className="space-y-2">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-3">
-              <Folder className="h-8 w-8 text-primary" />
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-2 sm:gap-3">
+              <Folder className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
               Projects & Portfolio
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground">
               A collection of programming, bioinformatics, and research projects
             </p>
           </div>
           <Separator />
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="relative">
-            <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
               id="project-search"
-              placeholder="Search projects by title or description..."
+              placeholder="Search projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-10 h-11 text-base"
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-medium text-muted-foreground">Filter by:</span>
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground whitespace-nowrap">Filter by:</span>
             {allDomains.map(domain => (
               <Badge
                 key={domain}
                 variant={selectedDomains.has(domain) ? 'default' : 'outline'}
-                className="cursor-pointer hover:border-primary transition-colors"
+                className="cursor-pointer hover:border-primary transition-colors text-xs sm:text-sm py-1 px-2 touch-manipulation"
                 onClick={() => toggleDomain(domain)}
               >
                 {domain}
               </Badge>
             ))}
             
-            <Separator orientation="vertical" className="h-6" />
+            <Separator orientation="vertical" className="h-5 sm:h-6 hidden xs:block" />
             
             <Badge
               variant={hasLinkFilter === true ? 'default' : 'outline'}
-              className="cursor-pointer hover:border-primary transition-colors"
+              className="cursor-pointer hover:border-primary transition-colors text-xs sm:text-sm py-1 px-2 touch-manipulation"
               onClick={() => setHasLinkFilter(curr => curr === true ? null : true)}
             >
               Has Link
@@ -289,15 +289,15 @@ export function ProjectsSection() {
             
             {hasActiveFilters && (
               <>
-                <Separator orientation="vertical" className="h-6" />
+                <Separator orientation="vertical" className="h-5 sm:h-6 hidden xs:block" />
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={clearAllFilters}
-                  className="h-7 text-xs"
+                  className="h-8 sm:h-7 text-xs px-2 sm:px-3 touch-manipulation"
                 >
                   <X className="h-3 w-3 mr-1" />
-                  Clear Filters
+                  Clear
                 </Button>
               </>
             )}
@@ -306,19 +306,19 @@ export function ProjectsSection() {
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Showing {filteredProjects.length} of {uniqueProjects.length} projects
             </p>
           </div>
 
           {filteredProjects.length === 0 ? (
-            <Card className="p-8">
+            <Card className="p-6 sm:p-8">
               <div className="text-center space-y-2">
-                <Folder className="h-12 w-12 mx-auto text-muted-foreground/50" />
-                <p className="text-muted-foreground">
+                <Folder className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-muted-foreground/50" />
+                <p className="text-sm sm:text-base text-muted-foreground">
                   No projects match your current filters
                 </p>
-                <Button variant="link" size="sm" onClick={clearAllFilters}>
+                <Button variant="link" size="sm" onClick={clearAllFilters} className="touch-manipulation">
                   Clear all filters
                 </Button>
               </div>
@@ -326,7 +326,7 @@ export function ProjectsSection() {
           ) : (
             <div 
               ref={containerRef as React.RefObject<HTMLDivElement>}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
             >
               {filteredProjects.map((project, idx) => (
                 <div key={idx} style={getItemStyle(idx)}>

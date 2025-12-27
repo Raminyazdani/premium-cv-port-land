@@ -12,6 +12,23 @@ html {
   * {
     @apply border-border
   }
+  
+  body {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  @media (max-width: 640px) {
+    body {
+      font-size: 14px;
+    }
+  }
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {

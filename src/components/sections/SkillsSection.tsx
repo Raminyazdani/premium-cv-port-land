@@ -90,11 +90,11 @@ export function SkillsSection() {
   }
 
   return (
-    <section id="skills" className="w-full py-16 px-4 bg-muted/30">
+    <section id="skills" className="w-full py-12 sm:py-16 px-3 sm:px-4 bg-muted/30">
       <div className="max-w-5xl mx-auto">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2">Skills & Expertise</h2>
-          <p className="text-muted-foreground">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2">Skills & Expertise</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">
             {skillsArray.reduce((sum, cat) => sum + cat.totalCount, 0)} skills across {skillsArray.length} domains
           </p>
         </div>
@@ -102,34 +102,35 @@ export function SkillsSection() {
         <div className="mb-6 relative max-w-md">
           <MagnifyingGlass 
             size={18} 
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" 
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" 
           />
           <Input
             type="text"
             placeholder="Search skills..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-10"
+            className="pl-10 pr-10 h-11 text-base"
           />
           {searchQuery && (
             <Button
               size="icon"
               variant="ghost"
               onClick={() => setSearchQuery('')}
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+              className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-9 touch-manipulation"
+              aria-label="Clear search"
             >
-              <X size={14} />
+              <X size={16} />
             </Button>
           )}
         </div>
 
         {skillsArray.length === 0 ? (
-          <div className="text-center py-16 text-muted-foreground">
-            <MagnifyingGlass size={48} className="mx-auto mb-4 opacity-30" />
-            <p className="text-lg">No skills found matching "{searchQuery}"</p>
+          <div className="text-center py-12 sm:py-16 text-muted-foreground">
+            <MagnifyingGlass size={40} className="sm:w-12 sm:h-12 mx-auto mb-4 opacity-30" />
+            <p className="text-base sm:text-lg px-4">No skills found matching "{searchQuery}"</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {skillsArray.map(({ category, groups, totalCount }) => (
               <Collapsible
                 key={category}
@@ -137,37 +138,37 @@ export function SkillsSection() {
                 onOpenChange={() => toggleCategory(category)}
               >
                 <div className="border rounded-lg bg-card overflow-hidden">
-                  <CollapsibleTrigger className="w-full px-4 py-3 flex items-center justify-between hover:bg-accent/50 transition-colors group">
-                    <div className="flex items-center gap-3">
+                  <CollapsibleTrigger className="w-full px-3 sm:px-4 py-3 sm:py-3.5 flex items-center justify-between hover:bg-accent/50 transition-colors group touch-manipulation">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                       <CaretDown
-                        size={18}
+                        size={16}
                         weight="bold"
-                        className={`text-muted-foreground transition-transform ${
+                        className={`text-muted-foreground transition-transform flex-shrink-0 sm:w-[18px] sm:h-[18px] ${
                           openCategories.has(category) ? 'rotate-0' : '-rotate-90'
                         }`}
                       />
-                      <h3 className="text-base font-semibold text-left">
+                      <h3 className="text-sm sm:text-base font-semibold text-left truncate">
                         {category}
                       </h3>
                     </div>
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" className="text-xs ml-2 flex-shrink-0">
                       {totalCount}
                     </Badge>
                   </CollapsibleTrigger>
                   
                   <CollapsibleContent>
-                    <div className="px-4 pb-4 pt-2 space-y-4">
+                    <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2 space-y-3 sm:space-y-4">
                       {groups.map((group) => (
                         <div key={group.name} className="space-y-2">
-                          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                          <h4 className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-wide">
                             {group.name}
                           </h4>
-                          <div className="flex flex-wrap gap-1.5">
+                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
                             {group.items.map((skill, idx) => (
                               <Badge
                                 key={idx}
                                 variant="outline"
-                                className="text-xs font-normal hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors cursor-default"
+                                className="text-xs font-normal hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors cursor-default py-1 px-2 sm:px-2.5"
                                 title={skill.long_name !== skill.short_name ? skill.long_name : undefined}
                               >
                                 {skill.short_name}

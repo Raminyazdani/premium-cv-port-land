@@ -29,7 +29,7 @@ function SocialButton({ profile }: { profile: Profile }) {
       variant="outline"
       size="icon"
       asChild
-      className="hover:scale-105 hover:bg-primary hover:text-primary-foreground transition-all"
+      className="h-11 w-11 sm:h-12 sm:w-12 hover:scale-105 hover:bg-primary hover:text-primary-foreground transition-all touch-manipulation"
     >
       <a
         href={profile.url}
@@ -37,7 +37,7 @@ function SocialButton({ profile }: { profile: Profile }) {
         rel="noopener noreferrer"
         aria-label={`Visit ${profile.network} profile`}
       >
-        <Icon size={20} weight="fill" />
+        <Icon size={20} weight="fill" className="sm:w-5 sm:h-5" />
       </a>
     </Button>
   )
@@ -80,7 +80,7 @@ export function HeroSection() {
     <section
       id="hero"
       data-hero
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-14 sm:pt-16 lg:pt-20"
       style={{
         backgroundImage: coverPhoto
           ? `linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${coverPhoto})`
@@ -94,28 +94,28 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-background" />
       )}
 
-      <div className="container relative z-10 px-4 py-20">
+      <div className="container relative z-10 px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-4 sm:mb-6">
             <Avatar 
               data-profile-image
-              className="h-32 w-32 lg:h-40 lg:w-40 border-4 border-background shadow-2xl"
+              className="h-24 w-24 sm:h-32 sm:w-32 lg:h-40 lg:w-40 border-4 border-background shadow-2xl"
             >
               <AvatarImage src={profilePhoto || undefined} alt={fullName} />
-              <AvatarFallback className="text-3xl lg:text-4xl font-bold">
+              <AvatarFallback className="text-2xl sm:text-3xl lg:text-4xl font-bold">
                 {getInitials(fullName)}
               </AvatarFallback>
             </Avatar>
           </div>
 
-          <h1 className={`text-4xl lg:text-6xl font-bold mb-4 font-heading ${coverPhoto ? 'text-white' : 'text-foreground'}`}>
+          <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 font-heading px-2 ${coverPhoto ? 'text-white' : 'text-foreground'}`}>
             {fullName}
           </h1>
 
-          <div className="min-h-[2.5rem] mb-6">
+          <div className="min-h-[2rem] sm:min-h-[2.5rem] mb-4 sm:mb-6 px-4">
             {roles.length > 0 && (
               <p
-                className={`text-xl lg:text-2xl font-medium transition-opacity duration-500 ${
+                className={`text-lg sm:text-xl lg:text-2xl font-medium transition-opacity duration-500 ${
                   coverPhoto ? 'text-white/90' : 'text-muted-foreground'
                 }`}
                 key={currentRoleIndex}
@@ -126,25 +126,26 @@ export function HeroSection() {
           </div>
 
           {location && (
-            <div className="flex items-center justify-center gap-2 mb-8">
-              <MapPin size={20} weight="fill" className={coverPhoto ? 'text-white/80' : 'text-muted-foreground'} />
-              <span className={`text-sm lg:text-base ${coverPhoto ? 'text-white/90' : 'text-muted-foreground'}`}>
+            <div className="flex items-center justify-center gap-2 mb-6 sm:mb-8 px-4">
+              <MapPin size={18} className={`sm:w-5 sm:h-5 ${coverPhoto ? 'text-white/80' : 'text-muted-foreground'}`} weight="fill" />
+              <span className={`text-sm sm:text-base ${coverPhoto ? 'text-white/90' : 'text-muted-foreground'}`}>
                 {location}
               </span>
             </div>
           )}
 
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-4">
             {basics?.email && (
               <Button
                 variant={coverPhoto ? 'secondary' : 'default'}
                 size="lg"
                 asChild
-                className="gap-2"
+                className="gap-2 h-11 sm:h-12 text-sm sm:text-base min-w-[140px] sm:min-w-[160px]"
               >
-                <a href={`mailto:${basics.email}`}>
-                  <EnvelopeSimple size={20} weight="fill" />
-                  Get in Touch
+                <a href={`mailto:${basics.email}`} className="touch-manipulation">
+                  <EnvelopeSimple size={18} weight="fill" className="sm:w-5 sm:h-5" />
+                  <span className="hidden xs:inline">Get in Touch</span>
+                  <span className="xs:hidden">Contact</span>
                 </a>
               </Button>
             )}
@@ -162,10 +163,10 @@ export function HeroSection() {
 
           <button
             onClick={handleScrollToAbout}
-            className={`mt-12 animate-bounce ${coverPhoto ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
+            className={`mt-8 sm:mt-12 animate-bounce touch-manipulation p-2 ${coverPhoto ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
             aria-label="Scroll to about section"
           >
-            <ArrowDown size={32} weight="bold" />
+            <ArrowDown size={28} weight="bold" className="sm:w-8 sm:h-8" />
           </button>
         </div>
       </div>

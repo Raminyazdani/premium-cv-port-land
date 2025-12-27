@@ -54,23 +54,23 @@ export function Header() {
           : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20">
           <a
             href="#hero"
             onClick={(e) => handleNavClick(e, '#hero')}
-            className="text-lg lg:text-xl font-bold font-heading hover:text-primary transition-colors"
+            className="text-base sm:text-lg lg:text-xl font-bold font-heading hover:text-primary transition-colors truncate max-w-[150px] sm:max-w-none"
           >
             {fullName || 'Portfolio'}
           </a>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors"
+                className="px-3 xl:px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors"
               >
                 {item.label}
               </a>
@@ -82,18 +82,24 @@ export function Header() {
             </div>
           </nav>
 
-          <div className="flex items-center gap-2 md:hidden">
-            <FocusFilterSelector />
-            <LanguageSelector />
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden">
+            <div className="hidden sm:flex items-center gap-1.5">
+              <FocusFilterSelector />
+              <LanguageSelector />
+            </div>
             <ThemeSelector />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Open menu">
-                  <List size={24} weight="bold" />
+                <Button variant="ghost" size="icon" aria-label="Open menu" className="h-9 w-9 sm:h-10 sm:w-10">
+                  <List size={20} weight="bold" className="sm:w-6 sm:h-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-64">
+              <SheetContent side="right" className="w-[280px] sm:w-[320px]">
                 <div className="flex flex-col gap-4 mt-8">
+                  <div className="flex sm:hidden flex-col gap-3 pb-4 border-b border-border">
+                    <FocusFilterSelector />
+                    <LanguageSelector />
+                  </div>
                   {navItems.map((item) => (
                     <a
                       key={item.href}
