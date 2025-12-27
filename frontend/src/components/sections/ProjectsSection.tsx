@@ -56,7 +56,7 @@ function ProjectCard({ project, onOpenMedia }: ProjectCardProps) {
   }, [description])
 
   return (
-    <Card className="group hover:border-primary/50 transition-all duration-200 h-full flex flex-col overflow-hidden">
+    <Card className="card-interactive group hover:border-primary/50 transition-all duration-200 h-full flex flex-col overflow-hidden">
       {detectImageUrl && (
         <button
           onClick={() => onOpenMedia(detectImageUrl, title)}
@@ -66,20 +66,24 @@ function ProjectCard({ project, onOpenMedia }: ProjectCardProps) {
               onOpenMedia(detectImageUrl, title)
             }
           }}
-          className="w-full h-40 sm:h-48 overflow-hidden bg-muted cursor-pointer hover:opacity-90 transition-opacity"
+          className="relative w-full h-40 sm:h-48 overflow-hidden bg-muted cursor-pointer"
           aria-label={`View image for ${title}`}
           type="button"
         >
           <img
             src={detectImageUrl}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
             onError={(e) => {
               const target = e.target as HTMLImageElement
               target.style.display = 'none'
             }}
           />
+          {/* Overlay on hover */}
+          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <span className="text-white text-sm font-medium">Click to view</span>
+          </div>
         </button>
       )}
       
