@@ -1,6 +1,7 @@
-import { useEffect, useCallback, useRef } from 'react'
-import { X, ArrowLeft, ArrowRight, FilePdf } from '@phosphor-icons/react'
+import { useEffect, useCallback, useRef, useState } from 'react'
+import { X, ArrowLeft, ArrowRight, FilePdf, WarningCircle } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { detectMediaType } from '@/utils/mediaDetector'
 
 interface MediaModalProps {
@@ -24,8 +25,13 @@ export function MediaModal({
 }: MediaModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
   const mediaType = detectMediaType(url)
   const hasGallery = mediaList.length > 1
+  
+  const [imageLoading, setImageLoading] = useState(true)
+  const [imageError, setImageError] = useState(false)
+  const [announcement, setAnnouncement] = useState('')
 
   const handlePrevious = useCallback(() => {
     if (hasGallery && onNavigate && currentIndex > 0) {
@@ -38,6 +44,18 @@ export function MediaModal({
       onNavigate(currentIndex + 1)
     }
   }, [hasGallery, onNavigate, currentIndex, mediaList.length])
+
+  useEffect(() => {
+    if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement
+      setImageLoading(mediaType === 'image')
+      setImageError(false)
+      setAnnouncement(`Media viewer opened. Showing ${alt || 'media'}. Press Escape to close.`)
+    } else if (previousFocusRef.current) {
+      previousFocusRef.current.focus()
+      setAnnouncement('Media viewer closed')
+    }
+  }, [isOpen, alt, mediaType])
 
   useEffect(() => {
     if (!isOpen) return
@@ -102,6 +120,15 @@ export function MediaModal({
       aria-modal="true"
       aria-label="Media viewer"
     >
+      <div 
+        role="status" 
+        aria-live="polite" 
+        aria-atomic="true" 
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      
       <div
         ref={modalRef}
         className="relative max-w-7xl max-h-[90vh] w-full bg-background rounded-lg shadow-2xl overflow-hidden"
@@ -126,11 +153,45 @@ export function MediaModal({
 
         <div className="flex items-center justify-center min-h-[400px] max-h-[90vh] p-8">
           {mediaType === 'image' && (
-            <img
-              src={url}
-              alt={alt}
-              className="max-w-full max-h-[80vh] object-contain"
-            />
+            <div className="relative w-full h-full flex items-center justify-center">
+              {imageLoading && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Spinner size={48} label="Loading image" />
+                </div>
+              )}
+              {imageError ? (
+                <div className="flex flex-col items-center gap-4 p-8">
+                  <WarningCircle size={64} className="text-destructive" weight="fill" />
+                  <p className="text-lg font-medium">Failed to load image</p>
+                  <p className="text-sm text-muted-foreground">The image could not be loaded</p>
+                  <Button 
+                    onClick={() => {
+                      setImageError(false)
+                      setImageLoading(true)
+                    }}
+                  >
+                    Retry
+                  </Button>
+                </div>
+              ) : (
+                <img
+                  src={url}
+                  alt={alt}
+                  onLoad={() => {
+                    setImageLoading(false)
+                    setAnnouncement(`Image loaded: ${alt}`)
+                  }}
+                  onError={() => {
+                    setImageLoading(false)
+                    setImageError(true)
+                    setAnnouncement('Failed to load image')
+                  }}
+                  className={`max-w-full max-h-[80vh] object-contain transition-opacity duration-300 ${
+                    imageLoading ? 'opacity-0' : 'opacity-100'
+                  }`}
+                />
+              )}
+            </div>
           )}
 
           {mediaType === 'pdf' && (

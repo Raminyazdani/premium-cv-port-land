@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Check, FunnelSimple } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import {
@@ -60,6 +60,7 @@ function deriveFilterOptions(): FilterOption[] {
 
 export function FocusFilterSelector() {
   const { selectedFocus, setSelectedFocus, setAvailableFocusOptions } = useFilter()
+  const [announcement, setAnnouncement] = useState('')
   const filterOptions = deriveFilterOptions()
 
   useEffect(() => {
@@ -68,43 +69,58 @@ export function FocusFilterSelector() {
 
   const handleFilterChange = (filter: string) => {
     setSelectedFocus(filter)
+    const selected = filterOptions.find(o => o.id === filter)
+    setAnnouncement(`Content filter changed to ${selected?.label || filter}. ${selected?.description || ''}`)
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="icon"
-          className="relative"
-          aria-label="Filter content focus"
-        >
-          <FunnelSimple className="h-5 w-5" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
-        <DropdownMenuLabel>Content Focus</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {filterOptions.map((option) => (
-          <DropdownMenuItem
-            key={option.id}
-            onClick={() => handleFilterChange(option.id)}
-            className="flex items-start gap-2 cursor-pointer"
+    <>
+      <div 
+        role="status" 
+        aria-live="polite" 
+        aria-atomic="true" 
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button 
+            variant="outline" 
+            size="icon"
+            className="relative"
+            aria-label="Filter content focus"
           >
-            <div className="flex items-center justify-center w-5 h-5 mt-0.5">
-              {selectedFocus === option.id && (
-                <Check className="h-4 w-4" weight="bold" />
-              )}
-            </div>
-            <div className="flex-1">
-              <div className="font-medium">{option.label}</div>
-              <div className="text-xs text-muted-foreground">
-                {option.description}
+            <FunnelSimple className="h-5 w-5" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-64">
+          <DropdownMenuLabel>Content Focus</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {filterOptions.map((option) => (
+            <DropdownMenuItem
+              key={option.id}
+              onClick={() => handleFilterChange(option.id)}
+              className="flex items-start gap-2 cursor-pointer focus:bg-accent focus:text-accent-foreground"
+              role="menuitemradio"
+              aria-checked={selectedFocus === option.id}
+            >
+              <div className="flex items-center justify-center w-5 h-5 mt-0.5">
+                {selectedFocus === option.id && (
+                  <Check className="h-4 w-4 text-primary" weight="bold" aria-hidden="true" />
+                )}
               </div>
-            </div>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+              <div className="flex-1">
+                <div className="font-medium">{option.label}</div>
+                <div className="text-xs text-muted-foreground">
+                  {option.description}
+                </div>
+              </div>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   )
 }

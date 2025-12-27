@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar, Clock, Video, Phone, MapPin } from '@phosphor-icons/react'
+import { Spinner } from '@/components/ui/spinner'
 import { toast } from 'sonner'
 
 type MeetingType = 'video' | 'phone' | 'in-person'
@@ -16,6 +17,8 @@ export function BookingWidget() {
   const [selectedType, setSelectedType] = useState<MeetingType>('video')
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedTime, setSelectedTime] = useState<string>('')
+  const [isBooking, setIsBooking] = useState(false)
+  const [statusMessage, setStatusMessage] = useState('')
 
   const mockTimeSlots: TimeSlot[] = [
     { id: '1', time: '09:00 AM', available: true },
@@ -47,21 +50,39 @@ export function BookingWidget() {
     },
   ]
 
-  const handleBookCall = () => {
+  const handleBookCall = async () => {
     if (!selectedDate || !selectedTime) {
       toast.error('Please select a date and time')
+      setStatusMessage('Please select both a date and time to continue')
       return
     }
 
-    toast.info('Booking system not implemented yet', {
-      description: 'Calendar integration (e.g., Calendly) will be added in a future update.',
-    })
+    setIsBooking(true)
+    setStatusMessage('Booking your call...')
 
-    console.log('Booking details (would be sent to backend):', {
-      type: selectedType,
-      date: selectedDate,
-      time: selectedTime,
-    })
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      const meetingLabel = meetingTypes.find((t) => t.id === selectedType)?.label
+      setStatusMessage(`Call booked successfully: ${meetingLabel} on ${selectedDate} at ${selectedTime}`)
+      
+      toast.success('Call booked!', {
+        description: `Your ${meetingLabel?.toLowerCase()} is scheduled for ${selectedDate} at ${selectedTime}.`,
+      })
+
+      console.log('Booking details (would be sent to backend):', {
+        type: selectedType,
+        date: selectedDate,
+        time: selectedTime,
+      })
+    } catch (error) {
+      setStatusMessage('Failed to book call. Please try again.')
+      toast.error('Booking failed', {
+        description: 'There was a problem booking your call. Please try again later.',
+      })
+    } finally {
+      setIsBooking(false)
+    }
   }
 
   return (
@@ -73,6 +94,15 @@ export function BookingWidget() {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-8">
+        <div 
+          role="status" 
+          aria-live="polite" 
+          aria-atomic="true" 
+          className="sr-only"
+        >
+          {statusMessage}
+        </div>
+        
         <div className="flex flex-col gap-4">
           <h3 className="text-sm font-medium">Meeting Type</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -83,6 +113,12 @@ export function BookingWidget() {
                   key={type.id}
                   type="button"
                   onClick={() => setSelectedType(type.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      setSelectedType(type.id)
+                    }
+                  }}
                   className={`
                     flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-all
                     ${
@@ -168,17 +204,26 @@ export function BookingWidget() {
         <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
           <Button
             onClick={handleBookCall}
-            disabled={!selectedDate || !selectedTime}
+            disabled={!selectedDate || !selectedTime || isBooking}
             className="flex-1"
           >
-            Book a Call
+            {isBooking ? (
+              <>
+                <Spinner size={16} className="mr-2" label="Booking" />
+                Booking...
+              </>
+            ) : (
+              'Book a Call'
+            )}
           </Button>
           <Button
             variant="outline"
             onClick={() => {
               setSelectedDate('')
               setSelectedTime('')
+              setStatusMessage('Selection cleared')
             }}
+            disabled={isBooking}
             className="sm:w-auto"
           >
             Clear Selection

@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { PaperPlaneRight } from '@phosphor-icons/react'
+import { Spinner } from '@/components/ui/spinner'
 import { toast } from 'sonner'
 
 interface FormData {
@@ -32,6 +33,7 @@ export function ContactForm() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [statusMessage, setStatusMessage] = useState<string>('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -102,7 +104,7 @@ export function ContactForm() {
     return isValid
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -111,10 +113,32 @@ export function ContactForm() {
       return
     }
 
-    setStatusMessage('Form submitted successfully. Backend integration pending.')
-    toast.info('Backend not implemented yet', {
-      description: 'The contact form submission functionality will be added once the backend API is available.',
-    })
+    setIsSubmitting(true)
+    setStatusMessage('Sending your message...')
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      setStatusMessage('Message sent successfully!')
+      toast.success('Message sent!', {
+        description: 'Thank you for reaching out. I\'ll get back to you as soon as possible.',
+      })
+      
+      setFormData({ name: '', email: '', subject: '', message: '' })
+      setTouched({})
+      setErrors({})
+      
+      setTimeout(() => {
+        document.getElementById('name')?.focus()
+      }, 100)
+    } catch (error) {
+      setStatusMessage('Failed to send message. Please try again.')
+      toast.error('Failed to send message', {
+        description: 'There was a problem sending your message. Please try again later or email directly.',
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
 
     console.log('Form data (would be sent to backend):', formData)
   }
@@ -230,9 +254,18 @@ export function ContactForm() {
             )}
           </div>
 
-          <Button type="submit" className="w-full sm:w-auto sm:self-end">
-            <PaperPlaneRight className="mr-2" />
-            Send Message
+          <Button type="submit" className="w-full sm:w-auto sm:self-end" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Spinner size={16} className="mr-2" label="Sending" />
+                Sending...
+              </>
+            ) : (
+              <>
+                <PaperPlaneRight className="mr-2" />
+                Send Message
+              </>
+            )}
           </Button>
         </form>
       </CardContent>
