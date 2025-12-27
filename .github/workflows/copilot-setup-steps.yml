@@ -1,0 +1,75 @@
+name: Copilot Setup Steps
+
+# This workflow provides deterministic setup steps for GitHub Copilot coding agents.
+# It preinstalls dependencies to make background jobs faster and more reliable.
+# 
+# IMPORTANT: 
+# - This workflow must be on the default branch to be used by Copilot
+# - The job name MUST be exactly "copilot-setup-steps"
+# - Only Ubuntu x64 runners are supported for Copilot coding agent environment
+# 
+# Documentation: 
+# https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment
+
+on:
+  workflow_dispatch: # Allow manual triggering for validation
+  
+permissions:
+  contents: read # Minimal permissions
+
+jobs:
+  copilot-setup-steps:
+    name: Setup Dependencies for Copilot
+    runs-on: ubuntu-latest # Copilot supports Ubuntu x64 only
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Verify installation
+        run: |
+          node --version
+          npm --version
+          npx vite --version
+          npx vitest --version
+          
+      - name: Cache build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules/.vite
+            dist
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+            
+      - name: Verify test infrastructure
+        run: |
+          echo "Checking test files exist..."
+          test -f tests/locked-files-integrity.test.ts || (echo "Missing locked files test" && exit 1)
+          test -f tests/language-content-verification.test.tsx || (echo "Missing language verification test" && exit 1)
+          echo "✅ Test infrastructure verified"
+          
+      - name: Verify locked data files
+        run: |
+          echo "Checking locked CV data files exist..."
+          test -f src/data/cv.json || (echo "Missing cv.json" && exit 1)
+          test -f src/data/ramin_de.json || (echo "Missing ramin_de.json" && exit 1)
+          test -f src/data/ramin_fa.json || (echo "Missing ramin_fa.json" && exit 1)
+          echo "✅ Locked files verified"
+          
+      - name: Setup complete
+        run: |
+          echo "✅ Copilot environment setup complete"
+          echo "Node.js: $(node --version)"
+          echo "npm: $(npm --version)"
+          echo "Dependencies installed: $(ls node_modules | wc -l) packages"

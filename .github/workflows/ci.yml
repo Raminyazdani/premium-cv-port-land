@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop, copilot/** ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch: # Allow manual runs
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  lint-and-test:
+    name: Lint, Test & Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Verify locked files integrity
+        run: |
+          echo "Computing hashes for locked CV files..."
+          md5sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+          echo ""
+          echo "Note: Locked files must not be modified. Any changes will fail tests."
+        
+      - name: Run linter
+        run: npm run lint
+        continue-on-error: true # Don't fail CI on lint warnings
+        
+      - name: Run unit tests
+        run: npm run test
+        
+      - name: Run language smoke validation
+        run: npm run verify-languages
+        
+      - name: Build for production
+        run: npm run build
+        
+      - name: Check build artifacts
+        run: |
+          echo "Checking build output..."
+          test -f dist/index.html || (echo "Missing index.html" && exit 1)
+          test -d dist/assets || (echo "Missing assets directory" && exit 1)
+          echo "✅ Build artifacts verified"
+          ls -lh dist/
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+          
+  visual-proof:
+    name: Visual Proof (Screenshots)
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Run Playwright screenshot tests
+        run: npx playwright test
+        continue-on-error: true # Don't fail if screenshots don't match, just upload them
+        
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+          
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: test-results/
+          retention-days: 7
+          
+  smoke-validation:
+    name: Smoke Validation (EN/DE/FA)
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Validate English data
+        run: |
+          echo "Validating English (EN) data..."
+          npm run verify-languages | grep "English (EN):.*PASSED" || exit 1
+          
+      - name: Validate German data
+        run: |
+          echo "Validating German (DE) data..."
+          npm run verify-languages | grep "German (DE):.*PASSED" || exit 1
+          
+      - name: Validate Persian data
+        run: |
+          echo "Validating Persian (FA) data..."
+          npm run verify-languages | grep "Persian (FA):.*PASSED" || exit 1
+          
+      - name: All languages validated
+        run: |
+          echo "✅ All three languages (EN/DE/FA) validated successfully!"
+          echo "No empty sections detected."
+          echo "No undefined/null values detected."
