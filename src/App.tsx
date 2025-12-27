@@ -12,6 +12,7 @@ import { ExperiencesSection } from '@/components/sections/ExperiencesSection'
 import { ProjectsSection } from '@/components/sections/ProjectsSection'
 import { PublicationsSection } from '@/components/sections/PublicationsSection'
 import { ReferencesSection } from '@/components/sections/ReferencesSection'
+import { ContactSection } from '@/components/sections/ContactSection'
 import { Footer } from '@/components/sections/Footer'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <WorkshopAndCertificationsSection />
         <SkillsSection />
         <ReferencesSection />
+        <ContactSection />
         <Footer />
         <Toaster position="bottom-right" />
       </div>
