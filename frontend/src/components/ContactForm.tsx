@@ -127,6 +127,17 @@ export function ContactForm() {
     setStatusMessage(t.forms.sending)
 
     try {
+      // TODO: Replace with backend API call
+      // POST to /api/contact endpoint with formData
+      // Example:
+      // const response = await fetch('/api/contact', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData)
+      // })
+      // if (!response.ok) throw new Error('Failed to send message')
+      
+      // Simulating backend call for now
       await new Promise(resolve => setTimeout(resolve, 1500))
       
       setStatusMessage(t.forms.sent)
