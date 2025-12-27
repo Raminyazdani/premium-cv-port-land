@@ -5,9 +5,13 @@
  * Usage: node tests/generate-hashes.js
  */
 
-const crypto = require('crypto')
-const fs = require('fs')
-const path = require('path')
+import crypto from 'crypto'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 function computeSHA256(filePath) {
   const fileBuffer = fs.readFileSync(filePath)
@@ -63,3 +67,4 @@ fs.writeFileSync(hashesFilePath, JSON.stringify(output, null, 2))
 console.log(`✅ Hashes written to: ${path.relative(projectRoot, hashesFilePath)}`)
 console.log('\n⚠️  IMPORTANT: Commit this file to version control.')
 console.log('Tests will now fail if any locked data files are modified.')
+
