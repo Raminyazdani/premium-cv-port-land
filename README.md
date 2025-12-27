@@ -2,10 +2,14 @@
 
 > **A premium, production-quality personal CV/portfolio website** built with React, TypeScript, and the Spark framework. Fully driven by structured JSON data for easy customization and reusability.
 
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-success.svg)](./ITERATION_55_STATUS.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://reactjs.org/)
 [![Lighthouse](https://img.shields.io/badge/Lighthouse-90+-green.svg)](https://developers.google.com/web/tools/lighthouse)
 [![WCAG](https://img.shields.io/badge/WCAG-AA-brightgreen.svg)](https://www.w3.org/WAI/WCAG2AA-Conformance)
+[![Iterations](https://img.shields.io/badge/Iterations-55-blueviolet.svg)](./ITERATION_55_STATUS.md)
+
+> 📚 **New Here?** Start with [QUICK_START.md](./QUICK_START.md) for a 5-minute deployment guide, or see [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for all documentation.
 
 ---
 
