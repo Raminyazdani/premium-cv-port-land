@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,11 @@ import {
 import { getCVData } from '@/lib/cv-data'
 import type { Reference } from '@/types/cv'
 import { toast } from 'sonner'
+import { 
+  type FocusFilter, 
+  getStoredFocusFilter, 
+  isVisibleWithFilter 
+} from '@/lib/focusFilterManager'
 
 interface ReferenceCardProps {
   reference: Reference
@@ -172,14 +177,29 @@ function ReferenceCard({ reference }: ReferenceCardProps) {
 
 export function ReferencesSection() {
   const cvData = getCVData()
-  const references = cvData.references || []
+  const allReferences = cvData.references || []
+  const [currentFilter, setCurrentFilter] = useState<FocusFilter>(getStoredFocusFilter())
 
-  if (references.length === 0) {
+  useEffect(() => {
+    const handleFilterChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ filter: FocusFilter }>
+      setCurrentFilter(customEvent.detail.filter)
+    }
+
+    window.addEventListener('focusFilterChange', handleFilterChange)
+    return () => window.removeEventListener('focusFilterChange', handleFilterChange)
+  }, [])
+
+  const filteredReferences = allReferences.filter(reference => 
+    isVisibleWithFilter(reference.type_key, currentFilter)
+  )
+
+  if (filteredReferences.length === 0) {
     return null
   }
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="references" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
       <div className="mb-8">
         <h2 className="text-3xl font-bold mb-3 flex items-center gap-3">
           <UserCircle weight="duotone" className="text-primary" size={36} />
@@ -196,7 +216,7 @@ export function ReferencesSection() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {references.map((reference, index) => (
+        {filteredReferences.map((reference, index) => (
           <ReferenceCard key={index} reference={reference} />
         ))}
       </div>
