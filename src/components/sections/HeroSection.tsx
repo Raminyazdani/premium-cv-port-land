@@ -9,8 +9,8 @@ import {
   GithubLogo,
   ArrowDown,
 } from '@phosphor-icons/react'
-import { getBasics, getProfilePhotoUrl, getCoverPhotoUrl, getInitials, formatLocation, getFullName, getRoles } from '@/lib/cv-data'
-import { getProfiles } from '@/lib/cv-data'
+import { extractBasics, extractProfilePhotoUrl, extractCoverPhotoUrl, extractProfiles, getInitials, formatLocation, getFullName, getRoles } from '@/lib/cv-data'
+import { useCVData } from '@/context/CVDataContext'
 import { optimizeCloudinaryImage } from '@/utils/imageOptimizer'
 import type { Profile } from '@/types/cv'
 
@@ -45,12 +45,13 @@ function SocialButton({ profile }: { profile: Profile }) {
 }
 
 export function HeroSection() {
-  const basics = getBasics()
-  const profiles = getProfiles()
+  const { data } = useCVData()
+  const basics = extractBasics(data)
+  const profiles = extractProfiles(data)
   const fullName = getFullName(basics)
   const roles = getRoles(basics?.label)
-  const profilePhoto = getProfilePhotoUrl()
-  const coverPhoto = getCoverPhotoUrl()
+  const profilePhoto = extractProfilePhotoUrl(basics)
+  const coverPhoto = extractCoverPhotoUrl(basics)
   const optimizedCover = coverPhoto 
     ? optimizeCloudinaryImage(coverPhoto, { width: 1920, quality: 'auto:good', format: 'auto' })
     : null

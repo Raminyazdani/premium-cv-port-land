@@ -1,0 +1,19 @@
+# Locked data files - DO NOT format these
+src/data/cv.json
+src/data/ramin_de.json
+src/data/ramin_fa.json
+
+# Build output
+dist
+build
+.next
+
+# Dependencies
+node_modules
+
+# Logs
+*.log
+
+# IDE
+.vscode
+.idea

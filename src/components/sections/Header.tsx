@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, X } from '@phosphor-icons/react'
-import { getBasics, getFullName } from '@/lib/cv-data'
+import { extractBasics, getFullName } from '@/lib/cv-data'
+import { useCVData } from '@/context/CVDataContext'
 import { ThemeSelector } from '@/components/ThemeSelector'
 import { LanguageSelector } from '@/components/LanguageSelector'
 import { FocusFilterSelector } from '@/components/FocusFilterSelector'
@@ -21,7 +22,8 @@ const navItems = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const basics = getBasics()
+  const { data } = useCVData()
+  const basics = extractBasics(data)
   const fullName = getFullName(basics)
 
   useEffect(() => {

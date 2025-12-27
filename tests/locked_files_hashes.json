@@ -1,10 +1,18 @@
 {
-  "comment": "SHA256 checksums for locked CV data files. DO NOT MODIFY THESE FILES.",
-  "files": {
-    "src/data/cv.json": "PLACEHOLDER_HASH_EN",
-    "src/data/ramin_de.json": "PLACEHOLDER_HASH_DE",
-    "src/data/ramin_fa.json": "PLACEHOLDER_HASH_FA"
+  "description": "SHA256 hashes of locked data files. DO NOT MODIFY. Changes to these files will cause tests to fail.",
+  "locked_files": {
+    "src/data/cv.json": {
+      "description": "English CV data - locked up to and including 'projects' section",
+      "hash": "PLACEHOLDER_HASH_TO_BE_GENERATED"
+    },
+    "src/data/ramin_de.json": {
+      "description": "German CV data - locked up to and including 'projects' section",
+      "hash": "PLACEHOLDER_HASH_TO_BE_GENERATED"
+    },
+    "src/data/ramin_fa.json": {
+      "description": "Persian CV data - locked up to and including 'projects' section",
+      "hash": "PLACEHOLDER_HASH_TO_BE_GENERATED"
+    }
   },
-  "generated": "2025-01-26T00:00:00.000Z",
-  "purpose": "Ensures language data files remain unmodified during development"
+  "instructions": "To regenerate hashes after intentional file changes, run: npm run generate-hashes"
 }

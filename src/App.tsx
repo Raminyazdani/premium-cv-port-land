@@ -2,9 +2,10 @@ import { lazy, Suspense, useEffect, useMemo } from 'react'
 import { Toaster } from 'sonner'
 import { FilterProvider, useFilter } from '@/context/FilterContext'
 import { LanguageProvider, useLanguage } from '@/context/LanguageContext'
+import { CVDataProvider, useCVData } from '@/context/CVDataContext'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
-import { loadAndValidateData, extractAllTypeKeys } from '@/utils/dataLoader'
+import { extractAllTypeKeys } from '@/utils/dataLoader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/ErrorFallback'
 
@@ -35,25 +36,23 @@ function SectionSkeleton() {
 
 function AppContent() {
   const { setAvailableFocusOptions } = useFilter()
-  const { language } = useLanguage()
-
-  const { data, validationResult } = useMemo(() => loadAndValidateData(language), [language])
+  const { data, isValid, errors, warnings } = useCVData()
 
   useEffect(() => {
     if (import.meta.env.DEV) {
-      if (validationResult.errors.length > 0) {
-        console.error('❌ Data validation errors:', validationResult.errors)
+      if (errors.length > 0) {
+        console.error('❌ Data validation errors:', errors)
       }
-      if (validationResult.warnings.length > 0) {
-        console.warn('⚠️  Data validation warnings:', validationResult.warnings)
+      if (warnings.length > 0) {
+        console.warn('⚠️  Data validation warnings:', warnings)
       }
     }
 
     const focusOptions = extractAllTypeKeys(data)
     setAvailableFocusOptions(focusOptions)
-  }, [data, validationResult, setAvailableFocusOptions])
+  }, [data, errors, warnings, setAvailableFocusOptions])
 
-  if (!validationResult.isValid) {
+  if (!isValid) {
     console.error('Data validation failed. Displaying with best effort.')
   }
 
@@ -114,9 +113,11 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
       <LanguageProvider>
-        <FilterProvider>
-          <AppContent />
-        </FilterProvider>
+        <CVDataProvider>
+          <FilterProvider>
+            <AppContent />
+          </FilterProvider>
+        </CVDataProvider>
       </LanguageProvider>
     </ErrorBoundary>
   )

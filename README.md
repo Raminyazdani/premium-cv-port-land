@@ -439,32 +439,71 @@ The schema is validated at runtime using TypeScript interfaces. Missing or null 
 
 ## 🎨 Customization Guide
 
-### Adding New Languages
+### Multi-Language Support 🌍
 
-Currently supports EN/DE/FA. To add a new language:
+The site fully supports **English (EN), German (DE), and Persian (FA)** with automatic:
+- Data normalization (translated keys → canonical schema)
+- RTL layout for Persian
+- UI string translations
+- URL persistence (`?lang=fa`)
+- localStorage persistence
 
-1. **Create language JSON:**
-   ```bash
-   cp src/data/cv.json src/data/cv-es.json
-   # Translate all text fields, keep structure identical
-   ```
+**Quick switch:** Click globe icon (🌐) in header.
 
-2. **Update language selector:**
-   ```tsx
-   // src/components/LanguageSelector.tsx
-   const languages = [
-     { code: 'en', name: 'English' },
-     { code: 'de', name: 'Deutsch' },
-     { code: 'fa', name: 'فارسی' },
-     { code: 'es', name: 'Español' },  // Add new language
-   ]
-   ```
+#### How It Works
+```
+User selects language → 
+LanguageContext updates → 
+CVDataContext loads ramin_de.json / ramin_fa.json →
+dataNormalizer converts German/Persian keys → English schema →
+Components render using canonical schema
+```
 
-3. **Add font if needed:**
-   ```html
-   <!-- index.html -->
-   <link href="https://fonts.googleapis.com/css2?family=YourFont&display=swap">
-   ```
+#### For Developers
+```tsx
+import { useCVData } from '@/context/CVDataContext'
+import { useTranslation } from '@/context/LanguageContext'
+
+function MyComponent() {
+  const { data } = useCVData()  // Always English schema!
+  const t = useTranslation()    // UI strings in current language
+  
+  return (
+    <div>
+      <h2>{t.sections.education}</h2>  {/* "Education" / "Bildung" / "تحصیلات" */}
+      {data.education.map(edu => (
+        <div key={edu.institution}>{edu.institution}</div>
+      ))}
+    </div>
+  )
+}
+```
+
+#### Add a New Language (e.g., Spanish)
+
+**📚 Full guide:** See `LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md` → Section 7
+
+**Quick steps:**
+1. Create `src/data/ramin_es.json` (translate keys AND values)
+2. Update `src/config/keyMappings.ts` (add `es` to every mapping)
+3. Update `src/context/LanguageContext.tsx` (add `'es'` to `SUPPORTED_LANGUAGES`)
+4. Update `src/components/LanguageSelector.tsx` (add Spanish option)
+5. Update `src/lib/i18n.ts` (add Spanish UI strings)
+6. Test: `npm test`
+
+**⚠️ Important:** 
+- Never modify `cv.json`, `ramin_de.json`, `ramin_fa.json` (locked files, tests will fail)
+- Use helper functions from `cv-data.ts`, never import JSON directly
+- All components must use `useCVData()` hook for language-aware data
+
+---
+
+### Adding New Languages (Legacy Method - Deprecated)
+
+> **⚠️ This method is deprecated. Use the multi-language system above instead.**
+
+Previously, you would duplicate `cv.json` for each language. This no longer works.
+Use the normalization system documented in `LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`.
 
 ### Adding New Themes
 
@@ -1046,6 +1085,9 @@ npx tsc --noEmit
 - `PERFORMANCE_OPTIMIZATION.md` - Performance guide
 - `ACCESSIBILITY_AUDIT.md` - Accessibility checklist
 - `BROWSER_COMPATIBILITY_FINAL_REPORT.md` - Browser support
+- **`LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`** - 🌍 **Multi-language system guide** (EN/DE/FA)
+- **`LANGUAGE_IMPLEMENTATION_SUMMARY.md`** - Quick overview of language feature
+- **`LANGUAGE_QUICK_REFERENCE.md`** - Developer quick reference for language APIs
 
 **Debugging:**
 ```bash
@@ -1057,6 +1099,56 @@ npm run preview
 
 # Run linter
 npm run lint
+
+# Run tests (including language normalization tests)
+npm test
+```
+
+---
+
+## 🌐 Language Feature Documentation
+
+The site includes a **production-ready multi-language system** supporting:
+- **English (EN)** - Default
+- **German (DE)** - Deutsch
+- **Persian (FA)** - فارسی with automatic RTL
+
+### Quick Links
+- 📖 **Full Implementation Guide**: `LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`
+- 📝 **Quick Summary**: `LANGUAGE_IMPLEMENTATION_SUMMARY.md`
+- ⚡ **Developer Quick Ref**: `LANGUAGE_QUICK_REFERENCE.md`
+
+### Key Features
+- ✅ Automatic data normalization (DE/FA keys → English schema)
+- ✅ RTL layout for Persian (automatic `dir="rtl"`)
+- ✅ UI string translations (buttons, labels, headings)
+- ✅ URL persistence (`?lang=fa`)
+- ✅ localStorage persistence
+- ✅ Locked file integrity protection (tests fail if JSON modified)
+- ✅ Comprehensive tests (normalization + switching + integrity)
+
+### For Developers
+```tsx
+// Always use these hooks in components:
+import { useCVData } from '@/context/CVDataContext'
+import { useTranslation } from '@/context/LanguageContext'
+
+const { data } = useCVData()  // Normalized English schema
+const t = useTranslation()    // UI strings in current language
+```
+
+**⚠️ Never:**
+- Import JSON directly (`import cv from '@/data/cv.json'` ❌)
+- Use deprecated functions (`getBasics()` ❌, use `useCVData()` ✅)
+- Modify locked files (`cv.json`, `ramin_de.json`, `ramin_fa.json`)
+
+### Add New Language
+See **Section 7** of `LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md` for step-by-step guide.
+
+### Run Language Tests
+```bash
+npm test  # Runs normalization + integrity + smoke tests
+node tests/generate-hashes.js  # Regenerate hashes (after approved changes)
 ```
 
 ---

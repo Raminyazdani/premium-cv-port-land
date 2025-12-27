@@ -1,20 +1,37 @@
+/**
+ * CV Data Utilities: Helper functions for accessing CV data
+ * 
+ * IMPORTANT: These functions are now deprecated in favor of using
+ * useCVData() hook directly in components. They are kept for
+ * backward compatibility but should not be used in new code.
+ * 
+ * Use the CVDataContext instead:
+ * ```tsx
+ * import { useCV } from '@/context/CVDataContext'
+ * const data = useCV()
+ * ```
+ */
+
 import type { CVData, Basics, Location } from '@/types/cv'
-import cvDataJson from '@/data/cv.json'
 import { safeArray, safeString, safeUrl } from '@/utils/dataValidation'
 import { DEFAULT_VALUES } from '@/constants/app'
 
+/**
+ * @deprecated Use useCVData() hook instead
+ * This function no longer works correctly with language switching.
+ * It's kept for backward compatibility only.
+ */
 export function getCVData(): CVData {
-  try {
-    return cvDataJson as unknown as CVData
-  } catch {
-    return {}
-  }
+  console.warn('getCVData() is deprecated. Use useCVData() hook instead.')
+  return {} as CVData
 }
 
-export function getBasics(): Basics | null {
+/**
+ * Helper function to extract basics from CV data
+ * Use this with data from useCVData() hook
+ */
+export function extractBasics(data: CVData): Basics | null {
   try {
-    const data = getCVData()
-    
     if (!data.basics) return null
     
     if (Array.isArray(data.basics)) {
@@ -25,6 +42,14 @@ export function getBasics(): Basics | null {
   } catch {
     return null
   }
+}
+
+/**
+ * @deprecated Use useCVData() + extractBasics() instead
+ */
+export function getBasics(): Basics | null {
+  console.warn('getBasics() is deprecated. Use useCVData() + extractBasics() instead.')
+  return null
 }
 
 export function getFullName(basics: Basics | null | undefined): string {
@@ -42,10 +67,11 @@ export function getFullName(basics: Basics | null | undefined): string {
   return fullName || DEFAULT_VALUES.UNKNOWN_NAME
 }
 
-export function getProfilePhotoUrl(): string | null {
+/**
+ * Extract profile photo URL from basics data
+ */
+export function extractProfilePhotoUrl(basics: Basics | null): string | null {
   try {
-    const basics = getBasics()
-    
     if (basics?.Pictures && Array.isArray(basics.Pictures)) {
       const profilePic = basics.Pictures.find(pic => 
         pic && typeof pic === 'object' && pic.type_of === 'profile'
@@ -67,10 +93,19 @@ export function getProfilePhotoUrl(): string | null {
   }
 }
 
-export function getCoverPhotoUrl(): string | null {
+/**
+ * @deprecated Use useCVData() + extractProfilePhotoUrl() instead
+ */
+export function getProfilePhotoUrl(): string | null {
+  console.warn('getProfilePhotoUrl() is deprecated. Use useCVData() + extractProfilePhotoUrl() instead.')
+  return null
+}
+
+/**
+ * Extract cover photo URL from basics data
+ */
+export function extractCoverPhotoUrl(basics: Basics | null): string | null {
   try {
-    const basics = getBasics()
-    
     if (basics?.Pictures && Array.isArray(basics.Pictures)) {
       const coverPic = basics.Pictures.find(pic => 
         pic && typeof pic === 'object' && pic.type_of === 'cover'
@@ -87,13 +122,31 @@ export function getCoverPhotoUrl(): string | null {
   }
 }
 
-export function getProfiles() {
+/**
+ * @deprecated Use useCVData() + extractCoverPhotoUrl() instead
+ */
+export function getCoverPhotoUrl(): string | null {
+  console.warn('getCoverPhotoUrl() is deprecated. Use useCVData() + extractCoverPhotoUrl() instead.')
+  return null
+}
+
+/**
+ * Extract profiles from CV data
+ */
+export function extractProfiles(data: CVData) {
   try {
-    const data = getCVData()
     return safeArray(data.profiles)
   } catch {
     return []
   }
+}
+
+/**
+ * @deprecated Use useCVData() + extractProfiles() instead
+ */
+export function getProfiles() {
+  console.warn('getProfiles() is deprecated. Use useCVData() + extractProfiles() instead.')
+  return []
 }
 
 export function getInitials(name?: string | null): string {
