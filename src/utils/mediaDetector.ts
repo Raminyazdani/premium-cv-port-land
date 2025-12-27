@@ -7,6 +7,11 @@ export interface MediaInfo {
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg']
 const PDF_EXTENSION = '.pdf'
 
+/**
+ * Detects the media type based on URL file extension.
+ * @param url - The URL to analyze
+ * @returns 'image', 'pdf', or null if not a recognized media type
+ */
 export function detectMediaType(url: string): 'image' | 'pdf' | null {
   if (!url) return null
   
@@ -25,10 +30,21 @@ export function detectMediaType(url: string): 'image' | 'pdf' | null {
   return null
 }
 
+/**
+ * Checks if a URL points to a supported media file.
+ * @param url - The URL to check
+ * @returns true if URL is a recognized image or PDF
+ */
 export function isMediaUrl(url: string): boolean {
   return detectMediaType(url) !== null
 }
 
+/**
+ * Extracts media URLs (images and PDFs) from text content.
+ * Useful for finding embedded media links in descriptions.
+ * @param text - Text content to search
+ * @returns Array of MediaInfo objects found in the text
+ */
 export function extractMediaFromText(text: string): MediaInfo[] {
   if (!text) return []
   
@@ -48,7 +64,14 @@ export function extractMediaFromText(text: string): MediaInfo[] {
     .filter((item): item is MediaInfo => item !== null)
 }
 
-export function collectAllMedia(data: any, source: string = 'unknown'): MediaInfo[] {
+/**
+ * Recursively collects all media URLs from a data structure.
+ * Traverses objects, arrays, and primitives to find all image and PDF URLs.
+ * @param data - The data structure to traverse (can be object, array, or primitive)
+ * @param source - Tracking label for the source of the media (used internally for debugging)
+ * @returns Array of all MediaInfo objects found in the data structure
+ */
+export function collectAllMedia(data: unknown, source: string = 'unknown'): MediaInfo[] {
   const media: MediaInfo[] = []
   
   if (!data) return media

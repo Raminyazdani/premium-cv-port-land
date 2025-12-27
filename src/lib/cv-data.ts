@@ -1,6 +1,7 @@
 import type { CVData, Basics, Location } from '@/types/cv'
 import cvDataJson from '@/data/cv.json'
 import { safeArray, safeString, safeUrl } from '@/utils/dataValidation'
+import { DEFAULT_VALUES } from '@/constants/app'
 
 export function getCVData(): CVData {
   try {
@@ -27,7 +28,7 @@ export function getBasics(): Basics | null {
 }
 
 export function getFullName(basics: Basics | null | undefined): string {
-  if (!basics) return 'Unknown'
+  if (!basics) return DEFAULT_VALUES.UNKNOWN_NAME
   
   const fname = safeString(basics.fname).trim()
   const lname = safeString(basics.lname).trim()
@@ -35,10 +36,10 @@ export function getFullName(basics: Basics | null | undefined): string {
   
   if (fname || lname) {
     const name = [fname, lname].filter(Boolean).join(' ').trim()
-    return name || 'Unknown'
+    return name || DEFAULT_VALUES.UNKNOWN_NAME
   }
   
-  return fullName || 'Unknown'
+  return fullName || DEFAULT_VALUES.UNKNOWN_NAME
 }
 
 export function getProfilePhotoUrl(): string | null {
@@ -96,13 +97,13 @@ export function getProfiles() {
 }
 
 export function getInitials(name?: string | null): string {
-  if (!name || typeof name !== 'string') return '?'
+  if (!name || typeof name !== 'string') return DEFAULT_VALUES.FALLBACK_INITIALS
   
   const trimmed = name.trim()
-  if (!trimmed) return '?'
+  if (!trimmed) return DEFAULT_VALUES.FALLBACK_INITIALS
   
   const parts = trimmed.split(/\s+/)
-  if (parts.length === 0) return '?'
+  if (parts.length === 0) return DEFAULT_VALUES.FALLBACK_INITIALS
   if (parts.length === 1) {
     const firstWord = parts[0]
     return firstWord.length >= 2 

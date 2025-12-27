@@ -1,3 +1,11 @@
+import { DEFAULT_VALUES } from '@/constants/app'
+
+/**
+ * Safely converts a value to a string with fallback.
+ * @param value - Value to convert
+ * @param fallback - Default value if conversion fails
+ * @returns String representation or fallback
+ */
 export function safeString(value: unknown, fallback: string = ''): string {
   if (value === null || value === undefined) return fallback
   if (typeof value === 'string') return value
@@ -5,11 +13,22 @@ export function safeString(value: unknown, fallback: string = ''): string {
   return fallback
 }
 
+/**
+ * Safely converts a value to an array. Returns empty array if not an array.
+ * @param value - Value to convert
+ * @returns Array or empty array
+ */
 export function safeArray<T>(value: unknown): T[] {
   if (Array.isArray(value)) return value
   return []
 }
 
+/**
+ * Safely converts a value to an object with fallback.
+ * @param value - Value to convert
+ * @param fallback - Default object if conversion fails
+ * @returns Object or fallback
+ */
 export function safeObject<T extends Record<string, unknown>>(
   value: unknown,
   fallback: T
@@ -20,6 +39,11 @@ export function safeObject<T extends Record<string, unknown>>(
   return fallback
 }
 
+/**
+ * Validates if a value can be parsed as a valid date.
+ * @param dateStr - Date string or number to validate
+ * @returns true if valid date, false otherwise
+ */
 export function isValidDate(dateStr: unknown): boolean {
   if (!dateStr) return false
   if (typeof dateStr !== 'string' && typeof dateStr !== 'number') return false
@@ -28,6 +52,15 @@ export function isValidDate(dateStr: unknown): boolean {
   return !isNaN(date.getTime())
 }
 
+/**
+ * Formats a date string safely, handling invalid dates gracefully.
+ * Special case: "present" (case-insensitive) returns "Present"
+ * Invalid dates return the original value with "(Invalid Date)" suffix
+ * 
+ * @param dateStr - Date to format
+ * @param options - Intl date formatting options
+ * @returns Formatted date string or error message
+ */
 export function formatDateSafe(
   dateStr: unknown,
   options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short' }
@@ -119,10 +152,10 @@ export function isEmpty(value: unknown): boolean {
 }
 
 export function getInitials(name: string): string {
-  if (!name || typeof name !== 'string') return '?'
+  if (!name || typeof name !== 'string') return DEFAULT_VALUES.FALLBACK_INITIALS
   
   const parts = name.trim().split(/\s+/)
-  if (parts.length === 0) return '?'
+  if (parts.length === 0) return DEFAULT_VALUES.FALLBACK_INITIALS
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase()
   
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()

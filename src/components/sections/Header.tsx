@@ -6,6 +6,7 @@ import { getBasics, getFullName } from '@/lib/cv-data'
 import { ThemeSelector } from '@/components/ThemeSelector'
 import { LanguageSelector } from '@/components/LanguageSelector'
 import { FocusFilterSelector } from '@/components/FocusFilterSelector'
+import { LAYOUT_CONSTANTS } from '@/constants/app'
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -25,7 +26,7 @@ export function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      setIsScrolled(window.scrollY > LAYOUT_CONSTANTS.SCROLL_THRESHOLD)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -36,9 +37,8 @@ export function Header() {
     setIsOpen(false)
     const element = document.querySelector(href)
     if (element) {
-      const offset = 80
       const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.scrollY - offset
+      const offsetPosition = elementPosition + window.scrollY - LAYOUT_CONSTANTS.HEADER_SCROLL_OFFSET
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
