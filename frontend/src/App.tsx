@@ -5,6 +5,7 @@ import { LanguageProvider, useLanguage } from '@/context/LanguageContext'
 import { CVDataProvider, useCVData } from '@/context/CVDataContext'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
+import { EnhancedUIDemo } from '@/components/sections/EnhancedUIDemo'
 import { extractAllTypeKeys } from '@/utils/dataLoader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/ErrorFallback'
@@ -67,6 +68,12 @@ function AppContent() {
       <Header />
       <main id="main-content">
         <HeroSection />
+        
+        {/* Enhanced UI Demo Section */}
+        <Suspense fallback={<SectionSkeleton />}>
+          <EnhancedUIDemo />
+        </Suspense>
+        
         <Suspense fallback={<SectionSkeleton />}>
           <BasicsSection />
         </Suspense>
