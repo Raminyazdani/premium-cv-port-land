@@ -21,7 +21,8 @@
         "test:language": "vitest run tests/language-content-verification.test.tsx",
         "verify-languages": "node scripts/verify-languages.js",
         "smoke-validation": "node scripts/smoke-validation.js",
-        "generate-hashes": "node tests/generate-hashes.js"
+        "generate-hashes": "node tests/generate-hashes.js",
+        "accessibility-audit": "node scripts/accessibility-audit.js"
     },
     "dependencies": {
         "@github/spark": ">=0.43.1 <1",
