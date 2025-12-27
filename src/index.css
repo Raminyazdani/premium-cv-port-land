@@ -6,6 +6,24 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+:root {
+  --vh: 1vh;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --vh: 1svh;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -23,6 +41,33 @@ html {
   }
 }
 
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
 @layer base {
   * {
     @apply border-border
@@ -38,6 +83,56 @@ html {
     body {
       font-size: 14px;
     }
+  }
+}
+
+.img-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted-foreground) / 0.1) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.img-loaded {
+  animation: fade-in 0.3s ease-in-out;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fonts-loaded body {
+  font-family: var(--theme-font-family);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img-skeleton {
+    animation: none;
+    background: hsl(var(--muted));
+  }
+  
+  .img-loaded {
+    animation: none;
   }
 }
 

@@ -11,12 +11,23 @@ import "./index.css"
 
 import { initializeLanguage } from './lib/languageManager'
 import { initializeTheme } from './lib/themeManager'
+import { initPerformanceMonitoring, preloadCriticalResources, reportWebVitals } from './utils/performance'
+import { initLayoutStability } from './utils/layoutStability'
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
   console.error('Root element not found')
   throw new Error('Root element not found')
 }
+
+initLayoutStability()
+
+if (import.meta.env.DEV) {
+  initPerformanceMonitoring()
+  reportWebVitals()
+}
+
+preloadCriticalResources()
 
 try {
   initializeLanguage()

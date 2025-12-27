@@ -1,20 +1,21 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { MagnifyingGlass, X } from '@phosphor-icons/react'
+import { MagnifyingGlass, X, CaretDown } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
 import type { Skills } from '@/types/cv'
 import { Button } from '@/components/ui/button'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 
 export function SkillsSection() {
   const data = getCVData()
   const skills = (data.skills as Skills) ?? {}
   
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedTab, setSelectedTab] = useState<string>('')
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const [currentFilter, setCurrentFilter] = useState<FocusFilter>(getStoredFocusFilter())
+  const { ref, isVisible } = useScrollAnimation()
 
   useEffect(() => {
     const handleFilterChange = (event: Event) => {
@@ -70,29 +71,57 @@ export function SkillsSection() {
   }, [filteredSkills])
 
   useEffect(() => {
-    if (skillsArray.length > 0 && !selectedTab) {
-      setSelectedTab(skillsArray[0].category)
+    if (skillsArray.length > 0 && expandedCategories.size === 0) {
+      setExpandedCategories(new Set([skillsArray[0].category]))
     }
-  }, [skillsArray, selectedTab])
+  }, [skillsArray.length])
+
+  const toggleCategory = (category: string) => {
+    setExpandedCategories(prev => {
+      const next = new Set(prev)
+      if (next.has(category)) {
+        next.delete(category)
+      } else {
+        next.add(category)
+      }
+      return next
+    })
+  }
+
+  const expandAll = () => {
+    setExpandedCategories(new Set(skillsArray.map(s => s.category)))
+  }
+
+  const collapseAll = () => {
+    setExpandedCategories(new Set())
+  }
 
   if (!skills || Object.keys(skills).length === 0) {
     return null
   }
 
   const totalSkills = skillsArray.reduce((sum, cat) => sum + cat.totalCount, 0)
+  const allExpanded = expandedCategories.size === skillsArray.length
+  const noneExpanded = expandedCategories.size === 0
 
   return (
-    <section id="skills" className="w-full py-12 sm:py-16 px-3 sm:px-4 bg-background">
+    <section 
+      id="skills" 
+      ref={ref as React.RefObject<HTMLElement>}
+      className={`w-full py-12 sm:py-16 px-3 sm:px-4 bg-muted/30 transition-opacity duration-700 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col gap-4 mb-8">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Skills & Expertise</h2>
-            <p className="text-sm sm:text-base text-muted-foreground">
-              {totalSkills} skills across {skillsArray.length} domains
-            </p>
-          </div>
-          
-          <div className="relative max-w-md">
+        <div className="mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2">Skills & Expertise</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            {totalSkills} skills across {skillsArray.length} domains
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6">
+          <div className="relative flex-1 max-w-md">
             <MagnifyingGlass 
               size={18} 
               className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" 
@@ -117,54 +146,97 @@ export function SkillsSection() {
               </Button>
             )}
           </div>
+
+          <div className="flex gap-2">
+            <Button 
+              size="sm" 
+              variant="outline"
+              onClick={expandAll}
+              disabled={allExpanded}
+              className="text-xs sm:text-sm"
+            >
+              Expand All
+            </Button>
+            <Button 
+              size="sm" 
+              variant="outline"
+              onClick={collapseAll}
+              disabled={noneExpanded}
+              className="text-xs sm:text-sm"
+            >
+              Collapse All
+            </Button>
+          </div>
         </div>
 
         {skillsArray.length === 0 ? (
-          <div className="text-center py-12 sm:py-16 text-muted-foreground">
+          <div className="text-center py-12 sm:py-16 bg-card border border-border rounded-lg">
             <MagnifyingGlass size={40} className="sm:w-12 sm:h-12 mx-auto mb-4 opacity-30" />
-            <p className="text-base sm:text-lg px-4">No skills found matching "{searchQuery}"</p>
+            <p className="text-base sm:text-lg px-4 text-muted-foreground">
+              No skills found matching "{searchQuery}"
+            </p>
           </div>
         ) : (
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-            <TabsList className="w-full flex flex-wrap justify-start h-auto gap-2 bg-transparent p-0 mb-6">
-              {skillsArray.map(({ category, totalCount }) => (
-                <TabsTrigger
+          <div className="space-y-3">
+            {skillsArray.map(({ category, groups, totalCount }) => {
+              const isExpanded = expandedCategories.has(category)
+              
+              return (
+                <div 
                   key={category}
-                  value={category}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4 py-2 rounded-lg border border-border hover:bg-accent/50 transition-colors"
+                  className="bg-card border border-border rounded-lg overflow-hidden transition-all duration-200 hover:border-primary/50"
                 >
-                  <span className="font-medium">{category}</span>
-                  <Badge variant="secondary" className="ml-2 text-xs bg-background/50">
-                    {totalCount}
-                  </Badge>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+                  <button
+                    onClick={() => toggleCategory(category)}
+                    className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-accent/50 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset"
+                    aria-expanded={isExpanded}
+                    aria-controls={`skills-${category}`}
+                  >
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <CaretDown 
+                        size={20} 
+                        weight="bold"
+                        className={`flex-shrink-0 transition-transform duration-200 ${
+                          isExpanded ? 'rotate-0' : '-rotate-90'
+                        }`}
+                      />
+                      <h3 className="text-base sm:text-lg font-semibold truncate">{category}</h3>
+                      <Badge variant="secondary" className="text-xs flex-shrink-0">
+                        {totalCount}
+                      </Badge>
+                    </div>
+                  </button>
 
-            {skillsArray.map(({ category, groups }) => (
-              <TabsContent key={category} value={category} className="mt-0 space-y-6">
-                {groups.map((group) => (
-                  <div key={group.name} className="space-y-3">
-                    <h3 className="text-base font-semibold text-foreground border-b border-border pb-2">
-                      {group.name}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {group.items.map((skill, idx) => (
-                        <Badge
-                          key={idx}
-                          variant="outline"
-                          className="text-sm font-normal hover:bg-accent hover:text-accent-foreground transition-colors cursor-default py-1.5 px-3 border-muted-foreground/20"
-                          title={skill.long_name !== skill.short_name ? skill.long_name : undefined}
-                        >
-                          {skill.short_name}
-                        </Badge>
+                  {isExpanded && (
+                    <div 
+                      id={`skills-${category}`}
+                      className="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200"
+                    >
+                      {groups.map((group) => (
+                        <div key={group.name} className="space-y-2">
+                          <h4 className="text-sm font-medium text-muted-foreground">
+                            {group.name}
+                          </h4>
+                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                            {group.items.map((skill, idx) => (
+                              <Badge
+                                key={idx}
+                                variant="outline"
+                                className="text-xs sm:text-sm font-normal hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-150 cursor-default py-1 px-2 sm:py-1.5 sm:px-3"
+                                title={skill.long_name !== skill.short_name ? skill.long_name : undefined}
+                              >
+                                {skill.short_name}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
-                  </div>
-                ))}
-              </TabsContent>
-            ))}
-          </Tabs>
+                  )}
+                </div>
+              )
+            })}
+          </div>
         )}
       </div>
     </section>

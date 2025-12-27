@@ -44,8 +44,15 @@
     <link rel="dns-prefetch" href="https://res.cloudinary.com">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="/src/main.tsx" as="script" crossorigin>
+    <link rel="preload" href="/src/main.css" as="style">
+    
     <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter&family=Noto+Serif&family=JetBrains+Mono&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter&family=Noto+Serif&family=JetBrains+Mono&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter&family=Noto+Serif&family=JetBrains+Mono&display=swap">
+    </noscript>
     
     <!-- Favicon (add your favicon files to public/ directory) -->
     <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg"> -->
@@ -61,6 +68,27 @@
 </head>
 
 <body>
+    <noscript>
+        <div style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 1rem;
+            text-align: center;
+            z-index: 10000;
+            font-family: system-ui, -apple-system, sans-serif;
+        ">
+            <strong>JavaScript Required:</strong> This portfolio requires JavaScript to display interactive features.
+            Please enable JavaScript in your browser for the best experience.
+        </div>
+        <style>
+            body { padding-top: 60px; }
+            #root > * { display: none; }
+        </style>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 </body>
