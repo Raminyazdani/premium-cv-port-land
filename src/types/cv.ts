@@ -233,11 +233,13 @@ export interface Reference {
 export interface Experience {
   role?: string | null
   institution?: string | null
+  location?: string | null
   duration?: string | null
   primaryFocus?: string | null
   description?: string | null
   startDate?: string | null
   endDate?: string | null
+  type_key?: string[] | null
 }
 
 export interface CVData {
