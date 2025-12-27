@@ -121,7 +121,11 @@ export function BasicsSection() {
         <div className="grid lg:grid-cols-[300px_1fr] gap-12 items-center">
           <div className="flex flex-col items-center lg:items-start gap-6">
             <Avatar className="h-64 w-64 border-4 border-background shadow-2xl">
-              <AvatarImage src={photoUrl ?? undefined} alt={fullName ?? 'Profile'} />
+              <AvatarImage 
+                src={photoUrl ?? undefined} 
+                alt={fullName ?? 'Profile'}
+                loading="lazy"
+              />
               <AvatarFallback className="text-6xl font-bold bg-primary text-primary-foreground">
                 {initials}
               </AvatarFallback>
