@@ -2,6 +2,23 @@
 
 This file provides repository-wide instructions for GitHub Copilot coding agents working in this CV website project.
 
+## Project Structure
+
+```
+/
+├── frontend/          # All React/TS/JS/CSS/frontend build tooling
+│   ├── src/           # Source code
+│   ├── public/        # Static assets
+│   ├── tests/         # Test files
+│   ├── package.json   # Dependencies
+│   └── ...            # Build configs (vite, tailwind, etc.)
+├── backend/           # Backend code (placeholder - not yet implemented)
+├── docs/              # Documentation
+│   ├── archive/       # Historical implementation reports
+│   └── ...            # Active documentation
+└── .github/           # Workflows, instructions
+```
+
 ## Project Overview
 
 This is a **JSON-driven multilingual CV/portfolio website** built with:
@@ -12,8 +29,11 @@ This is a **JSON-driven multilingual CV/portfolio website** built with:
 
 ## Essential Commands
 
+**All commands must be run from the `/frontend` directory:**
+
 ### Development
 ```bash
+cd frontend
 npm install              # Install dependencies
 npm run dev             # Start dev server on http://localhost:5173
 npm run build           # Build for production
@@ -22,6 +42,7 @@ npm run preview         # Preview production build
 
 ### Testing & Validation
 ```bash
+cd frontend
 npm run test                    # Run all tests
 npm run test:watch              # Run tests in watch mode
 npm run test:language           # Run language-specific content tests
@@ -31,6 +52,7 @@ npm run generate-hashes         # Generate integrity hashes for locked files
 
 ### Linting
 ```bash
+cd frontend
 npm run lint            # Run ESLint
 ```
 
@@ -38,9 +60,9 @@ npm run lint            # Run ESLint
 
 **CRITICAL: These files are READ-ONLY and must NEVER be modified:**
 
-- `src/data/cv.json` (English CV data)
-- `src/data/ramin_de.json` (German CV data)
-- `src/data/ramin_fa.json` (Persian CV data)
+- `frontend/src/data/cv.json` (English CV data)
+- `frontend/src/data/ramin_de.json` (German CV data)
+- `frontend/src/data/ramin_fa.json` (Persian CV data)
 
 **Why locked?**
 - These are production data files containing real CV information
@@ -49,11 +71,11 @@ npm run lint            # Run ESLint
 
 **If tests need fixtures:**
 - Read directly from locked JSON files at runtime, OR
-- Create byte-identical copies in `tests/fixtures/` and document they are copies
+- Create byte-identical copies in `frontend/tests/fixtures/` and document they are copies
 
 **Verification:**
-- Locked file integrity is tested in `tests/locked-files-integrity.test.ts`
-- Hashes are stored in `tests/locked_files_hashes.json`
+- Locked file integrity is tested in `frontend/tests/locked-files-integrity.test.ts`
+- Hashes are stored in `frontend/tests/locked_files_hashes.json`
 - Run `npm run generate-hashes` if you need to regenerate reference hashes (only after explicit user approval)
 
 ## Language Selection & Data Loading
@@ -65,9 +87,9 @@ npm run lint            # Run ESLint
 4. **Default**: English (`en`)
 
 **Implementation files:**
-- `src/context/LanguageContext.tsx` - Language state management
-- `src/lib/i18n.ts` - UI translations (not CV content)
-- `src/utils/dataLoader.ts` - CV data loading and language routing
+- `frontend/src/context/LanguageContext.tsx` - Language state management
+- `frontend/src/lib/i18n.ts` - UI translations (not CV content)
+- `frontend/src/utils/dataLoader.ts` - CV data loading and language routing
 
 ### Data Loading Flow
 ```
@@ -81,9 +103,9 @@ CVDataContext (provide to components)
 ```
 
 **Key files:**
-- `src/utils/dataLoader.ts` - Main data loading entry point
-- `src/utils/dataNormalizer.ts` - Normalizes DE/FA keys to EN schema
-- `src/context/CVDataContext.tsx` - React context for CV data
+- `frontend/src/utils/dataLoader.ts` - Main data loading entry point
+- `frontend/src/utils/dataNormalizer.ts` - Normalizes DE/FA keys to EN schema
+- `frontend/src/context/CVDataContext.tsx` - React context for CV data
 
 ## Canonical Data Shape (English Schema)
 
@@ -181,10 +203,10 @@ interface CVData {
 2. **Check normalization**: Ensure language-specific keys map correctly
    - German: `grunddaten` → `basics`, `ausbildung` → `education`, etc.
    - Persian: `اطلاعات_پایه` → `basics`, `تحصیلات` → `education`, etc.
-   - See `src/utils/dataNormalizer.ts` for full key mappings
+   - See `frontend/src/utils/dataNormalizer.ts` for full key mappings
 
 3. **Check validation**: Look for errors/warnings in dataLoader
-   - Validation runs in `src/utils/dataLoader.ts`
+   - Validation runs in `frontend/src/utils/dataLoader.ts`
    - Check browser console in dev mode for detailed logs
 
 4. **Check component rendering**: Ensure components handle empty arrays
@@ -193,7 +215,7 @@ interface CVData {
    - Display empty states when data is missing
 
 5. **Check type_key filtering**: Filtering by focus area may hide entries
-   - Check `src/context/FilterContext.tsx`
+   - Check `frontend/src/context/FilterContext.tsx`
    - Try "Full CV" filter to see all entries
 
 ### Common Issues
@@ -210,13 +232,13 @@ interface CVData {
 ✅ No "undefined" or "null" strings appear in rendered output
 ✅ RTL layout works correctly for Persian (FA)
 ✅ Language switching works via URL param, localStorage, and UI
-✅ Tests pass: `npm run test`
-✅ Language verification passes: `npm run verify-languages`
-✅ Build succeeds: `npm run build`
+✅ Tests pass: `cd frontend && npm run test`
+✅ Language verification passes: `cd frontend && npm run verify-languages`
+✅ Build succeeds: `cd frontend && npm run build`
 ✅ Locked files remain unchanged (verify with git diff)
 
 ### Manual Verification
-1. Start dev server: `npm run dev`
+1. Start dev server: `cd frontend && npm run dev`
 2. Test each language:
    - EN: http://localhost:5173/?lang=en
    - DE: http://localhost:5173/?lang=de
@@ -243,7 +265,7 @@ For more targeted guidance, see:
 
 ## Additional Resources
 
-- **Quick Start**: `QUICK_START.md`
-- **Full Documentation**: `DOCUMENTATION_INDEX.md`
-- **Agent Runbook**: `AGENTS.md`
-- **Schema Reference**: `SCHEMA.md`
+- **Quick Start**: `docs/QUICK_START.md`
+- **Full Documentation**: `docs/DOCUMENTATION_INDEX.md`
+- **Agent Runbook**: `docs/AGENTS.md`
+- **Schema Reference**: `docs/SCHEMA.md`

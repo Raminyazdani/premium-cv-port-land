@@ -11,10 +11,13 @@ Complete guide for setting up and running this CV/Portfolio website locally.
 git clone https://github.com/Raminyazdani/premium-cv-port-land.git
 cd premium-cv-port-land
 
-# 2. Install dependencies
+# 2. Navigate to frontend directory
+cd frontend
+
+# 3. Install dependencies
 npm install
 
-# 3. Start development server
+# 4. Start development server
 npm run dev
 ```
 
@@ -58,7 +61,13 @@ git clone git@github.com:Raminyazdani/premium-cv-port-land.git
 cd premium-cv-port-land
 ```
 
-### 2. Install Dependencies
+### 2. Navigate to Frontend
+
+```bash
+cd frontend
+```
+
+### 3. Install Dependencies
 
 ```bash
 npm install
@@ -79,7 +88,7 @@ added 362 packages, and audited 363 packages in 45s
 found 0 vulnerabilities
 ```
 
-### 3. Verify Installation
+### 4. Verify Installation
 
 ```bash
 # Check that build works
@@ -279,59 +288,69 @@ git push origin your-branch
 
 ```
 /
-├── src/                      # Source code
-│   ├── components/          # React components
-│   │   ├── ui/             # Reusable UI components (Shadcn)
-│   │   └── sections/       # Page sections (Hero, Education, etc.)
-│   ├── context/            # React Context providers
-│   │   ├── CVDataContext.tsx      # CV data state
-│   │   ├── LanguageContext.tsx    # Language state
-│   │   └── FilterContext.tsx      # Filter state
-│   ├── data/               # CV data files (JSON)
-│   │   ├── cv.json         # English data (LOCKED)
-│   │   ├── ramin_de.json   # German data (LOCKED)
-│   │   └── ramin_fa.json   # Persian data (LOCKED)
-│   ├── hooks/              # Custom React hooks
-│   ├── lib/                # Utility libraries
-│   │   └── i18n.ts         # UI translations
-│   ├── utils/              # Utility functions
-│   │   ├── dataLoader.ts          # Data loading logic
-│   │   ├── dataNormalizer.ts      # Language normalization
-│   │   └── dataValidator.ts       # Data validation
-│   ├── types/              # TypeScript type definitions
-│   ├── styles/             # Global styles
-│   ├── main.tsx            # Application entry point
-│   └── App.tsx             # Root component
+├── frontend/                 # Frontend application
+│   ├── src/                  # Source code
+│   │   ├── components/       # React components
+│   │   │   ├── ui/           # Reusable UI components (Shadcn)
+│   │   │   └── sections/     # Page sections (Hero, Education, etc.)
+│   │   ├── context/          # React Context providers
+│   │   │   ├── CVDataContext.tsx      # CV data state
+│   │   │   ├── LanguageContext.tsx    # Language state
+│   │   │   └── FilterContext.tsx      # Filter state
+│   │   ├── data/             # CV data files (JSON)
+│   │   │   ├── cv.json       # English data (LOCKED)
+│   │   │   ├── ramin_de.json # German data (LOCKED)
+│   │   │   └── ramin_fa.json # Persian data (LOCKED)
+│   │   ├── hooks/            # Custom React hooks
+│   │   ├── lib/              # Utility libraries
+│   │   │   └── i18n.ts       # UI translations
+│   │   ├── utils/            # Utility functions
+│   │   │   ├── dataLoader.ts          # Data loading logic
+│   │   │   ├── dataNormalizer.ts      # Language normalization
+│   │   │   └── dataValidator.ts       # Data validation
+│   │   ├── types/            # TypeScript type definitions
+│   │   ├── styles/           # Global styles
+│   │   ├── main.tsx          # Application entry point
+│   │   └── App.tsx           # Root component
+│   │
+│   ├── tests/                # Unit tests
+│   ├── e2e/                  # End-to-end tests
+│   ├── public/               # Static assets (served as-is)
+│   │
+│   ├── index.html            # HTML entry point
+│   ├── vite.config.ts        # Vite configuration
+│   ├── tsconfig.json         # TypeScript configuration
+│   ├── tailwind.config.js    # Tailwind CSS configuration
+│   ├── vitest.config.ts      # Test configuration
+│   └── package.json          # Project manifest
 │
-├── tests/                   # Unit tests
-├── e2e/                     # End-to-end tests
-├── docs/                    # Documentation
-├── public/                  # Static assets (served as-is)
-├── .github/                 # GitHub Actions workflows
+├── backend/                  # Backend (placeholder - not yet implemented)
+│   └── README.md
+│
+├── docs/                     # Documentation
+│   ├── archive/              # Historical implementation reports
+│   └── ...                   # Active documentation
+│
+├── .github/                  # GitHub Actions workflows
 │   └── workflows/
-│       └── ci.yml          # CI/CD pipeline
+│       └── ci.yml            # CI/CD pipeline
 │
-├── index.html              # HTML entry point
-├── vite.config.ts          # Vite configuration
-├── tsconfig.json           # TypeScript configuration
-├── tailwind.config.js      # Tailwind CSS configuration
-├── vitest.config.ts        # Test configuration
-├── package.json            # Project manifest
-└── README.md               # Project overview
+├── README.md                 # Project overview
+└── LICENSE                   # License file
 ```
 
 ### Important Files
 
 | File | Purpose | Edit? |
 |------|---------|-------|
-| `src/data/cv.json` | English CV data | ⚠️ LOCKED - DO NOT EDIT |
-| `src/data/ramin_de.json` | German CV data | ⚠️ LOCKED - DO NOT EDIT |
-| `src/data/ramin_fa.json` | Persian CV data | ⚠️ LOCKED - DO NOT EDIT |
-| `src/App.tsx` | Main application component | ✅ Yes |
-| `src/components/**/*.tsx` | UI components | ✅ Yes |
-| `vite.config.ts` | Build configuration | ⚠️ Carefully |
-| `tailwind.config.js` | Styling configuration | ✅ Yes |
-| `package.json` | Dependencies and scripts | ⚠️ Carefully |
+| `frontend/src/data/cv.json` | English CV data | ⚠️ LOCKED - DO NOT EDIT |
+| `frontend/src/data/ramin_de.json` | German CV data | ⚠️ LOCKED - DO NOT EDIT |
+| `frontend/src/data/ramin_fa.json` | Persian CV data | ⚠️ LOCKED - DO NOT EDIT |
+| `frontend/src/App.tsx` | Main application component | ✅ Yes |
+| `frontend/src/components/**/*.tsx` | UI components | ✅ Yes |
+| `frontend/vite.config.ts` | Build configuration | ⚠️ Carefully |
+| `frontend/tailwind.config.js` | Styling configuration | ✅ Yes |
+| `frontend/package.json` | Dependencies and scripts | ⚠️ Carefully |
 
 ---
 
@@ -341,14 +360,15 @@ git push origin your-branch
 
 The following files are **LOCKED** and protected by CI integrity checks:
 
-- `src/data/cv.json`
-- `src/data/ramin_de.json`
-- `src/data/ramin_fa.json`
+- `frontend/src/data/cv.json`
+- `frontend/src/data/ramin_de.json`
+- `frontend/src/data/ramin_fa.json`
 
 **DO NOT EDIT THESE FILES** unless you:
 1. Have explicit permission from the repository owner
 2. Understand you must regenerate hashes afterward:
    ```bash
+   cd frontend
    npm run generate-hashes
    ```
 3. Are prepared to update tests that verify file integrity
@@ -367,12 +387,13 @@ If you want to use this template for your own CV:
 2. **Replace the data files** with your own:
    ```bash
    # Edit these files with your data
-   src/data/cv.json
-   src/data/ramin_de.json  # or remove if not needed
-   src/data/ramin_fa.json  # or remove if not needed
+   frontend/src/data/cv.json
+   frontend/src/data/ramin_de.json  # or remove if not needed
+   frontend/src/data/ramin_fa.json  # or remove if not needed
    ```
 3. **Regenerate integrity hashes**:
    ```bash
+   cd frontend
    npm run generate-hashes
    ```
 4. **Update tests** to reflect your data
@@ -388,7 +409,7 @@ This application **does not require environment variables** for local developmen
 
 ### Optional Environment Variables
 
-Create a `.env` file in the root directory for optional features:
+Create a `.env` file in the frontend directory for optional features:
 
 ```env
 # Optional: Analytics (not implemented yet)
@@ -521,9 +542,10 @@ npm run test -- --clearCache
 git status
 
 # 2. Revert the locked files
-git checkout HEAD -- src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+git checkout HEAD -- frontend/src/data/cv.json frontend/src/data/ramin_de.json frontend/src/data/ramin_fa.json
 
 # 3. If you intentionally modified them, regenerate hashes
+cd frontend
 npm run generate-hashes
 
 # 4. Commit the hash changes
@@ -655,7 +677,7 @@ http://localhost:5173/?lang=fa  # Persian
 
 ### Adding New UI Translations
 
-**Edit**: `src/lib/i18n.ts`
+**Edit**: `frontend/src/lib/i18n.ts`
 
 ```typescript
 export const uiStrings = {
@@ -700,7 +722,7 @@ export const uiStrings = {
 
 Now that you have the application running locally:
 
-1. **Explore the codebase**: Start with `src/App.tsx` and follow the component tree
+1. **Explore the codebase**: Start with `frontend/src/App.tsx` and follow the component tree
 2. **Make a small change**: Edit a component and see HMR in action
 3. **Run tests**: `npm run test` to ensure everything works
 4. **Build for production**: `npm run build` to create production bundle

@@ -28,18 +28,23 @@ Everything! All 55 iterations are complete:
 1. Go to [vercel.com](https://vercel.com) and sign in
 2. Click "Add New Project"
 3. Import this repository
-4. Click "Deploy" (zero configuration needed!)
-5. Done! Your site is live
+4. Set **Root Directory** to `frontend`
+5. Click "Deploy"
+6. Done! Your site is live
 
 ### **Option 2: Netlify (Alternative - 5 minutes)**
 
 1. Go to [netlify.com](https://netlify.com) and sign in
-2. Drag and drop your `dist` folder after building
-3. Or connect your Git repository
-4. Done!
+2. Import your Git repository
+3. Set **Base directory** to `frontend`
+4. Build command: `npm run build`
+5. Publish directory: `frontend/dist`
+6. Done!
 
 ### **Build Commands**
 ```bash
+cd frontend
+
 # Build for production
 npm run build
 
@@ -53,7 +58,7 @@ npm run preview
 
 ### **1. Update CV Data**
 
-Edit: `src/data/cv.json`
+Edit: `frontend/src/data/cv.json`
 
 ```json
 {
@@ -71,13 +76,13 @@ Edit: `src/data/cv.json`
 ### **2. Add New Section**
 
 Already all sections are included! But if you need custom ones:
-1. Add data to `cv.json`
-2. Create component in `src/components/sections/`
-3. Import in `App.tsx`
+1. Add data to `frontend/src/data/cv.json`
+2. Create component in `frontend/src/components/sections/`
+3. Import in `frontend/src/App.tsx`
 
 ### **3. Change Theme Colors**
 
-Edit: `src/styles/themes.css`
+Edit: `frontend/src/styles/themes.css`
 
 ```css
 [data-theme="normal"] {
@@ -191,7 +196,7 @@ Edit `cv.json`:
 ### **Mobile Layout Issues?**
 1. Test in real device (not just DevTools)
 2. Clear mobile browser cache
-3. Check viewport meta tag in `index.html`
+3. Check viewport meta tag in `frontend/index.html`
 
 ---
 
@@ -199,11 +204,11 @@ Edit `cv.json`:
 
 For deeper dives, see:
 
-- `ITERATION_55_STATUS.md` - Current status report
-- `README.md` - Complete documentation
+- `archive/ITERATION_55_STATUS.md` - Current status report
+- `../README.md` - Complete documentation
 - `SCHEMA.md` - JSON structure guide
 - `DEPLOYMENT_GUIDE.md` - Deployment details
-- `QA_CHECKLIST.md` - Full testing guide
+- `archive/QA_CHECKLIST.md` - Full testing guide
 
 ---
 
