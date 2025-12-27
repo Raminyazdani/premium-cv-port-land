@@ -101,6 +101,45 @@ h6 {
       font-size: 14px;
     }
   }
+  
+  /* Enhanced focus indicators for WCAG 2.1 AA compliance */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+  
+  /* Ensure focus is visible for keyboard users */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+  
+  /* Skip to content link */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  
+  .sr-only:focus {
+    position: fixed;
+    width: auto;
+    height: auto;
+    padding: 1rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
 }
 
 .img-skeleton {
@@ -156,6 +195,22 @@ h6 {
 .touch-manipulation {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Minimum touch target size for accessibility (WCAG 2.5.5) */
+.min-touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Ensure interactive elements have sufficient size on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  button:not(.min-touch-target),
+  a:not(.min-touch-target),
+  [role="button"]:not(.min-touch-target) {
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 
 :root {
