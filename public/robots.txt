@@ -1,0 +1,28 @@
+# robots.txt - Search Engine Crawler Configuration
+
+# Allow all search engines to crawl all pages
+User-agent: *
+Allow: /
+
+# Sitemap location (update URL after deployment)
+Sitemap: https://your-domain.com/sitemap.xml
+
+# Optional: Crawl delay (1 second between requests)
+# Crawl-delay: 1
+
+# Optional: Disallow specific paths
+# Disallow: /private/
+# Disallow: /api/
+
+# Common user agents (informational)
+# User-agent: Googlebot - Google's web crawler
+# User-agent: Bingbot - Microsoft Bing's crawler
+# User-agent: Slurp - Yahoo's crawler
+# User-agent: DuckDuckBot - DuckDuckGo's crawler
+# User-agent: Baiduspider - Baidu's crawler
+# User-agent: YandexBot - Yandex's crawler
+
+# Instructions for deployment:
+# 1. Copy this file to public/robots.txt
+# 2. Update the Sitemap URL to your actual domain
+# 3. Rebuild and redeploy

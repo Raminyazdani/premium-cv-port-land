@@ -624,78 +624,197 @@ body {
 
 ## 🚀 Deployment
 
-### Deploy on Spark (Current Environment)
+### Quick Start: Production Build
 
-The app is already deployed in your Spark workspace and accessible via the Spark URL.
+```bash
+# Build for production
+npm run build
 
-**To publish publicly from Spark:**
-1. Click the "Share" button in Spark UI
+# Preview production build locally
+npm run preview
+```
+
+**Expected output**: `dist/` folder with optimized assets (~360KB initial load)
+
+### Deployment Options
+
+| Platform | Best For | Deployment Time | Custom Domain | Cost |
+|----------|----------|-----------------|---------------|------|
+| **Vercel** | Production sites, automatic deployments | ~2 minutes | ✅ Free | Free (hobby) |
+| **Netlify** | Form handling, serverless functions | ~3 minutes | ✅ Free | Free (starter) |
+| **GitHub Pages** | Open source, GitHub integration | ~5 minutes | ✅ Free | Free |
+| **Cloudflare Pages** | Global CDN, DDoS protection | ~3 minutes | ✅ Free | Free |
+| **Spark** | Quick sharing, zero config | Instant | ❌ Spark URL only | Free |
+
+---
+
+### Option 1: Vercel (Recommended)
+
+**Best for**: Fast deployment, excellent performance, custom domains
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Login
+vercel login
+
+# Deploy
+vercel
+
+# Deploy to production
+vercel --prod
+```
+
+**Configuration**: Create `vercel.json`:
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite"
+}
+```
+
+**Custom Domain**: Add in Vercel dashboard → Domain settings
+
+📖 **Full guide**: See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for complete Vercel setup
+
+---
+
+### Option 2: Netlify
+
+**Best for**: Drag-and-drop deployment, form handling
+
+#### Method A: Drag & Drop
+1. Build: `npm run build`
+2. Go to https://app.netlify.com/drop
+3. Drag `dist/` folder
+
+#### Method B: GitHub (Recommended)
+1. Push to GitHub
+2. Connect repo in Netlify dashboard
+3. Configure: Build command = `npm run build`, Publish directory = `dist`
+
+**Configuration**: Create `netlify.toml`:
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+📖 **Full guide**: See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for complete Netlify setup
+
+---
+
+### Option 3: GitHub Pages
+
+**Best for**: Free hosting, simple setup
+
+```bash
+# Install gh-pages
+npm install --save-dev gh-pages
+
+# Add scripts to package.json
+{
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "homepage": "https://yourusername.github.io/repo-name"
+}
+
+# Deploy
+npm run deploy
+```
+
+**Important**: Update `vite.config.ts` with base path:
+```typescript
+export default defineConfig({
+  base: '/repo-name/', // Match your repository name
+})
+```
+
+📖 **Full guide**: See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for GitHub Pages details
+
+---
+
+### Option 4: Cloudflare Pages
+
+**Best for**: Global CDN, excellent performance
+
+1. Push code to GitHub
+2. Connect GitHub at https://pages.cloudflare.com
+3. Configure: Build command = `npm run build`, Output = `dist`
+
+📖 **Full guide**: See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for Cloudflare setup
+
+---
+
+### Option 5: Spark (Current Environment)
+
+**Already deployed** in your Spark workspace.
+
+**To publish publicly:**
+1. Click "Share" button in Spark UI
 2. Set visibility to "Public"
-3. Share the generated Spark URL
+3. Share generated Spark URL
 
-### Deploy to Vercel
-
-1. **Build the project:**
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy to Vercel:**
-   ```bash
-   npm install -g vercel
-   vercel
-   ```
-
-3. **Configure:**
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-   - Framework Preset: Vite
-
-### Deploy to Netlify
-
-1. **Build the project:**
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy:**
-   - Drag `dist` folder to Netlify drop zone, or
-   - Connect GitHub repo and set:
-     - Build command: `npm run build`
-     - Publish directory: `dist`
-
-### Deploy to GitHub Pages
-
-1. **Install gh-pages:**
-   ```bash
-   npm install --save-dev gh-pages
-   ```
-
-2. **Add to package.json:**
-   ```json
-   {
-     "scripts": {
-       "predeploy": "npm run build",
-       "deploy": "gh-pages -d dist"
-     },
-     "homepage": "https://yourusername.github.io/your-repo"
-   }
-   ```
-
-3. **Deploy:**
-   ```bash
-   npm run deploy
-   ```
+---
 
 ### Environment Variables
 
-No environment variables required for basic deployment. For backend features:
+No environment variables required for basic deployment.
 
+**For future backend features:**
 ```bash
-# .env (future use)
-VITE_API_URL=https://your-backend.com
-VITE_CALENDLY_API_KEY=your_key
+# .env.production (configure in hosting platform)
+VITE_API_URL=https://api.your-domain.com
+VITE_CALENDLY_API_KEY=your_prod_key
 ```
+
+Access in code:
+```typescript
+const apiUrl = import.meta.env.VITE_API_URL
+```
+
+---
+
+### Post-Deployment Checklist
+
+- [ ] Site loads correctly at production URL
+- [ ] Run Lighthouse audit (Performance > 90)
+- [ ] Test all features work identically to dev
+- [ ] Test on mobile devices
+- [ ] Test in all browsers (Chrome, Firefox, Safari, Edge)
+- [ ] Verify images load (Cloudinary URLs)
+- [ ] Check external links (GitHub, LinkedIn, etc.)
+- [ ] Add custom domain (optional)
+- [ ] Configure SSL certificate (automatic on most platforms)
+- [ ] Add robots.txt and sitemap.xml (optional, for SEO)
+
+---
+
+### 📖 Complete Deployment Documentation
+
+For detailed deployment instructions, troubleshooting, SEO configuration, and analytics setup:
+
+**➡️ See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)**
+
+Topics covered:
+- Step-by-step deployment for each platform
+- Custom domain configuration
+- SSL certificate setup
+- SEO optimization (meta tags, robots.txt, sitemap.xml)
+- Analytics setup (Google Analytics, Vercel Analytics)
+- Security headers and CSP
+- Troubleshooting common deployment issues
+- Performance verification
+- Monitoring and maintenance
 
 ---
 
