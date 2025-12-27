@@ -37,7 +37,7 @@ export function initPerformanceMonitoring() {
       })
 
       observer.observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] })
-    } catch (e) {
+    } catch {
       console.debug('Performance monitoring not supported')
     }
   }

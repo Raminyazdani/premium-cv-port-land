@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { CVDataProvider } from '@/context/CVDataContext'
 import { FilterProvider } from '@/context/FilterContext'
@@ -13,9 +13,12 @@ import { FilterProvider } from '@/context/FilterContext'
 describe('Language Switching', () => {
   beforeEach(() => {
     localStorage.clear()
+    // Reset document attributes to ensure clean state
+    document.documentElement.removeAttribute('lang')
+    document.documentElement.removeAttribute('dir')
   })
   
-  it('should load English by default', () => {
+  it('should load English by default', async () => {
     const TestComponent = () => {
       return (
         <LanguageProvider>
@@ -28,11 +31,13 @@ describe('Language Switching', () => {
     
     render(<TestComponent />)
     
-    expect(document.documentElement.getAttribute('lang')).toBe('en')
-    expect(document.documentElement.getAttribute('dir')).toBe('ltr')
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('lang')).toBe('en')
+      expect(document.documentElement.getAttribute('dir')).toBe('ltr')
+    })
   })
   
-  it('should apply RTL for Persian', () => {
+  it('should apply RTL for Persian', async () => {
     localStorage.setItem('cv-language', 'fa')
     
     const TestComponent = () => {
@@ -47,11 +52,13 @@ describe('Language Switching', () => {
     
     render(<TestComponent />)
     
-    expect(document.documentElement.getAttribute('lang')).toBe('fa')
-    expect(document.documentElement.getAttribute('dir')).toBe('rtl')
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('lang')).toBe('fa')
+      expect(document.documentElement.getAttribute('dir')).toBe('rtl')
+    })
   })
   
-  it('should apply LTR for German', () => {
+  it('should apply LTR for German', async () => {
     localStorage.setItem('cv-language', 'de')
     
     const TestComponent = () => {
@@ -66,8 +73,10 @@ describe('Language Switching', () => {
     
     render(<TestComponent />)
     
-    expect(document.documentElement.getAttribute('lang')).toBe('de')
-    expect(document.documentElement.getAttribute('dir')).toBe('ltr')
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('lang')).toBe('de')
+      expect(document.documentElement.getAttribute('dir')).toBe('ltr')
+    })
   })
   
   it('should not crash when loading German data', () => {

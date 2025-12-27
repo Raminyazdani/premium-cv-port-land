@@ -39,7 +39,7 @@ export const SECTION_KEYS: Record<string, KeyMapping> = {
   workshop_and_certifications: {
     en: 'workshop_and_certifications',
     de: 'schulungen_und_zertifikate',
-    fa: 'کارگاه‌ها_و_گواهینامه‌ها'
+    fa: 'کارگاه‌ها_و_گواهی‌ها'
   },
   skills: {
     en: 'skills',
@@ -58,13 +58,13 @@ export const SECTION_KEYS: Record<string, KeyMapping> = {
   },
   publications: {
     en: 'publications',
-    de: 'veröffentlichungen',
+    de: 'publikationen',
     fa: 'انتشارات'
   },
   references: {
     en: 'references',
     de: 'referenzen',
-    fa: 'مراجع'
+    fa: 'معرف‌ها'
   }
 }
 
