@@ -8,8 +8,8 @@ interface ErrorFallbackProps {
 }
 
 export const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
-  if (import.meta.env.DEV) throw error
-
+  console.error('Error caught by boundary:', error)
+  
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -26,6 +26,11 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps)
           <pre className="text-xs text-destructive bg-muted/50 p-3 rounded border overflow-auto max-h-32">
             {error.message}
           </pre>
+          {error.stack && (
+            <pre className="text-xs text-muted-foreground bg-muted/30 p-3 rounded border overflow-auto max-h-48 mt-2">
+              {error.stack}
+            </pre>
+          )}
         </div>
         
         <Button 
