@@ -145,14 +145,14 @@ function main() {
   const results = {
     en: verifyLanguage('English', resolve(projectRoot, 'src/data/cv.json')),
     de: verifyLanguage('German', resolve(projectRoot, 'src/data/ramin_de.json'), [
-      'grundlagen', 'profile', 'bildung', 'sprachen',
-      'workshop_und_zertifizierungen', 'fähigkeiten', 'erfahrungen',
-      'projekte', 'veröffentlichungen', 'referenzen'
+      'grunddaten', 'profile', 'ausbildung', 'sprachen',
+      'schulungen_und_zertifikate', 'faehigkeiten', 'erfahrungen',
+      'projekte', 'publikationen', 'referenzen'
     ]),
     fa: verifyLanguage('Persian', resolve(projectRoot, 'src/data/ramin_fa.json'), [
-      'اطلاعات_پایه', 'پروفایل_ها', 'تحصیلات', 'زبان_ها',
-      'کارگاه_ها_و_گواهینامه_ها', 'مهارت_ها', 'تجربیات',
-      'پروژه_ها', 'انتشارات', 'مراجع'
+      'اطلاعات_پایه', 'پروفایل‌ها', 'تحصیلات', 'زبان‌ها',
+      'کارگاه‌ها_و_گواهی‌ها', 'مهارت‌ها', 'سوابق',
+      'پروژه‌ها', 'انتشارات', 'معرف‌ها'
     ])
   }
   

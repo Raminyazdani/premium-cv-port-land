@@ -179,7 +179,7 @@ interface CVData {
    ```
 
 2. **Check normalization**: Ensure language-specific keys map correctly
-   - German: `grundlagen` → `basics`, `bildung` → `education`, etc.
+   - German: `grunddaten` → `basics`, `ausbildung` → `education`, etc.
    - Persian: `اطلاعات_پایه` → `basics`, `تحصیلات` → `education`, etc.
    - See `src/utils/dataNormalizer.ts` for full key mappings
 

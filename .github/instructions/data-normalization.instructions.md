@@ -134,36 +134,37 @@ console.log('Validation warnings:', validationResult.warnings)
 
 ### German (DE) to English (EN)
 ```
-grundlagen → basics
+grunddaten → basics
 profile → profiles
-bildung → education
+ausbildung → education
 sprachen → languages
-workshop_und_zertifizierungen → workshop_and_certifications
-fähigkeiten → skills
+schulungen_und_zertifikate → workshop_and_certifications
+faehigkeiten → skills
 erfahrungen → experiences
 projekte → projects
-veröffentlichungen → publications
+publikationen → publications
 referenzen → references
 ```
 
 ### Persian (FA) to English (EN)
 ```
 اطلاعات_پایه → basics
-پروفایل_ها → profiles
+پروفایل‌ها → profiles
 تحصیلات → education
-زبان_ها → languages
-کارگاه_ها_و_گواهینامه_ها → workshop_and_certifications
-مهارت_ها → skills
-تجربیات → experiences
-پروژه_ها → projects
+زبان‌ها → languages
+کارگاه‌ها_و_گواهی‌ها → workshop_and_certifications
+مهارت‌ها → skills
+سوابق → experiences
+پروژه‌ها → projects
 انتشارات → publications
-مراجع → references
+معرف‌ها → references
 ```
 
 ### Nested Field Mappings (German)
 ```
 vorname → fname
 nachname → lname
+e_mail → email
 einrichtung → institution
 studiengang → studyType
 bereich → area
