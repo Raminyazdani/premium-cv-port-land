@@ -17,16 +17,22 @@ import {
 import { getCVData } from '@/lib/cv-data'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
+import { MediaThumbnail } from '@/components/MediaThumbnail'
+import { MediaModal } from '@/components/MediaModal'
+import { useMediaModal } from '@/hooks/use-media-modal'
+import { detectMediaType } from '@/utils/mediaDetector'
 import type { Publication } from '@/types/cv'
 
 interface PublicationCardProps {
   publication: Publication
+  onOpenMedia: (url: string, alt: string) => void
 }
 
-function PublicationCard({ publication }: PublicationCardProps) {
+function PublicationCard({ publication, onOpenMedia }: PublicationCardProps) {
   const displayTitle = publication.title || 'Untitled Publication'
   const hasLink = !!(publication.url || publication.URL || publication.identifiers?.doi)
   const externalLink = publication.url || publication.URL || (publication.identifiers?.doi ? `https://doi.org/${publication.identifiers.doi}` : null)
+  const mediaType = externalLink ? detectMediaType(externalLink) : null
 
   const authorsDisplay = useMemo(() => {
     if (!publication.authors || publication.authors.length === 0) return null
@@ -90,6 +96,15 @@ function PublicationCard({ publication }: PublicationCardProps) {
               )}
             </div>
           </div>
+          
+          {mediaType === 'pdf' && externalLink && (
+            <MediaThumbnail
+              url={externalLink}
+              alt={displayTitle}
+              className="w-20 h-24"
+              onClick={() => onOpenMedia(externalLink, displayTitle)}
+            />
+          )}
         </div>
 
         {authorsDisplay && (
@@ -164,6 +179,8 @@ export function PublicationsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilter, setSelectedFilter] = useState<string>('all')
   const [currentFocusFilter, setCurrentFocusFilter] = useState<FocusFilter>(getStoredFocusFilter())
+  
+  const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
   const data = getCVData()
   const publications = data.publications || []
@@ -358,7 +375,7 @@ export function PublicationsSection() {
             ) : (
               <div className="grid gap-6 md:grid-cols-2">
                 {filteredPublications.map((pub, index) => (
-                  <PublicationCard key={index} publication={pub} />
+                  <PublicationCard key={index} publication={pub} onOpenMedia={openModal} />
                 ))}
               </div>
             )}
@@ -376,6 +393,13 @@ export function PublicationsSection() {
           </div>
         )}
       </div>
+      
+      <MediaModal
+        url={currentUrl}
+        alt={currentAlt}
+        isOpen={isOpen}
+        onClose={closeModal}
+      />
     </section>
   )
 }

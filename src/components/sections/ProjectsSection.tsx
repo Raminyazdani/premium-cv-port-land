@@ -12,14 +12,17 @@ import {
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
+import { MediaModal } from '@/components/MediaModal'
+import { useMediaModal } from '@/hooks/use-media-modal'
 import type { Project } from '@/types/cv'
 import { safeString, safeUrl, safeArray, isImageUrl } from '@/utils/dataValidation'
 
 interface ProjectCardProps {
   project: Project
+  onOpenMedia: (url: string, alt: string) => void
 }
 
-function ProjectCard({ project }: ProjectCardProps) {
+function ProjectCard({ project, onOpenMedia }: ProjectCardProps) {
   const title = safeString(project.title || project.name, 'Untitled Project')
   const description = safeString(project.description)
   const url = project.url ? safeUrl(project.url) : null
@@ -53,7 +56,18 @@ function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Card className="group hover:border-primary/50 transition-all duration-200 h-full flex flex-col overflow-hidden">
       {detectImageUrl && (
-        <div className="w-full h-40 sm:h-48 overflow-hidden bg-muted">
+        <button
+          onClick={() => onOpenMedia(detectImageUrl, title)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              onOpenMedia(detectImageUrl, title)
+            }
+          }}
+          className="w-full h-40 sm:h-48 overflow-hidden bg-muted cursor-pointer hover:opacity-90 transition-opacity"
+          aria-label={`View image for ${title}`}
+          type="button"
+        >
           <img
             src={detectImageUrl}
             alt={title}
@@ -64,7 +78,7 @@ function ProjectCard({ project }: ProjectCardProps) {
               target.style.display = 'none'
             }}
           />
-        </div>
+        </button>
       )}
       
       <CardHeader className="pb-3 px-4 sm:px-6 pt-4 sm:pt-6">
@@ -122,6 +136,8 @@ export function ProjectsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedDomains, setSelectedDomains] = useState<Set<string>>(new Set())
   const [hasLinkFilter, setHasLinkFilter] = useState<boolean | null>(null)
+  
+  const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
   const data = getCVData()
   const projects = data.projects ?? []
@@ -330,13 +346,20 @@ export function ProjectsSection() {
             >
               {filteredProjects.map((project, idx) => (
                 <div key={idx} style={getItemStyle(idx)}>
-                  <ProjectCard project={project} />
+                  <ProjectCard project={project} onOpenMedia={openModal} />
                 </div>
               ))}
             </div>
           )}
         </div>
       </div>
+      
+      <MediaModal
+        url={currentUrl}
+        alt={currentAlt}
+        isOpen={isOpen}
+        onClose={closeModal}
+      />
     </section>
   )
 }

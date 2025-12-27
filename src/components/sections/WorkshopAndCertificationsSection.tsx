@@ -24,6 +24,9 @@ import {
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
+import { MediaThumbnail } from '@/components/MediaThumbnail'
+import { MediaModal } from '@/components/MediaModal'
+import { useMediaModal } from '@/hooks/use-media-modal'
 import type { WorkshopIssuer, Certification } from '@/types/cv'
 import { 
   formatDateSafe, 
@@ -36,9 +39,10 @@ import {
 
 interface CertificationItemProps {
   certification: Certification
+  onOpenMedia: (url: string, alt: string) => void
 }
 
-function CertificationItem({ certification }: CertificationItemProps) {
+function CertificationItem({ certification, onOpenMedia }: CertificationItemProps) {
   const certUrl = certification.URL ? safeUrl(certification.URL) : null
   const isPDF = certUrl ? isPdfUrl(certUrl) : false
   const certName = safeString(certification.name, 'Unnamed Certification')
@@ -98,39 +102,14 @@ function CertificationItem({ certification }: CertificationItemProps) {
             </div>
           </div>
           
-          {certUrl && (
-            <div className="shrink-0 flex flex-col gap-2">
-              {isPDF && (
-                <a
-                  href={certUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-16 h-20 rounded border-2 border-border hover:border-primary transition-colors overflow-hidden bg-muted relative group"
-                  aria-label={`View PDF certificate for ${certName}`}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <FilePdf size={32} weight="duotone" className="text-destructive group-hover:text-primary transition-colors" />
-                  </div>
-                  <div className="absolute bottom-0 inset-x-0 bg-destructive/10 text-[10px] text-center py-0.5 font-medium">
-                    PDF
-                  </div>
-                </a>
-              )}
-              <Button
-                size="sm"
-                variant="outline"
-                asChild
-              >
-                <a
-                  href={certUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`View certificate for ${certName}`}
-                >
-                  <LinkIcon size={16} weight="bold" />
-                  <span className="ml-1.5 hidden sm:inline">View</span>
-                </a>
-              </Button>
+          {certUrl && isPDF && (
+            <div className="shrink-0">
+              <MediaThumbnail
+                url={certUrl}
+                alt={`${certName} - Certificate`}
+                className="w-20 h-24"
+                onClick={() => onOpenMedia(certUrl, `${certName} - Certificate`)}
+              />
             </div>
           )}
         </div>
@@ -145,9 +124,10 @@ interface IssuerAccordionProps {
   selectedFilters: Set<string>
   showCertifiedOnly: boolean
   currentFocusFilter: FocusFilter
+  onOpenMedia: (url: string, alt: string) => void
 }
 
-function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOnly, currentFocusFilter }: IssuerAccordionProps) {
+function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOnly, currentFocusFilter, onOpenMedia }: IssuerAccordionProps) {
   const filteredCertifications = useMemo(() => {
     const certs = issuer.certifications ?? []
     
@@ -203,7 +183,7 @@ function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOn
       <AccordionContent className="px-4 pb-4">
         <div className="space-y-3 pt-2">
           {sortedCertifications.map((cert, idx) => (
-            <CertificationItem key={idx} certification={cert} />
+            <CertificationItem key={idx} certification={cert} onOpenMedia={onOpenMedia} />
           ))}
         </div>
       </AccordionContent>
@@ -219,6 +199,8 @@ export function WorkshopAndCertificationsSection() {
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
   const [showCertifiedOnly, setShowCertifiedOnly] = useState(false)
   const [currentFocusFilter, setCurrentFocusFilter] = useState<FocusFilter>('Full CV')
+  
+  const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
   useEffect(() => {
     const handleFocusFilterChange = () => {
@@ -423,11 +405,19 @@ export function WorkshopAndCertificationsSection() {
                 selectedFilters={selectedFilters}
                 showCertifiedOnly={showCertifiedOnly}
                 currentFocusFilter={currentFocusFilter}
+                onOpenMedia={openModal}
               />
             ))}
           </Accordion>
         )}
       </div>
+      
+      <MediaModal
+        url={currentUrl}
+        alt={currentAlt}
+        isOpen={isOpen}
+        onClose={closeModal}
+      />
     </section>
   )
 }
