@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { useLanguage } from '@/context/LanguageContext'
+import { useLanguage, useTranslation } from '@/context/LanguageContext'
 import type { Language } from '@/utils/dataNormalizer'
 
 const LANGUAGES: Array<{ code: Language; name: string; nativeName: string }> = [
@@ -21,6 +21,7 @@ const LANGUAGES: Array<{ code: Language; name: string; nativeName: string }> = [
 
 export function LanguageSelector() {
   const { language, setLanguage } = useLanguage()
+  const t = useTranslation()
 
   const currentLanguage = LANGUAGES.find((lang) => lang.code === language)
 
@@ -31,7 +32,7 @@ export function LanguageSelector() {
           variant="ghost"
           size="sm"
           className="gap-2"
-          aria-label="Select language"
+          aria-label={t.a11y.select_language}
         >
           <Globe size={18} weight="duotone" />
           <span className="hidden sm:inline">{currentLanguage?.nativeName}</span>

@@ -14,6 +14,7 @@ import { useCV } from '@/context/CVDataContext'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
+import { useTranslation } from '@/context/LanguageContext'
 import type { Project } from '@/types/cv'
 import { safeString, safeUrl, safeArray, isImageUrl } from '@/utils/dataValidation'
 
@@ -27,6 +28,7 @@ function ProjectCard({ project, onOpenMedia }: ProjectCardProps) {
   const description = safeString(project.description)
   const url = project.url ? safeUrl(project.url) : null
   const typeKeys = safeArray<string>(project.type_key)
+  const t = useTranslation()
 
   const uniqueDomains = useMemo(() => {
     const domains = new Set<string>()
@@ -122,7 +124,7 @@ function ProjectCard({ project, onOpenMedia }: ProjectCardProps) {
                 aria-label={`View project: ${title}`}
               >
                 <GithubLogo className="h-4 w-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                View Repository
+                {t.projects.view_code}
               </a>
             </Button>
           </div>
@@ -136,6 +138,7 @@ export function ProjectsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedDomains, setSelectedDomains] = useState<Set<string>>(new Set())
   const [hasLinkFilter, setHasLinkFilter] = useState<boolean | null>(null)
+  const t = useTranslation()
   
   const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
@@ -252,12 +255,12 @@ export function ProjectsSection() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Folder className="h-5 w-5" />
-              No Projects
+              {t.sections.projects}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              No projects have been added yet.
+              {t.empty.no_projects}
             </p>
           </CardContent>
         </Card>
@@ -272,7 +275,7 @@ export function ProjectsSection() {
           <div className="space-y-2">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-2 sm:gap-3">
               <Folder className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
-              Projects & Portfolio
+              {t.sections.projects}
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground">
               A collection of programming, bioinformatics, and research projects
@@ -286,7 +289,7 @@ export function ProjectsSection() {
             <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
               id="project-search"
-              placeholder="Search projects..."
+              placeholder={t.actions.search}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 h-11 text-base"
@@ -294,7 +297,7 @@ export function ProjectsSection() {
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span className="text-xs sm:text-sm font-medium text-muted-foreground whitespace-nowrap">Filter by:</span>
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground whitespace-nowrap">{t.actions.filter}:</span>
             {allDomains.map(domain => (
               <Badge
                 key={domain}
@@ -326,7 +329,7 @@ export function ProjectsSection() {
                   className="h-8 sm:h-7 text-xs px-2 sm:px-3 touch-manipulation"
                 >
                   <X className="h-3 w-3 mr-1" />
-                  Clear
+                  {t.actions.clear}
                 </Button>
               </>
             )}
@@ -345,10 +348,10 @@ export function ProjectsSection() {
               <div className="text-center space-y-2">
                 <Folder className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-muted-foreground/50" />
                 <p className="text-sm sm:text-base text-muted-foreground">
-                  No projects match your current filters
+                  {t.empty.no_results}
                 </p>
                 <Button variant="link" size="sm" onClick={clearAllFilters} className="touch-manipulation">
-                  Clear all filters
+                  {t.actions.clear}
                 </Button>
               </div>
             </Card>

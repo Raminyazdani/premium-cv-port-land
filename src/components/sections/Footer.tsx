@@ -7,6 +7,8 @@ import {
   Link as LinkIcon,
 } from '@phosphor-icons/react'
 import { getBasics, getFullName, getProfiles } from '@/lib/cv-data'
+import { useTranslation } from '@/context/LanguageContext'
+import { interpolate } from '@/lib/i18n'
 import type { Profile } from '@/types/cv'
 
 const iconMap: Record<string, typeof LinkedinLogo> = {
@@ -49,14 +51,9 @@ export function Footer() {
   const profiles = getProfiles()
   const fullName = getFullName(basics)
   const currentYear = new Date().getFullYear()
+  const t = useTranslation()
 
   const handlePdfExport = () => {
-    // TODO: Replace with backend API call for LaTeX PDF generation
-    // Current implementation uses browser's native print-to-PDF functionality
-    // Future enhancement: POST CV data to server-side LaTeX renderer
-    // Expected API endpoint: POST /api/generate-pdf
-    // Request body: { cvData: CVData, language: string, theme: string }
-    // Response: PDF file download
     window.print()
   }
 
@@ -66,7 +63,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
           <div className="text-center md:text-left order-2 md:order-1">
             <p className="text-xs sm:text-sm text-muted-foreground">
-              © {currentYear} {fullName}. All rights reserved.
+              {interpolate(t.footer.copyright, { year: String(currentYear), name: fullName })}
             </p>
           </div>
 
@@ -78,7 +75,7 @@ export function Footer() {
               className="flex items-center gap-2 h-10 sm:h-9 w-full sm:w-auto min-w-[140px] touch-manipulation"
             >
               <FilePdf size={18} weight="bold" />
-              <span className="text-sm sm:text-base">Export PDF</span>
+              <span className="text-sm sm:text-base">{t.actions.download_cv}</span>
             </Button>
 
             <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">

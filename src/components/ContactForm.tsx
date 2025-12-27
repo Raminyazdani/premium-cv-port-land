@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { PaperPlaneRight } from '@phosphor-icons/react'
 import { Spinner } from '@/components/ui/spinner'
 import { toast } from 'sonner'
+import { useTranslation } from '@/context/LanguageContext'
 
 interface FormData {
   name: string
@@ -23,6 +24,7 @@ interface FormErrors {
 }
 
 export function ContactForm() {
+  const t = useTranslation()
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -108,19 +110,19 @@ export function ContactForm() {
     e.preventDefault()
 
     if (!validateForm()) {
-      setStatusMessage('Form has errors. Please review and correct the highlighted fields.')
-      toast.error('Please fix the errors in the form')
+      setStatusMessage(t.forms.error)
+      toast.error(t.forms.error)
       return
     }
 
     setIsSubmitting(true)
-    setStatusMessage('Sending your message...')
+    setStatusMessage(t.forms.sending)
 
     try {
       await new Promise(resolve => setTimeout(resolve, 1500))
       
-      setStatusMessage('Message sent successfully!')
-      toast.success('Message sent!', {
+      setStatusMessage(t.forms.sent)
+      toast.success(t.forms.sent, {
         description: 'Thank you for reaching out. I\'ll get back to you as soon as possible.',
       })
       
@@ -132,8 +134,8 @@ export function ContactForm() {
         document.getElementById('name')?.focus()
       }, 100)
     } catch (error) {
-      setStatusMessage('Failed to send message. Please try again.')
-      toast.error('Failed to send message', {
+      setStatusMessage(t.forms.error)
+      toast.error(t.forms.error, {
         description: 'There was a problem sending your message. Please try again later or email directly.',
       })
     } finally {
@@ -146,7 +148,7 @@ export function ContactForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>Get in Touch</CardTitle>
+        <CardTitle>{t.sections.contact}</CardTitle>
         <CardDescription>
           Send me a message and I'll get back to you as soon as possible
         </CardDescription>
@@ -163,7 +165,7 @@ export function ContactForm() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
           <div className="flex flex-col gap-2">
             <Label htmlFor="name">
-              Name <span className="text-destructive" aria-label="required">*</span>
+              {t.forms.name} <span className="text-destructive" aria-label="required">*</span>
             </Label>
             <Input
               id="name"
@@ -175,7 +177,7 @@ export function ContactForm() {
               aria-required="true"
               aria-invalid={!!errors.name}
               aria-describedby={errors.name ? 'name-error' : undefined}
-              placeholder="Your full name"
+              placeholder={t.forms.name}
             />
             {errors.name && (
               <span id="name-error" className="text-sm text-destructive" role="alert">
@@ -186,7 +188,7 @@ export function ContactForm() {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">
-              Email <span className="text-destructive" aria-label="required">*</span>
+              {t.forms.email} <span className="text-destructive" aria-label="required">*</span>
             </Label>
             <Input
               id="email"
@@ -198,7 +200,7 @@ export function ContactForm() {
               aria-required="true"
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'email-error' : undefined}
-              placeholder="your.email@example.com"
+              placeholder={t.forms.email}
             />
             {errors.email && (
               <span id="email-error" className="text-sm text-destructive" role="alert">
@@ -209,7 +211,7 @@ export function ContactForm() {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="subject">
-              Subject <span className="text-destructive" aria-label="required">*</span>
+              {t.forms.subject} <span className="text-destructive" aria-label="required">*</span>
             </Label>
             <Input
               id="subject"
@@ -221,7 +223,7 @@ export function ContactForm() {
               aria-required="true"
               aria-invalid={!!errors.subject}
               aria-describedby={errors.subject ? 'subject-error' : undefined}
-              placeholder="What is this about?"
+              placeholder={t.forms.subject}
             />
             {errors.subject && (
               <span id="subject-error" className="text-sm text-destructive" role="alert">
@@ -232,7 +234,7 @@ export function ContactForm() {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="message">
-              Message <span className="text-destructive" aria-label="required">*</span>
+              {t.forms.message} <span className="text-destructive" aria-label="required">*</span>
             </Label>
             <Textarea
               id="message"
@@ -243,7 +245,7 @@ export function ContactForm() {
               aria-required="true"
               aria-invalid={!!errors.message}
               aria-describedby={errors.message ? 'message-error' : undefined}
-              placeholder="Your message..."
+              placeholder={t.forms.message}
               rows={6}
               className="resize-none"
             />
@@ -257,13 +259,13 @@ export function ContactForm() {
           <Button type="submit" className="w-full sm:w-auto sm:self-end" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
-                <Spinner size={16} className="mr-2" label="Sending" />
-                Sending...
+                <Spinner size={16} className="mr-2" label={t.forms.sending} />
+                {t.forms.sending}
               </>
             ) : (
               <>
                 <PaperPlaneRight className="mr-2" />
-                Send Message
+                {t.forms.send}
               </>
             )}
           </Button>

@@ -12,6 +12,7 @@ import {
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
+import { useTranslation } from '@/context/LanguageContext'
 import type { Education } from '@/types/cv'
 import { 
   formatDateRangeSafe, 
@@ -149,6 +150,7 @@ export function EducationSection() {
   const cvData = useCV()
   const education = cvData.education ?? []
   const { selectedFocus } = useFilter()
+  const t = useTranslation()
   
   // DEBUG: Log what we receive
   if (import.meta.env.DEV) {
@@ -164,7 +166,7 @@ export function EducationSection() {
     console.groupEnd()
   }
   
-  const [selectedFilter, setSelectedFilter] = useState<string>('All')
+  const [selectedFilter, setSelectedFilter] = useState<string>(t.filters.all)
   
   const filteredByGlobalFocus = useMemo(() => {
     return education.filter(edu => shouldShowEntry(edu.type_key, selectedFocus))
@@ -179,18 +181,18 @@ export function EducationSection() {
           .forEach(key => tagSet.add(key))
       }
     })
-    return ['All', ...Array.from(tagSet).sort()]
-  }, [filteredByGlobalFocus])
+    return [t.filters.all, ...Array.from(tagSet).sort()]
+  }, [filteredByGlobalFocus, t.filters.all])
   
   const filteredEducation = useMemo(() => {
-    if (selectedFilter === 'All') {
+    if (selectedFilter === t.filters.all) {
       return filteredByGlobalFocus
     }
     
     return filteredByGlobalFocus.filter(edu => 
       edu.type_key?.includes(selectedFilter)
     )
-  }, [filteredByGlobalFocus, selectedFilter])
+  }, [filteredByGlobalFocus, selectedFilter, t.filters.all])
   
   const sortedEducation = useMemo(() => {
     return [...filteredEducation].sort((a, b) => {
@@ -212,9 +214,9 @@ export function EducationSection() {
           <div className="text-center">
             <GraduationCap size={48} weight="duotone" className="mx-auto mb-4 text-muted-foreground" />
             <h2 id="education-heading" className="text-3xl font-bold mb-2">
-              Education
+              {t.sections.education}
             </h2>
-            <p className="text-muted-foreground">No education history available</p>
+            <p className="text-muted-foreground">{t.empty.no_education}</p>
           </div>
         </div>
       </section>
@@ -229,7 +231,7 @@ export function EducationSection() {
             <GraduationCap size={32} weight="duotone" className="text-primary" />
           </div>
           <h2 id="education-heading" className="text-4xl font-bold mb-3">
-            Education
+            {t.sections.education}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             My academic journey and continuous learning path
@@ -240,7 +242,7 @@ export function EducationSection() {
           <>
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-sm font-medium text-muted-foreground">Filter by:</span>
+                <span className="text-sm font-medium text-muted-foreground">{t.actions.filter}:</span>
                 <div className="flex flex-wrap gap-2">
                   {allTags.map(tag => (
                     <Button
@@ -251,12 +253,12 @@ export function EducationSection() {
                       className="transition-all"
                     >
                       {tag}
-                      {tag === 'All' && (
+                      {tag === t.filters.all && (
                         <Badge variant="secondary" className="ml-2 px-1.5 py-0 text-xs">
                           {filteredByGlobalFocus.length}
                         </Badge>
                       )}
-                      {tag !== 'All' && (
+                      {tag !== t.filters.all && (
                         <Badge variant="secondary" className="ml-2 px-1.5 py-0 text-xs">
                           {filteredByGlobalFocus.filter(edu => edu.type_key?.includes(tag)).length}
                         </Badge>
@@ -273,14 +275,14 @@ export function EducationSection() {
         {sortedEducation.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
-              No education entries match the selected filter
+              {t.empty.no_results}
             </p>
             <Button 
               variant="link" 
-              onClick={() => setSelectedFilter('All')}
+              onClick={() => setSelectedFilter(t.filters.all)}
               className="mt-2"
             >
-              Clear filter
+              {t.actions.clear}
             </Button>
           </div>
         ) : (

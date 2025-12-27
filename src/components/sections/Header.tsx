@@ -8,16 +8,7 @@ import { ThemeSelector } from '@/components/ThemeSelector'
 import { LanguageSelector } from '@/components/LanguageSelector'
 import { FocusFilterSelector } from '@/components/FocusFilterSelector'
 import { LAYOUT_CONSTANTS } from '@/constants/app'
-
-const navItems = [
-  { label: 'About', href: '#about' },
-  { label: 'Education', href: '#education' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Publications', href: '#publications' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' },
-]
+import { useTranslation } from '@/context/LanguageContext'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -25,6 +16,17 @@ export function Header() {
   const { data } = useCVData()
   const basics = extractBasics(data)
   const fullName = getFullName(basics)
+  const t = useTranslation()
+
+  const navItems = [
+    { label: t.nav.about, href: '#about' },
+    { label: t.nav.education, href: '#education' },
+    { label: t.nav.experience, href: '#experience' },
+    { label: t.nav.projects, href: '#projects' },
+    { label: t.nav.publications, href: '#publications' },
+    { label: t.nav.skills, href: '#skills' },
+    { label: t.nav.contact, href: '#contact' },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,7 +94,7 @@ export function Header() {
             <ThemeSelector />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Open menu" className="h-9 w-9 sm:h-10 sm:w-10">
+                <Button variant="ghost" size="icon" aria-label={t.a11y.menu} className="h-9 w-9 sm:h-10 sm:w-10">
                   <List size={20} weight="bold" className="sm:w-6 sm:h-6" />
                 </Button>
               </SheetTrigger>
