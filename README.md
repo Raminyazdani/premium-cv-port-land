@@ -13,6 +13,23 @@
 
 ---
 
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js**: Version 18.0.0 or higher (tested with v20.19.6)
+- **npm**: Version 9.0.0 or higher (tested with v10.8.2)
+
+Check your versions:
+```bash
+node --version  # Should show v18.0.0 or higher
+npm --version   # Should show 9.0.0 or higher
+```
+
+If you need to install or update Node.js, visit [nodejs.org](https://nodejs.org/).
+
+---
+
 ## 🚀 Quickstart
 
 ### Local Development (3 minutes)
@@ -179,10 +196,15 @@ The app runs automatically in your Spark workspace. No manual start command need
 
 **For local development outside Spark:**
 ```bash
-npm install      # Install dependencies
-npm run dev      # Start dev server on port 5173
-npm run build    # Build for production
-npm run preview  # Preview production build
+npm install         # Install dependencies
+npm run dev         # Start dev server on port 5000
+npm run build       # Build for production
+npm run preview     # Preview production build
+npm run test        # Run tests
+npm run lint        # Lint code
+npm run lint:fix    # Fix linting issues automatically
+npm run format      # Format code with Prettier
+npm run typecheck   # Type check with TypeScript
 ```
 
 ### Quick Customization
