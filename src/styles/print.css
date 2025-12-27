@@ -1,0 +1,201 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 1.5cm 1cm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+
+  header[class*="fixed"],
+  footer,
+  .no-print,
+  [data-no-print],
+  button,
+  [role="button"],
+  nav,
+  .theme-selector,
+  .language-selector,
+  .focus-filter-selector {
+    display: none !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: 18pt;
+    margin-bottom: 0.5rem;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 14pt;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    page-break-after: avoid;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.25rem;
+  }
+
+  h3 {
+    font-size: 12pt;
+    margin-top: 0.75rem;
+    margin-bottom: 0.25rem;
+    page-break-after: avoid;
+  }
+
+  p, li {
+    font-size: 10pt;
+    line-height: 1.4;
+    orphans: 3;
+    widows: 3;
+  }
+
+  a {
+    color: black !important;
+    text-decoration: underline;
+  }
+
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #666;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  .cover-image,
+  [data-cover-image] {
+    display: none !important;
+  }
+
+  .profile-image,
+  [data-profile-image] {
+    width: 3cm !important;
+    height: 3cm !important;
+    border-radius: 50%;
+    page-break-inside: avoid;
+  }
+
+  ul, ol {
+    page-break-inside: avoid;
+  }
+
+  .card,
+  [data-card] {
+    border: 1px solid #ddd !important;
+    background: white !important;
+    padding: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+    page-break-inside: avoid;
+  }
+
+  .grid,
+  [data-grid] {
+    display: block !important;
+  }
+
+  .grid > *,
+  [data-grid] > * {
+    margin-bottom: 0.5rem;
+    page-break-inside: avoid;
+  }
+
+  .timeline-item,
+  [data-timeline-item] {
+    page-break-inside: avoid;
+    margin-bottom: 0.75rem;
+  }
+
+  .badge,
+  [data-badge] {
+    border: 1px solid #666 !important;
+    background: white !important;
+    color: black !important;
+    padding: 0.1rem 0.3rem !important;
+    font-size: 8pt !important;
+    display: inline-block;
+    margin: 0.1rem;
+  }
+
+  .shadow,
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg {
+    box-shadow: none !important;
+  }
+
+  .backdrop-blur,
+  .backdrop-blur-sm,
+  .backdrop-blur-md {
+    backdrop-filter: none !important;
+  }
+
+  .hero-section,
+  [data-hero] {
+    page-break-after: avoid;
+    margin-bottom: 1rem;
+  }
+
+  .education-section,
+  .experience-section,
+  .projects-section,
+  .publications-section,
+  .skills-section,
+  .languages-section,
+  .certifications-section,
+  .references-section {
+    page-break-inside: auto;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .modal,
+  .dialog,
+  .tooltip,
+  .popover {
+    display: none !important;
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+    font-size: 8pt;
+  }
+
+  .visually-hidden {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+  }
+}

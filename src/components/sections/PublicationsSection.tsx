@@ -16,6 +16,7 @@ import {
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
 import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
+import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import type { Publication } from '@/types/cv'
 
 interface PublicationCardProps {

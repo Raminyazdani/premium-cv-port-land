@@ -11,6 +11,7 @@ import {
   X,
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
+import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import type { Project } from '@/types/cv'
 
 interface ProjectCardProps {
@@ -187,6 +188,11 @@ export function ProjectsSection() {
     })
   }, [uniqueProjects, searchQuery, selectedDomains, hasLinkFilter])
 
+  const { containerRef, getItemStyle } = useStaggeredScrollAnimation(filteredProjects.length, {
+    threshold: 0.05,
+    rootMargin: '0px 0px -100px 0px',
+  })
+
   const toggleDomain = (domain: string) => {
     setSelectedDomains(prev => {
       const newSet = new Set(prev)
@@ -315,9 +321,14 @@ export function ProjectsSection() {
               </div>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div 
+              ref={containerRef as React.RefObject<HTMLDivElement>}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
               {filteredProjects.map((project, idx) => (
-                <ProjectCard key={idx} project={project} />
+                <div key={idx} style={getItemStyle(idx)}>
+                  <ProjectCard project={project} />
+                </div>
               ))}
             </div>
           )}

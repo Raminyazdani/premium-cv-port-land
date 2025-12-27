@@ -79,6 +79,7 @@ export function HeroSection() {
   return (
     <section
       id="hero"
+      data-hero
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
         backgroundImage: coverPhoto
@@ -96,7 +97,10 @@ export function HeroSection() {
       <div className="container relative z-10 px-4 py-20">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex justify-center mb-6">
-            <Avatar className="h-32 w-32 lg:h-40 lg:w-40 border-4 border-background shadow-2xl">
+            <Avatar 
+              data-profile-image
+              className="h-32 w-32 lg:h-40 lg:w-40 border-4 border-background shadow-2xl"
+            >
               <AvatarImage src={profilePhoto || undefined} alt={fullName} />
               <AvatarFallback className="text-3xl lg:text-4xl font-bold">
                 {getInitials(fullName)}

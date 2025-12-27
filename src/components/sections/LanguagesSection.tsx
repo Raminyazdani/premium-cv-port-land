@@ -22,6 +22,7 @@ import { getCVData } from '@/lib/cv-data'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { detectMediaType } from '@/utils/mediaDetector'
+import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import type { Language, LanguageCertification } from '@/types/cv'
 
 function getProficiencyLevel(level?: string | null, cefr?: string | null): number {
@@ -337,6 +338,11 @@ export function LanguagesSection() {
   const cvData = getCVData()
   const languages = cvData.languages ?? []
   
+  const { containerRef, getItemStyle } = useStaggeredScrollAnimation(languages.length, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px',
+  })
+  
   if (languages.length === 0) {
     return (
       <section className="py-16 bg-muted/30" aria-labelledby="languages-heading">
@@ -354,7 +360,7 @@ export function LanguagesSection() {
   }
   
   return (
-    <section className="py-16 bg-muted/30" aria-labelledby="languages-heading">
+    <section id="languages" className="py-16 bg-muted/30" aria-labelledby="languages-heading">
       <div className="container max-w-6xl px-4">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
@@ -368,9 +374,14 @@ export function LanguagesSection() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div 
+          ref={containerRef as React.RefObject<HTMLDivElement>}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {languages.map((lang, idx) => (
-            <LanguageCard key={idx} language={lang} />
+            <div key={idx} style={getItemStyle(idx)}>
+              <LanguageCard language={lang} />
+            </div>
           ))}
         </div>
       </div>

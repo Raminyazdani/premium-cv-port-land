@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import './styles/themes.css';
 @import './styles/rtl.css';
+@import './styles/print.css';
 
 html {
   scroll-behavior: smooth;

@@ -51,11 +51,17 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   const handlePdfExport = () => {
+    // TODO: Replace with backend API call for LaTeX PDF generation
+    // Current implementation uses browser's native print-to-PDF functionality
+    // Future enhancement: POST CV data to server-side LaTeX renderer
+    // Expected API endpoint: POST /api/generate-pdf
+    // Request body: { cvData: CVData, language: string, theme: string }
+    // Response: PDF file download
     window.print()
   }
 
   return (
-    <footer className="bg-card border-t border-border mt-16">
+    <footer className="no-print bg-card border-t border-border mt-16">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">
