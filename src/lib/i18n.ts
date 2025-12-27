@@ -54,6 +54,9 @@ export interface UIStrings {
     filter: string
     search: string
     clear: string
+    get_in_touch: string
+    contact: string
+    learn_more: string
   }
 
   // Forms
@@ -185,6 +188,47 @@ export interface UIStrings {
     open_modal: string
     close_modal: string
   }
+
+  // Booking Widget
+  booking: {
+    title: string
+    description: string
+    meeting_type: string
+    video_call: string
+    phone_call: string
+    in_person: string
+    video_description: string
+    phone_description: string
+    in_person_description: string
+    select_date: string
+    select_time: string
+    book_call: string
+    booking: string
+    clear_selection: string
+    your_selection: string
+    success_title: string
+    success_description: string
+    error_title: string
+    error_description: string
+    select_date_time: string
+    selection_cleared: string
+    unavailable: string
+  }
+
+  // Validation Messages
+  validation: {
+    required: string
+    invalid_email: string
+    min_length_2: string
+    min_length_3: string
+    min_length_10: string
+  }
+
+  // Loading States
+  loading: {
+    loading: string
+    please_wait: string
+  }
 }
 
 const translations: Record<Language, UIStrings> = {
@@ -230,7 +274,10 @@ const translations: Record<Language, UIStrings> = {
       collapse: 'Collapse',
       filter: 'Filter',
       search: 'Search',
-      clear: 'Clear'
+      clear: 'Clear',
+      get_in_touch: 'Get in Touch',
+      contact: 'Contact',
+      learn_more: 'Learn More'
     },
     forms: {
       name: 'Name',
@@ -337,6 +384,41 @@ const translations: Record<Language, UIStrings> = {
       select_focus: 'Select focus',
       open_modal: 'Open modal',
       close_modal: 'Close modal'
+    },
+    booking: {
+      title: 'Schedule a Call',
+      description: 'Choose your preferred meeting type and select a time that works for you',
+      meeting_type: 'Meeting Type',
+      video_call: 'Video Call',
+      phone_call: 'Phone Call',
+      in_person: 'In Person',
+      video_description: 'Meet via Zoom, Google Meet, or Microsoft Teams',
+      phone_description: 'Direct phone conversation',
+      in_person_description: 'Meet at a specified location',
+      select_date: 'Select Date',
+      select_time: 'Select Time',
+      book_call: 'Book a Call',
+      booking: 'Booking...',
+      clear_selection: 'Clear Selection',
+      your_selection: 'Your Selection:',
+      success_title: 'Call booked!',
+      success_description: 'Your {type} is scheduled for {date} at {time}.',
+      error_title: 'Booking failed',
+      error_description: 'There was a problem booking your call. Please try again later.',
+      select_date_time: 'Please select a date and time',
+      selection_cleared: 'Selection cleared',
+      unavailable: 'unavailable'
+    },
+    validation: {
+      required: '{field} is required',
+      invalid_email: 'Please enter a valid email address',
+      min_length_2: '{field} must be at least 2 characters',
+      min_length_3: '{field} must be at least 3 characters',
+      min_length_10: '{field} must be at least 10 characters'
+    },
+    loading: {
+      loading: 'Loading...',
+      please_wait: 'Please wait'
     }
   },
 
@@ -382,7 +464,10 @@ const translations: Record<Language, UIStrings> = {
       collapse: 'Einklappen',
       filter: 'Filtern',
       search: 'Suchen',
-      clear: 'Löschen'
+      clear: 'Löschen',
+      get_in_touch: 'Kontakt aufnehmen',
+      contact: 'Kontakt',
+      learn_more: 'Mehr erfahren'
     },
     forms: {
       name: 'Name',
@@ -489,6 +574,41 @@ const translations: Record<Language, UIStrings> = {
       select_focus: 'Fokus auswählen',
       open_modal: 'Modal öffnen',
       close_modal: 'Modal schließen'
+    },
+    booking: {
+      title: 'Anruf vereinbaren',
+      description: 'Wählen Sie Ihre bevorzugte Besprechungsart und wählen Sie eine passende Zeit',
+      meeting_type: 'Besprechungsart',
+      video_call: 'Videoanruf',
+      phone_call: 'Telefonanruf',
+      in_person: 'Persönlich',
+      video_description: 'Treffen per Zoom, Google Meet oder Microsoft Teams',
+      phone_description: 'Direktes Telefongespräch',
+      in_person_description: 'Treffen an einem festgelegten Ort',
+      select_date: 'Datum auswählen',
+      select_time: 'Uhrzeit auswählen',
+      book_call: 'Anruf buchen',
+      booking: 'Wird gebucht...',
+      clear_selection: 'Auswahl löschen',
+      your_selection: 'Ihre Auswahl:',
+      success_title: 'Anruf gebucht!',
+      success_description: 'Ihr {type} ist für {date} um {time} geplant.',
+      error_title: 'Buchung fehlgeschlagen',
+      error_description: 'Bei der Buchung Ihres Anrufs ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut.',
+      select_date_time: 'Bitte wählen Sie ein Datum und eine Uhrzeit',
+      selection_cleared: 'Auswahl gelöscht',
+      unavailable: 'nicht verfügbar'
+    },
+    validation: {
+      required: '{field} ist erforderlich',
+      invalid_email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
+      min_length_2: '{field} muss mindestens 2 Zeichen lang sein',
+      min_length_3: '{field} muss mindestens 3 Zeichen lang sein',
+      min_length_10: '{field} muss mindestens 10 Zeichen lang sein'
+    },
+    loading: {
+      loading: 'Wird geladen...',
+      please_wait: 'Bitte warten'
     }
   },
 
@@ -534,7 +654,10 @@ const translations: Record<Language, UIStrings> = {
       collapse: 'جمع کردن',
       filter: 'فیلتر',
       search: 'جستجو',
-      clear: 'پاک کردن'
+      clear: 'پاک کردن',
+      get_in_touch: 'تماس بگیرید',
+      contact: 'تماس',
+      learn_more: 'اطلاعات بیشتر'
     },
     forms: {
       name: 'نام',
@@ -641,6 +764,41 @@ const translations: Record<Language, UIStrings> = {
       select_focus: 'انتخاب تمرکز',
       open_modal: 'باز کردن مدال',
       close_modal: 'بستن مدال'
+    },
+    booking: {
+      title: 'رزرو تماس',
+      description: 'نوع جلسه مورد نظر خود را انتخاب کرده و زمان مناسب را برگزینید',
+      meeting_type: 'نوع جلسه',
+      video_call: 'تماس تصویری',
+      phone_call: 'تماس تلفنی',
+      in_person: 'حضوری',
+      video_description: 'جلسه از طریق Zoom، Google Meet یا Microsoft Teams',
+      phone_description: 'مکالمه مستقیم تلفنی',
+      in_person_description: 'ملاقات در محل مشخص شده',
+      select_date: 'انتخاب تاریخ',
+      select_time: 'انتخاب زمان',
+      book_call: 'رزرو تماس',
+      booking: 'در حال رزرو...',
+      clear_selection: 'پاک کردن انتخاب',
+      your_selection: 'انتخاب شما:',
+      success_title: 'تماس رزرو شد!',
+      success_description: '{type} شما برای {date} در ساعت {time} برنامه‌ریزی شد.',
+      error_title: 'رزرو ناموفق',
+      error_description: 'مشکلی در رزرو تماس شما به وجود آمد. لطفاً بعداً دوباره تلاش کنید.',
+      select_date_time: 'لطفاً یک تاریخ و زمان انتخاب کنید',
+      selection_cleared: 'انتخاب پاک شد',
+      unavailable: 'غیر قابل دسترس'
+    },
+    validation: {
+      required: '{field} الزامی است',
+      invalid_email: 'لطفاً یک آدرس ایمیل معتبر وارد کنید',
+      min_length_2: '{field} باید حداقل ۲ کاراکتر باشد',
+      min_length_3: '{field} باید حداقل ۳ کاراکتر باشد',
+      min_length_10: '{field} باید حداقل ۱۰ کاراکتر باشد'
+    },
+    loading: {
+      loading: 'در حال بارگذاری...',
+      please_wait: 'لطفاً صبر کنید'
     }
   }
 }

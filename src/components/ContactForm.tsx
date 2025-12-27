@@ -8,6 +8,7 @@ import { PaperPlaneRight } from '@phosphor-icons/react'
 import { Spinner } from '@/components/ui/spinner'
 import { toast } from 'sonner'
 import { useTranslation } from '@/context/LanguageContext'
+import { interpolate } from '@/lib/i18n'
 
 interface FormData {
   name: string
@@ -43,22 +44,29 @@ export function ContactForm() {
   }
 
   const validateField = (name: keyof FormData, value: string): string | undefined => {
+    const fieldNames: Record<keyof FormData, string> = {
+      name: t.forms.name,
+      email: t.forms.email,
+      subject: t.forms.subject,
+      message: t.forms.message
+    }
+    
     switch (name) {
       case 'name':
-        if (!value.trim()) return 'Name is required'
-        if (value.trim().length < 2) return 'Name must be at least 2 characters'
+        if (!value.trim()) return interpolate(t.validation.required, { field: fieldNames[name] })
+        if (value.trim().length < 2) return interpolate(t.validation.min_length_2, { field: fieldNames[name] })
         break
       case 'email':
-        if (!value.trim()) return 'Email is required'
-        if (!validateEmail(value)) return 'Please enter a valid email address'
+        if (!value.trim()) return interpolate(t.validation.required, { field: fieldNames[name] })
+        if (!validateEmail(value)) return t.validation.invalid_email
         break
       case 'subject':
-        if (!value.trim()) return 'Subject is required'
-        if (value.trim().length < 3) return 'Subject must be at least 3 characters'
+        if (!value.trim()) return interpolate(t.validation.required, { field: fieldNames[name] })
+        if (value.trim().length < 3) return interpolate(t.validation.min_length_3, { field: fieldNames[name] })
         break
       case 'message':
-        if (!value.trim()) return 'Message is required'
-        if (value.trim().length < 10) return 'Message must be at least 10 characters'
+        if (!value.trim()) return interpolate(t.validation.required, { field: fieldNames[name] })
+        if (value.trim().length < 10) return interpolate(t.validation.min_length_10, { field: fieldNames[name] })
         break
     }
     return undefined

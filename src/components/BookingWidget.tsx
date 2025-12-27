@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Calendar, Clock, Video, Phone, MapPin } from '@phosphor-icons/react'
 import { Spinner } from '@/components/ui/spinner'
 import { toast } from 'sonner'
+import { useTranslation } from '@/context/LanguageContext'
+import { interpolate } from '@/lib/i18n'
 
 type MeetingType = 'video' | 'phone' | 'in-person'
 
@@ -14,6 +16,7 @@ interface TimeSlot {
 }
 
 export function BookingWidget() {
+  const t = useTranslation()
   const [selectedType, setSelectedType] = useState<MeetingType>('video')
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedTime, setSelectedTime] = useState<string>('')
@@ -32,42 +35,50 @@ export function BookingWidget() {
   const meetingTypes = [
     {
       id: 'video' as MeetingType,
-      label: 'Video Call',
+      label: t.booking.video_call,
       icon: Video,
-      description: 'Meet via Zoom, Google Meet, or Microsoft Teams',
+      description: t.booking.video_description,
     },
     {
       id: 'phone' as MeetingType,
-      label: 'Phone Call',
+      label: t.booking.phone_call,
       icon: Phone,
-      description: 'Direct phone conversation',
+      description: t.booking.phone_description,
     },
     {
       id: 'in-person' as MeetingType,
-      label: 'In Person',
+      label: t.booking.in_person,
       icon: MapPin,
-      description: 'Meet at a specified location',
+      description: t.booking.in_person_description,
     },
   ]
 
   const handleBookCall = async () => {
     if (!selectedDate || !selectedTime) {
-      toast.error('Please select a date and time')
-      setStatusMessage('Please select both a date and time to continue')
+      toast.error(t.booking.select_date_time)
+      setStatusMessage(t.booking.select_date_time)
       return
     }
 
     setIsBooking(true)
-    setStatusMessage('Booking your call...')
+    setStatusMessage(t.booking.booking)
 
     try {
       await new Promise(resolve => setTimeout(resolve, 1500))
       
-      const meetingLabel = meetingTypes.find((t) => t.id === selectedType)?.label
-      setStatusMessage(`Call booked successfully: ${meetingLabel} on ${selectedDate} at ${selectedTime}`)
+      const meetingLabel = meetingTypes.find((m) => m.id === selectedType)?.label
+      setStatusMessage(interpolate(t.booking.success_description, {
+        type: meetingLabel || '',
+        date: selectedDate,
+        time: selectedTime
+      }))
       
-      toast.success('Call booked!', {
-        description: `Your ${meetingLabel?.toLowerCase()} is scheduled for ${selectedDate} at ${selectedTime}.`,
+      toast.success(t.booking.success_title, {
+        description: interpolate(t.booking.success_description, {
+          type: meetingLabel || '',
+          date: selectedDate,
+          time: selectedTime
+        }),
       })
 
       console.log('Booking details (would be sent to backend):', {
@@ -76,9 +87,9 @@ export function BookingWidget() {
         time: selectedTime,
       })
     } catch (error) {
-      setStatusMessage('Failed to book call. Please try again.')
-      toast.error('Booking failed', {
-        description: 'There was a problem booking your call. Please try again later.',
+      setStatusMessage(t.booking.error_description)
+      toast.error(t.booking.error_title, {
+        description: t.booking.error_description,
       })
     } finally {
       setIsBooking(false)
@@ -88,9 +99,9 @@ export function BookingWidget() {
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle>Schedule a Call</CardTitle>
+        <CardTitle>{t.booking.title}</CardTitle>
         <CardDescription>
-          Choose your preferred meeting type and select a time that works for you
+          {t.booking.description}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-8">
@@ -104,7 +115,7 @@ export function BookingWidget() {
         </div>
         
         <div className="flex flex-col gap-4">
-          <h3 className="text-sm font-medium">Meeting Type</h3>
+          <h3 className="text-sm font-medium">{t.booking.meeting_type}</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {meetingTypes.map((type) => {
               const Icon = type.icon
@@ -143,7 +154,7 @@ export function BookingWidget() {
         <div className="flex flex-col gap-4">
           <h3 className="text-sm font-medium flex items-center gap-2">
             <Calendar size={18} />
-            Select Date
+            {t.booking.select_date}
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {['Mon, Jan 15', 'Tue, Jan 16', 'Wed, Jan 17', 'Thu, Jan 18', 'Fri, Jan 19', 'Mon, Jan 22', 'Tue, Jan 23', 'Wed, Jan 24'].map(
@@ -172,7 +183,7 @@ export function BookingWidget() {
         <div className="flex flex-col gap-4">
           <h3 className="text-sm font-medium flex items-center gap-2">
             <Clock size={18} />
-            Select Time
+            {t.booking.select_time}
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {mockTimeSlots.map((slot) => (
@@ -195,7 +206,7 @@ export function BookingWidget() {
                 aria-disabled={!slot.available}
               >
                 {slot.time}
-                {!slot.available && <span className="sr-only"> (unavailable)</span>}
+                {!slot.available && <span className="sr-only"> ({t.booking.unavailable})</span>}
               </button>
             ))}
           </div>
@@ -209,11 +220,11 @@ export function BookingWidget() {
           >
             {isBooking ? (
               <>
-                <Spinner size={16} className="mr-2" label="Booking" />
-                Booking...
+                <Spinner size={16} className="mr-2" label={t.booking.booking} />
+                {t.booking.booking}
               </>
             ) : (
-              'Book a Call'
+              t.booking.book_call
             )}
           </Button>
           <Button
@@ -221,21 +232,20 @@ export function BookingWidget() {
             onClick={() => {
               setSelectedDate('')
               setSelectedTime('')
-              setStatusMessage('Selection cleared')
+              setStatusMessage(t.booking.selection_cleared)
             }}
             disabled={isBooking}
             className="sm:w-auto"
           >
-            Clear Selection
+            {t.booking.clear_selection}
           </Button>
         </div>
 
         {selectedDate && selectedTime && (
           <div className="p-4 rounded-lg bg-muted text-sm">
-            <p className="font-medium">Your Selection:</p>
+            <p className="font-medium">{t.booking.your_selection}</p>
             <p className="text-muted-foreground">
-              {meetingTypes.find((t) => t.id === selectedType)?.label} on {selectedDate} at{' '}
-              {selectedTime}
+              {meetingTypes.find((m) => m.id === selectedType)?.label} {t.education.duration} {selectedDate} {t.education.duration} {selectedTime}
             </p>
           </div>
         )}

@@ -13,6 +13,7 @@ import { extractBasics, extractProfilePhotoUrl, extractCoverPhotoUrl, extractPro
 import { useCVData } from '@/context/CVDataContext'
 import { optimizeCloudinaryImage } from '@/utils/imageOptimizer'
 import type { Profile } from '@/types/cv'
+import { useTranslation } from '@/context/LanguageContext'
 
 const iconMap: Record<string, typeof LinkedinLogo> = {
   linkedin: LinkedinLogo,
@@ -46,6 +47,7 @@ function SocialButton({ profile }: { profile: Profile }) {
 
 export function HeroSection() {
   const { data } = useCVData()
+  const t = useTranslation()
   const basics = extractBasics(data)
   const profiles = extractProfiles(data)
   const fullName = getFullName(basics)
@@ -154,8 +156,8 @@ export function HeroSection() {
               >
                 <a href={`mailto:${basics.email}`} className="touch-manipulation">
                   <EnvelopeSimple size={18} weight="fill" className="sm:w-5 sm:h-5" />
-                  <span className="hidden xs:inline">Get in Touch</span>
-                  <span className="xs:hidden">Contact</span>
+                  <span className="hidden xs:inline">{t.actions.get_in_touch}</span>
+                  <span className="xs:hidden">{t.actions.contact}</span>
                 </a>
               </Button>
             )}

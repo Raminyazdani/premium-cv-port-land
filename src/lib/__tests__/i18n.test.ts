@@ -1,223 +1,157 @@
 /**
  * i18n Dictionary Completeness Tests
  * 
- * Ensures all language dictionaries have identical key structures
+ * Ensures all language dictionaries have the same keys
  */
 
 import { describe, it, expect } from 'vitest'
-import { getUIStrings, t } from '../i18n'
+import { getUIStrings, t, interpolate } from '../i18n'
 import type { Language } from '@/utils/dataNormalizer'
 
-const LANGUAGES: Language[] = ['en', 'de', 'fa']
-
-/**
- * Recursively get all keys from an object
- */
-function getAllKeys(obj: any, prefix = ''): string[] {
-  const keys: string[] = []
-  
-  for (const key in obj) {
-    const fullKey = prefix ? `${prefix}.${key}` : key
-    
-    if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
-      keys.push(...getAllKeys(obj[key], fullKey))
-    } else {
-      keys.push(fullKey)
-    }
-  }
-  
-  return keys.sort()
-}
-
 describe('i18n Dictionary Completeness', () => {
-  it('should have identical key structures across all languages', () => {
+  const languages: Language[] = ['en', 'de', 'fa']
+
+  function getAllKeys(obj: any, prefix = ''): string[] {
+    const keys: string[] = []
+    
+    for (const key in obj) {
+      const fullKey = prefix ? `${prefix}.${key}` : key
+      const value = obj[key]
+      
+      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+        keys.push(...getAllKeys(value, fullKey))
+      } else if (typeof value === 'string') {
+        keys.push(fullKey)
+      }
+    }
+    
+    return keys.sort()
+  }
+
+  it('should have identical key sets across all languages', () => {
     const enKeys = getAllKeys(getUIStrings('en'))
     const deKeys = getAllKeys(getUIStrings('de'))
     const faKeys = getAllKeys(getUIStrings('fa'))
-    
-    expect(deKeys).toEqual(enKeys)
-    expect(faKeys).toEqual(enKeys)
+
+    expect(enKeys).toEqual(deKeys)
+    expect(enKeys).toEqual(faKeys)
+    expect(deKeys).toEqual(faKeys)
   })
-  
-  it('should have no missing keys in DE', () => {
-    const enKeys = getAllKeys(getUIStrings('en'))
-    const deKeys = getAllKeys(getUIStrings('de'))
-    
-    const missingInDE = enKeys.filter(key => !deKeys.includes(key))
-    expect(missingInDE).toEqual([])
+
+  it('should not have any missing translations', () => {
+    const enStrings = getUIStrings('en')
+    const deStrings = getUIStrings('de')
+    const faStrings = getUIStrings('fa')
+
+    const checkNoMissingTranslations = (obj: any, langCode: string, path = '') => {
+      for (const key in obj) {
+        const fullPath = path ? `${path}.${key}` : key
+        const value = obj[key]
+        
+        if (typeof value === 'object' && value !== null) {
+          checkNoMissingTranslations(value, langCode, fullPath)
+        } else if (typeof value === 'string') {
+          expect(value.trim()).not.toBe('')
+          expect(value).not.toMatch(/TODO|FIXME|TRANSLATE/i)
+        }
+      }
+    }
+
+    checkNoMissingTranslations(enStrings, 'en')
+    checkNoMissingTranslations(deStrings, 'de')
+    checkNoMissingTranslations(faStrings, 'fa')
   })
-  
-  it('should have no missing keys in FA', () => {
-    const enKeys = getAllKeys(getUIStrings('en'))
-    const faKeys = getAllKeys(getUIStrings('fa'))
-    
-    const missingInFA = enKeys.filter(key => !faKeys.includes(key))
-    expect(missingInFA).toEqual([])
+
+  it('should return correct translations for valid keys', () => {
+    expect(t('en', 'actions.download_cv')).toBe('Download CV')
+    expect(t('de', 'actions.download_cv')).toBe('Lebenslauf herunterladen')
+    expect(t('fa', 'actions.download_cv')).toBe('دانلود رزومه')
   })
-  
-  it('should have no extra keys in DE', () => {
-    const enKeys = getAllKeys(getUIStrings('en'))
-    const deKeys = getAllKeys(getUIStrings('de'))
-    
-    const extraInDE = deKeys.filter(key => !enKeys.includes(key))
-    expect(extraInDE).toEqual([])
-  })
-  
-  it('should have no extra keys in FA', () => {
-    const enKeys = getAllKeys(getUIStrings('en'))
-    const faKeys = getAllKeys(getUIStrings('fa'))
-    
-    const extraInFA = faKeys.filter(key => !enKeys.includes(key))
-    expect(extraInFA).toEqual([])
-  })
-  
-  it('should return string values for all valid keys', () => {
-    const testKeys = [
-      'nav.home',
-      'sections.education',
-      'actions.download_cv',
-      'forms.name',
-      'empty.no_data',
-      'a11y.skip_to_content'
-    ]
-    
-    LANGUAGES.forEach(lang => {
-      testKeys.forEach(key => {
-        const value = t(lang, key)
-        expect(typeof value).toBe('string')
-        expect(value.length).toBeGreaterThan(0)
-        expect(value).not.toBe(key)  // Should not return the key itself
-      })
-    })
-  })
-  
+
   it('should return the key itself for invalid keys', () => {
-    const invalidKey = 'invalid.nonexistent.key'
-    
-    LANGUAGES.forEach(lang => {
-      const value = t(lang, invalidKey)
-      expect(value).toBe(invalidKey)
+    expect(t('en', 'invalid.key')).toBe('invalid.key')
+    expect(t('de', 'nonexistent')).toBe('nonexistent')
+  })
+
+  it('should handle interpolation correctly', () => {
+    const template = '© {year} {name}. All rights reserved.'
+    const result = interpolate(template, { year: 2024, name: 'John Doe' })
+    expect(result).toBe('© 2024 John Doe. All rights reserved.')
+  })
+
+  it('should handle missing interpolation variables gracefully', () => {
+    const template = 'Hello {name}, you have {count} messages'
+    const result = interpolate(template, { name: 'Alice' })
+    expect(result).toBe('Hello Alice, you have  messages')
+  })
+
+  it('should return fallback language (en) for unsupported languages', () => {
+    const strings = getUIStrings('unsupported' as Language)
+    expect(strings).toEqual(getUIStrings('en'))
+  })
+
+  it('should have all navigation items translated', () => {
+    languages.forEach(lang => {
+      const strings = getUIStrings(lang)
+      expect(strings.nav.home).toBeTruthy()
+      expect(strings.nav.about).toBeTruthy()
+      expect(strings.nav.education).toBeTruthy()
+      expect(strings.nav.experience).toBeTruthy()
+      expect(strings.nav.projects).toBeTruthy()
+      expect(strings.nav.contact).toBeTruthy()
     })
   })
-  
-  it('should have all required section headings', () => {
-    const requiredSections = [
-      'hero',
-      'basics',
-      'profiles',
-      'education',
-      'languages',
-      'certifications',
-      'skills',
-      'experiences',
-      'projects',
-      'publications',
-      'references',
-      'contact'
-    ]
-    
-    LANGUAGES.forEach(lang => {
+
+  it('should have all section headings translated', () => {
+    languages.forEach(lang => {
       const strings = getUIStrings(lang)
-      requiredSections.forEach(section => {
-        expect(strings.sections).toHaveProperty(section)
-        expect(typeof strings.sections[section]).toBe('string')
-        expect(strings.sections[section].length).toBeGreaterThan(0)
-      })
+      expect(strings.sections.education).toBeTruthy()
+      expect(strings.sections.experiences).toBeTruthy()
+      expect(strings.sections.projects).toBeTruthy()
+      expect(strings.sections.publications).toBeTruthy()
+      expect(strings.sections.skills).toBeTruthy()
     })
   })
-  
-  it('should have all required action labels', () => {
-    const requiredActions = [
-      'download_cv',
-      'view_more',
-      'view_less',
-      'contact_me',
-      'send_message',
-      'copy',
-      'copied',
-      'close',
-      'expand',
-      'collapse',
-      'filter',
-      'search',
-      'clear'
-    ]
-    
-    LANGUAGES.forEach(lang => {
+
+  it('should have all action buttons translated', () => {
+    languages.forEach(lang => {
       const strings = getUIStrings(lang)
-      requiredActions.forEach(action => {
-        expect(strings.actions).toHaveProperty(action)
-        expect(typeof strings.actions[action]).toBe('string')
-        expect(strings.actions[action].length).toBeGreaterThan(0)
-      })
+      expect(strings.actions.download_cv).toBeTruthy()
+      expect(strings.actions.contact_me).toBeTruthy()
+      expect(strings.actions.send_message).toBeTruthy()
+      expect(strings.actions.copy).toBeTruthy()
+      expect(strings.actions.copied).toBeTruthy()
     })
   })
-  
-  it('should have all required form labels', () => {
-    const requiredFormFields = [
-      'name',
-      'email',
-      'subject',
-      'message',
-      'send',
-      'sending',
-      'sent',
-      'error'
-    ]
-    
-    LANGUAGES.forEach(lang => {
+
+  it('should have all form labels translated', () => {
+    languages.forEach(lang => {
       const strings = getUIStrings(lang)
-      requiredFormFields.forEach(field => {
-        expect(strings.forms).toHaveProperty(field)
-        expect(typeof strings.forms[field]).toBe('string')
-        expect(strings.forms[field].length).toBeGreaterThan(0)
-      })
+      expect(strings.forms.name).toBeTruthy()
+      expect(strings.forms.email).toBeTruthy()
+      expect(strings.forms.subject).toBeTruthy()
+      expect(strings.forms.message).toBeTruthy()
+      expect(strings.forms.send).toBeTruthy()
     })
   })
-  
-  it('should have all required empty state messages', () => {
-    const requiredEmptyStates = [
-      'no_data',
-      'no_results',
-      'no_education',
-      'no_experience',
-      'no_projects',
-      'no_publications',
-      'no_skills',
-      'no_languages',
-      'no_certifications',
-      'no_references'
-    ]
-    
-    LANGUAGES.forEach(lang => {
+
+  it('should have all empty state messages translated', () => {
+    languages.forEach(lang => {
       const strings = getUIStrings(lang)
-      requiredEmptyStates.forEach(state => {
-        expect(strings.empty).toHaveProperty(state)
-        expect(typeof strings.empty[state]).toBe('string')
-        expect(strings.empty[state].length).toBeGreaterThan(0)
-      })
+      expect(strings.empty.no_data).toBeTruthy()
+      expect(strings.empty.no_results).toBeTruthy()
+      expect(strings.empty.no_education).toBeTruthy()
+      expect(strings.empty.no_projects).toBeTruthy()
     })
   })
-  
-  it('should have all required accessibility labels', () => {
-    const requiredA11yLabels = [
-      'skip_to_content',
-      'menu',
-      'close_menu',
-      'select_language',
-      'select_theme',
-      'select_focus',
-      'open_modal',
-      'close_modal'
-    ]
-    
-    LANGUAGES.forEach(lang => {
+
+  it('should have all accessibility labels translated', () => {
+    languages.forEach(lang => {
       const strings = getUIStrings(lang)
-      requiredA11yLabels.forEach(label => {
-        expect(strings.a11y).toHaveProperty(label)
-        expect(typeof strings.a11y[label]).toBe('string')
-        expect(strings.a11y[label].length).toBeGreaterThan(0)
-      })
+      expect(strings.a11y.skip_to_content).toBeTruthy()
+      expect(strings.a11y.menu).toBeTruthy()
+      expect(strings.a11y.close_menu).toBeTruthy()
+      expect(strings.a11y.select_language).toBeTruthy()
     })
   })
 })
