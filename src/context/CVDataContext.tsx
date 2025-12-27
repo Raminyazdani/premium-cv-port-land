@@ -23,43 +23,63 @@ export function CVDataProvider({ children }: { children: React.ReactNode }) {
   const { language } = useLanguage()
 
   const cvDataState = useMemo(() => {
+    console.log(`\n🏁 [CVDataContext] STARTING DATA LOAD FOR: ${language}`)
     const { data, validationResult } = loadAndValidateData(language)
 
-    if (import.meta.env.DEV) {
-      console.log(`🔄 [CVDataContext] Loading data for language: ${language}`)
-      console.log(`📊 [CVDataContext] Data summary:`, {
-        basics: Array.isArray(data.basics) ? data.basics.length : (data.basics ? 1 : 0),
-        profiles: data.profiles?.length || 0,
-        education: data.education?.length || 0,
-        experiences: data.experiences?.length || 0,
-        projects: data.projects?.length || 0,
-        publications: data.publications?.length || 0,
-        skills: Object.keys(data.skills || {}).length,
-        languages: data.languages?.length || 0,
-        certifications: data.workshop_and_certifications?.length || 0,
-        references: data.references?.length || 0
-      })
-      
-      // Additional diagnostic: show first item of each array section
-      if (data.education && data.education.length > 0) {
-        console.log(`📝 [CVDataContext] First education entry:`, data.education[0])
+    console.group('📊 [CVDataContext] Data Summary')
+    console.log('Language:', language)
+    console.log('Data keys:', Object.keys(data))
+    console.log('Validation result:', validationResult.isValid ? '✅ Valid' : '❌ Invalid')
+    
+    // Log each section
+    const sections = [
+      'basics', 'profiles', 'education', 'experiences', 'projects',
+      'publications', 'skills', 'languages', 'workshop_and_certifications', 'references'
+    ]
+    
+    sections.forEach(section => {
+      const value = data[section]
+      if (Array.isArray(value)) {
+        console.log(`   ${section}: array[${value.length}]`)
+      } else if (typeof value === 'object' && value !== null) {
+        console.log(`   ${section}: object with ${Object.keys(value).length} keys`)
       } else {
-        console.warn(`⚠️  [CVDataContext] Education array is empty or undefined`)
+        console.log(`   ${section}: ${typeof value} (${value})`)
       }
-      
-      if (data.projects && data.projects.length > 0) {
-        console.log(`📝 [CVDataContext] First project entry:`, data.projects[0])
+    })
+    
+    // Specific checks for education and projects
+    if (Array.isArray(data.education)) {
+      if (data.education.length > 0) {
+        console.log(`✅ Education has ${data.education.length} entries`)
+        console.log('   First education item:', data.education[0])
       } else {
-        console.warn(`⚠️  [CVDataContext] Projects array is empty or undefined`)
+        console.error('❌ Education array is EMPTY!')
       }
-      
-      if (validationResult.errors.length > 0) {
-        console.error('❌ CV Data validation errors:', validationResult.errors)
-      }
-      if (validationResult.warnings.length > 0) {
-        console.warn('⚠️  CV Data validation warnings:', validationResult.warnings)
-      }
+    } else {
+      console.error('❌ Education is NOT an array:', typeof data.education)
     }
+    
+    if (Array.isArray(data.projects)) {
+      if (data.projects.length > 0) {
+        console.log(`✅ Projects has ${data.projects.length} entries`)
+        console.log('   First project item:', data.projects[0])
+      } else {
+        console.error('❌ Projects array is EMPTY!')
+      }
+    } else {
+      console.error('❌ Projects is NOT an array:', typeof data.projects)
+    }
+    
+    if (validationResult.errors.length > 0) {
+      console.error('❌ Validation errors:', validationResult.errors)
+    }
+    if (validationResult.warnings.length > 0) {
+      console.warn('⚠️  Validation warnings:', validationResult.warnings)
+    }
+    
+    console.groupEnd()
+    console.log(`🏁 [CVDataContext] DATA LOAD COMPLETE\n`)
 
     return {
       data,

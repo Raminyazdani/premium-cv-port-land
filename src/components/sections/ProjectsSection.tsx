@@ -141,6 +141,19 @@ export function ProjectsSection() {
   
   const data = useCV()
   const projects = data.projects ?? []
+  
+  // DEBUG: Log what we receive
+  if (import.meta.env.DEV) {
+    console.group('📋 [ProjectsSection] Render')
+    console.log('data.projects exists:', data.projects !== undefined)
+    console.log('data.projects is array:', Array.isArray(data.projects))
+    console.log('projects length:', projects.length)
+    if (projects.length > 0) {
+      console.log('First project:', projects[0])
+      console.log('First project type_key:', projects[0]?.type_key)
+    }
+    console.groupEnd()
+  }
 
   const allDomains = useMemo(() => {
     const domains = new Set<string>()

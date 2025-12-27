@@ -150,6 +150,20 @@ export function EducationSection() {
   const education = cvData.education ?? []
   const { selectedFocus } = useFilter()
   
+  // DEBUG: Log what we receive
+  if (import.meta.env.DEV) {
+    console.group('📋 [EducationSection] Render')
+    console.log('cvData.education exists:', cvData.education !== undefined)
+    console.log('cvData.education is array:', Array.isArray(cvData.education))
+    console.log('education length:', education.length)
+    console.log('selectedFocus:', selectedFocus)
+    if (education.length > 0) {
+      console.log('First education item:', education[0])
+      console.log('First education type_key:', education[0]?.type_key)
+    }
+    console.groupEnd()
+  }
+  
   const [selectedFilter, setSelectedFilter] = useState<string>('All')
   
   const filteredByGlobalFocus = useMemo(() => {
