@@ -13,10 +13,8 @@ export function useMagneticButton(strength = 0.3, maxDistance = 50) {
       setPrefersReducedMotion(e.matches)
     }
 
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange)
-      return () => mediaQuery.removeEventListener('change', handleChange)
-    }
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
   useEffect(() => {

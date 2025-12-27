@@ -20,10 +20,8 @@ export function useParallax({ speed = 0.5, disableOnMobile = true }: ParallaxOpt
       setPrefersReducedMotion(e.matches)
     }
 
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange)
-      return () => mediaQuery.removeEventListener('change', handleChange)
-    }
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
   // Check for mobile device
@@ -124,10 +122,8 @@ export function useParallaxLayers(
       setPrefersReducedMotion(e.matches)
     }
 
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange)
-      return () => mediaQuery.removeEventListener('change', handleChange)
-    }
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
   useEffect(() => {
