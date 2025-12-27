@@ -1,31 +1,40 @@
 import { useState, useMemo } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { MagnifyingGlass, X } from '@phosphor-icons/react'
+import { MagnifyingGlass, X, CaretDown } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
 import type { Skills } from '@/types/cv'
 import { Button } from '@/components/ui/button'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 
 export function SkillsSection() {
   const data = getCVData()
   const skills = (data.skills as Skills) ?? {}
   
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedTab, setSelectedTab] = useState<string>('')
+  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set())
 
-  const topCategories = Object.keys(skills)
-  
-  useMemo(() => {
-    if (!selectedTab && topCategories.length > 0) {
-      setSelectedTab(topCategories[0])
-    }
-  }, [topCategories, selectedTab])
+  const toggleCategory = (category: string) => {
+    setOpenCategories(prev => {
+      const next = new Set(prev)
+      if (next.has(category)) {
+        next.delete(category)
+      } else {
+        next.add(category)
+      }
+      return next
+    })
+  }
 
   const filteredSkills = useMemo(() => {
     if (!searchQuery) return skills
 
     const result: Skills = {}
+    const query = searchQuery.toLowerCase()
 
     Object.entries(skills).forEach(([topCat, category]) => {
       const filteredCategory: typeof category = {}
@@ -34,8 +43,8 @@ export function SkillsSection() {
         if (!Array.isArray(skillsList)) return
 
         const matchingSkills = skillsList.filter(skill => 
-          skill.long_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          skill.short_name.toLowerCase().includes(searchQuery.toLowerCase())
+          skill.long_name.toLowerCase().includes(query) ||
+          skill.short_name.toLowerCase().includes(query)
         )
 
         if (matchingSkills.length > 0) {
@@ -51,17 +60,28 @@ export function SkillsSection() {
     return result
   }, [skills, searchQuery])
 
+  const skillsArray = useMemo(() => {
+    return Object.entries(filteredSkills).map(([category, subcategories]) => {
+      const groups = Object.entries(subcategories).map(([name, items]) => ({
+        name,
+        items: Array.isArray(items) ? items : []
+      }))
+      const totalCount = groups.reduce((sum, g) => sum + g.items.length, 0)
+      return { category, groups, totalCount }
+    })
+  }, [filteredSkills])
+
   if (!skills || Object.keys(skills).length === 0) {
     return null
   }
 
   return (
-    <section id="skills" className="w-full py-16 px-4 bg-background">
-      <div className="max-w-6xl mx-auto">
+    <section id="skills" className="w-full py-16 px-4 bg-muted/30">
+      <div className="max-w-5xl mx-auto">
         <div className="mb-8">
           <h2 className="text-3xl font-bold mb-2">Skills & Expertise</h2>
           <p className="text-muted-foreground">
-            Comprehensive technical proficiencies across multiple domains
+            {skillsArray.reduce((sum, cat) => sum + cat.totalCount, 0)} skills across {skillsArray.length} domains
           </p>
         </div>
 
@@ -82,75 +102,73 @@ export function SkillsSection() {
               size="icon"
               variant="ghost"
               onClick={() => setSearchQuery('')}
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
             >
-              <X size={16} />
+              <X size={14} />
             </Button>
           )}
         </div>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="w-full justify-start mb-6 h-auto flex-wrap gap-2 bg-muted/50 p-2">
-            {topCategories.map((category) => {
-              const count = Object.values(filteredSkills[category] || {}).reduce(
-                (acc, skills) => acc + skills.length,
-                0
-              )
-              return (
-                <TabsTrigger 
-                  key={category} 
-                  value={category}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground gap-2"
-                >
-                  {category}
-                  {count > 0 && (
-                    <span className="text-xs opacity-70">({count})</span>
-                  )}
-                </TabsTrigger>
-              )
-            })}
-          </TabsList>
-
-          {topCategories.map((topCategory) => {
-            const category = filteredSkills[topCategory]
-            
-            return (
-              <TabsContent key={topCategory} value={topCategory} className="mt-0">
-                {!category || Object.keys(category).length === 0 ? (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <MagnifyingGlass size={40} className="mx-auto mb-3 opacity-50" />
-                    <p>No skills found matching your search</p>
-                  </div>
-                ) : (
-                  <div className="grid gap-6 md:grid-cols-2">
-                    {Object.entries(category).map(([skillGroupName, skillsList]) => (
-                      <div 
-                        key={skillGroupName}
-                        className="space-y-3 p-4 rounded-lg border bg-card"
-                      >
-                        <h3 className="font-semibold text-sm text-foreground/90">
-                          {skillGroupName}
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {skillsList.map((skill, idx) => (
-                            <Badge 
-                              key={idx}
-                              variant="secondary"
-                              className="text-xs font-normal hover:bg-primary hover:text-primary-foreground transition-colors cursor-default"
-                              title={skill.long_name !== skill.short_name ? skill.long_name : undefined}
-                            >
-                              {skill.short_name}
-                            </Badge>
-                          ))}
+        {skillsArray.length === 0 ? (
+          <div className="text-center py-16 text-muted-foreground">
+            <MagnifyingGlass size={48} className="mx-auto mb-4 opacity-30" />
+            <p className="text-lg">No skills found matching "{searchQuery}"</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {skillsArray.map(({ category, groups, totalCount }) => (
+              <Collapsible
+                key={category}
+                open={openCategories.has(category)}
+                onOpenChange={() => toggleCategory(category)}
+              >
+                <div className="border rounded-lg bg-card overflow-hidden">
+                  <CollapsibleTrigger className="w-full px-4 py-3 flex items-center justify-between hover:bg-accent/50 transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <CaretDown
+                        size={18}
+                        weight="bold"
+                        className={`text-muted-foreground transition-transform ${
+                          openCategories.has(category) ? 'rotate-0' : '-rotate-90'
+                        }`}
+                      />
+                      <h3 className="text-base font-semibold text-left">
+                        {category}
+                      </h3>
+                    </div>
+                    <Badge variant="secondary" className="text-xs">
+                      {totalCount}
+                    </Badge>
+                  </CollapsibleTrigger>
+                  
+                  <CollapsibleContent>
+                    <div className="px-4 pb-4 pt-2 space-y-4">
+                      {groups.map((group) => (
+                        <div key={group.name} className="space-y-2">
+                          <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                            {group.name}
+                          </h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {group.items.map((skill, idx) => (
+                              <Badge
+                                key={idx}
+                                variant="outline"
+                                className="text-xs font-normal hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors cursor-default"
+                                title={skill.long_name !== skill.short_name ? skill.long_name : undefined}
+                              >
+                                {skill.short_name}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </TabsContent>
-            )
-          })}
-        </Tabs>
+                      ))}
+                    </div>
+                  </CollapsibleContent>
+                </div>
+              </Collapsible>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
