@@ -2,14 +2,13 @@
 
 > **A premium, production-quality personal CV/portfolio website** built with React, TypeScript, and the Spark framework. Fully driven by structured JSON data for easy customization and reusability.
 
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-success.svg)](./ITERATION_55_STATUS.md)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-success.svg)](./docs/archive/ITERATION_55_STATUS.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://reactjs.org/)
 [![Lighthouse](https://img.shields.io/badge/Lighthouse-90+-green.svg)](https://developers.google.com/web/tools/lighthouse)
 [![WCAG](https://img.shields.io/badge/WCAG-AA-brightgreen.svg)](https://www.w3.org/WAI/WCAG2AA-Conformance)
-[![Iterations](https://img.shields.io/badge/Iterations-55-blueviolet.svg)](./ITERATION_55_STATUS.md)
 
-> 📚 **New Here?** Start with [QUICK_START.md](./QUICK_START.md) for a 5-minute deployment guide, or see [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for all documentation.
+> 📚 **New Here?** Start with [docs/QUICK_START.md](./docs/QUICK_START.md) for a 5-minute deployment guide, or see [docs/DOCUMENTATION_INDEX.md](./docs/DOCUMENTATION_INDEX.md) for all documentation.
 
 ---
 
@@ -39,6 +38,9 @@ If you need to install or update Node.js, visit [nodejs.org](https://nodejs.org/
 git clone https://github.com/Raminyazdani/premium-cv-port-land.git
 cd premium-cv-port-land
 
+# Navigate to frontend
+cd frontend
+
 # Install dependencies
 npm install
 
@@ -57,17 +59,21 @@ Choose your platform:
 **Option 1: Vercel** (Recommended - Zero Config)
 1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
 2. Click "New Project" and import this repository
-3. Click "Deploy" - That's it! ✅
+3. Set **Root Directory** to `frontend`
+4. Click "Deploy" ✅
 
 **Option 2: Netlify**
 1. Go to [netlify.com](https://netlify.com) and sign in with GitHub
 2. Click "Add new site" → "Import an existing project"
-3. Select this repository and click "Deploy" ✅
+3. Select this repository
+4. Set **Base directory** to `frontend`
+5. Click "Deploy" ✅
 
 **Option 3: Cloudflare Pages**
 1. Go to [pages.cloudflare.com](https://pages.cloudflare.com)
 2. Create application → Connect to Git → Select repository
-3. Click "Save and Deploy" ✅
+3. Set **Root path** to `frontend`
+4. Click "Save and Deploy" ✅
 
 All platforms provide:
 - ✅ Automatic production deployments (push to main)
@@ -196,15 +202,16 @@ The app runs automatically in your Spark workspace. No manual start command need
 
 **For local development outside Spark:**
 ```bash
-npm install         # Install dependencies
-npm run dev         # Start dev server on port 5000
-npm run build       # Build for production
-npm run preview     # Preview production build
-npm run test        # Run tests
-npm run lint        # Lint code
-npm run lint:fix    # Fix linting issues automatically
-npm run format      # Format code with Prettier
-npm run typecheck   # Type check with TypeScript
+cd frontend            # Navigate to frontend directory
+npm install            # Install dependencies
+npm run dev            # Start dev server on port 5173
+npm run build          # Build for production
+npm run preview        # Preview production build
+npm run test           # Run tests
+npm run lint           # Lint code
+npm run lint:fix       # Fix linting issues automatically
+npm run format         # Format code with Prettier
+npm run typecheck      # Type check with TypeScript
 ```
 
 ### Quick Customization
@@ -212,24 +219,24 @@ npm run typecheck   # Type check with TypeScript
 1. **Edit the CV data:**
    ```bash
    # Edit this file with your information
-   src/data/cv.json
+   frontend/src/data/cv.json
    ```
 
 2. **Update the title:**
    ```html
-   <!-- index.html -->
+   <!-- frontend/index.html -->
    <title>Your Name - Portfolio & CV</title>
    ```
 
 3. **Change theme colors:**
    ```css
-   /* src/styles/themes.css */
+   /* frontend/src/styles/themes.css */
    --theme-primary: oklch(0.35 0.15 250);  /* Your brand color */
    ```
 
 4. **Replace profile photo:**
    ```json
-   // src/data/cv.json
+   // frontend/src/data/cv.json
    "Pictures": [
      {
        "type_of": "profile",
@@ -243,91 +250,72 @@ npm run typecheck   # Type check with TypeScript
 ## 📁 Project Structure
 
 ```
-spark-template/
-├── public/                      # Static assets
-├── src/
-│   ├── assets/                  # Images, videos, audio, documents
-│   │   ├── images/
-│   │   ├── video/
-│   │   ├── audio/
-│   │   └── documents/
-│   ├── components/
-│   │   ├── sections/            # Main CV sections
-│   │   │   ├── Header.tsx       # Sticky header with nav
-│   │   │   ├── HeroSection.tsx  # Basics/identity
-│   │   │   ├── BasicsSection.tsx
-│   │   │   ├── ProfilesSection.tsx
-│   │   │   ├── EducationSection.tsx
-│   │   │   ├── ExperiencesSection.tsx
-│   │   │   ├── ProjectsSection.tsx
-│   │   │   ├── PublicationsSection.tsx
-│   │   │   ├── SkillsSection.tsx
-│   │   │   ├── LanguagesSection.tsx
-│   │   │   ├── WorkshopAndCertificationsSection.tsx
-│   │   │   ├── ReferencesSection.tsx
-│   │   │   ├── ContactSection.tsx
-│   │   │   └── Footer.tsx
-│   │   ├── ui/                  # Shadcn components (40+ preinstalled)
-│   │   │   ├── button.tsx
-│   │   │   ├── card.tsx
-│   │   │   ├── dialog.tsx
-│   │   │   └── ... (37 more)
-│   │   ├── BookingWidget.tsx    # Call scheduling UI
-│   │   ├── ContactForm.tsx      # Contact form
-│   │   ├── FocusFilterSelector.tsx
-│   │   ├── LanguageSelector.tsx
-│   │   ├── MediaModal.tsx       # Full-screen media viewer
-│   │   ├── MediaThumbnail.tsx   # Image/PDF thumbnails
-│   │   └── ThemeSelector.tsx
-│   ├── context/
-│   │   └── FilterContext.tsx    # Global filter state
-│   ├── data/
-│   │   └── cv.json              # **Your CV data**
-│   ├── hooks/
-│   │   ├── use-mobile.ts        # Responsive breakpoint hook
-│   │   ├── use-media-modal.ts   # Media modal state
-│   │   └── use-scroll-animation.ts
-│   ├── lib/
-│   │   ├── cv-data.ts           # Data loading utilities
-│   │   ├── clipboard.ts         # Copy-to-clipboard helper
-│   │   └── utils.ts             # General utilities (cn, etc.)
-│   ├── styles/
-│   │   ├── themes.css           # 6 theme presets
-│   │   ├── rtl.css              # Right-to-left support
-│   │   ├── print.css            # PDF export styles
-│   │   └── theme.css            # Base theme variables
-│   ├── types/
-│   │   └── cv.ts                # **TypeScript schema**
-│   ├── utils/
-│   │   └── imageOptimizer.ts    # Image optimization
-│   ├── App.tsx                  # Main app (lazy-loaded sections)
-│   ├── index.css                # Global styles & Tailwind
-│   ├── main.tsx                 # React entry point
-│   └── main.css                 # Structural CSS
-├── index.html                   # HTML entry point
-├── package.json                 # Dependencies
-├── tailwind.config.js           # Tailwind configuration
-├── tsconfig.json                # TypeScript config
-├── vite.config.ts               # Vite config
-├── PRD.md                       # Product requirements
-├── PERFORMANCE_OPTIMIZATION.md  # Performance guide
-├── ACCESSIBILITY_AUDIT.md       # Accessibility checklist
-├── BROWSER_COMPATIBILITY_FINAL_REPORT.md
-└── README.md                    # **This file**
+/
+├── frontend/                    # Frontend application
+│   ├── public/                  # Static assets
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── sections/        # Main CV sections
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── HeroSection.tsx
+│   │   │   │   ├── EducationSection.tsx
+│   │   │   │   ├── ProjectsSection.tsx
+│   │   │   │   └── ... (more sections)
+│   │   │   ├── ui/              # Shadcn components (40+ preinstalled)
+│   │   │   └── ...
+│   │   ├── context/
+│   │   │   ├── CVDataContext.tsx
+│   │   │   ├── LanguageContext.tsx
+│   │   │   └── FilterContext.tsx
+│   │   ├── data/
+│   │   │   ├── cv.json          # English CV data (LOCKED)
+│   │   │   ├── ramin_de.json    # German CV data (LOCKED)
+│   │   │   └── ramin_fa.json    # Persian CV data (LOCKED)
+│   │   ├── hooks/
+│   │   ├── lib/
+│   │   ├── styles/
+│   │   ├── types/
+│   │   ├── utils/
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   ├── tests/                   # Unit tests
+│   ├── e2e/                     # End-to-end tests
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── tsconfig.json
+│   └── tailwind.config.js
+│
+├── backend/                     # Backend (placeholder)
+│   └── README.md
+│
+├── docs/                        # Documentation
+│   ├── archive/                 # Historical implementation reports
+│   ├── QUICK_START.md
+│   ├── DEPLOYMENT_GUIDE.md
+│   ├── local_dev.md
+│   └── ...
+│
+├── .github/                     # GitHub Actions & Copilot instructions
+│
+├── README.md                    # This file
+└── LICENSE
 ```
 
 ### Key Directories
 
 | Directory | Purpose |
 |-----------|---------|
-| `src/components/sections/` | All CV sections (hero, education, experience, etc.) |
-| `src/components/ui/` | Shadcn components (buttons, cards, dialogs, etc.) |
-| `src/data/` | **CV JSON data file** |
-| `src/types/` | **TypeScript interfaces for JSON schema** |
-| `src/styles/` | Theme CSS, RTL support, print styles |
-| `src/context/` | Global state (filter context) |
-| `src/hooks/` | Custom React hooks |
-| `src/lib/` | Utilities and helpers |
+| `frontend/src/components/sections/` | All CV sections (hero, education, experience, etc.) |
+| `frontend/src/components/ui/` | Shadcn components (buttons, cards, dialogs, etc.) |
+| `frontend/src/data/` | **CV JSON data files** (LOCKED) |
+| `frontend/src/types/` | **TypeScript interfaces for JSON schema** |
+| `frontend/src/styles/` | Theme CSS, RTL support, print styles |
+| `frontend/src/context/` | Global state (filter, language, CV data contexts) |
+| `frontend/src/hooks/` | Custom React hooks |
+| `frontend/src/lib/` | Utilities and helpers |
+| `docs/` | Documentation and guides |
+| `docs/archive/` | Historical implementation reports |
 
 ---
 
@@ -335,7 +323,7 @@ spark-template/
 
 ### Overview
 
-The CV data is stored in `src/data/cv.json` and follows a structured schema defined in `src/types/cv.ts`.
+The CV data is stored in `frontend/src/data/cv.json` and follows a structured schema defined in `frontend/src/types/cv.ts`.
 
 **Key principles:**
 - All fields are optional for robustness
@@ -554,14 +542,14 @@ function MyComponent() {
 
 #### Add a New Language (e.g., Spanish)
 
-**📚 Full guide:** See `LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md` → Section 7
+**📚 Full guide:** See `docs/archive/LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md` → Section 7
 
 **Quick steps:**
-1. Create `src/data/ramin_es.json` (translate keys AND values)
-2. Update `src/config/keyMappings.ts` (add `es` to every mapping)
-3. Update `src/context/LanguageContext.tsx` (add `'es'` to `SUPPORTED_LANGUAGES`)
-4. Update `src/components/LanguageSelector.tsx` (add Spanish option)
-5. Update `src/lib/i18n.ts` (add Spanish UI strings)
+1. Create `frontend/src/data/ramin_es.json` (translate keys AND values)
+2. Update `frontend/src/config/keyMappings.ts` (add `es` to every mapping)
+3. Update `frontend/src/context/LanguageContext.tsx` (add `'es'` to `SUPPORTED_LANGUAGES`)
+4. Update `frontend/src/components/LanguageSelector.tsx` (add Spanish option)
+5. Update `frontend/src/lib/i18n.ts` (add Spanish UI strings)
 6. Test: `npm test`
 
 **⚠️ Important:** 
@@ -576,7 +564,7 @@ function MyComponent() {
 > **⚠️ This method is deprecated. Use the multi-language system above instead.**
 
 Previously, you would duplicate `cv.json` for each language. This no longer works.
-Use the normalization system documented in `LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`.
+Use the normalization system documented in `docs/archive/LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`.
 
 ### Adding New Themes
 
@@ -584,7 +572,7 @@ Six themes are pre-configured. To add a new theme:
 
 1. **Define theme in CSS:**
    ```css
-   /* src/styles/themes.css */
+   /* frontend/src/styles/themes.css */
    [data-theme="cyberpunk"] {
      --theme-primary: oklch(0.80 0.25 330);      /* Hot pink */
      --theme-secondary: oklch(0.60 0.20 200);    /* Cyan */
@@ -600,7 +588,7 @@ Six themes are pre-configured. To add a new theme:
 
 2. **Update theme selector:**
    ```tsx
-   // src/components/ThemeSelector.tsx
+   // frontend/src/components/ThemeSelector.tsx
    const themes = [
      { value: 'normal', label: 'Normal' },
      { value: 'academic', label: 'Academic' },
@@ -620,7 +608,7 @@ To add a custom section (e.g., "Awards"):
 
 1. **Update TypeScript types:**
    ```typescript
-   // src/types/cv.ts
+   // frontend/src/types/cv.ts
    export interface Award {
      title?: string | null
      organization?: string | null
@@ -652,7 +640,7 @@ To add a custom section (e.g., "Awards"):
 
 3. **Create section component:**
    ```tsx
-   // src/components/sections/AwardsSection.tsx
+   // frontend/src/components/sections/AwardsSection.tsx
    import { Award } from '@/types/cv'
    
    export function AwardsSection({ awards }: { awards: Award[] }) {
@@ -672,7 +660,7 @@ To add a custom section (e.g., "Awards"):
 
 4. **Add to App.tsx:**
    ```tsx
-   // src/App.tsx
+   // frontend/src/App.tsx
    const AwardsSection = lazy(() => import('./sections/AwardsSection'))
    
    // In render:
@@ -687,7 +675,7 @@ The focus filter is driven by `type_key` values. To customize:
 
 1. **Update filter options:**
    ```tsx
-   // src/components/FocusFilterSelector.tsx
+   // frontend/src/components/FocusFilterSelector.tsx
    const focusOptions = [
      { value: 'Full CV', label: 'Full CV' },
      { value: 'Academic', label: 'Academic' },
@@ -711,7 +699,7 @@ The focus filter is driven by `type_key` values. To customize:
 
 #### Colors
 ```css
-/* src/styles/themes.css */
+/* frontend/src/styles/themes.css */
 :root {
   --theme-primary: oklch(0.35 0.15 250);    /* Brand color */
   --theme-accent: oklch(0.70 0.15 60);      /* CTA color */
@@ -720,7 +708,7 @@ The focus filter is driven by `type_key` values. To customize:
 
 #### Typography
 ```css
-/* src/index.css */
+/* frontend/src/index.css */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Your Heading Font', sans-serif;
 }
@@ -732,7 +720,7 @@ body {
 
 #### Layout
 ```tsx
-// src/App.tsx
+// frontend/src/App.tsx
 <div className="max-w-7xl mx-auto px-4">  {/* Change max width */}
 ```
 
@@ -994,7 +982,7 @@ npm run preview
 # Check Network tab for lazy loading
 ```
 
-**See**: `PERFORMANCE_OPTIMIZATION.md` for detailed guide
+**See**: `docs/archive/PERFORMANCE_OPTIMIZATION.md` for detailed guide
 
 ---
 
@@ -1046,7 +1034,7 @@ This project meets WCAG 2.1 AA standards:
 - Keyboard traps in modals (fixed with focus management)
 - Missing alt text on images (fallback to empty string for decorative)
 
-**See**: `ACCESSIBILITY_AUDIT.md` for full checklist
+**See**: `docs/archive/ACCESSIBILITY_AUDIT.md` for full checklist
 
 ---
 
@@ -1104,7 +1092,7 @@ This is a personal CV project, but suggestions are welcome!
 ### Common Issues
 
 #### Issue: "Cannot find module '@/types/cv'"
-**Solution:** Check TypeScript path alias in `tsconfig.json`:
+**Solution:** Check TypeScript path alias in `frontend/tsconfig.json`:
 ```json
 {
   "compilerOptions": {
@@ -1154,13 +1142,13 @@ npx tsc --noEmit
 ### Getting Help
 
 **Documentation:**
-- `PRD.md` - Product requirements and design decisions
-- `PERFORMANCE_OPTIMIZATION.md` - Performance guide
-- `ACCESSIBILITY_AUDIT.md` - Accessibility checklist
+- `docs/PRD.md` - Product requirements and design decisions
+- `docs/archive/PERFORMANCE_OPTIMIZATION.md` - Performance guide
+- `docs/archive/ACCESSIBILITY_AUDIT.md` - Accessibility checklist
 - `BROWSER_COMPATIBILITY_FINAL_REPORT.md` - Browser support
-- **`LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`** - 🌍 **Multi-language system guide** (EN/DE/FA)
-- **`LANGUAGE_IMPLEMENTATION_SUMMARY.md`** - Quick overview of language feature
-- **`LANGUAGE_QUICK_REFERENCE.md`** - Developer quick reference for language APIs
+- **`docs/archive/LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`** - 🌍 **Multi-language system guide** (EN/DE/FA)
+- **`docs/archive/LANGUAGE_IMPLEMENTATION_SUMMARY.md`** - Quick overview of language feature
+- **`docs/archive/LANGUAGE_QUICK_REFERENCE.md`** - Developer quick reference for language APIs
 
 **Debugging:**
 ```bash
@@ -1187,9 +1175,9 @@ The site includes a **production-ready multi-language system** supporting:
 - **Persian (FA)** - فارسی with automatic RTL
 
 ### Quick Links
-- 📖 **Full Implementation Guide**: `LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`
-- 📝 **Quick Summary**: `LANGUAGE_IMPLEMENTATION_SUMMARY.md`
-- ⚡ **Developer Quick Ref**: `LANGUAGE_QUICK_REFERENCE.md`
+- 📖 **Full Implementation Guide**: `docs/archive/LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md`
+- 📝 **Quick Summary**: `docs/archive/LANGUAGE_IMPLEMENTATION_SUMMARY.md`
+- ⚡ **Developer Quick Ref**: `docs/archive/LANGUAGE_QUICK_REFERENCE.md`
 
 ### Key Features
 - ✅ Automatic data normalization (DE/FA keys → English schema)
@@ -1216,7 +1204,7 @@ const t = useTranslation()    // UI strings in current language
 - Modify locked files (`cv.json`, `ramin_de.json`, `ramin_fa.json`)
 
 ### Add New Language
-See **Section 7** of `LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md` for step-by-step guide.
+See **Section 7** of `docs/archive/LANGUAGE_IMPLEMENTATION_FINAL_REPORT.md` for step-by-step guide.
 
 ### Run Language Tests
 ```bash
@@ -1233,7 +1221,7 @@ The Spark Template files and resources from GitHub are licensed under the MIT Li
 Copyright © GitHub, Inc.
 
 **Your CV Content:**
-Your CV data (`src/data/cv.json`) and customizations remain your own intellectual property.
+Your CV data (`frontend/src/data/cv.json`) and customizations remain your own intellectual property.
 
 ---
 
