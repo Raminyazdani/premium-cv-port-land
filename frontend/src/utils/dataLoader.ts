@@ -4,7 +4,7 @@ import { normalizeCVData, type Language } from './dataNormalizer'
 import cvDataEN from '@/data/cv.json'
 import cvDataDE from '@/data/ramin_de.json'
 import cvDataFA from '@/data/ramin_fa.json'
-import { validateCVDataStructure, logDataSummary } from './debugDataFlow'
+import { validateCVDataStructure } from './debugDataFlow'
 
 export interface LoadDataResult {
   data: CVData
@@ -18,7 +18,7 @@ export interface LoadDataResult {
 /**
  * Loads CV data for the specified language
  */
-function loadCVDataForLanguage(lang: Language): any {
+function loadCVDataForLanguage(lang: Language): unknown {
   switch (lang) {
     case 'de':
       return cvDataDE

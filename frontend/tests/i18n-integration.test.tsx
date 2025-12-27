@@ -30,8 +30,9 @@ describe('I18N Integration Tests', () => {
     const user = userEvent.setup()
     render(<App />)
     
-    const languageButton = await screen.findByLabelText(/select language/i)
-    await user.click(languageButton)
+    // May have multiple language buttons (mobile/desktop) - use the first one
+    const languageButtons = await screen.findAllByLabelText(/select language/i)
+    await user.click(languageButtons[0])
     
     const germanOption = await screen.findByText(/Deutsch/i)
     await user.click(germanOption)
@@ -52,8 +53,9 @@ describe('I18N Integration Tests', () => {
     const user = userEvent.setup()
     render(<App />)
     
-    const languageButton = await screen.findByLabelText(/select language/i)
-    await user.click(languageButton)
+    // May have multiple language buttons (mobile/desktop) - use the first one
+    const languageButtons = await screen.findAllByLabelText(/select language/i)
+    await user.click(languageButtons[0])
     
     const persianOption = await screen.findByText(/فارسی/i)
     await user.click(persianOption)
@@ -74,8 +76,9 @@ describe('I18N Integration Tests', () => {
     const user = userEvent.setup()
     render(<App />)
     
-    const languageButton = await screen.findByLabelText(/select language/i)
-    await user.click(languageButton)
+    // May have multiple language buttons (mobile/desktop) - use the first one
+    const languageButtons = await screen.findAllByLabelText(/select language/i)
+    await user.click(languageButtons[0])
     
     const germanOption = await screen.findByText(/Deutsch/i)
     await user.click(germanOption)
@@ -89,8 +92,9 @@ describe('I18N Integration Tests', () => {
     const user = userEvent.setup()
     render(<App />)
     
-    const languageButton = await screen.findByLabelText(/select language/i)
-    await user.click(languageButton)
+    // May have multiple language buttons (mobile/desktop) - use the first one
+    const languageButtons = await screen.findAllByLabelText(/select language/i)
+    await user.click(languageButtons[0])
     
     const persianOption = await screen.findByText(/فارسی/i)
     await user.click(persianOption)
@@ -109,8 +113,9 @@ describe('I18N Integration Tests', () => {
       expect(educationSection).toBeInTheDocument()
     })
     
-    const languageButton = await screen.findByLabelText(/select language/i)
-    await user.click(languageButton)
+    // May have multiple language buttons (mobile/desktop) - use the first one
+    const languageButtons = await screen.findAllByLabelText(/select language/i)
+    await user.click(languageButtons[0])
     
     const germanOption = await screen.findByText(/Deutsch/i)
     await user.click(germanOption)
@@ -134,8 +139,9 @@ describe('I18N Integration Tests', () => {
       expect(screen.getByText(enStrings.nav.education)).toBeInTheDocument()
     })
     
-    const languageButton = await screen.findByLabelText(/select language/i)
-    await user.click(languageButton)
+    // May have multiple language buttons (mobile/desktop) - use the first one
+    const languageButtons = await screen.findAllByLabelText(/select language/i)
+    await user.click(languageButtons[0])
     
     const germanOption = await screen.findByText(/Deutsch/i)
     await user.click(germanOption)
