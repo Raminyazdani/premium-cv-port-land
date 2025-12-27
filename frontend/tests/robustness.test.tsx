@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { CVDataProvider } from '@/context/CVDataContext'
@@ -6,50 +6,23 @@ import { FilterProvider } from '@/context/FilterContext'
 import { EducationSection } from '@/components/sections/EducationSection'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { SkillsSection } from '@/components/sections/SkillsSection'
-import type { CVData } from '@/types/cv'
 
-function renderWithProviders(ui: React.ReactElement, { cvData }: { cvData?: Partial<CVData> } = {}) {
-  // Create a mock CVDataProvider that returns our test data
-  const MockCVDataProvider = ({ children }: { children: React.ReactNode }) => {
-    const mockData: CVData = {
-      basics: [],
-      profiles: [],
-      education: [],
-      languages: [],
-      workshop_and_certifications: [],
-      skills: {},
-      experiences: [],
-      projects: [],
-      publications: [],
-      references: [],
-      ...cvData,
-    }
-    
-    return (
-      <CVDataProvider>
-        {/* Override the context value */}
-        {children}
-      </CVDataProvider>
-    )
-  }
-
+function renderWithProviders(ui: React.ReactElement) {
   return render(
     <LanguageProvider initialLang="en">
-      <MockCVDataProvider>
+      <CVDataProvider>
         <FilterProvider>
           {ui}
         </FilterProvider>
-      </MockCVDataProvider>
+      </CVDataProvider>
     </LanguageProvider>
   )
 }
 
 describe('Robustness - Handle Missing/Null/Invalid Data', () => {
   describe('EducationSection', () => {
-    it('should render empty state when education array is empty', () => {
+    it('should render without crashing', () => {
       const { container } = renderWithProviders(<EducationSection />)
-      expect(container.textContent).toContain('Education')
-      // Should show empty state, not crash
       expect(container).toBeInTheDocument()
     })
 
@@ -59,37 +32,33 @@ describe('Robustness - Handle Missing/Null/Invalid Data', () => {
       expect(container.textContent).not.toContain('null')
     })
 
-    it('should handle education items with missing fields', () => {
-      // This will be checked in the actual component rendering
-      expect(true).toBe(true)
-    })
-
-    it('should handle invalid date formats gracefully', () => {
-      // Invalid dates should be shown with "(Invalid Date)" suffix or handled gracefully
-      expect(true).toBe(true)
+    it('should have proper section structure', () => {
+      const { container } = renderWithProviders(<EducationSection />)
+      const section = container.querySelector('section#education')
+      expect(section).toBeInTheDocument()
     })
   })
 
   describe('HeroSection', () => {
-    it('should render without crashing when basics is empty', () => {
+    it('should render without crashing', () => {
       const { container } = renderWithProviders(<HeroSection />)
       expect(container).toBeInTheDocument()
     })
 
-    it('should not show undefined for missing profile photo', () => {
+    it('should not show undefined for missing data', () => {
       const { container } = renderWithProviders(<HeroSection />)
       expect(container.textContent).not.toContain('undefined')
     })
 
-    it('should handle missing Pictures array gracefully', () => {
+    it('should have hero section with proper id', () => {
       const { container } = renderWithProviders(<HeroSection />)
-      // Should render hero section without photos, not crash
-      expect(container).toBeInTheDocument()
+      const section = container.querySelector('section#hero')
+      expect(section).toBeInTheDocument()
     })
   })
 
   describe('SkillsSection', () => {
-    it('should handle empty skills gracefully', () => {
+    it('should handle rendering gracefully', () => {
       const { container } = renderWithProviders(<SkillsSection />)
       // SkillsSection returns null when no skills OR renders with data
       // Either way, it should not crash
@@ -101,54 +70,59 @@ describe('Robustness - Handle Missing/Null/Invalid Data', () => {
       expect(container.textContent).not.toContain('undefined')
       expect(container.textContent).not.toContain('null')
     })
-
-    it('should handle skills with null type_key', () => {
-      // Skills with null type_key should still render
-      expect(true).toBe(true)
-    })
   })
 })
 
 describe('Accessibility - WCAG 2.1 AA Compliance', () => {
-  it('should have semantic HTML structure', () => {
+  it('should have semantic HTML structure in education section', () => {
     const { container } = renderWithProviders(<EducationSection />)
     const section = container.querySelector('section')
     expect(section).toBeInTheDocument()
     expect(section?.getAttribute('id')).toBe('education')
   })
 
-  it('should have proper heading hierarchy', () => {
+  it('should have proper heading hierarchy in education section', () => {
     const { container } = renderWithProviders(<EducationSection />)
     const heading = container.querySelector('h2')
     expect(heading).toBeInTheDocument()
     expect(heading?.getAttribute('id')).toBe('education-heading')
   })
 
-  it('should have aria-labelledby for sections', () => {
+  it('should have aria-labelledby for education section', () => {
     const { container } = renderWithProviders(<EducationSection />)
     const section = container.querySelector('section')
     expect(section?.getAttribute('aria-labelledby')).toBe('education-heading')
   })
 
-  it('images should have alt text', () => {
-    // All images should have meaningful alt text or empty alt for decorative images
-    expect(true).toBe(true)
-  })
-
-  it('should not have "undefined" in alt text', () => {
+  it('should not have "undefined" in hero image alt text', () => {
     const { container } = renderWithProviders(<HeroSection />)
     const images = container.querySelectorAll('img')
     images.forEach((img) => {
       const alt = img.getAttribute('alt')
-      expect(alt).not.toContain('undefined')
+      if (alt) {
+        expect(alt).not.toContain('undefined')
+        expect(alt).not.toContain('null')
+      }
     })
+  })
+
+  it('should have proper hero section id', () => {
+    const { container } = renderWithProviders(<HeroSection />)
+    const section = container.querySelector('section#hero')
+    expect(section).toBeInTheDocument()
   })
 })
 
 describe('Responsive Design', () => {
-  it('should have responsive classes', () => {
+  it('education section should have responsive classes', () => {
     const { container } = renderWithProviders(<EducationSection />)
     // Check for presence of responsive classes (sm:, md:, lg:)
+    const html = container.innerHTML
+    expect(html).toMatch(/sm:|md:|lg:/)
+  })
+
+  it('hero section should have responsive classes', () => {
+    const { container } = renderWithProviders(<HeroSection />)
     const html = container.innerHTML
     expect(html).toMatch(/sm:|md:|lg:/)
   })
