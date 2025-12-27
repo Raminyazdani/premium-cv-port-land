@@ -39,8 +39,30 @@ function ProjectCard({ project }: ProjectCardProps) {
     return Array.from(domains)
   }, [typeKeys])
 
+  const detectImageUrl = useMemo(() => {
+    const description = project.description || ''
+    const imageRegex = /https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg)/i
+    const match = description.match(imageRegex)
+    return match ? match[0] : null
+  }, [project.description])
+
   return (
-    <Card className="group hover:border-primary/50 transition-all duration-200 h-full flex flex-col">
+    <Card className="group hover:border-primary/50 transition-all duration-200 h-full flex flex-col overflow-hidden">
+      {detectImageUrl && (
+        <div className="w-full h-48 overflow-hidden bg-muted">
+          <img
+            src={detectImageUrl}
+            alt={displayTitle}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              target.style.display = 'none'
+            }}
+          />
+        </div>
+      )}
+      
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 space-y-1.5">
