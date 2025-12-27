@@ -30,12 +30,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Verify locked files integrity
+      - name: Verify locked files integrity (SHA256)
         run: |
-          echo "Computing hashes for locked CV files..."
-          md5sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+          echo "Computing SHA256 hashes for locked CV files..."
+          sha256sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
           echo ""
           echo "Note: Locked files must not be modified. Any changes will fail tests."
+          echo "These hashes are validated in locked-files-integrity.test.ts"
         
       - name: Run linter
         run: npm run lint
