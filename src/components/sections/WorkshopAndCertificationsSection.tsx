@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -20,8 +20,10 @@ import {
   Link as LinkIcon,
   Seal,
   X,
+  FilePdf,
 } from '@phosphor-icons/react'
 import { getCVData } from '@/lib/cv-data'
+import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
 import type { WorkshopIssuer, Certification } from '@/types/cv'
 
 function formatDate(dateStr?: string | null): string {
@@ -29,7 +31,9 @@ function formatDate(dateStr?: string | null): string {
   
   try {
     const date = new Date(dateStr)
-    if (isNaN(date.getTime())) return dateStr
+    if (isNaN(date.getTime())) {
+      return `${dateStr} (Invalid Date)`
+    }
     
     return date.toLocaleDateString('en-US', { 
       year: 'numeric', 
@@ -37,7 +41,7 @@ function formatDate(dateStr?: string | null): string {
       day: 'numeric'
     })
   } catch {
-    return dateStr
+    return `${dateStr} (Invalid Date)`
   }
 }
 
@@ -57,6 +61,8 @@ interface CertificationItemProps {
 }
 
 function CertificationItem({ certification }: CertificationItemProps) {
+  const isPDF = certification.URL?.toLowerCase().endsWith('.pdf')
+  
   return (
     <Card className="hover:shadow-md transition-all duration-200">
       <CardContent className="p-4">
@@ -111,22 +117,39 @@ function CertificationItem({ certification }: CertificationItemProps) {
           </div>
           
           {certification.URL && (
-            <Button
-              size="sm"
-              variant="outline"
-              asChild
-              className="shrink-0"
-            >
-              <a
-                href={certification.URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`View certificate for ${certification.name}`}
+            <div className="shrink-0 flex flex-col gap-2">
+              {isPDF && (
+                <a
+                  href={certification.URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-16 h-20 rounded border-2 border-border hover:border-primary transition-colors overflow-hidden bg-muted relative group"
+                  aria-label={`View PDF certificate for ${certification.name}`}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <FilePdf size={32} weight="duotone" className="text-destructive group-hover:text-primary transition-colors" />
+                  </div>
+                  <div className="absolute bottom-0 inset-x-0 bg-destructive/10 text-[10px] text-center py-0.5 font-medium">
+                    PDF
+                  </div>
+                </a>
+              )}
+              <Button
+                size="sm"
+                variant="outline"
+                asChild
               >
-                <LinkIcon size={16} weight="bold" />
-                <span className="ml-1.5 hidden sm:inline">Certificate</span>
-              </a>
-            </Button>
+                <a
+                  href={certification.URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View certificate for ${certification.name}`}
+                >
+                  <LinkIcon size={16} weight="bold" />
+                  <span className="ml-1.5 hidden sm:inline">View</span>
+                </a>
+              </Button>
+            </div>
           )}
         </div>
       </CardContent>
@@ -139,13 +162,16 @@ interface IssuerAccordionProps {
   searchQuery: string
   selectedFilters: Set<string>
   showCertifiedOnly: boolean
+  currentFocusFilter: FocusFilter
 }
 
-function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOnly }: IssuerAccordionProps) {
+function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOnly, currentFocusFilter }: IssuerAccordionProps) {
   const filteredCertifications = useMemo(() => {
     const certs = issuer.certifications ?? []
     
     return certs.filter(cert => {
+      if (!isVisibleWithFilter(cert.type_key, currentFocusFilter)) return false
+      
       if (showCertifiedOnly && !cert.certificate) return false
       
       if (selectedFilters.size > 0) {
@@ -163,7 +189,7 @@ function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOn
       
       return true
     })
-  }, [issuer, searchQuery, selectedFilters, showCertifiedOnly])
+  }, [issuer, searchQuery, selectedFilters, showCertifiedOnly, currentFocusFilter])
   
   const sortedCertifications = useMemo(() => {
     return [...filteredCertifications].sort((a, b) => {
@@ -210,6 +236,18 @@ export function WorkshopAndCertificationsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
   const [showCertifiedOnly, setShowCertifiedOnly] = useState(false)
+  const [currentFocusFilter, setCurrentFocusFilter] = useState<FocusFilter>('Full CV')
+  
+  useEffect(() => {
+    const handleFocusFilterChange = () => {
+      setCurrentFocusFilter(getStoredFocusFilter())
+    }
+    
+    handleFocusFilterChange()
+    
+    window.addEventListener('focusFilterChanged', handleFocusFilterChange)
+    return () => window.removeEventListener('focusFilterChanged', handleFocusFilterChange)
+  }, [])
   
   const allTags = useMemo(() => {
     const tagSet = new Set<string>()
@@ -244,6 +282,8 @@ export function WorkshopAndCertificationsSection() {
       const certs = issuer.certifications ?? []
       
       return certs.some(cert => {
+        if (!isVisibleWithFilter(cert.type_key, currentFocusFilter)) return false
+        
         if (showCertifiedOnly && !cert.certificate) return false
         
         if (selectedFilters.size > 0) {
@@ -262,7 +302,7 @@ export function WorkshopAndCertificationsSection() {
         return true
       })
     })
-  }, [workshopsData, searchQuery, selectedFilters, showCertifiedOnly])
+  }, [workshopsData, searchQuery, selectedFilters, showCertifiedOnly, currentFocusFilter])
   
   const totalCertifications = useMemo(() => {
     return workshopsData.reduce((sum, issuer) => 
@@ -400,6 +440,7 @@ export function WorkshopAndCertificationsSection() {
                 searchQuery={searchQuery}
                 selectedFilters={selectedFilters}
                 showCertifiedOnly={showCertifiedOnly}
+                currentFocusFilter={currentFocusFilter}
               />
             ))}
           </Accordion>
