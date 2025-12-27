@@ -4,6 +4,23 @@
 @import './styles/rtl.css';
 @import './styles/print.css';
 
+/* Persian/Arabic Font Stack */
+html[lang="fa"] body,
+html[lang="fa"] h1,
+html[lang="fa"] h2,
+html[lang="fa"] h3,
+html[lang="fa"] h4,
+html[lang="fa"] h5,
+html[lang="fa"] h6,
+html[lang="fa"] p,
+html[lang="fa"] span,
+html[lang="fa"] a,
+html[lang="fa"] button {
+  font-family: 'Vazirmatn', 'Tahoma', 'Arial', sans-serif;
+}
+
+/* German uses same font stack as English, but could be customized if needed */
+
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;

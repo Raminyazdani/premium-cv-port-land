@@ -1,411 +1,266 @@
 /**
- * RTL (Right-to-Left) Styles
- * Applied when dir="rtl" is set on the root element (e.g., for Farsi/Persian language)
+ * RTL (Right-to-Left) Styles for Persian/Arabic languages
+ * 
+ * Automatically applied when html[dir="rtl"]
  */
 
-[dir="rtl"] {
-  direction: rtl;
-  text-align: start;
-}
-
-[dir="rtl"] body {
-  direction: rtl;
-}
-
-/* Text alignment */
-[dir="rtl"] .text-left {
+/* RTL Typography and Text Alignment */
+html[dir="rtl"] {
   text-align: right;
 }
 
-[dir="rtl"] .text-right {
-  text-align: left;
-}
-
-/* Flex direction reversals */
-[dir="rtl"] .flex-row {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .flex-row-reverse {
-  flex-direction: row;
-}
-
-/* Grid auto-flow for RTL */
-[dir="rtl"] .grid {
+html[dir="rtl"] body {
   direction: rtl;
 }
 
-/* Margins - flip left/right */
-[dir="rtl"] .ml-auto {
-  margin-inline-start: auto;
+/* RTL Text Elements */
+html[dir="rtl"] p,
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] h5,
+html[dir="rtl"] h6,
+html[dir="rtl"] li {
+  text-align: right;
+}
+
+/* Mixed content: preserve LTR for URLs, emails, code */
+html[dir="rtl"] a[href^="http"],
+html[dir="rtl"] a[href^="mailto:"],
+html[dir="rtl"] code,
+html[dir="rtl"] pre {
+  direction: ltr;
+  unicode-bidi: embed;
+  text-align: left;
+}
+
+/* Flex direction reversal */
+html[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .flex-row-reverse {
+  flex-direction: row;
+}
+
+/* Spacing utilities - flip margins and padding */
+html[dir="rtl"] [class*="ml-"] {
   margin-left: 0;
+  margin-right: var(--ml-value, 0);
 }
 
-[dir="rtl"] .mr-auto {
-  margin-inline-end: auto;
+html[dir="rtl"] [class*="mr-"] {
   margin-right: 0;
+  margin-left: var(--mr-value, 0);
 }
 
-/* Transform origin for animations */
-[dir="rtl"] * {
-  transform-origin: center;
+html[dir="rtl"] [class*="pl-"] {
+  padding-left: 0;
+  padding-right: var(--pl-value, 0);
 }
 
-/* Padding adjustments for common utilities */
-[dir="rtl"] .ps-2 { padding-inline-start: 0.5rem; }
-[dir="rtl"] .ps-3 { padding-inline-start: 0.75rem; }
-[dir="rtl"] .ps-4 { padding-inline-start: 1rem; }
-[dir="rtl"] .ps-6 { padding-inline-start: 1.5rem; }
-[dir="rtl"] .ps-8 { padding-inline-start: 2rem; }
-
-[dir="rtl"] .pe-2 { padding-inline-end: 0.5rem; }
-[dir="rtl"] .pe-3 { padding-inline-end: 0.75rem; }
-[dir="rtl"] .pe-4 { padding-inline-end: 1rem; }
-[dir="rtl"] .pe-6 { padding-inline-end: 1.5rem; }
-[dir="rtl"] .pe-8 { padding-inline-end: 2rem; }
-
-/* Border radius flip */
-[dir="rtl"] .rounded-l,
-[dir="rtl"] .rounded-s {
-  border-start-start-radius: var(--radius);
-  border-end-start-radius: var(--radius);
-  border-start-end-radius: 0;
-  border-end-end-radius: 0;
+html[dir="rtl"] [class*="pr-"] {
+  padding-right: 0;
+  padding-left: var(--pr-value, 0);
 }
 
-[dir="rtl"] .rounded-r,
-[dir="rtl"] .rounded-e {
-  border-start-end-radius: var(--radius);
-  border-end-end-radius: var(--radius);
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
+/* Border radius flipping */
+html[dir="rtl"] [class*="rounded-l"] {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: var(--border-radius, 0.5rem);
+  border-bottom-right-radius: var(--border-radius, 0.5rem);
 }
 
-/* Icons that indicate direction should be flipped */
-[dir="rtl"] .rtl-flip {
+html[dir="rtl"] [class*="rounded-r"] {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: var(--border-radius, 0.5rem);
+  border-bottom-left-radius: var(--border-radius, 0.5rem);
+}
+
+/* Text alignment utilities */
+html[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+html[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* Float utilities */
+html[dir="rtl"] .float-left {
+  float: right;
+}
+
+html[dir="rtl"] .float-right {
+  float: left;
+}
+
+/* Icons and arrows - mirror horizontally */
+html[dir="rtl"] [class*="arrow-right"],
+html[dir="rtl"] [class*="chevron-right"] {
   transform: scaleX(-1);
 }
 
-/* Specific icon flipping for common directional icons */
-[dir="rtl"] svg[data-icon="arrow-right"],
-[dir="rtl"] svg[data-icon="caret-right"],
-[dir="rtl"] svg[data-icon="arrow-left"],
-[dir="rtl"] svg[data-icon="caret-left"] {
-  transform: scaleX(-1);
-}
-
-/* Navigation arrows */
-[dir="rtl"] [data-arrow="left"],
-[dir="rtl"] [data-arrow="prev"] {
-  transform: scaleX(-1);
-}
-
-[dir="rtl"] [data-arrow="right"],
-[dir="rtl"] [data-arrow="next"] {
+html[dir="rtl"] [class*="arrow-left"],
+html[dir="rtl"] [class*="chevron-left"] {
   transform: scaleX(-1);
 }
 
 /* Dropdown menus */
-[dir="rtl"] [role="menu"],
-[dir="rtl"] [role="listbox"] {
-  text-align: right;
-}
-
-/* Card layouts - ensure proper flow */
-[dir="rtl"] .card-header,
-[dir="rtl"] .card-content,
-[dir="rtl"] .card-footer {
-  text-align: right;
-}
-
-/* Timeline adjustments */
-[dir="rtl"] .timeline-item::before {
-  left: auto;
-  right: 0;
-}
-
-[dir="rtl"] .timeline-content {
-  margin-left: 0;
-  margin-right: 2rem;
-  text-align: right;
-}
-
-/* Badge and chip positioning */
-[dir="rtl"] .badge-container,
-[dir="rtl"] .chip-container {
-  flex-direction: row-reverse;
-}
-
-/* Header navigation */
-[dir="rtl"] header nav {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] header .nav-links {
-  flex-direction: row-reverse;
-}
-
-/* Hero section layout */
-[dir="rtl"] .hero-profile-photo {
-  margin-left: 0;
-  margin-right: auto;
-}
-
-[dir="rtl"] .hero-content {
-  text-align: right;
-}
-
-[dir="rtl"] #hero {
-  text-align: right;
-}
-
-/* Skills section - chips flow right-to-left */
-[dir="rtl"] .skills-grid,
-[dir="rtl"] .skills-chips {
+html[dir="rtl"] [role="menu"],
+html[dir="rtl"] [data-radix-popper-content-wrapper] {
   direction: rtl;
-}
-
-/* Flex gap utilities should work naturally, but ensure wrapping */
-[dir="rtl"] .flex.gap-2,
-[dir="rtl"] .flex.gap-3,
-[dir="rtl"] .flex.gap-4 {
-  flex-wrap: wrap;
-}
-
-/* Buttons with icons */
-[dir="rtl"] button {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] button > svg:first-child {
-  margin-left: 0.5rem;
-  margin-right: 0;
-}
-
-[dir="rtl"] button > svg:last-child {
-  margin-right: 0.5rem;
-  margin-left: 0;
-}
-
-/* Dialog/Modal content */
-[dir="rtl"] [role="dialog"] {
-  text-align: right;
 }
 
 /* Forms */
-[dir="rtl"] input,
-[dir="rtl"] textarea,
-[dir="rtl"] select {
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select {
   text-align: right;
+}
+
+html[dir="rtl"] input[type="email"],
+html[dir="rtl"] input[type="url"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Navigation */
+html[dir="rtl"] nav {
   direction: rtl;
 }
 
-[dir="rtl"] label {
+html[dir="rtl"] nav ul {
+  flex-direction: row-reverse;
+}
+
+/* Badges and chips */
+html[dir="rtl"] .badge,
+html[dir="rtl"] .chip {
+  direction: rtl;
+}
+
+/* Cards */
+html[dir="rtl"] .card {
   text-align: right;
 }
 
-/* Lists */
-[dir="rtl"] ul,
-[dir="rtl"] ol {
-  padding-left: 0;
+/* Timeline */
+html[dir="rtl"] .timeline::before {
+  right: 0;
+  left: auto;
+}
+
+html[dir="rtl"] .timeline-item {
   padding-right: 2rem;
-  text-align: right;
+  padding-left: 0;
 }
 
-[dir="rtl"] li {
-  text-align: right;
+/* Tabs */
+html[dir="rtl"] [role="tablist"] {
+  direction: rtl;
 }
 
 /* Tooltips */
-[dir="rtl"] [data-tooltip]::before,
-[dir="rtl"] [data-tooltip]::after {
-  left: auto;
-  right: 50%;
-  transform: translateX(50%);
-}
-
-/* Float utilities */
-[dir="rtl"] .float-left {
-  float: right;
-}
-
-[dir="rtl"] .float-right {
-  float: left;
-}
-
-/* Shadows - adjust for RTL perception */
-[dir="rtl"] .shadow-lg {
-  box-shadow: -10px 10px 15px -3px rgb(0 0 0 / 0.1), -4px 2px 6px -4px rgb(0 0 0 / 0.1);
-}
-
-/* Specific component overrides */
-
-/* Shadcn UI components adjustments */
-[dir="rtl"] .dropdown-menu-content {
+html[dir="rtl"] [data-radix-tooltip-content] {
+  direction: rtl;
   text-align: right;
 }
 
-[dir="rtl"] .select-content {
-  text-align: right;
+/* Shadows */
+html[dir="rtl"] .shadow-left {
+  box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-[dir="rtl"] .popover-content {
-  text-align: right;
+html[dir="rtl"] .shadow-right {
+  box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-[dir="rtl"] .toast {
-  text-align: right;
+/* Scrollbar */
+html[dir="rtl"] ::-webkit-scrollbar {
+  direction: rtl;
 }
 
-/* Sheet (mobile menu) */
-[dir="rtl"] .sheet-content {
-  text-align: right;
+/* Lists */
+html[dir="rtl"] ul,
+html[dir="rtl"] ol {
+  padding-right: 1.5rem;
+  padding-left: 0;
 }
 
-/* Tabs - reverse order */
-[dir="rtl"] [role="tablist"] {
-  flex-direction: row-reverse;
+html[dir="rtl"] li::marker {
+  unicode-bidi: isolate;
 }
 
-/* Accordion */
-[dir="rtl"] .accordion-trigger {
-  text-align: right;
+/* Grid adjustments */
+html[dir="rtl"] .grid {
+  direction: rtl;
 }
 
-[dir="rtl"] .accordion-content {
-  text-align: right;
+/* Dialog/Modal */
+html[dir="rtl"] [role="dialog"] {
+  direction: rtl;
 }
 
-/* Breadcrumb navigation */
-[dir="rtl"] .breadcrumb {
-  flex-direction: row-reverse;
+/* Prevent RTL for specific elements that should always be LTR */
+html[dir="rtl"] .ltr {
+  direction: ltr !important;
+  text-align: left !important;
 }
 
-[dir="rtl"] .breadcrumb-separator {
-  transform: scaleX(-1);
+/* Code blocks */
+html[dir="rtl"] pre,
+html[dir="rtl"] code {
+  direction: ltr;
+  text-align: left;
 }
 
-/* Progress bars - remain left-to-right for consistency */
-[dir="rtl"] .progress-bar {
+/* Numbers and dates */
+html[dir="rtl"] time,
+html[dir="rtl"] .date,
+html[dir="rtl"] .number {
+  unicode-bidi: embed;
   direction: ltr;
 }
 
-/* Data tables */
-[dir="rtl"] table {
-  direction: rtl;
+/* Email and phone links */
+html[dir="rtl"] a[href^="mailto:"],
+html[dir="rtl"] a[href^="tel:"] {
+  direction: ltr;
+  unicode-bidi: embed;
 }
 
-[dir="rtl"] th,
-[dir="rtl"] td {
-  text-align: right;
-}
-
-[dir="rtl"] thead {
-  text-align: right;
-}
-
-/* Avatar group ordering */
-[dir="rtl"] .avatar-group {
-  flex-direction: row-reverse;
-}
-
-/* Container and spacing */
-[dir="rtl"] .container {
-  direction: rtl;
-}
-
-/* Specific section overrides */
-[dir="rtl"] section {
-  text-align: right;
-}
-
-[dir="rtl"] .section-heading,
-[dir="rtl"] h1,
-[dir="rtl"] h2,
-[dir="rtl"] h3,
-[dir="rtl"] h4,
-[dir="rtl"] h5,
-[dir="rtl"] h6 {
-  text-align: right;
-}
-
-[dir="rtl"] p {
-  text-align: right;
-}
-
-/* Footer */
-[dir="rtl"] footer {
-  text-align: right;
-}
-
-[dir="rtl"] footer nav {
-  flex-direction: row-reverse;
-}
-
-/* Education and Experience cards */
-[dir="rtl"] .education-card,
-[dir="rtl"] .experience-card,
-[dir="rtl"] .project-card,
-[dir="rtl"] .publication-card {
-  text-align: right;
-}
-
-/* Badges in cards */
-[dir="rtl"] .badge {
-  margin-left: 0.5rem;
+/* Profile images */
+html[dir="rtl"] .profile-image {
+  margin-left: auto;
   margin-right: 0;
 }
 
-/* Skills chips spacing */
-[dir="rtl"] .skill-chip {
-  margin-left: 0.5rem;
-  margin-right: 0;
-}
-
-/* Ensure inline-start and inline-end logical properties work */
-[dir="rtl"] [class*="ms-"],
-[dir="rtl"] [class*="me-"],
-[dir="rtl"] [class*="ps-"],
-[dir="rtl"] [class*="pe-"] {
-  /* These already use logical properties, no flip needed */
-}
-
-/* Responsive grid layouts */
-[dir="rtl"] .grid-cols-1,
-[dir="rtl"] .grid-cols-2,
-[dir="rtl"] .grid-cols-3,
-[dir="rtl"] .grid-cols-4 {
-  direction: rtl;
-}
-
-/* Justify and align content */
-[dir="rtl"] .justify-start {
-  justify-content: flex-end;
-}
-
-[dir="rtl"] .justify-end {
-  justify-content: flex-start;
-}
-
-[dir="rtl"] .items-start {
-  align-items: flex-end;
-}
-
-[dir="rtl"] .items-end {
-  align-items: flex-start;
-}
-
-/* Text truncation should still work */
-[dir="rtl"] .truncate {
-  direction: rtl;
+/* Hero section RTL */
+html[dir="rtl"] .hero-content {
   text-align: right;
 }
 
-/* Ensure smooth transitions when switching languages */
+/* Skills chips */
+html[dir="rtl"] .skill-chip {
+  direction: rtl;
+}
+
+/* Publication citations */
+html[dir="rtl"] .citation {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+/* Transition: Prevent layout shift when switching languages */
 * {
-  transition: none;
+  transition: margin 0.15s ease, padding 0.15s ease, text-align 0.15s ease;
 }
 
-html[dir="rtl"] * {
-  transition: all 0.2s ease-in-out;
+/* Disable transitions during language switch */
+html[data-language-switching="true"] * {
+  transition: none !important;
 }

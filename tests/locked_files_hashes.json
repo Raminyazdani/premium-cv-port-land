@@ -1,0 +1,10 @@
+{
+  "comment": "SHA256 checksums for locked CV data files. DO NOT MODIFY THESE FILES.",
+  "files": {
+    "src/data/cv.json": "PLACEHOLDER_HASH_EN",
+    "src/data/ramin_de.json": "PLACEHOLDER_HASH_DE",
+    "src/data/ramin_fa.json": "PLACEHOLDER_HASH_FA"
+  },
+  "generated": "2025-01-26T00:00:00.000Z",
+  "purpose": "Ensures language data files remain unmodified during development"
+}

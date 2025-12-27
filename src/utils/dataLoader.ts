@@ -1,6 +1,9 @@
 import type { CVData } from '@/types/cv'
 import { DataValidator, deduplicateArray, sanitizeDate } from './dataValidator'
-import cvData from '@/data/cv.json'
+import { normalizeCVData, type Language } from './dataNormalizer'
+import cvDataEN from '@/data/cv.json'
+import cvDataDE from '@/data/ramin_de.json'
+import cvDataFA from '@/data/ramin_fa.json'
 
 export interface LoadDataResult {
   data: CVData
@@ -11,9 +14,34 @@ export interface LoadDataResult {
   }
 }
 
-export function loadAndValidateData(): LoadDataResult {
+/**
+ * Loads CV data for the specified language
+ */
+function loadCVDataForLanguage(lang: Language): any {
+  switch (lang) {
+    case 'de':
+      return cvDataDE
+    case 'fa':
+      return cvDataFA
+    case 'en':
+    default:
+      return cvDataEN
+  }
+}
+
+/**
+ * Loads, normalizes, and validates CV data for the specified language
+ */
+export function loadAndValidateData(lang: Language = 'en'): LoadDataResult {
+  // Load raw data for language
+  const rawData = loadCVDataForLanguage(lang)
+  
+  // Normalize to canonical English schema
+  const normalized = normalizeCVData(rawData, lang)
+  
+  // Validate normalized data
   const validator = new DataValidator()
-  const validationResult = validator.validate(cvData)
+  const validationResult = validator.validate(normalized)
 
   if (validationResult.errors.length > 0) {
     console.error('❌ Data validation errors:', validationResult.errors)
@@ -23,7 +51,8 @@ export function loadAndValidateData(): LoadDataResult {
     console.warn('⚠️  Data validation warnings:', validationResult.warnings)
   }
 
-  const sanitizedData = sanitizeData(cvData as CVData)
+  // Sanitize normalized data
+  const sanitizedData = sanitizeData(normalized as CVData)
 
   return {
     data: sanitizedData,

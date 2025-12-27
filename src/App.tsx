@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo } from 'react'
 import { Toaster } from 'sonner'
 import { FilterProvider, useFilter } from '@/context/FilterContext'
+import { LanguageProvider, useLanguage } from '@/context/LanguageContext'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { loadAndValidateData, extractAllTypeKeys } from '@/utils/dataLoader'
@@ -34,8 +35,9 @@ function SectionSkeleton() {
 
 function AppContent() {
   const { setAvailableFocusOptions } = useFilter()
+  const { language } = useLanguage()
 
-  const { data, validationResult } = useMemo(() => loadAndValidateData(), [])
+  const { data, validationResult } = useMemo(() => loadAndValidateData(language), [language])
 
   useEffect(() => {
     if (import.meta.env.DEV) {
@@ -111,9 +113,11 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
-      <FilterProvider>
-        <AppContent />
-      </FilterProvider>
+      <LanguageProvider>
+        <FilterProvider>
+          <AppContent />
+        </FilterProvider>
+      </LanguageProvider>
     </ErrorBoundary>
   )
 }
