@@ -103,8 +103,9 @@ export function DownloadModal({ open, onOpenChange }: DownloadModalProps) {
     if (!includeContact && result.basics) {
       const basics = Array.isArray(result.basics) ? result.basics[0] : result.basics
       if (basics) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { email, phone, ...rest } = basics
+        const { email: _email, phone: _phone, ...rest } = basics
+        void _email
+        void _phone
         result.basics = [{ ...rest }]
       }
     }
