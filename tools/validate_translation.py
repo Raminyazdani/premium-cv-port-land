@@ -2,14 +2,21 @@
 """
 Validation script for Persian CV translation.
 Checks structural equality, key translation completeness, and value preservation.
+
+Usage:
+    python3 validate_translation.py [--en-file PATH] [--fa-file PATH]
 """
 
+import argparse
 import json
 import hashlib
 import sys
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Set, Tuple
+
+# Configuration constants
+ENGLISH_WORD_THRESHOLD = 3  # Minimum number of English stopwords to trigger warning
 
 # Common English stopwords that should NOT appear in translated values
 ENGLISH_STOPWORDS = {
@@ -28,7 +35,7 @@ PRESERVED_PATTERNS = [
     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',  # Emails
     r'^\+?\d[\d\s()-]+$',  # Phone numbers
     r'^\d{4}(-\d{2})?(-\d{2})?$',  # Dates (ISO format)
-    r'^PIKk-q0AAAAJ$',  # Specific IDs
+    r'^[A-Za-z0-9_-]{10,}$',  # Generic IDs (UUID-like patterns)
     r'^[A-Z]{2,}$',  # Acronyms like GLP, GMP
 ]
 
@@ -146,7 +153,7 @@ def check_english_leftovers(fa_obj: Any, path: str = '') -> List[str]:
         words = fa_obj.lower().split()
         english_words = [w for w in words if w in ENGLISH_STOPWORDS]
         # Only warn if there are multiple English stopwords (to avoid false positives)
-        if len(english_words) >= 3:
+        if len(english_words) >= ENGLISH_WORD_THRESHOLD:
             warnings.append(f"Possible untranslated English at {path}: '{fa_obj[:100]}...'")
     elif isinstance(fa_obj, dict):
         for key, value in fa_obj.items():
@@ -268,9 +275,26 @@ def validate_translation(en_file: str, fa_file: str) -> Dict[str, Any]:
 
 
 def main():
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description='Validate Persian CV translation against English source.'
+    )
+    parser.add_argument(
+        '--en-file',
+        type=Path,
+        help='Path to English source JSON (default: frontend/src/data/cv.json)'
+    )
+    parser.add_argument(
+        '--fa-file',
+        type=Path,
+        help='Path to Persian translation JSON (default: ramin_fa.json)'
+    )
+    args = parser.parse_args()
+
+    # Determine file paths
     repo_root = Path(__file__).parent.parent
-    en_file = repo_root / 'frontend' / 'src' / 'data' / 'cv.json'
-    fa_file = repo_root / 'ramin_fa.json'
+    en_file = args.en_file or (repo_root / 'frontend' / 'src' / 'data' / 'cv.json')
+    fa_file = args.fa_file or (repo_root / 'ramin_fa.json')
 
     if not en_file.exists():
         print(f"Error: English source not found at {en_file}")
