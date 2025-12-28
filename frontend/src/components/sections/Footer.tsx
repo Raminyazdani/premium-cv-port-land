@@ -6,7 +6,8 @@ import {
   GraduationCap,
   Link as LinkIcon,
 } from '@phosphor-icons/react'
-import { getBasics, getFullName, getProfiles } from '@/lib/cv-data'
+import { extractBasics, getFullName, extractProfiles } from '@/lib/cv-data'
+import { useCVData } from '@/context/CVDataContext'
 import { useTranslation } from '@/context/LanguageContext'
 import { interpolate } from '@/lib/i18n'
 import type { Profile } from '@/types/cv'
@@ -47,8 +48,9 @@ function SocialLink({ profile }: { profile: Profile }) {
 }
 
 export function Footer() {
-  const basics = getBasics()
-  const profiles = getProfiles()
+  const { data } = useCVData()
+  const basics = extractBasics(data)
+  const profiles = extractProfiles(data)
   const fullName = getFullName(basics)
   const currentYear = new Date().getFullYear()
   const t = useTranslation()
