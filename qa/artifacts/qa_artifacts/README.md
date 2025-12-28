@@ -41,10 +41,13 @@ qa_artifacts/
 ## How to View Reports
 
 ### Primary Report (Markdown)
-Open `QA_REPORT.md` in any markdown viewer or GitHub.
+Open `qa/reports/QA_REPORT.md` in any markdown viewer or GitHub.
 
 ### HTML Report (Browser)
-Open `QA_REPORT.html` in a web browser for a styled, interactive view.
+Open `qa/reports/QA_REPORT.html` in a web browser for a styled, interactive view.
+
+### QA Index
+See `qa/indexes/QA_INDEX.md` for a complete navigation index to all QA outputs.
 
 ### Screenshot Gallery
 Screenshots are organized by:
