@@ -28,7 +28,7 @@ The English source file was **NOT modified** during this translation process.
 | Metric | Value |
 |--------|-------|
 | **Output Path** | `ramin_de.json` (repo root) |
-| **SHA256 Hash** | `7111006f95b9adfa25ba9e4069171baf8a4aee4cf823e8b25fe252185046d44d` |
+| **SHA256 Hash** | `66d7802c46aaed01242f23af5bac06e9bbc50a77641503c214ed7187f83f94f0` |
 | **Encoding** | UTF-8 |
 | **Valid JSON** | ✓ Yes |
 
