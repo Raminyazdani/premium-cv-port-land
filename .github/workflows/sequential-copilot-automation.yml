@@ -169,7 +169,9 @@ jobs:
           gh issue comment "$CANDIDATE" \
             --repo "$REPO" \
             --body "$COMMENT_BODY"
-          
+          gh issue edit "$NEXT_ISSUE" \
+            --repo "$REPO" \
+            --add-assignee "copilot"
           echo ""
           echo "✅ SUCCESS! Copilot has been assigned to issue #$CANDIDATE"
           echo "   Title: $ISSUE_TITLE"
@@ -513,9 +515,10 @@ jobs:
           gh issue comment "$NEXT_ISSUE" \
             --repo "$REPO" \
             --body "$COMMENT_BODY"
+            
           gh issue edit "$NEXT_ISSUE" \
             --repo "$REPO" \
-            --add-label "copilot: opus-4.5"
+            --add-assignee "copilot"
           echo ""
           echo "✅ SUCCESS! Copilot has been assigned to issue #$NEXT_ISSUE"
           echo "   Title: $NEXT_TITLE"
