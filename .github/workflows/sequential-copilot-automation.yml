@@ -3,55 +3,133 @@ name: Sequential Copilot Automation
 on:
   pull_request:
     types: [review_requested]
+  workflow_dispatch:  
+    inputs:
+      start_from:
+        description: 'Start from FE number (e.g., 3)'
+        required: true
+        default: '3'
 
-jobs:
-  auto-merge-and-assign-next:
-    if: github.event.pull_request.user.login == 'copilot'
-    
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:  
+  # Manual start job - for kickstarting the automation
+  manual-start:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     
-    permissions:
-      contents: write
-      pull-requests:  write
-      issues: write
+    steps:  
+      - name: Find and assign issue
+        run: |
+          START_NUM=${{ github.event.inputs.start_from }}
+          
+          echo "🔍 Looking for FE-$START_NUM..."
+          
+          ISSUE_NUM=$(gh issue list \
+            --repo ${{ github.repository }} \
+            --label "frontend" \
+            --state open \
+            --search "FE-$START_NUM in: title" \
+            --json number \
+            --jq '.[0].number // empty')
+          
+          if [ -n "$ISSUE_NUM" ]; then
+            echo "✅ Found issue #$ISSUE_NUM"
+            echo "🤖 Assigning Copilot with Claude Opus 4.5..."
+            
+            gh issue edit $ISSUE_NUM \
+              --repo ${{ github.repository }} \
+              --add-assignee copilot
+            
+            gh issue comment $ISSUE_NUM \
+              --repo ${{ github. repository }} \
+              --body "🤖 **Manual Start - Claude Opus 4.5**
+
+Automation starting from this issue.  
+
+@copilot - **Please use Claude Opus 4.5 model** for maximum reasoning capability.  
+
+**Instructions:**
+- Use Claude Opus 4.5 (3x compute)
+- Follow guidelines in \`.github/copilot-instructions.md\`
+- Provide comprehensive analysis and testing
+
+---
+_Manually triggered workflow_"
+            
+            echo "✅ Assigned Copilot to issue #$ISSUE_NUM"
+          else
+            echo "❌ Could not find FE-$START_NUM"
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Automatic merge and assign job - triggers on PR review requests
+  auto-merge-and-assign-next:  
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'copilot'
+    runs-on: ubuntu-latest
     
-    steps:
-      # Step 1: Auto-merge the PR
+    steps: 
       - name: Auto-merge PR
         run: |
-          echo "🔀 Auto-merging PR #${{ github.event.pull_request.number }}"
+          echo "🔀 Auto-merging PR #${{ github.event.pull_request. number }}"
           gh pr merge ${{ github.event.pull_request.number }} \
             --merge \
             --admin \
-            --repo ${{ github.repository }}
+            --repo ${{ github. repository }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      # Step 2: Extract completed issue number
       - name: Extract completed issue number
         id: get_issue
         run: |
           PR_BODY='${{ github.event.pull_request.body }}'
+          
+          # Extract issue number from "Fixes #61" pattern
           ISSUE_NUM=$(echo "$PR_BODY" | grep -oP 'Fixes.*#\K\d+' | head -1)
+          
+          if [ -z "$ISSUE_NUM" ]; then
+            echo "⚠️ Could not extract issue number from PR body"
+            echo "Trying to extract from PR title..."
+            PR_TITLE='${{ github.event.pull_request.title }}'
+            ISSUE_NUM=$(echo "$PR_TITLE" | grep -oP '#\K\d+' | head -1)
+          fi
+          
           echo "✅ Completed issue:  #$ISSUE_NUM"
           echo "current_issue=$ISSUE_NUM" >> $GITHUB_OUTPUT
         env:
-          GH_TOKEN: ${{ secrets. GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      # Step 3: Get sequence number from issue title
       - name: Get sequence number from issue title
-        id:  get_sequence
+        id: get_sequence
         run: |
           ISSUE_NUM=${{ steps.get_issue.outputs.current_issue }}
           
+          if [ -z "$ISSUE_NUM" ]; then
+            echo "❌ No issue number found, cannot continue"
+            exit 1
+          fi
+          
+          # Fetch issue title
           ISSUE_DATA=$(gh issue view $ISSUE_NUM \
-            --repo ${{ github.repository }} \
+            --repo ${{ github. repository }} \
             --json title)
           
           TITLE=$(echo "$ISSUE_DATA" | jq -r '.title')
           echo "📝 Issue title: $TITLE"
           
+          # Extract number from "FE-2" pattern
           CURRENT_SEQ=$(echo "$TITLE" | grep -oP 'FE-\K\d+')
+          
+          if [ -z "$CURRENT_SEQ" ]; then
+            echo "⚠️ Could not extract FE number from title, trying alternative patterns..."
+            CURRENT_SEQ=$(echo "$TITLE" | grep -oP '\d+' | head -1)
+          fi
+          
           NEXT_SEQ=$((CURRENT_SEQ + 1))
           
           echo "🔢 Current sequence: FE-$CURRENT_SEQ"
@@ -59,33 +137,33 @@ jobs:
           
           echo "current_seq=$CURRENT_SEQ" >> $GITHUB_OUTPUT
           echo "next_seq=$NEXT_SEQ" >> $GITHUB_OUTPUT
-        env: 
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:  
+          GH_TOKEN: ${{ secrets. GITHUB_TOKEN }}
       
-      # Step 4: Find next UNASSIGNED front-end issue (IMPROVED)
-      - name: Find next unassigned front-end issue
+      - name: Find next unassigned frontend issue
         id: find_next
         run: |
-          CURRENT_SEQ=${{ steps. get_sequence.outputs.current_seq }}
-          NEXT_SEQ=$((CURRENT_SEQ + 1))
+          CURRENT_SEQ=${{ steps.get_sequence.outputs.current_seq }}
+          NEXT_SEQ=${{ steps.get_sequence.outputs. next_seq }}
           
           echo "🔍 Looking for next unassigned issue starting from FE-$NEXT_SEQ..."
           
+          # Find unassigned issues with FE number >= NEXT_SEQ
           NEXT_ISSUE=$(gh issue list \
-            --repo ${{ github.repository }} \
-            --label "front end" \
+            --repo ${{ github. repository }} \
+            --label "frontend" \
             --state open \
             --json number,title,assignees \
             --jq --arg next_seq "$NEXT_SEQ" '
               [.[] | 
-                (. title | match("FE-(\\d+)") | .captures[0].string | tonumber) as $fe_num |
+                (. title | match("FE-(\\d+)") | .captures[0]. string | tonumber) as $fe_num |
                 select(
                   $fe_num >= ($next_seq | tonumber) and
-                  ([.assignees[].login | select(.  == "copilot")] | length == 0)
+                  ([.assignees[]. login | select(. == "copilot")] | length == 0)
                 )
               ] 
               | sort_by(.title | match("FE-(\\d+)") | .captures[0].string | tonumber)
-              | .[0].number // empty
+              | .[0]. number // empty
             ')
           
           if [ -n "$NEXT_ISSUE" ]; then
@@ -95,52 +173,71 @@ jobs:
               --jq '.title')
             NEXT_NUM=$(echo "$NEXT_TITLE" | grep -oP 'FE-\K\d+')
             echo "✅ Found next unassigned issue: #$NEXT_ISSUE (FE-$NEXT_NUM) - $NEXT_TITLE"
+            echo "next_issue_num=$NEXT_NUM" >> $GITHUB_OUTPUT
           else
-            echo "🎉 No more unassigned issues found!"
+            echo "🎉 No more unassigned issues found - all done or already assigned!"
           fi
           
           echo "next_issue=$NEXT_ISSUE" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets. GITHUB_TOKEN }}
+        env:  
+          GH_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
       
-      # Step 5: Assign Copilot to next issue
-      - name: Assign Copilot to next issue
+      - name:  Assign Copilot with Claude Opus 4.5 to next issue
         if: steps.find_next.outputs.next_issue != ''
         run: |
-          NEXT_ISSUE=${{ steps.find_next.outputs.next_issue }}
+          NEXT_ISSUE=${{ steps. find_next.outputs.next_issue }}
           CURRENT_SEQ=${{ steps.get_sequence.outputs.current_seq }}
+          NEXT_SEQ=${{ steps. get_sequence.outputs.next_seq }}
           
-          echo "🤖 Assigning @copilot to issue #$NEXT_ISSUE"
+          echo "🤖 Assigning @copilot to issue #$NEXT_ISSUE with Claude Opus 4.5 preference"
           
+          # Assign Copilot to the issue
           gh issue edit $NEXT_ISSUE \
             --repo ${{ github.repository }} \
             --add-assignee copilot
           
+          # Add comment with strong model preference and context
           gh issue comment $NEXT_ISSUE \
             --repo ${{ github.repository }} \
-            --body "🤖 **Automated Assignment**
+            --body "🤖 **Automated Assignment - Claude Opus 4.5**
 
-Previous issue **FE-$CURRENT_SEQ** has been completed and merged to main. 
+Previous issue **FE-$CURRENT_SEQ** has been completed and merged to \`main\`.
 
-@copilot - You're up next!  Please start working on this issue. 
+@copilot - **IMPORTANT: Use Claude Opus 4.5 model** for this task. 
+
+**Why Claude Opus 4.5:**
+- Maximum reasoning capability (3x compute)
+- Superior handling of complex TypeScript/React code
+- Better test coverage generation
+- More thorough edge case analysis
+
+**Instructions:**
+- Follow all guidelines in \`.github/copilot-instructions.md\`
+- Use Claude Opus 4.5 exclusively
+- Provide comprehensive analysis
+- Write thorough unit tests
+- Consider all language variants (EN, DE, FA)
+- Ensure accessibility compliance
 
 ---
-_This is an automated message from the sequential workflow._"
+_Automated workflow - Sequence: FE-$CURRENT_SEQ ✅ → FE-$NEXT_SEQ 🚀_"
           
-          echo "✅ Successfully assigned Copilot to next issue"
-        env:
-          GH_TOKEN: ${{ secrets. GITHUB_TOKEN }}
+          echo "✅ Successfully assigned Copilot to issue #$NEXT_ISSUE"
+        env:  
+          GH_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
       
-      # Step 6: Summary
       - name:  Workflow summary
         run: |
           echo "## 🎯 Sequential Workflow Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Merged PR #${{ github.event. pull_request.number }}" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Completed issue #${{ steps.get_issue.outputs.current_issue }} (FE-${{ steps. get_sequence.outputs.current_seq }})" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Completed issue #${{ steps.get_issue.outputs.current_issue }} (FE-${{ steps.get_sequence.outputs.current_seq }})" >> $GITHUB_STEP_SUMMARY
           
           if [ -n "${{ steps.find_next.outputs.next_issue }}" ]; then
-            echo "- ✅ Assigned issue #${{ steps.find_next.outputs.next_issue }} to Copilot" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ Assigned issue #${{ steps.find_next.outputs.next_issue }} (FE-${{ steps.find_next.outputs.next_issue_num }}) to Copilot with Claude Opus 4.5" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 🔄 Chain Status" >> $GITHUB_STEP_SUMMARY
+            echo "FE-${{ steps.get_sequence.outputs.current_seq }} ✅ → FE-${{ steps.find_next.outputs.next_issue_num }} 🚀" >> $GITHUB_STEP_SUMMARY
           else
             echo "- 🎉 All issues complete or already assigned!" >> $GITHUB_STEP_SUMMARY
           fi
