@@ -171,7 +171,7 @@ jobs:
             --body "$COMMENT_BODY"
           gh issue edit "$CANDIDATE" \
             --repo "$REPO" \
-            --add-assignee "Copilot"
+            --add-assignee "copilot-swe-agent"
           echo ""
           echo "✅ SUCCESS! Copilot has been assigned to issue #$CANDIDATE"
           echo "   Title: $ISSUE_TITLE"
@@ -518,7 +518,7 @@ jobs:
             
           gh issue edit "$NEXT_ISSUE" \
             --repo "$REPO" \
-            --add-assignee "Copilot"
+            --add-assignee "copilot-swe-agent"
           echo ""
           echo "✅ SUCCESS! Copilot has been assigned to issue #$NEXT_ISSUE"
           echo "   Title: $NEXT_TITLE"
