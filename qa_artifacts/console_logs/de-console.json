@@ -1,0 +1,1334 @@
+[
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: de",
+    "timestamp": "2025-12-28T04:15:37.771Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: de ====================",
+    "timestamp": "2025-12-28T04:15:37.774Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:15:37.774Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:15:37.779Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:15:37.779Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"heute\", returning null",
+    "timestamp": "2025-12-28T04:15:37.779Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:15:37.780Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:15:37.781Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:15:37.783Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Language: de",
+    "timestamp": "2025-12-28T04:15:37.783Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:15:37.783Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:15:37.783Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:15:37.783Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:15:37.783Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:15:37.784Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:15:37.784Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:15:37.784Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:15:37.784Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:15:37.784Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:15:37.785Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:15:37.785Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:15:37.785Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:15:37.785Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: Universität des Saarlandes, location: Saarbrücken, Deutschland, area: Bioinformatik, studyType: Master, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:15:37.785Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:15:37.785Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: Integrierte Omics-Pipeline für mikrobielle Genomik, description: Entwickelte eine umfassende Pipeline, die metageno…Profiling mikrobieller Gemeinschaften integriert., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:15:37.786Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:15:37.786Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:15:37.786Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:15:37.786Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:37.798Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:37.806Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:38.001Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:38.007Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:15:38.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: de",
+    "timestamp": "2025-12-28T04:15:38.221Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: de ====================",
+    "timestamp": "2025-12-28T04:15:38.223Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:15:38.223Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:15:38.227Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:15:38.228Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"heute\", returning null",
+    "timestamp": "2025-12-28T04:15:38.228Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:15:38.228Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Language: de",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:15:38.230Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:15:38.233Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:15:38.233Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:15:38.233Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:15:38.238Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:15:38.238Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:15:38.238Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: Universität des Saarlandes, location: Saarbrücken, Deutschland, area: Bioinformatik, studyType: Master, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:15:38.238Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:15:38.238Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: Integrierte Omics-Pipeline für mikrobielle Genomik, description: Entwickelte eine umfassende Pipeline, die metageno…Profiling mikrobieller Gemeinschaften integriert., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:15:38.239Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:15:38.239Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:15:38.239Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:15:38.239Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:38.239Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:38.243Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:38.465Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:38.465Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:15:38.520Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getBasics() is deprecated. Use useCVData() + extractBasics() instead.",
+    "timestamp": "2025-12-28T04:15:38.707Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getProfiles() is deprecated. Use useCVData() + extractProfiles() instead.",
+    "timestamp": "2025-12-28T04:15:38.707Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:15:41.617Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:46.053Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:46.055Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:15:49.058Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: de",
+    "timestamp": "2025-12-28T04:15:57.677Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: de ====================",
+    "timestamp": "2025-12-28T04:15:57.678Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:15:57.678Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:15:57.684Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:15:57.685Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"heute\", returning null",
+    "timestamp": "2025-12-28T04:15:57.685Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:15:57.685Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:15:57.687Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:15:57.687Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Language: de",
+    "timestamp": "2025-12-28T04:15:57.687Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:15:57.688Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:15:57.688Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:15:57.688Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:15:57.688Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:15:57.688Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:15:57.688Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: Universität des Saarlandes, location: Saarbrücken, Deutschland, area: Bioinformatik, studyType: Master, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: Integrierte Omics-Pipeline für mikrobielle Genomik, description: Entwickelte eine umfassende Pipeline, die metageno…Profiling mikrobieller Gemeinschaften integriert., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:15:57.690Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:57.701Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:57.708Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:57.927Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:57.927Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:15:57.995Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: de",
+    "timestamp": "2025-12-28T04:15:58.126Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: de ====================",
+    "timestamp": "2025-12-28T04:15:58.127Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:15:58.127Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:15:58.131Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:15:58.134Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"heute\", returning null",
+    "timestamp": "2025-12-28T04:15:58.143Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:15:58.143Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:15:58.143Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Language: de",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: Universität des Saarlandes, location: Saarbrücken, Deutschland, area: Bioinformatik, studyType: Master, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: Integrierte Omics-Pipeline für mikrobielle Genomik, description: Entwickelte eine umfassende Pipeline, die metageno…Profiling mikrobieller Gemeinschaften integriert., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:15:58.144Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:15:58.147Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:58.147Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:58.147Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:58.367Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:15:58.369Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:15:58.418Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getBasics() is deprecated. Use useCVData() + extractBasics() instead.",
+    "timestamp": "2025-12-28T04:15:58.581Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getProfiles() is deprecated. Use useCVData() + extractProfiles() instead.",
+    "timestamp": "2025-12-28T04:15:58.581Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:16:01.512Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:04.388Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:04.389Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:16:07.593Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: de",
+    "timestamp": "2025-12-28T04:16:15.458Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: de ====================",
+    "timestamp": "2025-12-28T04:16:15.458Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:16:15.458Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:16:15.468Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:16:15.468Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"heute\", returning null",
+    "timestamp": "2025-12-28T04:16:15.469Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:16:15.469Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:16:15.469Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:16:15.471Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Language: de",
+    "timestamp": "2025-12-28T04:16:15.471Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:16:15.471Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:16:15.471Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:16:15.471Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:16:15.472Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:16:15.472Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:16:15.472Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:16:15.472Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:16:15.472Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:16:15.474Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:16:15.474Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:16:15.474Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:16:15.474Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:16:15.474Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: Universität des Saarlandes, location: Saarbrücken, Deutschland, area: Bioinformatik, studyType: Master, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:16:15.474Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:16:15.474Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: Integrierte Omics-Pipeline für mikrobielle Genomik, description: Entwickelte eine umfassende Pipeline, die metageno…Profiling mikrobieller Gemeinschaften integriert., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:16:15.475Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:16:15.475Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:16:15.475Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:16:15.475Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:15.487Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:15.493Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:15.702Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:15.703Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:16:15.763Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: de",
+    "timestamp": "2025-12-28T04:16:15.883Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: de ====================",
+    "timestamp": "2025-12-28T04:16:15.884Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:16:15.884Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:16:15.892Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:16:15.892Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"heute\", returning null",
+    "timestamp": "2025-12-28T04:16:15.892Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:16:15.892Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Language: de",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:16:15.895Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: Universität des Saarlandes, location: Saarbrücken, Deutschland, area: Bioinformatik, studyType: Master, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:16:15.896Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:16:15.896Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: Integrierte Omics-Pipeline für mikrobielle Genomik, description: Entwickelte eine umfassende Pipeline, die metageno…Profiling mikrobieller Gemeinschaften integriert., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:16:15.896Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"heute\", Certification 0.0: Invalid date format \"2020-9-31\", Duplicate project entry found at index 3: \"Marktplatz-Template für Kosmetikshop (Django)\"]",
+    "timestamp": "2025-12-28T04:16:15.896Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:16:15.896Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:16:15.896Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:15.901Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:15.905Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:16.135Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:16.135Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:16:16.181Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getBasics() is deprecated. Use useCVData() + extractBasics() instead.",
+    "timestamp": "2025-12-28T04:16:16.309Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getProfiles() is deprecated. Use useCVData() + extractProfiles() instead.",
+    "timestamp": "2025-12-28T04:16:16.313Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:16:19.261Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:21.537Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:21.537Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:16:24.572Z",
+    "viewport": "mobile"
+  }
+]

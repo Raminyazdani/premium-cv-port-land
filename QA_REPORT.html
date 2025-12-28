@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Audit Report - CV Website</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #3b82f6;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #22c55e;
+            --info: #06b6d4;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        h2 { font-size: 1.5rem; margin: 2rem 0 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 1.5rem 0 0.75rem; }
+        .meta { color: var(--text-muted); margin-bottom: 2rem; }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .summary-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .summary-card .count {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .summary-card.blocker .count { color: var(--danger); }
+        .summary-card.high .count { color: var(--warning); }
+        .summary-card.medium .count { color: var(--info); }
+        .summary-card.low .count { color: var(--success); }
+        
+        .issue-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .issue-card.blocker { border-left: 4px solid var(--danger); }
+        .issue-card.high { border-left: 4px solid var(--warning); }
+        .issue-card.medium { border-left: 4px solid var(--info); }
+        .issue-card.low { border-left: 4px solid var(--success); }
+        
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .issue-id { font-weight: bold; font-family: monospace; }
+        .severity-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .severity-badge.blocker { background: #fef2f2; color: var(--danger); }
+        .severity-badge.high { background: #fffbeb; color: #b45309; }
+        .severity-badge.medium { background: #ecfeff; color: #0e7490; }
+        .severity-badge.low { background: #f0fdf4; color: #15803d; }
+        
+        .issue-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .issue-category { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 0.75rem; }
+        .issue-description { margin-bottom: 1rem; }
+        
+        .evidence {
+            background: #f1f5f9;
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+        
+        .screenshot-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .screenshot-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .screenshot-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: top;
+        }
+        .screenshot-card .caption {
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th { background: #f1f5f9; font-weight: 600; }
+        
+        .check { color: var(--success); }
+        .cross { color: var(--danger); }
+        
+        .top-issues {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .top-issues ol { padding-left: 1.5rem; }
+        .top-issues li { margin-bottom: 0.5rem; }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .nav-tab:hover { background: #f1f5f9; }
+        
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .issue-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 QA Audit Report - CV Website</h1>
+        <p class="meta">
+            <strong>Audit Date:</strong> 2025-12-28 |
+            <strong>Track:</strong> Website QA Visual + Functional Audit |
+            <strong>Repository:</strong> premium-cv-port-land
+        </p>
+
+        <h2>📊 Executive Summary</h2>
+        <div class="summary-grid">
+            <div class="summary-card blocker">
+                <div class="count">1</div>
+                <div>Blocker</div>
+            </div>
+            <div class="summary-card high">
+                <div class="count">8</div>
+                <div>High</div>
+            </div>
+            <div class="summary-card medium">
+                <div class="count">14</div>
+                <div>Medium</div>
+            </div>
+            <div class="summary-card low">
+                <div class="count">9</div>
+                <div>Low</div>
+            </div>
+        </div>
+
+        <div class="top-issues">
+            <h3>🎯 Top 10 Must-Fix Items</h3>
+            <ol>
+                <li><strong>SCOPE-001:</strong> EnhancedUIDemo section contains irrelevant "demo" content</li>
+                <li><strong>DATA-001:</strong> Footer displays "Unknown" instead of actual name</li>
+                <li><strong>I18N-001:</strong> EnhancedUIDemo section NOT translated for DE/FA languages</li>
+                <li><strong>BUILD-001:</strong> 3 CSS warnings about unexpected ParenthesisBlock tokens</li>
+                <li><strong>BUILD-002:</strong> 2 chunks exceed 500KB (main 818KB, SkillsViz 436KB)</li>
+                <li><strong>NET-001:</strong> Multiple 404 errors for Cloudinary images</li>
+                <li><strong>NET-002:</strong> 401 Unauthorized errors for API calls</li>
+                <li><strong>DATA-002:</strong> Invalid date format "2020-9-31" in certification data</li>
+                <li><strong>PERF-001:</strong> Deprecated API usage warnings</li>
+                <li><strong>A11Y-001:</strong> PWA icon manifest warning</li>
+            </ol>
+        </div>
+
+        <h2>📸 Screenshot Gallery</h2>
+        <div class="screenshot-gallery">
+            <div class="screenshot-card">
+                <img src="qa_artifacts/screenshots/qa-full-page-en-desktop.png" alt="English Full Page">
+                <div class="caption">English (EN) - Desktop Full Page</div>
+            </div>
+            <div class="screenshot-card">
+                <img src="qa_artifacts/screenshots/qa-fa-desktop-full.png" alt="Persian Full Page">
+                <div class="caption">Persian (FA) - Desktop Full Page - RTL Layout</div>
+            </div>
+            <div class="screenshot-card">
+                <img src="qa_artifacts/screenshots/enhanced-ui-demo-section.png" alt="Enhanced UI Demo Section">
+                <div class="caption">⚠️ EnhancedUIDemo Section (BLOCKER - Should be removed)</div>
+            </div>
+        </div>
+
+        <h2>🔴 Blocker Issues</h2>
+        
+        <div class="issue-card blocker">
+            <div class="issue-header">
+                <span class="issue-id">SCOPE-001</span>
+                <span class="severity-badge blocker">Blocker</span>
+            </div>
+            <div class="issue-title">EnhancedUIDemo Section Contains Irrelevant Demo Content</div>
+            <div class="issue-category">Category: Product Relevance / Scope</div>
+            <div class="issue-description">
+                <p>The EnhancedUIDemo section displays a "3D Language Carousel" and "Animated Timeline" that showcase UI features rather than actual CV content:</p>
+                <ul>
+                    <li>Contains a duplicate language selector (already exists in header)</li>
+                    <li>Shows a timeline with fake feature items (not CV data)</li>
+                    <li>Takes significant viewport space between Hero and About sections</li>
+                    <li>Confuses the CV narrative</li>
+                </ul>
+            </div>
+            <p><strong>Suspected Code:</strong> <code>frontend/src/components/sections/EnhancedUIDemo.tsx</code></p>
+            <p><strong>Suggested Fix:</strong> Remove or hide this section from production</p>
+        </div>
+
+        <h2>🟠 High Issues</h2>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <span class="issue-id">DATA-001</span>
+                <span class="severity-badge high">High</span>
+            </div>
+            <div class="issue-title">Footer Displays "Unknown" Instead of Actual Name</div>
+            <div class="issue-category">Category: Data Binding</div>
+            <div class="issue-description">
+                <p>The footer copyright shows "© 2025 Unknown. All rights reserved." instead of the person's actual name.</p>
+            </div>
+            <div class="evidence">© 2025 Unknown. All rights reserved.</div>
+            <p><strong>Expected:</strong> © 2025 Ramin Yazdani. All rights reserved.</p>
+        </div>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <span class="issue-id">I18N-001</span>
+                <span class="severity-badge high">High</span>
+            </div>
+            <div class="issue-title">EnhancedUIDemo Section Not Translated</div>
+            <div class="issue-category">Category: i18n</div>
+            <div class="issue-description">
+                <p>The EnhancedUIDemo section displays English text even when viewing in German (DE) or Persian (FA).</p>
+                <p>Text like "Enhanced UI Features", "Premium Interactive Components", "3D Language Carousel" remains in English.</p>
+            </div>
+        </div>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <span class="issue-id">BUILD-001</span>
+                <span class="severity-badge high">High</span>
+            </div>
+            <div class="issue-title">CSS Parsing Warnings for @media Queries</div>
+            <div class="issue-category">Category: Build</div>
+            <div class="evidence">
+@media (width >= (display-mode: standalone)) - Unexpected token ParenthesisBlock
+@media (width >= (pointer: coarse)) - Unexpected token ParenthesisBlock
+@media (width >= (pointer: fine)) - Unexpected token ParenthesisBlock
+            </div>
+        </div>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <span class="issue-id">BUILD-002</span>
+                <span class="severity-badge high">High</span>
+            </div>
+            <div class="issue-title">Large Bundle Sizes Exceeding 500KB Limit</div>
+            <div class="issue-category">Category: Performance / Build</div>
+            <div class="evidence">
+index-DlwatTDZ.js: 818KB (gzip: 225KB)
+SkillsVisualizationDashboard-BCDybaUb.js: 436KB (gzip: 116KB)
+            </div>
+        </div>
+
+        <div class="issue-card high">
+            <div class="issue-header">
+                <span class="issue-id">NET-001</span>
+                <span class="severity-badge high">High</span>
+            </div>
+            <div class="issue-title">Multiple 404 Errors for Cloudinary Images</div>
+            <div class="issue-category">Category: Network / Assets</div>
+            <div class="evidence">Failed to load resource: 404 @ https://res.cloudinary.com/... (10+ occurrences)</div>
+        </div>
+
+        <h2>✅ Coverage Summary</h2>
+        
+        <h3>Languages Tested</h3>
+        <table>
+            <tr><th>Language</th><th>Code</th><th>Direction</th><th>Status</th></tr>
+            <tr><td>English</td><td>en</td><td>LTR</td><td class="check">✅ Tested</td></tr>
+            <tr><td>German</td><td>de</td><td>LTR</td><td class="check">✅ Tested</td></tr>
+            <tr><td>Persian</td><td>fa</td><td>RTL</td><td class="check">✅ Tested</td></tr>
+        </table>
+
+        <h3>Viewports Tested</h3>
+        <table>
+            <tr><th>Viewport</th><th>Size</th><th>Status</th></tr>
+            <tr><td>Desktop</td><td>1440×900</td><td class="check">✅ Tested</td></tr>
+            <tr><td>Tablet</td><td>768×1024</td><td class="check">✅ Tested</td></tr>
+            <tr><td>Mobile</td><td>390×844</td><td class="check">✅ Tested</td></tr>
+        </table>
+
+        <h3>Expert Review Scores</h3>
+        <table>
+            <tr><th>Section</th><th>PM</th><th>CV</th><th>UI</th><th>UX</th><th>Top Issue</th></tr>
+            <tr><td>Hero</td><td>4/5</td><td>4/5</td><td>4/5</td><td>4/5</td><td>Role rotation distracting</td></tr>
+            <tr style="background:#fef2f2"><td>EnhancedUIDemo</td><td class="cross">1/5</td><td class="cross">0/5</td><td>3/5</td><td>2/5</td><td><strong>REMOVE - Irrelevant</strong></td></tr>
+            <tr><td>Basics/About</td><td>4/5</td><td>4/5</td><td>4/5</td><td>4/5</td><td>Good layout</td></tr>
+            <tr><td>Profiles</td><td>5/5</td><td>5/5</td><td>5/5</td><td>5/5</td><td>Excellent</td></tr>
+            <tr><td>Education</td><td>4/5</td><td>4/5</td><td>4/5</td><td>4/5</td><td>Clear display</td></tr>
+            <tr><td>Skills</td><td>3/5</td><td>3/5</td><td>4/5</td><td>3/5</td><td>196 skills overwhelming</td></tr>
+            <tr><td>Testimonials</td><td>2/5</td><td>2/5</td><td>4/5</td><td>3/5</td><td>Placeholder names</td></tr>
+            <tr><td>Footer</td><td>3/5</td><td>2/5</td><td>3/5</td><td>3/5</td><td>"Unknown" bug + easter egg</td></tr>
+        </table>
+
+        <h2>📁 Artifacts Location</h2>
+        <ul>
+            <li><code>qa_artifacts/screenshots/</code> - All captured screenshots</li>
+            <li><code>qa_artifacts/console_logs/</code> - Browser console logs per language</li>
+            <li><code>qa_artifacts/metadata/</code> - Stack detection, test matrix, issues JSON</li>
+            <li><code>QA_REPORT.md</code> - Full markdown report</li>
+        </ul>
+
+        <hr style="margin: 2rem 0">
+        <p class="meta">Generated by Copilot QA Audit Agent | Track 1: Website QA Visual + Functional Audit</p>
+    </div>
+</body>
+</html>

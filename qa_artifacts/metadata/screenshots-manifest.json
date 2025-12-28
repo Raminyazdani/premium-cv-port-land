@@ -1,0 +1,938 @@
+[
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/en/desktop/full-page.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/en/desktop/components/header.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/hero.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/about.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/profiles.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/education.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/experience.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/projects.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/publications.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/languages.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/certifications.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/skills.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/references.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/en/desktop/sections/contact.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "desktop",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/en/desktop/components/footer.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/en/tablet/full-page.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/en/tablet/components/header.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/hero.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/about.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/profiles.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/education.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/experience.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/projects.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/publications.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/languages.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/certifications.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/skills.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/references.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/en/tablet/sections/contact.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "tablet",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/en/tablet/components/footer.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/en/mobile/full-page.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/en/mobile/components/header.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/hero.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/about.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/profiles.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/education.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/experience.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/projects.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/publications.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/languages.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/certifications.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/skills.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/references.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/en/mobile/sections/contact.png"
+  },
+  {
+    "lang": "en",
+    "viewport": "mobile",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/en/mobile/components/footer.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/de/desktop/full-page.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/de/desktop/components/header.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/hero.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/about.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/profiles.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/education.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/experience.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/projects.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/publications.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/languages.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/certifications.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/skills.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/references.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/de/desktop/sections/contact.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "desktop",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/de/desktop/components/footer.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/de/tablet/full-page.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/de/tablet/components/header.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/hero.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/about.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/profiles.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/education.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/experience.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/projects.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/publications.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/languages.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/certifications.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/skills.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/references.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/de/tablet/sections/contact.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "tablet",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/de/tablet/components/footer.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/de/mobile/full-page.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/de/mobile/components/header.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/hero.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/about.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/profiles.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/education.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/experience.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/projects.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/publications.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/languages.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/certifications.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/skills.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/references.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/de/mobile/sections/contact.png"
+  },
+  {
+    "lang": "de",
+    "viewport": "mobile",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/de/mobile/components/footer.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/fa/desktop/full-page.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/fa/desktop/components/header.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/hero.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/about.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/profiles.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/education.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/experience.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/projects.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/publications.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/languages.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/certifications.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/skills.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/references.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/fa/desktop/sections/contact.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "desktop",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/fa/desktop/components/footer.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/fa/tablet/full-page.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/fa/tablet/components/header.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/hero.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/about.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/profiles.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/education.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/experience.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/projects.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/publications.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/languages.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/certifications.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/skills.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/references.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/fa/tablet/sections/contact.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "tablet",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/fa/tablet/components/footer.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "full-page",
+    "path": "qa_artifacts/screenshots/fa/mobile/full-page.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "component",
+    "name": "header",
+    "path": "qa_artifacts/screenshots/fa/mobile/components/header.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "hero",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/hero.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "about",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/about.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "profiles",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/profiles.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "education",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/education.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "experience",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/experience.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "projects",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/projects.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "publications",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/publications.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "languages",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/languages.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "certifications",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/certifications.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "skills",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/skills.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "references",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/references.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "section",
+    "name": "contact",
+    "path": "qa_artifacts/screenshots/fa/mobile/sections/contact.png"
+  },
+  {
+    "lang": "fa",
+    "viewport": "mobile",
+    "type": "component",
+    "name": "footer",
+    "path": "qa_artifacts/screenshots/fa/mobile/components/footer.png"
+  }
+]
