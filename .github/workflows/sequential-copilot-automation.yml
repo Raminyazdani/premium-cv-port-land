@@ -1,395 +1,322 @@
 name: Sequential Copilot Automation
 
-on: 
-  # Trigger when a PR requests a review (Copilot does this when done)
+on:
+  # Copilot (or a bot) requests a review when it thinks it's done
   pull_request:
     types: [review_requested]
-  
+
   # Manual trigger to start the chain
   workflow_dispatch:
-    inputs: 
+    inputs:
       start_from:
-        description:  'Start from FE number (leave empty for lowest unassigned)'
+        description: "Start from FE number (leave empty for lowest unassigned)"
         required: false
-        default: ''
+        default: ""
 
 permissions:
-  contents:  write
-  pull-requests:  write
+  contents: write
+  pull-requests: write
   issues: write
+
+concurrency:
+  group: sequential-copilot
+  cancel-in-progress: false
 
 jobs:
   # Job 1: Manual start - assign Copilot to a specific or lowest FE issue
   manual-start:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    
     steps:
       - name: Find and assign issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          START_NUM="${{ github.event.inputs. start_from }}"
-          
-          # Get all open frontend issues
-          ALL_ISSUES=$(gh issue list \
-            --repo ${{ github.repository }} \
-            --label "frontend" \
-            --state open \
-            --json number,title,assignees \
-            --limit 100)
-          
-          if [ -z "$START_NUM" ]; then
-            echo "🔍 No FE number specified, finding lowest unassigned..."
-            
-            # Find the lowest unassigned FE issue
-            ISSUE_DATA=$(echo "$ALL_ISSUES" | jq -r '
-              [. [] | 
-                select(.title | test("FE-\\d+")) |
-                .  + {fe_num: (. title | capture("FE-(? <n>\\d+)") | . n | tonumber)}
-              ] |
-              [.[] | 
-                select(
-                  ([.assignees[].login | select(.  == "Copilot" or . == "copilot")] | length == 0)
-                )
-              ] |
+          set -euo pipefail
+
+          START_NUM="${{ github.event.inputs.start_from }}"
+          REPO="${{ github.repository }}"
+
+          echo "Repo: $REPO"
+          echo "Start from: ${START_NUM:-<empty>}"
+
+          # List open issues and filter FE-* with jq
+          ALL_ISSUES="$(gh issue list --repo "$REPO" --state open --json number,title,assignees --limit 200)"
+
+          if [ -z "${START_NUM}" ]; then
+            echo "🔍 No FE number specified; finding lowest unassigned FE issue..."
+
+            ISSUE_DATA="$(echo "$ALL_ISSUES" | jq -c '
+              map(select(.title | test("\\bFE-[0-9]+\\b"))) |
+              map(. + {
+                fe_num: (.title | capture("FE-(?<n>[0-9]+)") | .n | tonumber),
+                assignee_logins: ((.assignees // []) | map(.login))
+              }) |
+              map(select((.assignee_logins | map(ascii_downcase) | index("copilot")) == null)) |
               sort_by(.fe_num) |
               .[0] // empty
-            ')
-            
+            ')"
+
             if [ -z "$ISSUE_DATA" ] || [ "$ISSUE_DATA" = "null" ]; then
-              echo "🎉 No unassigned frontend issues found - all done!"
+              echo "🎉 No unassigned FE issues found."
               exit 0
             fi
-            
-            ISSUE_NUM=$(echo "$ISSUE_DATA" | jq -r '.number')
-            FE_NUM=$(echo "$ISSUE_DATA" | jq -r '.fe_num')
-            TITLE=$(echo "$ISSUE_DATA" | jq -r '. title')
-            
-            echo "✅ Found lowest unassigned:  #$ISSUE_NUM (FE-$FE_NUM) - $TITLE"
+
+            ISSUE_NUM="$(echo "$ISSUE_DATA" | jq -r '.number')"
+            FE_NUM="$(echo "$ISSUE_DATA" | jq -r '.fe_num')"
+            TITLE="$(echo "$ISSUE_DATA" | jq -r '.title')"
           else
             echo "🔍 Looking for FE-$START_NUM..."
-            
-            # Find the specific issue
-            ISSUE_DATA=$(echo "$ALL_ISSUES" | jq -r --arg num "$START_NUM" '
-              [.[] | 
-                select(.title | test("FE-" + $num + "\\b"))
-              ] | .[0] // empty
-            ')
-            
+
+            ISSUE_DATA="$(echo "$ALL_ISSUES" | jq -c --arg num "$START_NUM" '
+              map(select(.title | test("\\bFE-" + $num + "\\b"))) |
+              .[0] // empty
+            ')"
+
             if [ -z "$ISSUE_DATA" ] || [ "$ISSUE_DATA" = "null" ]; then
               echo "❌ Could not find FE-$START_NUM"
               exit 1
             fi
-            
-            ISSUE_NUM=$(echo "$ISSUE_DATA" | jq -r '.number')
-            FE_NUM=$START_NUM
-            TITLE=$(echo "$ISSUE_DATA" | jq -r '.title')
-            
-            echo "✅ Found issue #$ISSUE_NUM (FE-$FE_NUM) - $TITLE"
+
+            ISSUE_NUM="$(echo "$ISSUE_DATA" | jq -r '.number')"
+            FE_NUM="$START_NUM"
+            TITLE="$(echo "$ISSUE_DATA" | jq -r '.title')"
           fi
-          
-          echo "🤖 Assigning Copilot to issue #$ISSUE_NUM..."
-          
-          # Assign Copilot to the issue
-          gh issue edit $ISSUE_NUM \
-            --repo ${{ github.repository }} \
-            --add-assignee copilot
-          
-          # Add a comment to trigger Copilot
-          gh issue comment $ISSUE_NUM \
-            --repo ${{ github.repository }} \
-            --body "🤖 **Manual Start - Sequential Automation**
+
+          echo "✅ Selected issue #$ISSUE_NUM (FE-$FE_NUM): $TITLE"
+          echo "🤖 Assigning @copilot..."
+
+          gh issue edit "$ISSUE_NUM" --repo "$REPO" --add-assignee copilot
+
+          gh issue comment "$ISSUE_NUM" --repo "$REPO" --body "$(cat <<EOF
+🤖 **Manual Start - Sequential Automation**
 
 Automation starting from this issue (FE-$FE_NUM).
 
-@copilot - Please work on this issue. 
+@copilot Please work on this issue.
 
 **Instructions:**
-- Follow guidelines in .github/copilot-instructions. md
+- Follow guidelines in \`.github/copilot-instructions.md\`
 - Provide comprehensive analysis and testing
 - Create a PR when ready
 
 ---
-_Manually triggered workflow_"
-          
-          echo "✅ Assigned Copilot to issue #$ISSUE_NUM (FE-$FE_NUM)"
-          
-          # Summary
-          echo "## 🚀 Sequential Automation Started" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Assigned Copilot to **#$ISSUE_NUM** (FE-$FE_NUM)" >> $GITHUB_STEP_SUMMARY
-          echo "- Title: $TITLE" >> $GITHUB_STEP_SUMMARY
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+_Manually triggered workflow_
+EOF
+          )"
+
+          {
+            echo "## 🚀 Sequential Automation Started"
+            echo ""
+            echo "- Assigned Copilot to **#$ISSUE_NUM** (FE-$FE_NUM)"
+            echo "- Title: $TITLE"
+          } >> "$GITHUB_STEP_SUMMARY"
 
   # Job 2: When Copilot's PR requests review, auto-merge and assign next issue
   auto-merge-and-continue:
     if: |
-      github.event_name == 'pull_request' && 
-      github. event.action == 'review_requested' &&
-      (github.event.pull_request.user.login == 'Copilot' || 
-       github.event.pull_request. user.login == 'copilot' ||
-       github. event.pull_request.user.type == 'Bot')
+      github.event_name == 'pull_request' &&
+      github.event.action == 'review_requested'
     runs-on: ubuntu-latest
-    
-    steps: 
-      - name:  Verify PR is from Copilot
+    steps:
+      - name: Verify PR author looks like Copilot
         id: verify
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_AUTHOR="${{ github.event. pull_request.user.login }}"
-          PR_NUMBER="${{ github.event. pull_request.number }}"
-          
+          set -euo pipefail
+
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          REPO="${{ github.repository }}"
+
           echo "📝 PR #$PR_NUMBER by $PR_AUTHOR requested review"
-          
-          if [ "$PR_AUTHOR" != "Copilot" ] && [ "$PR_AUTHOR" != "copilot" ]; then
-            echo "⚠️ PR is not from Copilot, skipping"
-            echo "skip=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          
-          echo "✅ Confirmed PR is from Copilot"
-          echo "skip=false" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Auto-merge PR
-        if: steps.verify.outputs. skip != 'true'
+          # Many orgs see Copilot PRs as github-copilot[bot]
+          author_lc="$(echo "$PR_AUTHOR" | tr '[:upper:]' '[:lower:]')"
+
+          if echo "$author_lc" | grep -q "copilot"; then
+            echo "✅ PR author contains 'copilot' -> proceeding"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "⚠️ PR does not look like Copilot (author: $PR_AUTHOR); skipping automation"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Enable auto-merge (merge when checks pass)
         id: merge
-        run: |
-          PR_NUMBER="${{ github.event.pull_request. number }}"
-          
-          echo "🔀 Auto-merging PR #$PR_NUMBER..."
-          
-          # Wait a moment for any checks to register
-          sleep 5
-          
-          # Try to merge the PR
-          if gh pr merge $PR_NUMBER \
-            --repo ${{ github.repository }} \
-            --merge \
-            --admin; then
-            echo "✅ Successfully merged PR #$PR_NUMBER"
-            echo "merged=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️ Could not merge PR #$PR_NUMBER (may need manual review)"
-            echo "merged=false" >> $GITHUB_OUTPUT
-          fi
+        if: steps.verify.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name:  Extract completed issue number
-        if: steps.verify.outputs.skip != 'true' && steps.merge. outputs.merged == 'true'
+        run: |
+          set -euo pipefail
+
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          REPO="${{ github.repository }}"
+
+          echo "🔀 Enabling auto-merge for PR #$PR_NUMBER..."
+
+          # This queues merge; it will merge once required checks are green
+          if gh pr merge "$PR_NUMBER" --repo "$REPO" --merge --auto; then
+            echo "✅ Auto-merge enabled for PR #$PR_NUMBER"
+            echo "merged=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "⚠️ Could not enable auto-merge (may need manual review/permissions)"
+            echo "merged=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Extract completed issue number from PR (Fixes/Closes/Resolves #N)
         id: get_issue
+        if: steps.verify.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_NUMBER="${{ github.event. pull_request.number }}"
-          
-          # Get PR details
-          PR_DATA=$(gh pr view $PR_NUMBER \
-            --repo ${{ github.repository }} \
-            --json body,title)
-          
-          PR_BODY=$(echo "$PR_DATA" | jq -r '.body // ""')
-          PR_TITLE=$(echo "$PR_DATA" | jq -r '.title')
-          
+          set -euo pipefail
+
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          REPO="${{ github.repository }}"
+
+          PR_DATA="$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body,title)"
+          PR_BODY="$(echo "$PR_DATA" | jq -r '.body // ""')"
+          PR_TITLE="$(echo "$PR_DATA" | jq -r '.title // ""')"
+
           echo "📝 PR Title: $PR_TITLE"
-          
-          # Try to extract issue number from PR body (Fixes #123, Closes #123, etc.)
-          ISSUE_NUM=$(echo "$PR_BODY" | grep -oP '(Fixes|Closes|Resolves)\s*#\K\d+' | head -1)
-          
+
+          ISSUE_NUM="$(echo "$PR_BODY" | grep -oP '(Fixes|Closes|Resolves)\s*#\K\d+' | head -n 1 || true)"
           if [ -z "$ISSUE_NUM" ]; then
-            # Try from PR title
-            ISSUE_NUM=$(echo "$PR_TITLE" | grep -oP '#\K\d+' | head -1)
+            ISSUE_NUM="$(echo "$PR_TITLE" | grep -oP '#\K\d+' | head -n 1 || true)"
           fi
-          
+
           if [ -z "$ISSUE_NUM" ]; then
-            echo "⚠️ Could not extract issue number from PR"
-            echo "found=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Could not extract issue number from PR; cannot continue chain safely."
+            echo "found=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          
-          echo "✅ Completed issue:  #$ISSUE_NUM"
-          echo "found=true" >> $GITHUB_OUTPUT
-          echo "issue_num=$ISSUE_NUM" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Get sequence number from issue
-        if:  steps.verify.outputs.skip != 'true' && steps.merge.outputs.merged == 'true' && steps.get_issue.outputs.found == 'true'
+
+          echo "✅ Completed issue: #$ISSUE_NUM"
+          echo "found=true" >> "$GITHUB_OUTPUT"
+          echo "issue_num=$ISSUE_NUM" >> "$GITHUB_OUTPUT"
+
+      - name: Get FE number from the completed issue title
         id: get_sequence
+        if: steps.verify.outputs.skip != 'true' && steps.get_issue.outputs.found == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ISSUE_NUM=${{ steps.get_issue.outputs.issue_num }}
-          
-          ISSUE_DATA=$(gh issue view $ISSUE_NUM \
-            --repo ${{ github. repository }} \
-            --json title)
-          
-          TITLE=$(echo "$ISSUE_DATA" | jq -r '.title')
+          set -euo pipefail
+
+          ISSUE_NUM="${{ steps.get_issue.outputs.issue_num }}"
+          REPO="${{ github.repository }}"
+
+          ISSUE_DATA="$(gh issue view "$ISSUE_NUM" --repo "$REPO" --json title)"
+          TITLE="$(echo "$ISSUE_DATA" | jq -r '.title // ""')"
+
           echo "📝 Issue title: $TITLE"
-          
-          # Extract FE-X number from title
-          CURRENT_SEQ=$(echo "$TITLE" | grep -oP 'FE-\K\d+')
-          
+
+          CURRENT_SEQ="$(echo "$TITLE" | grep -oP '\bFE-\K\d+' | head -n 1 || true)"
           if [ -z "$CURRENT_SEQ" ]; then
-            echo "⚠️ Could not extract FE number from title"
-            echo "found=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Could not extract FE number from issue title; cannot continue chain safely."
+            echo "found=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          
-          echo "🔢 Completed:  FE-$CURRENT_SEQ"
-          echo "found=true" >> $GITHUB_OUTPUT
-          echo "current_seq=$CURRENT_SEQ" >> $GITHUB_OUTPUT
-        env: 
-          GH_TOKEN: ${{ secrets. GITHUB_TOKEN }}
-      
-      - name: Find next unassigned frontend issue
-        if:  steps.verify.outputs.skip != 'true' && steps. merge.outputs.merged == 'true'
+
+          echo "found=true" >> "$GITHUB_OUTPUT"
+          echo "current_seq=$CURRENT_SEQ" >> "$GITHUB_OUTPUT"
+          echo "🔢 Completed: FE-$CURRENT_SEQ"
+
+      - name: Find next unassigned FE issue
         id: find_next
-        run: |
-          CURRENT_SEQ="${{ steps.get_sequence.outputs.current_seq }}"
-          
-          echo "🔍 Looking for next unassigned frontend issue..."
-          
-          # Get all open frontend issues
-          ALL_ISSUES=$(gh issue list \
-            --repo ${{ github.repository }} \
-            --label "frontend" \
-            --state open \
-            --json number,title,assignees \
-            --limit 100)
-          
-          # If we have a current sequence, find next >= current+1
-          # Otherwise, find the absolute lowest unassigned
-          if [ -n "$CURRENT_SEQ" ]; then
-            NEXT_SEQ=$((CURRENT_SEQ + 1))
-            echo "🔍 Looking for FE-$NEXT_SEQ or higher..."
-            
-            NEXT_ISSUE_DATA=$(echo "$ALL_ISSUES" | jq -r --arg next_seq "$NEXT_SEQ" '
-              [.[] | 
-                select(. title | test("FE-\\d+")) |
-                .  + {fe_num: (.title | capture("FE-(? <n>\\d+)") | .n | tonumber)}
-              ] |
-              [.[] | 
-                select(
-                  . fe_num >= ($next_seq | tonumber) and
-                  ([.assignees[]. login | select(.  == "Copilot" or . == "copilot")] | length == 0)
-                )
-              ] |
-              sort_by(.fe_num) |
-              .[0] // empty
-            ')
-          else
-            echo "🔍 Finding lowest unassigned issue..."
-            
-            NEXT_ISSUE_DATA=$(echo "$ALL_ISSUES" | jq -r '
-              [.[] | 
-                select(.title | test("FE-\\d+")) |
-                . + {fe_num: (.title | capture("FE-(?<n>\\d+)") | .n | tonumber)}
-              ] |
-              [. [] | 
-                select(
-                  ([.assignees[]. login | select(.  == "Copilot" or . == "copilot")] | length == 0)
-                )
-              ] |
-              sort_by(. fe_num) |
-              .[0] // empty
-            ')
-          fi
-          
-          if [ -n "$NEXT_ISSUE_DATA" ] && [ "$NEXT_ISSUE_DATA" != "null" ]; then
-            NEXT_ISSUE=$(echo "$NEXT_ISSUE_DATA" | jq -r '.number')
-            NEXT_FE_NUM=$(echo "$NEXT_ISSUE_DATA" | jq -r '.fe_num')
-            NEXT_TITLE=$(echo "$NEXT_ISSUE_DATA" | jq -r '.title')
-            
-            echo "✅ Found next unassigned issue:  #$NEXT_ISSUE (FE-$NEXT_FE_NUM) - $NEXT_TITLE"
-            echo "found=true" >> $GITHUB_OUTPUT
-            echo "next_issue=$NEXT_ISSUE" >> $GITHUB_OUTPUT
-            echo "next_fe_num=$NEXT_FE_NUM" >> $GITHUB_OUTPUT
-            echo "next_title=$NEXT_TITLE" >> $GITHUB_OUTPUT
-          else
-            echo "🎉 No more unassigned issues found - all done!"
-            echo "found=false" >> $GITHUB_OUTPUT
-          fi
-        env: 
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Assign Copilot to next issue
-        if: steps.find_next.outputs. found == 'true'
-        run: |
-          NEXT_ISSUE=${{ steps.find_next.outputs.next_issue }}
-          NEXT_FE_NUM=${{ steps. find_next.outputs.next_fe_num }}
-          CURRENT_SEQ="${{ steps.get_sequence.outputs.current_seq }}"
-          
-          echo "🤖 Assigning @copilot to issue #$NEXT_ISSUE (FE-$NEXT_FE_NUM)"
-          
-          # Assign Copilot
-          gh issue edit $NEXT_ISSUE \
-            --repo ${{ github.repository }} \
-            --add-assignee copilot
-          
-          # Build comment body
-          if [ -n "$CURRENT_SEQ" ]; then
-            COMMENT_BODY="🤖 **Automated Assignment - Sequential Chain**
-
-Previous issue FE-$CURRENT_SEQ has been completed and merged to main. 
-
-@copilot - Please work on this issue next.
-
-**Instructions:**
-- Follow all guidelines in .github/copilot-instructions.md
-- Provide comprehensive analysis
-- Write thorough unit tests
-- Consider all language variants (EN, DE, FA)
-- Ensure accessibility compliance
-- Create a PR when ready
-
----
-_Automated workflow - Sequence:  FE-$CURRENT_SEQ ✅ → FE-$NEXT_FE_NUM 🚀_"
-          else
-            COMMENT_BODY="🤖 **Automated Assignment - Sequential Chain**
-
-@copilot - Please work on this issue. 
-
-**Instructions:**
-- Follow all guidelines in .github/copilot-instructions.md
-- Provide comprehensive analysis
-- Write thorough unit tests
-- Consider all language variants (EN, DE, FA)
-- Ensure accessibility compliance
-- Create a PR when ready
-
----
-_Automated workflow_"
-          fi
-          
-          # Add comment to trigger Copilot
-          gh issue comment $NEXT_ISSUE \
-            --repo ${{ github.repository }} \
-            --body "$COMMENT_BODY"
-          
-          echo "✅ Successfully assigned Copilot to issue #$NEXT_ISSUE (FE-$NEXT_FE_NUM)"
+        if: steps.verify.outputs.skip != 'true' && steps.get_sequence.outputs.found == 'true'
         env:
-          GH_TOKEN:  ${{ secrets. GITHUB_TOKEN }}
-      
-      - name: Workflow summary
-        if:  steps.verify.outputs.skip != 'true'
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "## 🎯 Sequential Workflow Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "${{ steps.merge.outputs.merged }}" == "true" ]; then
-            echo "- ✅ Auto-merged PR #${{ github.event.pull_request.number }}" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⚠️ Could not auto-merge PR #${{ github.event. pull_request.number }}" >> $GITHUB_STEP_SUMMARY
+          set -euo pipefail
+
+          REPO="${{ github.repository }}"
+          CURRENT_SEQ="${{ steps.get_sequence.outputs.current_seq }}"
+          NEXT_SEQ="$((CURRENT_SEQ + 1))"
+
+          echo "🔍 Finding next unassigned FE issue (>= FE-$NEXT_SEQ)..."
+
+          ALL_ISSUES="$(gh issue list --repo "$REPO" --state open --json number,title,assignees --limit 200)"
+
+          NEXT_ISSUE_DATA="$(echo "$ALL_ISSUES" | jq -c --arg next_seq "$NEXT_SEQ" '
+            map(select(.title | test("\\bFE-[0-9]+\\b"))) |
+            map(. + {
+              fe_num: (.title | capture("FE-(?<n>[0-9]+)") | .n | tonumber),
+              assignee_logins: ((.assignees // []) | map(.login))
+            }) |
+            map(select(.fe_num >= ($next_seq | tonumber))) |
+            map(select((.assignee_logins | map(ascii_downcase) | index("copilot")) == null)) |
+            sort_by(.fe_num) |
+            .[0] // empty
+          ')"
+
+          if [ -z "$NEXT_ISSUE_DATA" ] || [ "$NEXT_ISSUE_DATA" = "null" ]; then
+            echo "🎉 No more unassigned FE issues found."
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
-          
-          if [ "${{ steps. get_issue.outputs.found }}" == "true" ]; then
-            echo "- ✅ Completed issue #${{ steps.get_issue. outputs.issue_num }} (FE-${{ steps.get_sequence.outputs.current_seq }})" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ "${{ steps. find_next.outputs.found }}" == "true" ]; then
-            echo "- ✅ Assigned issue #${{ steps.find_next.outputs.next_issue }} (FE-${{ steps.find_next. outputs.next_fe_num }}) to Copilot" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### 🔄 Next Up" >> $GITHUB_STEP_SUMMARY
-            echo "**${{ steps.find_next.outputs. next_title }}**" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- 🎉 All frontend issues complete or already assigned!" >> $GITHUB_STEP_SUMMARY
-          fi
+
+          NEXT_ISSUE="$(echo "$NEXT_ISSUE_DATA" | jq -r '.number')"
+          NEXT_FE_NUM="$(echo "$NEXT_ISSUE_DATA" | jq -r '.fe_num')"
+          NEXT_TITLE="$(echo "$NEXT_ISSUE_DATA" | jq -r '.title')"
+
+          echo "✅ Next: #$NEXT_ISSUE (FE-$NEXT_FE_NUM) - $NEXT_TITLE"
+          echo "found=true" >> "$GITHUB_OUTPUT"
+          echo "next_issue=$NEXT_ISSUE" >> "$GITHUB_OUTPUT"
+          echo "next_fe_num=$NEXT_FE_NUM" >> "$GITHUB_OUTPUT"
+          echo "next_title=$NEXT_TITLE" >> "$GITHUB_OUTPUT"
+
+      - name: Assign Copilot to next issue
+        if: steps.find_next.outputs.found == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          REPO="${{ github.repository }}"
+          NEXT_ISSUE="${{ steps.find_next.outputs.next_issue }}"
+          NEXT_FE_NUM="${{ steps.find_next.outputs.next_fe_num }}"
+          CURRENT_SEQ="${{ steps.get_sequence.outputs.current_seq }}"
+
+          echo "🤖 Assigning @copilot to issue #$NEXT_ISSUE (FE-$NEXT_FE_NUM)"
+
+          gh issue edit "$NEXT_ISSUE" --repo "$REPO" --add-assignee copilot
+
+          gh issue comment "$NEXT_ISSUE" --repo "$REPO" --body "$(cat <<EOF
+🤖 **Automated Assignment - Sequential Chain**
+
+Previous issue FE-$CURRENT_SEQ is associated with the PR that just requested review.
+
+@copilot Please work on this issue next.
+
+**Instructions:**
+- Follow all guidelines in \`.github/copilot-instructions.md\`
+- Provide comprehensive analysis
+- Write thorough unit tests
+- Consider all language variants (EN, DE, FA)
+- Create a PR when ready
+
+---
+_Automated workflow - Sequence: FE-$CURRENT_SEQ → FE-$NEXT_FE_NUM_
+EOF
+          )"
+
+          echo "✅ Assigned Copilot to issue #$NEXT_ISSUE (FE-$NEXT_FE_NUM)"
+
+      - name: Workflow summary
+        if: steps.verify.outputs.skip != 'true'
+        run: |
+          {
+            echo "## 🎯 Sequential Workflow Summary"
+            echo ""
+            echo "- PR: #${{ github.event.pull_request.number }}"
+            echo "- Auto-merge enabled: ${{ steps.merge.outputs.merged }}"
+            echo "- Completed issue extracted: ${{ steps.get_issue.outputs.found }}"
+            echo "- Next issue found: ${{ steps.find_next.outputs.found }}"
+            if [ "${{ steps.find_next.outputs.found }}" = "true" ]; then
+              echo "- Next: #${{ steps.find_next.outputs.next_issue }} (FE-${{ steps.find_next.outputs.next_fe_num }})"
+              echo "- Title: ${{ steps.find_next.outputs.next_title }}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
