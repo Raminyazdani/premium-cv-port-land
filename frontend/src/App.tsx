@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useCallback } from 'react'
+import { lazy, Suspense, useEffect, useCallback } from 'react'
 import { Toaster } from 'sonner'
 import { FilterProvider, useFilter } from '@/context/FilterContext'
 import { LanguageProvider, useLanguage } from '@/context/LanguageContext'
@@ -14,7 +14,10 @@ import { CelebrationAnimation } from '@/components/CelebrationAnimation'
 import { PageCornerCurl } from '@/components/PageCornerCurl'
 import { MicroFeedbackProvider } from '@/components/MicroFeedback'
 import { SoundEffectsProvider } from '@/components/SoundEffects'
+import { CookieConsentBanner } from '@/components/CookieConsentBanner'
 import { extractAllTypeKeys } from '@/utils/dataLoader'
+import { initializeSEO } from '@/utils/seo'
+import { initAnalytics, trackPageView, setupExternalLinkTracking, createSectionObserver } from '@/utils/analytics'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/ErrorFallback'
 import { SkeletonSection } from '@/components/ui/skeleton'
@@ -31,6 +34,8 @@ const PublicationsSection = lazy(() => import('@/components/sections/Publication
 const ReferencesSection = lazy(() => import('@/components/sections/ReferencesSection').then(m => ({ default: m.ReferencesSection })))
 const ContactSection = lazy(() => import('@/components/sections/ContactSection').then(m => ({ default: m.ContactSection })))
 const Footer = lazy(() => import('@/components/sections/Footer').then(m => ({ default: m.Footer })))
+const SkillsVisualizationDashboard = lazy(() => import('@/components/SkillsVisualizationDashboard').then(m => ({ default: m.SkillsVisualizationDashboard })))
+const TestimonialsSection = lazy(() => import('@/components/TestimonialsSection').then(m => ({ default: m.TestimonialsSection })))
 
 function SectionSkeleton() {
   return <SkeletonSection items={2} />
@@ -39,7 +44,39 @@ function SectionSkeleton() {
 function AppContent() {
   const { setAvailableFocusOptions } = useFilter()
   const { data, isValid, errors, warnings } = useCVData()
-  const { isUnlocked, justUnlocked } = useKonami()
+  const { justUnlocked } = useKonami()
+  const { language } = useLanguage()
+
+  // Initialize SEO when data or language changes
+  useEffect(() => {
+    if (data) {
+      initializeSEO(data, language)
+    }
+  }, [data, language])
+
+  // Initialize analytics and tracking
+  useEffect(() => {
+    initAnalytics({ debug: import.meta.env.DEV })
+    trackPageView()
+    
+    // Setup external link tracking
+    const cleanupLinks = setupExternalLinkTracking()
+    
+    // Setup section scroll tracking
+    const observer = createSectionObserver()
+    if (observer) {
+      // Observe all sections with IDs
+      const sections = document.querySelectorAll('section[id]')
+      sections.forEach(section => observer.observe(section))
+      
+      return () => {
+        cleanupLinks()
+        observer.disconnect()
+      }
+    }
+    
+    return cleanupLinks
+  }, [])
 
   useEffect(() => {
     if (import.meta.env.DEV) {
@@ -84,6 +121,9 @@ function AppContent() {
       {/* Page corner curl effect */}
       <PageCornerCurl onClick={handleCornerClick} />
       
+      {/* Cookie Consent Banner */}
+      <CookieConsentBanner />
+      
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
@@ -126,6 +166,17 @@ function AppContent() {
         <Suspense fallback={<SectionSkeleton />}>
           <SkillsSection />
         </Suspense>
+        
+        {/* Skills Visualization Dashboard */}
+        <Suspense fallback={<SectionSkeleton />}>
+          <SkillsVisualizationDashboard />
+        </Suspense>
+        
+        {/* Testimonials Section */}
+        <Suspense fallback={<SectionSkeleton />}>
+          <TestimonialsSection />
+        </Suspense>
+        
         <Suspense fallback={<SectionSkeleton />}>
           <ReferencesSection />
         </Suspense>

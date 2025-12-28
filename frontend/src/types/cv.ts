@@ -106,6 +106,8 @@ export interface Project {
   entity?: string | null
   type?: string | null
   type_key?: string[] | null
+  // Case study fields (Task 7.5)
+  caseStudy?: ProjectCaseStudy | null
 }
 
 export interface PublicationIdentifiers {
@@ -242,6 +244,28 @@ export interface Experience {
   type_key?: string[] | null
 }
 
+export interface Testimonial {
+  quote: string
+  author: string
+  title?: string | null
+  company?: string | null
+  photoUrl?: string | null
+  date?: string | null
+  rating?: number | null
+  linkedInUrl?: string | null
+}
+
+export interface ProjectCaseStudy {
+  problem?: string | null
+  solution?: string | null
+  process?: string | null
+  results?: string | null
+  technologies?: string[] | null
+  images?: string[] | null
+  links?: { label: string; url: string }[] | null
+  metrics?: { label: string; value: string }[] | null
+}
+
 export interface CVData {
   basics?: Basics[] | Basics | null
   profiles?: Profile[] | null
@@ -254,4 +278,5 @@ export interface CVData {
   workshop_and_certifications?: WorkshopIssuer[] | null
   references?: Reference[] | null
   experiences?: Experience[] | null
+  testimonials?: Testimonial[] | null
 }
