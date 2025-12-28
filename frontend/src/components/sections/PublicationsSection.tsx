@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,7 @@ import {
   FileText,
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
-import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
+import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
@@ -178,24 +178,12 @@ function PublicationCard({ publication, onOpenMedia }: PublicationCardProps) {
 export function PublicationsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilter, setSelectedFilter] = useState<string>('all')
-  const [currentFocusFilter, setCurrentFocusFilter] = useState<FocusFilter>(getStoredFocusFilter())
+  const { selectedFocus } = useFilter()
   
   const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
   const data = useCV()
   const publications = data.publications || []
-
-  useEffect(() => {
-    const handleFocusFilterChange = (event: CustomEvent<{ filter: FocusFilter }>) => {
-      setCurrentFocusFilter(event.detail.filter)
-    }
-    
-    window.addEventListener('focusFilterChange', handleFocusFilterChange as EventListener)
-    
-    return () => {
-      window.removeEventListener('focusFilterChange', handleFocusFilterChange as EventListener)
-    }
-  }, [])
 
   const filteredPublications = useMemo(() => {
     let filtered = publications
@@ -205,7 +193,7 @@ export function PublicationsSection() {
         ? pub.type_key.map(k => typeof k === 'string' ? k : k.name || '')
         : []
       
-      return isVisibleWithFilter(typeKeys, currentFocusFilter)
+      return shouldShowEntry(typeKeys, selectedFocus)
     })
 
     if (selectedFilter !== 'all') {
@@ -243,7 +231,7 @@ export function PublicationsSection() {
     }
 
     return filtered
-  }, [publications, selectedFilter, searchQuery, currentFocusFilter])
+  }, [publications, selectedFilter, searchQuery, selectedFocus])
 
   const publicationCounts = useMemo(() => {
     const focusFilteredPublications = publications.filter(pub => {
@@ -251,7 +239,7 @@ export function PublicationsSection() {
         ? pub.type_key.map(k => typeof k === 'string' ? k : k.name || '')
         : []
       
-      return isVisibleWithFilter(typeKeys, currentFocusFilter)
+      return shouldShowEntry(typeKeys, selectedFocus)
     })
 
     const counts = {
@@ -279,7 +267,7 @@ export function PublicationsSection() {
     })
 
     return counts
-  }, [publications, currentFocusFilter])
+  }, [publications, selectedFocus])
 
   const handleClearSearch = () => {
     setSearchQuery('')
@@ -385,9 +373,9 @@ export function PublicationsSection() {
         {filteredPublications.length > 0 && (
           <div className="text-sm text-muted-foreground text-center">
             Showing {filteredPublications.length} of {publicationCounts.all} publication{publicationCounts.all !== 1 ? 's' : ''}
-            {currentFocusFilter !== 'Full CV' && (
+            {selectedFocus !== 'Full CV' && (
               <span className="ml-1">
-                (filtered by <span className="font-medium">{currentFocusFilter}</span>)
+                (filtered by <span className="font-medium">{selectedFocus}</span>)
               </span>
             )}
           </div>

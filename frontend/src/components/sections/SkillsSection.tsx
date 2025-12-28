@@ -5,7 +5,7 @@ import { MagnifyingGlass, X, CaretDown, SquaresFour, ListBullets } from '@phosph
 import { useCV } from '@/context/CVDataContext'
 import type { Skills } from '@/types/cv'
 import { Button } from '@/components/ui/button'
-import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
+import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 import { SkillsCarousel } from '@/components/SkillsCarousel'
 
@@ -17,19 +17,9 @@ export function SkillsSection() {
   
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
-  const [currentFilter, setCurrentFilter] = useState<FocusFilter>(getStoredFocusFilter())
+  const { selectedFocus } = useFilter()
   const [viewMode, setViewMode] = useState<ViewMode>('list')
   const { ref, isVisible } = useScrollAnimation()
-
-  useEffect(() => {
-    const handleFilterChange = (event: Event) => {
-      const customEvent = event as CustomEvent<{ filter: FocusFilter }>
-      setCurrentFilter(customEvent.detail.filter)
-    }
-
-    window.addEventListener('focusFilterChange', handleFilterChange)
-    return () => window.removeEventListener('focusFilterChange', handleFilterChange)
-  }, [])
 
   const filteredSkills = useMemo(() => {
     const result: Skills = {}
@@ -45,7 +35,7 @@ export function SkillsSection() {
             skill.long_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             skill.short_name.toLowerCase().includes(searchQuery.toLowerCase())
           
-          const matchesFilter = isVisibleWithFilter(skill.type_key, currentFilter)
+          const matchesFilter = shouldShowEntry(skill.type_key, selectedFocus)
           
           return matchesSearch && matchesFilter
         })
@@ -61,7 +51,7 @@ export function SkillsSection() {
     })
 
     return result
-  }, [skills, searchQuery, currentFilter])
+  }, [skills, searchQuery, selectedFocus])
 
   const skillsArray = useMemo(() => {
     return Object.entries(filteredSkills).map(([category, subcategories]) => {
