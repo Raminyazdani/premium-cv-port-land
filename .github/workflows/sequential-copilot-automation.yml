@@ -513,7 +513,9 @@ jobs:
           gh issue comment "$NEXT_ISSUE" \
             --repo "$REPO" \
             --body "$COMMENT_BODY"
-          
+          gh issue edit "$NEXT_ISSUE" \
+            --repo "$REPO" \
+            --add-label "copilot: opus-4.5"
           echo ""
           echo "✅ SUCCESS! Copilot has been assigned to issue #$NEXT_ISSUE"
           echo "   Title: $NEXT_TITLE"
