@@ -221,7 +221,7 @@
       "zertifikate": [
         {
           "name": "Mikroarray Datenanalyse in R Software und Systembiologie",
-          "datum": "2020-9-31",
+          "datum": "2020-09-30",
           "dauer": "18 Stunden",
           "zertifikat": true,
           "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_TUV_north_Academy_MicroArray_dspdq4.pdf",
@@ -2612,16 +2612,6 @@
       "titel": "Policy-Compliance-Checker (Flask + React + SQLite)",
       "beschreibung": "Erstellte eine Webanwendung im FReMP-Stack zum Upload dynamischer Sicherheitsrichtlinien und Nutzerdatensätze (JSON/CSV), zur serverseitigen Prüfung der Compliance pro Nutzer und zur Darstellung filterbarer/exportierbarer Pass/Fail-Ergebnisse inklusive Begründungen in einer React-Oberfläche.",
       "link": "https://github.com/Raminyazdani/policy-compliance-checker",
-      "typ_schluessel": [
-        "Voller_Lebenslauf",
-        "Programmierung",
-        "Akademisch"
-      ]
-    },
-    {
-      "titel": "Marktplatz-Template für Kosmetikshop (Django)",
-      "beschreibung": "Baute ein Multi-App-Django‑4.1-Marktplatz-Template für einen Kosmetikshop mit einer wiederverwendbaren Core-Schicht (zentralisierte Field-Factories, Basismodelle mit Soft-Delete, gemeinsame Mixins und ein eigener App-Scaffolding-Befehl) sowie Produktkatalog (Liste/Suche/Filter), Warenkorb- und Checkout-Flow und Bestell-/Zahlungs-/Versandmodelle, gerendert mit Bootstrap-Templates auf SQLite.",
-      "link": "https://github.com/Raminyazdani/Cosmetic_Shop",
       "typ_schluessel": [
         "Voller_Lebenslauf",
         "Programmierung",
