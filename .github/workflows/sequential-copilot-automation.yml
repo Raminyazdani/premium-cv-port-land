@@ -169,7 +169,7 @@ jobs:
           gh issue comment "$CANDIDATE" \
             --repo "$REPO" \
             --body "$COMMENT_BODY"
-          gh issue edit "$NEXT_ISSUE" \
+          gh issue edit "$CANDIDATE" \
             --repo "$REPO" \
             --add-assignee "copilot"
           echo ""
