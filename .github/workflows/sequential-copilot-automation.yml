@@ -1,0 +1,155 @@
+name: Sequential Copilot Automation
+
+on:
+  pull_request:
+    types: [review_requested]
+
+jobs:
+  auto-merge-and-assign-next: 
+    # Only run if PR author is Copilot
+    if: github.event.pull_request.user.login == 'copilot'
+    
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests:  write
+      issues: write
+    
+    steps:
+      # Step 1: Auto-merge the PR immediately
+      - name: Auto-merge PR
+        run: |
+          echo "🔀 Auto-merging PR #${{ github.event.pull_request.number }}"
+          gh pr merge ${{ github.event.pull_request.number }} \
+            --merge \
+            --admin \
+            --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      # Step 2: Extract the completed issue number from PR body
+      - name: Extract completed issue number
+        id: get_issue
+        run: |
+          PR_BODY='${{ github.event.pull_request.body }}'
+          
+          # Extract issue number from "Fixes #61" pattern
+          ISSUE_NUM=$(echo "$PR_BODY" | grep -oP 'Fixes.*#\K\d+' | head -1)
+          
+          echo "✅ Completed issue:  #$ISSUE_NUM"
+          echo "current_issue=$ISSUE_NUM" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets. GITHUB_TOKEN }}
+      
+      # Step 3: Get the issue title to extract sequence number
+      - name: Get sequence number from issue title
+        id: get_sequence
+        run: |
+          ISSUE_NUM=${{ steps.get_issue. outputs.current_issue }}
+          
+          # Fetch issue title
+          ISSUE_DATA=$(gh issue view $ISSUE_NUM \
+            --repo ${{ github.repository }} \
+            --json title)
+          
+          TITLE=$(echo "$ISSUE_DATA" | jq -r '.title')
+          echo "📝 Issue title: $TITLE"
+          
+          # Extract number from "FE-2" pattern
+          CURRENT_SEQ=$(echo "$TITLE" | grep -oP 'FE-\K\d+')
+          NEXT_SEQ=$((CURRENT_SEQ + 1))
+          
+          echo "🔢 Current sequence: FE-$CURRENT_SEQ"
+          echo "🔢 Next sequence: FE-$NEXT_SEQ"
+          
+          echo "current_seq=$CURRENT_SEQ" >> $GITHUB_OUTPUT
+          echo "next_seq=$NEXT_SEQ" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
+      
+      # Step 4: Find the next front-end issue
+      - name: Find next front-end issue
+        id:  find_next
+        run: |
+          NEXT_SEQ=${{ steps.get_sequence.outputs.next_seq }}
+          
+          echo "🔍 Searching for issue with 'FE-$NEXT_SEQ' in title..."
+          
+          # Search for issue with "FE-{next_seq}" in title and "front end" label
+          NEXT_ISSUE=$(gh issue list \
+            --repo ${{ github.repository }} \
+            --label "front end" \
+            --state open \
+            --search "FE-$NEXT_SEQ in:title" \
+            --json number,title \
+            --jq '.[0].number // empty')
+          
+          if [ -z "$NEXT_ISSUE" ]; then
+            echo "⚠️ No issue found with FE-$NEXT_SEQ pattern"
+            echo "🔍 Trying fallback:  finding lowest unassigned issue..."
+            
+            # Fallback: Find lowest numbered unassigned "front end" issue
+            NEXT_ISSUE=$(gh issue list \
+              --repo ${{ github. repository }} \
+              --label "front end" \
+              --state open \
+              --json number,title,assignees \
+              --jq '[.[] | select(.assignees == [])] | sort_by(.title | scan("FE-(\\d+)") | .[0] | tonumber) | .[0].number // empty')
+          fi
+          
+          if [ -n "$NEXT_ISSUE" ]; then
+            NEXT_TITLE=$(gh issue view $NEXT_ISSUE \
+              --repo ${{ github.repository }} \
+              --json title \
+              --jq '.title')
+            echo "✅ Found next issue: #$NEXT_ISSUE - $NEXT_TITLE"
+          else
+            echo "🎉 No more issues found - all done!"
+          fi
+          
+          echo "next_issue=$NEXT_ISSUE" >> $GITHUB_OUTPUT
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      # Step 5: Assign Copilot to the next issue
+      - name:  Assign Copilot to next issue
+        if: steps.find_next.outputs.next_issue != ''
+        run: |
+          NEXT_ISSUE=${{ steps. find_next.outputs.next_issue }}
+          CURRENT_SEQ=${{ steps.get_sequence.outputs.current_seq }}
+          
+          echo "🤖 Assigning @copilot to issue #$NEXT_ISSUE"
+          
+          gh issue edit $NEXT_ISSUE \
+            --repo ${{ github.repository }} \
+            --add-assignee copilot
+          
+          gh issue comment $NEXT_ISSUE \
+            --repo ${{ github.repository }} \
+            --body "🤖 **Automated Assignment**
+
+Previous issue **FE-$CURRENT_SEQ** has been completed and merged to main. 
+
+@copilot - You're up next! Please start working on this issue. 
+
+---
+_This is an automated message from the sequential workflow._"
+          
+          echo "✅ Successfully assigned Copilot to next issue"
+        env:
+          GH_TOKEN: ${{ secrets. GITHUB_TOKEN }}
+      
+      # Step 6: Final summary
+      - name:  Workflow summary
+        run: |
+          echo "## 🎯 Sequential Workflow Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Merged PR #${{ github.event. pull_request.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Completed issue #${{ steps.get_issue.outputs.current_issue }} (FE-${{ steps.get_sequence.outputs.current_seq }})" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -n "${{ steps.find_next.outputs. next_issue }}" ]; then
+            echo "- ✅ Assigned issue #${{ steps.find_next.outputs.next_issue }} (FE-${{ steps.get_sequence.outputs.next_seq }}) to Copilot" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- 🎉 All issues complete!" >> $GITHUB_STEP_SUMMARY
+          fi
