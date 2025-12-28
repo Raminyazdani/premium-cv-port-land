@@ -27,10 +27,12 @@ export interface PageMeta {
 }
 
 // Default configuration - can be overridden
+// Note: defaultImage URL returns 404 and should be updated with a valid image URL
+// or the CV data Pictures field should contain valid image URLs
 const DEFAULT_CONFIG: SEOConfig = {
   siteUrl: 'https://your-domain.com',
   siteName: 'Ramin Yazdani - Portfolio',
-  defaultImage: 'https://res.cloudinary.com/dgflx4rum/image/upload/v1748294090/IMG_9262_wioxcp.jpg',
+  defaultImage: '', // Cloudinary URL removed - returns 404. Update CV data or provide valid URL
   twitterHandle: '@raminyazdani'
 }
 
