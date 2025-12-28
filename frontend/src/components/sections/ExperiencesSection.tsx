@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,7 @@ import {
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
 import { useTranslation, useFormatters } from '@/context/LanguageContext'
-import { isVisibleWithFilter, type FocusFilter, getStoredFocusFilter } from '@/lib/focusFilterManager'
+import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import type { Experience } from '@/types/cv'
 
 function parseDuration(durationStr?: string | null, presentLabel: string = 'Present'): { startDate: Date | null; endDate: Date | null; displayDuration: string } {
@@ -171,31 +171,18 @@ function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
 
 export function ExperiencesSection() {
   const [groupBy, setGroupBy] = useState<'none' | 'category'>('category')
-  const [currentFilter, setCurrentFilter] = useState<FocusFilter>('Full CV')
+  const { selectedFocus } = useFilter()
   
   const data = useCV()
   const t = useTranslation()
   const experiences = data.experiences ?? []
   const presentLabel = t.experience.present
 
-  useEffect(() => {
-    const filter = getStoredFocusFilter()
-    setCurrentFilter(filter)
-
-    const handleFilterChange = (event: Event) => {
-      const customEvent = event as CustomEvent<{ filter: FocusFilter }>
-      setCurrentFilter(customEvent.detail.filter)
-    }
-
-    window.addEventListener('focusFilterChange', handleFilterChange)
-    return () => window.removeEventListener('focusFilterChange', handleFilterChange)
-  }, [])
-
   const filteredExperiences = useMemo(() => {
     return experiences.filter(exp => 
-      isVisibleWithFilter(exp.type_key, currentFilter)
+      shouldShowEntry(exp.type_key, selectedFocus)
     )
-  }, [experiences, currentFilter])
+  }, [experiences, selectedFocus])
 
   const processedExperiences = useMemo(() => {
     return filteredExperiences.map(exp => {

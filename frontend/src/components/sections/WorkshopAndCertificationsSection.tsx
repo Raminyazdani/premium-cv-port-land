@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -23,7 +23,7 @@ import {
   FilePdf,
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
-import { getStoredFocusFilter, type FocusFilter, isVisibleWithFilter } from '@/lib/focusFilterManager'
+import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
@@ -123,16 +123,16 @@ interface IssuerAccordionProps {
   searchQuery: string
   selectedFilters: Set<string>
   showCertifiedOnly: boolean
-  currentFocusFilter: FocusFilter
+  selectedFocus: string
   onOpenMedia: (url: string, alt: string) => void
 }
 
-function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOnly, currentFocusFilter, onOpenMedia }: IssuerAccordionProps) {
+function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOnly, selectedFocus, onOpenMedia }: IssuerAccordionProps) {
   const filteredCertifications = useMemo(() => {
     const certs = issuer.certifications ?? []
     
     return certs.filter(cert => {
-      if (!isVisibleWithFilter(cert.type_key, currentFocusFilter)) return false
+      if (!shouldShowEntry(cert.type_key, selectedFocus)) return false
       
       if (showCertifiedOnly && !cert.certificate) return false
       
@@ -151,7 +151,7 @@ function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOn
       
       return true
     })
-  }, [issuer, searchQuery, selectedFilters, showCertifiedOnly, currentFocusFilter])
+  }, [issuer, searchQuery, selectedFilters, showCertifiedOnly, selectedFocus])
   
   const sortedCertifications = useMemo(() => {
     return [...filteredCertifications].sort((a, b) => {
@@ -198,20 +198,9 @@ export function WorkshopAndCertificationsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
   const [showCertifiedOnly, setShowCertifiedOnly] = useState(false)
-  const [currentFocusFilter, setCurrentFocusFilter] = useState<FocusFilter>('Full CV')
+  const { selectedFocus } = useFilter()
   
   const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
-  
-  useEffect(() => {
-    const handleFocusFilterChange = () => {
-      setCurrentFocusFilter(getStoredFocusFilter())
-    }
-    
-    handleFocusFilterChange()
-    
-    window.addEventListener('focusFilterChanged', handleFocusFilterChange)
-    return () => window.removeEventListener('focusFilterChanged', handleFocusFilterChange)
-  }, [])
   
   const allTags = useMemo(() => {
     const tagSet = new Set<string>()
@@ -246,7 +235,7 @@ export function WorkshopAndCertificationsSection() {
       const certs = issuer.certifications ?? []
       
       return certs.some(cert => {
-        if (!isVisibleWithFilter(cert.type_key, currentFocusFilter)) return false
+        if (!shouldShowEntry(cert.type_key, selectedFocus)) return false
         
         if (showCertifiedOnly && !cert.certificate) return false
         
@@ -266,7 +255,7 @@ export function WorkshopAndCertificationsSection() {
         return true
       })
     })
-  }, [workshopsData, searchQuery, selectedFilters, showCertifiedOnly, currentFocusFilter])
+  }, [workshopsData, searchQuery, selectedFilters, showCertifiedOnly, selectedFocus])
   
   const totalCertifications = useMemo(() => {
     return workshopsData.reduce((sum, issuer) => 
@@ -404,7 +393,7 @@ export function WorkshopAndCertificationsSection() {
                 searchQuery={searchQuery}
                 selectedFilters={selectedFilters}
                 showCertifiedOnly={showCertifiedOnly}
-                currentFocusFilter={currentFocusFilter}
+                selectedFocus={selectedFocus}
                 onOpenMedia={openModal}
               />
             ))}
