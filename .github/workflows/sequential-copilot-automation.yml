@@ -52,7 +52,7 @@ jobs:
       - name: Find and assign issue to Copilot
         id: find-issue
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.COPILOT_PAT }}
           REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
@@ -207,7 +207,7 @@ jobs:
       - name: Check if PR author is Copilot
         id: check-author
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.COPILOT_PAT }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
         run: |
@@ -250,7 +250,7 @@ jobs:
         id: merge
         if: steps.check-author.outputs.IS_COPILOT == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.COPILOT_PAT }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
         run: |
@@ -351,7 +351,7 @@ jobs:
         id: get-sequence
         if: steps.check-author.outputs.IS_COPILOT == 'true' && steps.extract-issue.outputs.ISSUE_FOUND == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.COPILOT_PAT }}
           REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ steps.extract-issue.outputs.ISSUE_NUMBER }}
         run: |
@@ -395,7 +395,7 @@ jobs:
         id: find-next
         if: steps.check-author.outputs.IS_COPILOT == 'true' && steps.get-sequence.outputs.FE_FOUND == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.COPILOT_PAT }}
           REPO: ${{ github.repository }}
           NEXT_FE: ${{ steps.get-sequence.outputs.NEXT_FE }}
         run: |
@@ -484,7 +484,7 @@ jobs:
         id: assign
         if: steps.check-author.outputs.IS_COPILOT == 'true' && steps.find-next.outputs.NEXT_ISSUE_FOUND == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.COPILOT_PAT }}
           REPO: ${{ github.repository }}
           NEXT_ISSUE: ${{ steps.find-next.outputs.NEXT_ISSUE }}
           NEXT_TITLE: ${{ steps.find-next.outputs.NEXT_TITLE }}
