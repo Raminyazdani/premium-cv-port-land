@@ -154,14 +154,8 @@ jobs:
           echo "   Title: $ISSUE_TITLE"
           echo "========================================"
           
-          # Assign Copilot to the issue
-          echo "Assigning copilot to issue #$CANDIDATE..."
-          gh issue edit "$CANDIDATE" \
-            --repo "$REPO" \
-            --add-assignee "@me" 2>/dev/null || true
-          
-          # The actual copilot assignment happens via comment
-          # Add a comment to trigger Copilot with Claude Opus 4.5 preference
+          # The actual copilot assignment happens via comment (not via assignee)
+          # Adding a comment with @copilot mention triggers Copilot to work on the issue
           echo "Adding Copilot trigger comment..."
           COMMENT_BODY=$(cat <<'COMMENT_EOF'
           @copilot Please work on this issue. Use Claude Opus 4.5 model for best results.
