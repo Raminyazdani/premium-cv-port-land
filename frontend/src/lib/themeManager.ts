@@ -3,12 +3,13 @@
  * Handles theme switching and persistence via localStorage
  */
 
-export type ThemeName = 'normal' | 'academic' | 'apple' | 'dark' | 'bright' | 'futuristic'
+export type ThemeName = 'normal' | 'academic' | 'apple' | 'dark' | 'bright' | 'futuristic' | 'matrix'
 
 export interface ThemeOption {
   id: ThemeName
   label: string
   description: string
+  secret?: boolean
 }
 
 export const THEME_OPTIONS: ThemeOption[] = [
@@ -41,6 +42,12 @@ export const THEME_OPTIONS: ThemeOption[] = [
     id: 'futuristic',
     label: 'Futuristic',
     description: 'Tech-forward, neon accents, sci-fi vibe'
+  },
+  {
+    id: 'matrix',
+    label: 'Matrix',
+    description: 'Secret theme: Green terminal aesthetics',
+    secret: true
   }
 ]
 
@@ -55,7 +62,8 @@ export function getStoredTheme(): ThemeName {
   
   try {
     const stored = localStorage.getItem(THEME_STORAGE_KEY)
-    if (stored && THEME_OPTIONS.some(opt => opt.id === stored)) {
+    // Allow matrix theme if stored, even though it's secret
+    if (stored && (THEME_OPTIONS.some(opt => opt.id === stored) || stored === 'matrix')) {
       return stored as ThemeName
     }
   } catch (error) {
@@ -63,6 +71,16 @@ export function getStoredTheme(): ThemeName {
   }
   
   return DEFAULT_THEME
+}
+
+/**
+ * Get available theme options (filters secret themes unless unlocked)
+ */
+export function getAvailableThemes(konamiUnlocked: boolean = false): ThemeOption[] {
+  if (konamiUnlocked) {
+    return THEME_OPTIONS
+  }
+  return THEME_OPTIONS.filter(opt => !opt.secret)
 }
 
 /**

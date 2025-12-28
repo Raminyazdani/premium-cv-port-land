@@ -3,9 +3,14 @@ import { Toaster } from 'sonner'
 import { FilterProvider, useFilter } from '@/context/FilterContext'
 import { LanguageProvider, useLanguage } from '@/context/LanguageContext'
 import { CVDataProvider, useCVData } from '@/context/CVDataContext'
+import { KonamiProvider, useKonami } from '@/context/KonamiContext'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { EnhancedUIDemo } from '@/components/sections/EnhancedUIDemo'
+import { CursorFollower } from '@/components/CursorFollower'
+import { FloatingActionButton } from '@/components/FloatingActionButton'
+import { ScrollProgressIndicator } from '@/components/ScrollProgressIndicator'
+import { CelebrationAnimation } from '@/components/CelebrationAnimation'
 import { extractAllTypeKeys } from '@/utils/dataLoader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/ErrorFallback'
@@ -38,6 +43,7 @@ function SectionSkeleton() {
 function AppContent() {
   const { setAvailableFocusOptions } = useFilter()
   const { data, isValid, errors, warnings } = useCVData()
+  const { isUnlocked, justUnlocked } = useKonami()
 
   useEffect(() => {
     if (import.meta.env.DEV) {
@@ -59,6 +65,18 @@ function AppContent() {
 
   return (
     <div className="relative">
+      {/* Custom cursor follower */}
+      <CursorFollower />
+      
+      {/* Scroll progress indicator */}
+      <ScrollProgressIndicator />
+      
+      {/* Konami code celebration animation */}
+      <CelebrationAnimation show={justUnlocked} />
+      
+      {/* Floating action button */}
+      <FloatingActionButton />
+      
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
@@ -122,7 +140,9 @@ function App() {
       <LanguageProvider>
         <CVDataProvider>
           <FilterProvider>
-            <AppContent />
+            <KonamiProvider>
+              <AppContent />
+            </KonamiProvider>
           </FilterProvider>
         </CVDataProvider>
       </LanguageProvider>
