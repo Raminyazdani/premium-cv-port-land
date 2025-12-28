@@ -4,6 +4,10 @@
 **Repository:** premium-cv-port-land  
 **Purpose:** Central navigation for all QA/audit outputs
 
+> **Note:** All links in this document use relative paths from the `qa/indexes/` directory.
+> Navigate to this file's location in the repository before following links, or view on GitHub
+> where links resolve automatically.
+
 ---
 
 ## Quick Navigation
