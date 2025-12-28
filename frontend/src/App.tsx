@@ -4,6 +4,8 @@ import { FilterProvider, useFilter } from '@/context/FilterContext'
 import { LanguageProvider, useLanguage } from '@/context/LanguageContext'
 import { CVDataProvider, useCVData } from '@/context/CVDataContext'
 import { KonamiProvider, useKonami } from '@/context/KonamiContext'
+import { PWAProvider } from '@/context/PWAContext'
+import { AccessibilityProvider } from '@/context/AccessibilityContext'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { EnhancedUIDemo } from '@/components/sections/EnhancedUIDemo'
@@ -15,6 +17,7 @@ import { PageCornerCurl } from '@/components/PageCornerCurl'
 import { MicroFeedbackProvider } from '@/components/MicroFeedback'
 import { SoundEffectsProvider } from '@/components/SoundEffects'
 import { CookieConsentBanner } from '@/components/CookieConsentBanner'
+import { OfflineIndicator, UpdateBanner } from '@/components/OfflineIndicator'
 import { extractAllTypeKeys } from '@/utils/dataLoader'
 import { initializeSEO } from '@/utils/seo'
 import { initAnalytics, trackPageView, setupExternalLinkTracking, createSectionObserver } from '@/utils/analytics'
@@ -36,6 +39,7 @@ const ContactSection = lazy(() => import('@/components/sections/ContactSection')
 const Footer = lazy(() => import('@/components/sections/Footer').then(m => ({ default: m.Footer })))
 const SkillsVisualizationDashboard = lazy(() => import('@/components/SkillsVisualizationDashboard').then(m => ({ default: m.SkillsVisualizationDashboard })))
 const TestimonialsSection = lazy(() => import('@/components/TestimonialsSection').then(m => ({ default: m.TestimonialsSection })))
+const ArticlesSection = lazy(() => import('@/components/ArticlesSection').then(m => ({ default: m.ArticlesSection })))
 
 function SectionSkeleton() {
   return <SkeletonSection items={2} />
@@ -124,6 +128,10 @@ function AppContent() {
       {/* Cookie Consent Banner */}
       <CookieConsentBanner />
       
+      {/* PWA Indicators */}
+      <OfflineIndicator />
+      <UpdateBanner />
+      
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
@@ -177,6 +185,11 @@ function AppContent() {
           <TestimonialsSection />
         </Suspense>
         
+        {/* Articles Section */}
+        <Suspense fallback={<SectionSkeleton />}>
+          <ArticlesSection />
+        </Suspense>
+        
         <Suspense fallback={<SectionSkeleton />}>
           <ReferencesSection />
         </Suspense>
@@ -199,11 +212,15 @@ function App() {
         <CVDataProvider>
           <FilterProvider>
             <KonamiProvider>
-              <SoundEffectsProvider>
-                <MicroFeedbackProvider>
-                  <AppContent />
-                </MicroFeedbackProvider>
-              </SoundEffectsProvider>
+              <PWAProvider>
+                <AccessibilityProvider>
+                  <SoundEffectsProvider>
+                    <MicroFeedbackProvider>
+                      <AppContent />
+                    </MicroFeedbackProvider>
+                  </SoundEffectsProvider>
+                </AccessibilityProvider>
+              </PWAProvider>
             </KonamiProvider>
           </FilterProvider>
         </CVDataProvider>

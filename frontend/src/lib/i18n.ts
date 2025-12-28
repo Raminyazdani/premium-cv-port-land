@@ -239,6 +239,71 @@ export interface UIStrings {
     loading: string
     please_wait: string
   }
+
+  // PWA
+  pwa?: {
+    install_app: string
+    installed: string
+    offline_mode: string
+    update_available: string
+    update_now: string
+  }
+
+  // Download Modal
+  download?: {
+    title: string
+    description: string
+    format: string
+    pdf_browser: string
+    pdf_browser_desc: string
+    json_export: string
+    json_export_desc: string
+    markdown: string
+    markdown_desc: string
+    sections: string
+    select_all: string
+    deselect_all: string
+    include_contact: string
+    include_references: string
+    preview: string
+    download: string
+    downloading: string
+    success: string
+    error: string
+  }
+
+  // Articles Section
+  articles?: {
+    title: string
+    featured: string
+    read_time: string
+    external_link: string
+    no_articles: string
+    filter_by_tag: string
+    all_tags: string
+  }
+
+  // Video Section
+  video?: {
+    play: string
+    pause: string
+    mute: string
+    unmute: string
+    fullscreen: string
+    exit_fullscreen: string
+    loading: string
+  }
+
+  // Accessibility
+  accessibility?: {
+    high_contrast: string
+    font_size: string
+    increase_font: string
+    decrease_font: string
+    reset_font: string
+    dyslexia_font: string
+    reduced_motion: string
+  }
 }
 
 const translations: Record<Language, UIStrings> = {
@@ -439,6 +504,61 @@ const translations: Record<Language, UIStrings> = {
     loading: {
       loading: 'Loading...',
       please_wait: 'Please wait'
+    },
+    pwa: {
+      install_app: 'Install App',
+      installed: 'App installed',
+      offline_mode: 'You are offline',
+      update_available: 'Update available',
+      update_now: 'Update now'
+    },
+    download: {
+      title: 'Download CV',
+      description: 'Choose your preferred format and customize the content',
+      format: 'Format',
+      pdf_browser: 'PDF (Browser Print)',
+      pdf_browser_desc: 'Use browser print dialog to save as PDF',
+      json_export: 'JSON Export',
+      json_export_desc: 'Raw data in JSON format',
+      markdown: 'Markdown',
+      markdown_desc: 'Plain text readable format',
+      sections: 'Sections to Include',
+      select_all: 'Select All',
+      deselect_all: 'Deselect All',
+      include_contact: 'Include Contact Info',
+      include_references: 'Include References',
+      preview: 'Preview',
+      download: 'Download',
+      downloading: 'Downloading...',
+      success: 'Download complete',
+      error: 'Download failed'
+    },
+    articles: {
+      title: 'Articles & Blog',
+      featured: 'Featured',
+      read_time: '{minutes} min read',
+      external_link: 'External article',
+      no_articles: 'No articles available',
+      filter_by_tag: 'Filter by tag',
+      all_tags: 'All'
+    },
+    video: {
+      play: 'Play video',
+      pause: 'Pause video',
+      mute: 'Mute',
+      unmute: 'Unmute',
+      fullscreen: 'Fullscreen',
+      exit_fullscreen: 'Exit fullscreen',
+      loading: 'Loading video...'
+    },
+    accessibility: {
+      high_contrast: 'High contrast mode',
+      font_size: 'Font size',
+      increase_font: 'Increase font size',
+      decrease_font: 'Decrease font size',
+      reset_font: 'Reset font size',
+      dyslexia_font: 'Dyslexia-friendly font',
+      reduced_motion: 'Reduced motion'
     }
   },
 
@@ -639,6 +759,61 @@ const translations: Record<Language, UIStrings> = {
     loading: {
       loading: 'Wird geladen...',
       please_wait: 'Bitte warten'
+    },
+    pwa: {
+      install_app: 'App installieren',
+      installed: 'App installiert',
+      offline_mode: 'Sie sind offline',
+      update_available: 'Update verfügbar',
+      update_now: 'Jetzt aktualisieren'
+    },
+    download: {
+      title: 'Lebenslauf herunterladen',
+      description: 'Wählen Sie Ihr bevorzugtes Format und passen Sie den Inhalt an',
+      format: 'Format',
+      pdf_browser: 'PDF (Browser-Druck)',
+      pdf_browser_desc: 'Verwenden Sie den Browser-Druckdialog zum Speichern als PDF',
+      json_export: 'JSON-Export',
+      json_export_desc: 'Rohdaten im JSON-Format',
+      markdown: 'Markdown',
+      markdown_desc: 'Lesbares Klartextformat',
+      sections: 'Einzubeziehende Abschnitte',
+      select_all: 'Alle auswählen',
+      deselect_all: 'Alle abwählen',
+      include_contact: 'Kontaktdaten einbeziehen',
+      include_references: 'Referenzen einbeziehen',
+      preview: 'Vorschau',
+      download: 'Herunterladen',
+      downloading: 'Wird heruntergeladen...',
+      success: 'Download abgeschlossen',
+      error: 'Download fehlgeschlagen'
+    },
+    articles: {
+      title: 'Artikel & Blog',
+      featured: 'Empfohlen',
+      read_time: '{minutes} Min. Lesezeit',
+      external_link: 'Externer Artikel',
+      no_articles: 'Keine Artikel verfügbar',
+      filter_by_tag: 'Nach Tag filtern',
+      all_tags: 'Alle'
+    },
+    video: {
+      play: 'Video abspielen',
+      pause: 'Video pausieren',
+      mute: 'Stumm schalten',
+      unmute: 'Ton einschalten',
+      fullscreen: 'Vollbild',
+      exit_fullscreen: 'Vollbild beenden',
+      loading: 'Video wird geladen...'
+    },
+    accessibility: {
+      high_contrast: 'Hoher Kontrast',
+      font_size: 'Schriftgröße',
+      increase_font: 'Schrift vergrößern',
+      decrease_font: 'Schrift verkleinern',
+      reset_font: 'Schriftgröße zurücksetzen',
+      dyslexia_font: 'Legasthenie-freundliche Schrift',
+      reduced_motion: 'Reduzierte Bewegung'
     }
   },
 
@@ -839,6 +1014,61 @@ const translations: Record<Language, UIStrings> = {
     loading: {
       loading: 'در حال بارگذاری...',
       please_wait: 'لطفاً صبر کنید'
+    },
+    pwa: {
+      install_app: 'نصب برنامه',
+      installed: 'برنامه نصب شده',
+      offline_mode: 'آفلاین هستید',
+      update_available: 'به‌روزرسانی موجود است',
+      update_now: 'الان به‌روز کنید'
+    },
+    download: {
+      title: 'دانلود رزومه',
+      description: 'فرمت مورد نظر خود را انتخاب کرده و محتوا را سفارشی کنید',
+      format: 'فرمت',
+      pdf_browser: 'PDF (چاپ مرورگر)',
+      pdf_browser_desc: 'از گفتگوی چاپ مرورگر برای ذخیره به عنوان PDF استفاده کنید',
+      json_export: 'خروجی JSON',
+      json_export_desc: 'داده‌های خام در فرمت JSON',
+      markdown: 'Markdown',
+      markdown_desc: 'فرمت متن ساده خوانا',
+      sections: 'بخش‌های مورد نظر',
+      select_all: 'انتخاب همه',
+      deselect_all: 'لغو انتخاب همه',
+      include_contact: 'شامل اطلاعات تماس',
+      include_references: 'شامل مراجع',
+      preview: 'پیش‌نمایش',
+      download: 'دانلود',
+      downloading: 'در حال دانلود...',
+      success: 'دانلود کامل شد',
+      error: 'دانلود ناموفق'
+    },
+    articles: {
+      title: 'مقالات و وبلاگ',
+      featured: 'ویژه',
+      read_time: '{minutes} دقیقه مطالعه',
+      external_link: 'مقاله خارجی',
+      no_articles: 'مقاله‌ای موجود نیست',
+      filter_by_tag: 'فیلتر بر اساس تگ',
+      all_tags: 'همه'
+    },
+    video: {
+      play: 'پخش ویدیو',
+      pause: 'توقف ویدیو',
+      mute: 'بی‌صدا',
+      unmute: 'صدادار',
+      fullscreen: 'تمام صفحه',
+      exit_fullscreen: 'خروج از تمام صفحه',
+      loading: 'در حال بارگذاری ویدیو...'
+    },
+    accessibility: {
+      high_contrast: 'حالت کنتراست بالا',
+      font_size: 'اندازه فونت',
+      increase_font: 'افزایش اندازه فونت',
+      decrease_font: 'کاهش اندازه فونت',
+      reset_font: 'بازنشانی اندازه فونت',
+      dyslexia_font: 'فونت مناسب دیسلکسی',
+      reduced_motion: 'حرکت کمتر'
     }
   }
 }
