@@ -8,7 +8,6 @@ import { PWAProvider } from '@/context/PWAContext'
 import { AccessibilityProvider } from '@/context/AccessibilityContext'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
-import { EnhancedUIDemo } from '@/components/sections/EnhancedUIDemo'
 import { CursorFollower } from '@/components/CursorFollower'
 import { FloatingActionButton } from '@/components/FloatingActionButton'
 import { ScrollProgressIndicator } from '@/components/ScrollProgressIndicator'
@@ -142,11 +141,6 @@ function AppContent() {
       <Header />
       <main id="main-content">
         <HeroSection />
-        
-        {/* Enhanced UI Demo Section */}
-        <Suspense fallback={<SectionSkeleton />}>
-          <EnhancedUIDemo />
-        </Suspense>
         
         <Suspense fallback={<SectionSkeleton />}>
           <BasicsSection />
