@@ -1,0 +1,106 @@
+
+> spark-template@0.0.0 build
+> tsc -b --noCheck && vite build
+
+[icon-proxy] Checking for exports in directory: /home/runner/work/premium-cv-port-land/premium-cv-port-land/frontend/node_modules/@phosphor-icons/react
+[icon-proxy] Found package file: /home/runner/work/premium-cv-port-land/premium-cv-port-land/frontend/node_modules/@phosphor-icons/react/dist/index.d.ts
+[icon-proxy] Loaded 1514 exports from /home/runner/work/premium-cv-port-land/premium-cv-port-land/frontend/node_modules/@phosphor-icons/react/dist/index.d.ts
+[icon-proxy] Checking for exports in directory: /home/runner/work/premium-cv-port-land/premium-cv-port-land/frontend/node_modules/@phosphor-icons/react
+[icon-proxy] Found package file: /home/runner/work/premium-cv-port-land/premium-cv-port-land/frontend/node_modules/@phosphor-icons/react/dist/index.d.ts
+[icon-proxy] Loaded 1514 exports from /home/runner/work/premium-cv-port-land/premium-cv-port-land/frontend/node_modules/@phosphor-icons/react/dist/index.d.ts
+[36mvite v7.2.6 [32mbuilding client environment for production...[36m[39m
+transforming...
+Found 3 warnings while optimizing generated CSS:
+
+Issue #1:
+[2m│   .container {[22m
+[2m│     width: 100%;[22m
+[2m│[22m     @media (width >= (display-mode: standalone)) {
+[2m┆[22m                     [33m[2m^--[22m Unexpected token ParenthesisBlock[39m
+[2m┆[22m
+[2m│       max-width: (display-mode: standalone);[22m
+[2m│     }[22m
+
+Issue #2:
+[2m│       max-width: (display-mode: standalone);[22m
+[2m│     }[22m
+[2m│[22m     @media (width >= (pointer: coarse)) {
+[2m┆[22m                     [33m[2m^--[22m Unexpected token ParenthesisBlock[39m
+[2m┆[22m
+[2m│       max-width: (pointer: coarse);[22m
+[2m│     }[22m
+
+Issue #3:
+[2m│       max-width: (pointer: coarse);[22m
+[2m│     }[22m
+[2m│[22m     @media (width >= (pointer: fine)) {
+[2m┆[22m                     [33m[2m^--[22m Unexpected token ParenthesisBlock[39m
+[2m┆[22m
+[2m│       max-width: (pointer: fine);[22m
+[2m│     }[22m
+
+[icon-proxy] Proxying non-existent icon: AccessibilityMotion -> Question
+[33msrc/components/ui/label.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/switch.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/slider.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/tabs.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/scroll-area.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/avatar.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/separator.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/dropdown-menu.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/popover.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[33msrc/components/ui/checkbox.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+[32m✓[39m 7360 modules transformed.
+rendering chunks...
+Emitted proxy files to build output
+computing gzip size...
+[2mdist/[22m[32mpackage.json                                         [39m[1m[2m    0.26 kB[22m[1m[22m[2m │ gzip:   0.18 kB[22m
+[2mdist/[22m[32mindex.html                                           [39m[1m[2m    7.50 kB[22m[1m[22m[2m │ gzip:   3.02 kB[22m
+[2mdist/[22m[32mproxy.js                                             [39m[1m[2m1,568.41 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[35mindex-DMmT_CSa.css                            [39m[1m[2m  475.08 kB[22m[1m[22m[2m │ gzip:  84.54 kB[22m
+[2mdist/[22m[2massets/[22m[36muse-media-modal-r11MzSkg.js                   [39m[1m[2m    0.48 kB[22m[1m[22m[2m │ gzip:   0.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mclipboard-C7YUl7IS.js                         [39m[1m[2m    0.64 kB[22m[1m[22m[2m │ gzip:   0.40 kB[22m
+[2mdist/[22m[2massets/[22m[36mfocusFilterManager-BNPnPTge.js                [39m[1m[2m    0.76 kB[22m[1m[22m[2m │ gzip:   0.44 kB[22m
+[2mdist/[22m[2massets/[22m[36minput-CxpehBWq.js                             [39m[1m[2m    0.81 kB[22m[1m[22m[2m │ gzip:   0.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mbadge-CMxCPTl0.js                             [39m[1m[2m    1.15 kB[22m[1m[22m[2m │ gzip:   0.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mCaretDown.es-BxDVryWa.js                      [39m[1m[2m    1.36 kB[22m[1m[22m[2m │ gzip:   0.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mCaretUp.es-DMIRyJN_.js                        [39m[1m[2m    1.44 kB[22m[1m[22m[2m │ gzip:   0.53 kB[22m
+[2mdist/[22m[2massets/[22m[36muse-scroll-animation-ZBG5Vup0.js              [39m[1m[2m    1.49 kB[22m[1m[22m[2m │ gzip:   0.65 kB[22m
+[2mdist/[22m[2massets/[22m[36mMagnifyingGlass.es-DDEN-mqB.js                [39m[1m[2m    1.62 kB[22m[1m[22m[2m │ gzip:   0.65 kB[22m
+[2mdist/[22m[2massets/[22m[36mClock.es-G-wTTlJ4.js                          [39m[1m[2m    1.79 kB[22m[1m[22m[2m │ gzip:   0.62 kB[22m
+[2mdist/[22m[2massets/[22m[36mFooter-DX90fMnb.js                            [39m[1m[2m    2.11 kB[22m[1m[22m[2m │ gzip:   1.01 kB[22m
+[2mdist/[22m[2massets/[22m[36mCalendarBlank.es-heQAj5-y.js                  [39m[1m[2m    2.20 kB[22m[1m[22m[2m │ gzip:   0.68 kB[22m
+[2mdist/[22m[2massets/[22m[36mCaretRight.es-NlHYKQKc.js                     [39m[1m[2m    2.61 kB[22m[1m[22m[2m │ gzip:   0.77 kB[22m
+[2mdist/[22m[2massets/[22m[36mBuildings.es-BtjMExQp.js                      [39m[1m[2m    3.29 kB[22m[1m[22m[2m │ gzip:   0.99 kB[22m
+[2mdist/[22m[2massets/[22m[36mCertificate.es-Cts_-p6e.js                    [39m[1m[2m    3.43 kB[22m[1m[22m[2m │ gzip:   1.20 kB[22m
+[2mdist/[22m[2massets/[22m[36mCalendar.es-BaPVbIp4.js                       [39m[1m[2m    3.72 kB[22m[1m[22m[2m │ gzip:   1.15 kB[22m
+[2mdist/[22m[2massets/[22m[36mGraduationCap.es-TXfUg4eF.js                  [39m[1m[2m    4.15 kB[22m[1m[22m[2m │ gzip:   1.49 kB[22m
+[2mdist/[22m[2massets/[22m[36mMediaThumbnail-DgLb-tOA.js                    [39m[1m[2m    4.22 kB[22m[1m[22m[2m │ gzip:   1.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mLink.es-sD2BTm6L.js                           [39m[1m[2m    4.47 kB[22m[1m[22m[2m │ gzip:   1.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mPhone.es-DGMU_YMr.js                          [39m[1m[2m    4.53 kB[22m[1m[22m[2m │ gzip:   1.65 kB[22m
+[2mdist/[22m[2massets/[22m[36mEyeSlash.es-9igkvQTG.js                       [39m[1m[2m    5.51 kB[22m[1m[22m[2m │ gzip:   2.02 kB[22m
+[2mdist/[22m[2massets/[22m[36mReferencesSection-DfveEWVl.js                 [39m[1m[2m    7.30 kB[22m[1m[22m[2m │ gzip:   2.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mMediaModal-NdKP06ac.js                        [39m[1m[2m    9.46 kB[22m[1m[22m[2m │ gzip:   3.12 kB[22m
+[2mdist/[22m[2massets/[22m[36mBasicsSection-CCShm7nq.js                     [39m[1m[2m   10.00 kB[22m[1m[22m[2m │ gzip:   3.97 kB[22m
+[2mdist/[22m[2massets/[22m[36mProjectsSection-DITS9hk4.js                   [39m[1m[2m   10.41 kB[22m[1m[22m[2m │ gzip:   3.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mExperiencesSection-COctO7tR.js                [39m[1m[2m   10.73 kB[22m[1m[22m[2m │ gzip:   3.51 kB[22m
+[2mdist/[22m[2massets/[22m[36mTestimonialsSection-CTN7VdBw.js               [39m[1m[2m   14.02 kB[22m[1m[22m[2m │ gzip:   4.76 kB[22m
+[2mdist/[22m[2massets/[22m[36mProfilesSection-q0MLvKA-.js                   [39m[1m[2m   14.20 kB[22m[1m[22m[2m │ gzip:   5.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mPublicationsSection-CKBDXhyQ.js               [39m[1m[2m   14.26 kB[22m[1m[22m[2m │ gzip:   4.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mLanguagesSection-DFXbQwyq.js                  [39m[1m[2m   14.80 kB[22m[1m[22m[2m │ gzip:   5.07 kB[22m
+[2mdist/[22m[2massets/[22m[36mContactSection-CA3tTvJs.js                    [39m[1m[2m   15.84 kB[22m[1m[22m[2m │ gzip:   4.75 kB[22m
+[2mdist/[22m[2massets/[22m[36mSkillsSection-Brq4nT8i.js                     [39m[1m[2m   15.95 kB[22m[1m[22m[2m │ gzip:   4.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mWorkshopAndCertificationsSection-906HjpS9.js  [39m[1m[2m   25.21 kB[22m[1m[22m[2m │ gzip:   8.76 kB[22m
+[2mdist/[22m[2massets/[22m[36mArticlesSection-Dzx12jiD.js                   [39m[1m[2m   58.75 kB[22m[1m[22m[2m │ gzip:  18.38 kB[22m
+[2mdist/[22m[2massets/[22m[36mEducationSection-CWTTxHpA.js                  [39m[1m[2m  119.56 kB[22m[1m[22m[2m │ gzip:  39.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mSkillsVisualizationDashboard-BCDybaUb.js      [39m[1m[2m  436.53 kB[22m[1m[22m[2m │ gzip: 116.87 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-DlwatTDZ.js                             [39m[1m[33m  818.12 kB[39m[22m[2m │ gzip: 225.87 kB[22m
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 14.27s[39m
+
+[icon-proxy] Proxied imports:
+  - "AccessibilityMotion" -> "Question"
