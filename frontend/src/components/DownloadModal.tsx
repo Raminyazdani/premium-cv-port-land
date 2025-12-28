@@ -154,7 +154,7 @@ export function DownloadModal({ open, onOpenChange }: DownloadModalProps) {
         lines.push(`### ${edu.institution || 'Unknown Institution'}`)
         if (degree) lines.push(`**${degree}**`)
         if (edu.startDate || edu.endDate) {
-          lines.push(`*${edu.startDate || ''} - ${edu.endDate || 'Present'}*`)
+          lines.push(`*${edu.startDate || ''} - ${edu.endDate || t.education.present}*`)
         }
         if (edu.location) lines.push(`📍 ${edu.location}`)
         if (edu.gpa) lines.push(`GPA: ${edu.gpa}`)
@@ -247,7 +247,7 @@ export function DownloadModal({ open, onOpenChange }: DownloadModalProps) {
     }
     
     return lines.join('\n')
-  }, [includeContact, includeReferences])
+  }, [includeContact, includeReferences, t])
 
   // Download handlers
   const handleDownload = useCallback(async () => {
