@@ -1,0 +1,187 @@
+{
+  "audit_metadata": {
+    "generated_at": "2025-12-28T04:15:00Z",
+    "audit_type": "Language Change Audit",
+    "scope": "CV data files + website static text (EN/DE/FA)",
+    "status": "DIAGNOSIS_ONLY",
+    "track": "Language Change Audit (CV JSON + UI strings)"
+  },
+  "summary": {
+    "cv_data_loading": "PASS",
+    "key_normalization": "PASS",
+    "ui_translations_i18n": "GOOD",
+    "hardcoded_strings": "ISSUE",
+    "hardcoded_strings_count": 92,
+    "rtl_support": "GOOD",
+    "seo_tags": "PARTIAL",
+    "document_attributes": "GOOD"
+  },
+  "language_system": {
+    "selection_mechanism": {
+      "priority_order": [
+        "URL parameter (?lang=xx)",
+        "localStorage (cv-language)",
+        "Browser language (navigator.language)",
+        "Default (en)"
+      ],
+      "context_file": "frontend/src/context/LanguageContext.tsx",
+      "manager_file": "frontend/src/lib/languageManager.ts"
+    },
+    "cv_data_loading": {
+      "loader_file": "frontend/src/utils/dataLoader.ts",
+      "normalizer_file": "frontend/src/utils/dataNormalizer.ts",
+      "languages": {
+        "en": {
+          "source_file": "src/data/cv.json",
+          "status": "PASS",
+          "sections": 10
+        },
+        "de": {
+          "source_file": "src/data/ramin_de.json",
+          "status": "PASS",
+          "sections": 10,
+          "requires_normalization": true
+        },
+        "fa": {
+          "source_file": "src/data/ramin_fa.json",
+          "status": "PASS",
+          "sections": 10,
+          "requires_normalization": true
+        }
+      }
+    },
+    "ui_translations": {
+      "i18n_file": "frontend/src/lib/i18n.ts",
+      "total_keys_estimated": 180,
+      "coverage": {
+        "en": "COMPLETE",
+        "de": "COMPLETE",
+        "fa": "COMPLETE"
+      }
+    }
+  },
+  "locked_files_verification": {
+    "cv.json": {
+      "hash": "c62f32a8a4319502b093cb7254ef3a7068a581e8b96b700e350c5b7bdca432a1",
+      "status": "UNCHANGED"
+    },
+    "ramin_de.json": {
+      "hash": "7111006f95b9adfa25ba9e4069171baf8a4aee4cf823e8b25fe252185046d44d",
+      "status": "UNCHANGED"
+    },
+    "ramin_fa.json": {
+      "hash": "8035095d0a7de06e2d6f54c8f7368cbc01e3214c0b04f6af8a2b65c3dbccb0de",
+      "status": "UNCHANGED"
+    }
+  },
+  "rtl_support": {
+    "persian_direction": "rtl",
+    "html_dir_attribute": "dynamic",
+    "font_support": "Vazirmatn via Google Fonts"
+  },
+  "issues_found": {
+    "hardcoded_strings": {
+      "severity": "MEDIUM",
+      "count": 92,
+      "categories": {
+        "critical_content": 15,
+        "demo_section": 20,
+        "aria_labels": 35,
+        "fallback_texts": 12,
+        "download_modal": 10
+      },
+      "critical_files": [
+        {
+          "file": "ContactSection.tsx",
+          "strings": ["Let's Connect", "Whether you want to send a message...", "Send Message", "Book a Call"]
+        },
+        {
+          "file": "EnhancedUIDemo.tsx",
+          "strings": ["Enhanced UI Features", "Premium Interactive Components", "3D Language Carousel", "Animated Timeline"]
+        },
+        {
+          "file": "ErrorFallback.tsx",
+          "strings": ["Something went wrong", "An error occurred", "Error details", "Try again"]
+        },
+        {
+          "file": "Footer.tsx",
+          "strings": ["Try the Konami code 🎮"]
+        }
+      ]
+    },
+    "scattered_translation_objects": {
+      "severity": "LOW",
+      "files": [
+        {
+          "file": "CookieConsentBanner.tsx",
+          "keys": 6
+        },
+        {
+          "file": "TestimonialsSection.tsx",
+          "keys": 9
+        },
+        {
+          "file": "SkillsVisualizationDashboard.tsx",
+          "keys": 12
+        },
+        {
+          "file": "ProjectCaseStudy.tsx",
+          "keys": 17
+        }
+      ]
+    },
+    "aria_labels_hardcoded": {
+      "severity": "LOW",
+      "examples": [
+        "Page scroll progress",
+        "Scroll to about section",
+        "Close modal",
+        "Previous skill category"
+      ]
+    },
+    "initial_html_lang": {
+      "severity": "LOW",
+      "issue": "index.html has lang='en' hardcoded"
+    }
+  },
+  "recommendations": [
+    {
+      "strategy": "Minimal Dictionary Approach",
+      "effort": "S",
+      "description": "Move all scattered translation objects into i18n.ts, add missing keys",
+      "pros": ["No new dependencies", "Consistent with existing pattern", "Type-safe"],
+      "cons": ["Manual key management", "No extraction tooling"],
+      "migration_days": "1-2"
+    },
+    {
+      "strategy": "i18next Library Integration",
+      "effort": "M",
+      "description": "Use react-i18next for namespace support, missing key detection",
+      "pros": ["Industry standard", "Rich ecosystem", "Translation extraction tools"],
+      "cons": ["New dependency (~13KB)", "Migration effort"],
+      "migration_days": "3-5"
+    },
+    {
+      "strategy": "Full Product Internationalization",
+      "effort": "L",
+      "description": "Complete i18n infrastructure with lint rules, CI checks, translation platform",
+      "pros": ["Professional-grade", "Scalable", "Quality assurance"],
+      "cons": ["Significant effort", "May be overkill for 3 languages"],
+      "migration_days": "7-14"
+    }
+  ],
+  "essential_checks": {
+    "html_lang_attribute_updates": true,
+    "document_dir_updates": true,
+    "document_lang_updates": true,
+    "respects_prefers_reduced_motion": true,
+    "ui_cv_language_in_sync": true
+  },
+  "self_overseer_checklist": {
+    "language_audit_md_exists": true,
+    "language_string_inventory_csv_exists": true,
+    "language_audit_json_exists": true,
+    "three_strategies_proposed": true,
+    "locked_files_unchanged": true
+  }
+}
