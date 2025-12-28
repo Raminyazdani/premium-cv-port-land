@@ -49,7 +49,7 @@ jobs:
 
 Automation starting from this issue.
 
-@copilot - Please use Claude Opus 4.5 model for maximum reasoning capability.
+copilot - Please use Claude Opus 4.5 model for maximum reasoning capability.
 
 **Instructions:**
 - Use Claude Opus 4.5 (3x compute)
