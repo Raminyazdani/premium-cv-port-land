@@ -1,0 +1,1334 @@
+[
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: fa",
+    "timestamp": "2025-12-28T04:16:31.058Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: fa ====================",
+    "timestamp": "2025-12-28T04:16:31.059Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:16:31.059Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:16:31.065Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:16:31.066Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"تاکنون\", returning null",
+    "timestamp": "2025-12-28T04:16:31.066Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:16:31.066Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:16:31.067Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:16:31.068Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Language: fa",
+    "timestamp": "2025-12-28T04:16:31.068Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:16:31.068Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:16:31.068Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: دانشگاه زارلند, location: زاربروکن, آلمان, area: بیوانفورماتیک, studyType: کارشناسی_ارشد, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: پایپلاین یکپارچهٔ اُمیکس برای ژنومیک میکروبی, description: یک پایپلاین جامع توسعه دادم که داده‌های متاژنومیک،…ملکردی و پروفایلینگ جوامع میکروبی یکپارچه می‌کند., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:16:31.072Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:16:31.073Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:16:31.073Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:31.082Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:31.089Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:31.289Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:31.290Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:16:31.390Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: fa",
+    "timestamp": "2025-12-28T04:16:31.544Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: fa ====================",
+    "timestamp": "2025-12-28T04:16:31.545Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:16:31.545Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:16:31.549Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:16:31.549Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"تاکنون\", returning null",
+    "timestamp": "2025-12-28T04:16:31.550Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:16:31.550Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:16:31.551Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:16:31.551Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Language: fa",
+    "timestamp": "2025-12-28T04:16:31.551Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:16:31.551Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:16:31.551Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:16:31.551Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: دانشگاه زارلند, location: زاربروکن, آلمان, area: بیوانفورماتیک, studyType: کارشناسی_ارشد, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: پایپلاین یکپارچهٔ اُمیکس برای ژنومیک میکروبی, description: یک پایپلاین جامع توسعه دادم که داده‌های متاژنومیک،…ملکردی و پروفایلینگ جوامع میکروبی یکپارچه می‌کند., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:16:31.554Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:31.559Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:31.562Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:31.783Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:31.783Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:16:31.873Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getBasics() is deprecated. Use useCVData() + extractBasics() instead.",
+    "timestamp": "2025-12-28T04:16:32.040Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getProfiles() is deprecated. Use useCVData() + extractProfiles() instead.",
+    "timestamp": "2025-12-28T04:16:32.041Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:16:34.953Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:38.455Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:38.455Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:16:41.456Z",
+    "viewport": "desktop"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: fa",
+    "timestamp": "2025-12-28T04:16:49.909Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: fa ====================",
+    "timestamp": "2025-12-28T04:16:49.910Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:16:49.910Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:16:49.919Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:16:49.919Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"تاکنون\", returning null",
+    "timestamp": "2025-12-28T04:16:49.920Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:16:49.920Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:16:49.920Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:16:49.921Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Language: fa",
+    "timestamp": "2025-12-28T04:16:49.921Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:16:49.922Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:16:49.923Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:16:49.923Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:16:49.923Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:16:49.923Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:16:49.923Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:16:49.923Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: دانشگاه زارلند, location: زاربروکن, آلمان, area: بیوانفورماتیک, studyType: کارشناسی_ارشد, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: پایپلاین یکپارچهٔ اُمیکس برای ژنومیک میکروبی, description: یک پایپلاین جامع توسعه دادم که داده‌های متاژنومیک،…ملکردی و پروفایلینگ جوامع میکروبی یکپارچه می‌کند., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:16:49.926Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:49.940Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:49.944Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:50.146Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:50.151Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:16:50.243Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: fa",
+    "timestamp": "2025-12-28T04:16:50.400Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: fa ====================",
+    "timestamp": "2025-12-28T04:16:50.400Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:16:50.400Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:16:50.405Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:16:50.406Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"تاکنون\", returning null",
+    "timestamp": "2025-12-28T04:16:50.406Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:16:50.406Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:16:50.407Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:16:50.407Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Language: fa",
+    "timestamp": "2025-12-28T04:16:50.407Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:16:50.407Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:16:50.407Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:16:50.410Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:16:50.410Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:16:50.410Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:16:50.410Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:16:50.410Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:16:50.414Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:16:50.414Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:16:50.414Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:16:50.414Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:16:50.414Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:16:50.414Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: دانشگاه زارلند, location: زاربروکن, آلمان, area: بیوانفورماتیک, studyType: کارشناسی_ارشد, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:16:50.415Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:16:50.415Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: پایپلاین یکپارچهٔ اُمیکس برای ژنومیک میکروبی, description: یک پایپلاین جامع توسعه دادم که داده‌های متاژنومیک،…ملکردی و پروفایلینگ جوامع میکروبی یکپارچه می‌کند., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:16:50.415Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:16:50.415Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:16:50.415Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:16:50.415Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:50.421Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:50.421Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:50.647Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:50.647Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:16:50.724Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getBasics() is deprecated. Use useCVData() + extractBasics() instead.",
+    "timestamp": "2025-12-28T04:16:50.840Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getProfiles() is deprecated. Use useCVData() + extractProfiles() instead.",
+    "timestamp": "2025-12-28T04:16:50.840Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:16:53.795Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:56.654Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:16:56.654Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:16:59.822Z",
+    "viewport": "tablet"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: fa",
+    "timestamp": "2025-12-28T04:17:07.506Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: fa ====================",
+    "timestamp": "2025-12-28T04:17:07.506Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:17:07.506Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:17:07.512Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:17:07.512Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"تاکنون\", returning null",
+    "timestamp": "2025-12-28T04:17:07.516Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:17:07.517Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:17:07.517Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:17:07.517Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Language: fa",
+    "timestamp": "2025-12-28T04:17:07.517Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:17:07.517Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:17:07.517Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:17:07.518Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:17:07.518Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:17:07.518Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: دانشگاه زارلند, location: زاربروکن, آلمان, area: بیوانفورماتیک, studyType: کارشناسی_ارشد, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: پایپلاین یکپارچهٔ اُمیکس برای ژنومیک میکروبی, description: یک پایپلاین جامع توسعه دادم که داده‌های متاژنومیک،…ملکردی و پروفایلینگ جوامع میکروبی یکپارچه می‌کند., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:17:07.519Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:17:07.520Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:17:07.520Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:17:07.520Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:07.532Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:07.538Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:07.750Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:07.754Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:17:07.841Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🏁 [CVDataContext] STARTING DATA LOAD FOR: fa",
+    "timestamp": "2025-12-28T04:17:07.963Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n==================== LOADING DATA FOR LANGUAGE: fa ====================",
+    "timestamp": "2025-12-28T04:17:07.964Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🔄 [PHASE 3] NORMALIZATION STARTING",
+    "timestamp": "2025-12-28T04:17:07.964Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Data validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:17:07.968Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "\n🧹 [PHASE 3 - SANITIZATION] Starting",
+    "timestamp": "2025-12-28T04:17:07.969Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"تاکنون\", returning null",
+    "timestamp": "2025-12-28T04:17:07.969Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "Invalid date format: \"2020-9-31\", returning null",
+    "timestamp": "2025-12-28T04:17:07.969Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "==================== DATA LOADING COMPLETE ====================\n",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "startGroup",
+    "text": "📊 [CVDataContext] Data Summary",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Language: fa",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Data keys: [basics, profiles, education, languages, workshop_and_certifications, skills, experiences, projects, publications, references]",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "Validation result: ✅ Valid",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   basics: array[1]",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   profiles: array[4]",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   education: array[5]",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   experiences: array[5]",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   projects: array[25]",
+    "timestamp": "2025-12-28T04:17:07.971Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   publications: array[5]",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   skills: object with 8 keys",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   languages: array[3]",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   workshop_and_certifications: array[10]",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   references: array[5]",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "✅ Education has 5 entries",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   First education item: {institution: دانشگاه زارلند, location: زاربروکن, آلمان, area: بیوانفورماتیک, studyType: کارشناسی_ارشد, startDate: 2024-10-20}",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "✅ Projects has 25 entries",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "   First project item: {title: پایپلاین یکپارچهٔ اُمیکس برای ژنومیک میکروبی, description: یک پایپلاین جامع توسعه دادم که داده‌های متاژنومیک،…ملکردی و پروفایلینگ جوامع میکروبی یکپارچه می‌کند., url: null, type_key: Array(3)}",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "⚠️  Validation warnings: [Education item 0: Invalid endDate format \"تاکنون\", Certification 0.0: Invalid date format \"2020-9-31\", Skill item \"پایگاه‌داده_و_مهندسی_داده.مدل‌سازی_و_ب…ی_پایگاه‌داده[4]\" missing long_name or short_name, Duplicate project entry found at index 3: \"قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)\"]",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "endGroup",
+    "text": "console.groupEnd",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "log",
+    "text": "🏁 [CVDataContext] DATA LOAD COMPLETE\n",
+    "timestamp": "2025-12-28T04:17:07.978Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:07.988Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:07.988Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:08.190Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:08.190Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "error",
+    "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "timestamp": "2025-12-28T04:17:08.270Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getBasics() is deprecated. Use useCVData() + extractBasics() instead.",
+    "timestamp": "2025-12-28T04:17:08.409Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getProfiles() is deprecated. Use useCVData() + extractProfiles() instead.",
+    "timestamp": "2025-12-28T04:17:08.409Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:17:11.358Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:13.715Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "getCVData() is deprecated. Use useCVData() hook instead.",
+    "timestamp": "2025-12-28T04:17:13.719Z",
+    "viewport": "mobile"
+  },
+  {
+    "type": "warning",
+    "text": "The resource data:application/octet-stream;base64,aW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCB7IEVycm9yQm91bmRhcnkgfSBmcm9tICJyZWFjdC1lcnJvci1ib3VuZGFyeSIKaW1wb3J0ICJAZ2l0aHViL3NwYXJrL3NwYXJrIgoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC50c3gnCmltcG9ydCB7IEVycm9yRmFsbGJhY2sgfSBmcm9tICcuL0Vycm9yRmFsbGJhY2sudHN4JwoKaW1wb3J0ICIuL21haW4uY3NzIgppbXBvcnQgIi4vc3R5bGVzL3RoZW1lLmNzcyIKaW1wb3J0ICIuL2luZGV4LmNzcyIKCmltcG9ydCB7IGluaXRpYWxpemVMYW5ndWFnZSB9IGZyb20gJy4vbGliL2xhbmd1YWdlTWFuYWdlcicKaW1wb3J0IHsgaW5pdGlhbGl6ZVRoZW1lIH0gZnJvbSAnLi9saWIvdGhlbWVNYW5hZ2VyJwppbXBvcnQgeyBpbml0UGVyZm9ybWFuY2VNb25pdG9yaW5nLCBwcmVsb2FkQ3JpdGljYWxSZXNvdXJjZXMsIHJlcG9ydFdlYlZpdGFscyB9IGZyb20gJy4vdXRpbHMvcGVyZm9ybWFuY2UnCmltcG9ydCB7IGluaXRMYXlvdXRTdGFiaWxpdHkgfSBmcm9tICcuL3V0aWxzL2xheW91dFN0YWJpbGl0eScKCmNvbnN0IHJvb3RFbGVtZW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKQppZiAoIXJvb3RFbGVtZW50KSB7CiAgY29uc29sZS5lcnJvcignUm9vdCBlbGVtZW50IG5vdCBmb3VuZCcpCiAgdGhyb3cgbmV3IEVycm9yKCdSb290IGVsZW1lbnQgbm90IGZvdW5kJykKfQoKaW5pdExheW91dFN0YWJpbGl0eSgpCgppZiAoaW1wb3J0Lm1ldGEuZW52LkRFVikgewogIGluaXRQZXJmb3JtYW5jZU1vbml0b3JpbmcoKQogIHJlcG9ydFdlYlZpdGFscygpCn0KCnByZWxvYWRDcml0aWNhbFJlc291cmNlcygpCgp0cnkgewogIGluaXRpYWxpemVMYW5ndWFnZSgpCiAgaW5pdGlhbGl6ZVRoZW1lKCkKICAKICBjb25zdCByb290ID0gY3JlYXRlUm9vdChyb290RWxlbWVudCkKICByb290LnJlbmRlcigKICAgIDxFcnJvckJvdW5kYXJ5IEZhbGxiYWNrQ29tcG9uZW50PXtFcnJvckZhbGxiYWNrfT4KICAgICAgPEFwcCAvPgogICAgPC9FcnJvckJvdW5kYXJ5PgogICkKfSBjYXRjaCAoZXJyb3IpIHsKICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBhcHA6JywgZXJyb3IpCiAgcm9vdEVsZW1lbnQuaW5uZXJIVE1MID0gYAogICAgPGRpdiBzdHlsZT0icGFkZGluZzogMnJlbTsgdGV4dC1hbGlnbjogY2VudGVyOyBmb250LWZhbWlseTogc3lzdGVtLXVpOyI+CiAgICAgIDxoMSBzdHlsZT0iY29sb3I6ICNlZjQ0NDQ7Ij5BcHBsaWNhdGlvbiBFcnJvcjwvaDE+CiAgICAgIDxwPkZhaWxlZCB0byBpbml0aWFsaXplIHRoZSBhcHBsaWNhdGlvbi4gUGxlYXNlIHJlZnJlc2ggdGhlIHBhZ2UuPC9wPgogICAgICA8cHJlIHN0eWxlPSJiYWNrZ3JvdW5kOiAjZjNmNGY2OyBwYWRkaW5nOiAxcmVtOyBib3JkZXItcmFkaXVzOiAwLjVyZW07IG1hcmdpbi10b3A6IDFyZW07IHRleHQtYWxpZ246IGxlZnQ7IG92ZXJmbG93OiBhdXRvOyI+JHtlcnJvciBpbnN0YW5jZW9mIEVycm9yID8gZXJyb3IubWVzc2FnZSA6IFN0cmluZyhlcnJvcil9PC9wcmU+CiAgICA8L2Rpdj4KICBgCn0K was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.",
+    "timestamp": "2025-12-28T04:17:16.727Z",
+    "viewport": "mobile"
+  }
+]
