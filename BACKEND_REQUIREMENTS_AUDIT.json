@@ -1,0 +1,539 @@
+{
+  "audit_metadata": {
+    "project": "Premium CV Portfolio Website",
+    "audit_date": "2024-12-28",
+    "audit_type": "diagnostics_only",
+    "auditor": "GitHub Copilot Agent",
+    "repository": "Raminyazdani/premium-cv-port-land"
+  },
+  "executive_summary": {
+    "verdict": "backend_recommended",
+    "verdict_details": "A backend IS recommended for the contact form and booking features to become fully functional. However, the website can operate as a static portfolio without a backend using third-party services (Formspree, Calendly, etc.).",
+    "total_features_analyzed": 7,
+    "features_requiring_backend": 2,
+    "features_backend_optional": 5
+  },
+  "features": [
+    {
+      "name": "Contact Form",
+      "file": "src/components/ContactForm.tsx",
+      "lines": "129-164",
+      "current_status": "simulated",
+      "current_behavior": "Form collects name, email, subject, message. Submits to console.log() with simulated 1.5s delay.",
+      "backend_required": true,
+      "priority": "high",
+      "data_collected": ["name", "email", "subject", "message"],
+      "pii_involved": true,
+      "minimal_backend": {
+        "endpoint": "POST /api/contact",
+        "dependencies": ["email_service"],
+        "effort": "1-2 days"
+      },
+      "ideal_backend": {
+        "features": ["database_storage", "admin_ui", "spam_filtering", "auto_response"],
+        "effort": "1-2 weeks"
+      }
+    },
+    {
+      "name": "Booking Widget",
+      "file": "src/components/BookingWidget.tsx",
+      "lines": "67-120",
+      "current_status": "mock_data",
+      "current_behavior": "UI for selecting meeting type with hardcoded dates and mock time slots. No actual calendar integration.",
+      "backend_required": true,
+      "priority": "high",
+      "data_collected": ["name", "email", "meeting_type", "date", "time", "timezone", "notes"],
+      "pii_involved": true,
+      "minimal_backend": {
+        "endpoint": "POST /api/bookings",
+        "dependencies": ["database", "email_service"],
+        "effort": "1 week"
+      },
+      "ideal_backend": {
+        "features": ["google_calendar_integration", "zoom_api", "automated_reminders", "availability_management"],
+        "effort": "3-4 weeks"
+      }
+    },
+    {
+      "name": "PDF Generation",
+      "file": "src/components/sections/Footer.tsx",
+      "lines": "56-77",
+      "current_status": "browser_fallback",
+      "current_behavior": "Uses window.print() browser dialog. No server-side PDF generation.",
+      "backend_required": false,
+      "priority": "medium",
+      "data_collected": [],
+      "pii_involved": false,
+      "minimal_backend": {
+        "endpoint": "POST /api/generate-pdf",
+        "dependencies": ["puppeteer_or_wkhtmltopdf"],
+        "effort": "3-5 days"
+      },
+      "ideal_backend": {
+        "features": ["latex_templates", "multiple_formats", "cdn_caching"],
+        "effort": "2 weeks"
+      }
+    },
+    {
+      "name": "Analytics",
+      "file": "src/utils/analytics.ts",
+      "lines": "full",
+      "current_status": "client_side_only",
+      "current_behavior": "Client-side event tracking with GA4 integration stub. Events logged to console in dev mode.",
+      "backend_required": false,
+      "priority": "low",
+      "data_collected": ["page_views", "section_scrolls", "interactions"],
+      "pii_involved": false,
+      "minimal_backend": null,
+      "ideal_backend": {
+        "features": ["custom_analytics_api", "privacy_first_storage", "realtime_dashboard"],
+        "effort": "2-3 weeks"
+      }
+    },
+    {
+      "name": "Testimonials",
+      "file": "src/components/TestimonialsSection.tsx",
+      "lines": "68-94",
+      "current_status": "static_mock",
+      "current_behavior": "Uses sample testimonials if no real data in CV JSON. Static data in component file.",
+      "backend_required": false,
+      "priority": "low",
+      "data_collected": [],
+      "pii_involved": false,
+      "minimal_backend": null,
+      "ideal_backend": {
+        "features": ["admin_management", "public_submission", "moderation"],
+        "effort": "1 week"
+      }
+    },
+    {
+      "name": "Articles Section",
+      "file": "src/components/ArticlesSection.tsx",
+      "lines": "full",
+      "current_status": "static",
+      "current_behavior": "Reads articles from CV data context. Supports internal markdown and external links.",
+      "backend_required": false,
+      "priority": "low",
+      "data_collected": [],
+      "pii_involved": false,
+      "minimal_backend": null,
+      "ideal_backend": {
+        "features": ["headless_cms", "markdown_editor", "view_tracking"],
+        "effort": "2 weeks"
+      }
+    },
+    {
+      "name": "Download Modal",
+      "file": "src/components/DownloadModal.tsx",
+      "lines": "full",
+      "current_status": "client_side",
+      "current_behavior": "Client-side export to JSON and Markdown. PDF uses browser print.",
+      "backend_required": false,
+      "priority": "medium",
+      "data_collected": [],
+      "pii_involved": false,
+      "minimal_backend": {
+        "endpoint": "POST /api/generate-pdf",
+        "dependencies": ["same_as_pdf_generation"],
+        "effort": "included_in_pdf_generation"
+      },
+      "ideal_backend": null
+    }
+  ],
+  "data_domains": [
+    {
+      "domain": "contact_messages",
+      "needs_persistence": true,
+      "needs_database": true,
+      "sensitivity": "high",
+      "pii_fields": ["name", "email"],
+      "gdpr_relevant": true
+    },
+    {
+      "domain": "booking_requests",
+      "needs_persistence": true,
+      "needs_database": true,
+      "sensitivity": "high",
+      "pii_fields": ["name", "email", "timezone"],
+      "gdpr_relevant": true
+    },
+    {
+      "domain": "availability_slots",
+      "needs_persistence": true,
+      "needs_database": true,
+      "sensitivity": "low",
+      "pii_fields": [],
+      "gdpr_relevant": false
+    },
+    {
+      "domain": "meeting_links",
+      "needs_persistence": true,
+      "needs_database": true,
+      "sensitivity": "medium",
+      "pii_fields": [],
+      "gdpr_relevant": false
+    },
+    {
+      "domain": "analytics_events",
+      "needs_persistence": false,
+      "needs_database": false,
+      "sensitivity": "low",
+      "pii_fields": ["ip_address"],
+      "gdpr_relevant": true
+    },
+    {
+      "domain": "user_preferences",
+      "needs_persistence": false,
+      "needs_database": false,
+      "sensitivity": "low",
+      "pii_fields": [],
+      "gdpr_relevant": false
+    },
+    {
+      "domain": "cv_content",
+      "needs_persistence": false,
+      "needs_database": false,
+      "sensitivity": "medium",
+      "pii_fields": [],
+      "gdpr_relevant": false
+    }
+  ],
+  "api_design": {
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/api/contact",
+        "description": "Submit contact form message",
+        "request_body": {
+          "name": "string (2-100 chars)",
+          "email": "string (valid email)",
+          "subject": "string (3-200 chars)",
+          "message": "string (10-5000 chars)",
+          "captcha": "string (optional, reCAPTCHA token)"
+        },
+        "response_success": {
+          "status": 200,
+          "body": {
+            "success": true,
+            "message": "Message sent successfully",
+            "id": "uuid"
+          }
+        },
+        "response_error": {
+          "status": "400/422/429",
+          "body": {
+            "success": false,
+            "error": "string",
+            "details": "object (optional)"
+          }
+        },
+        "rate_limit": "5 requests/hour per IP"
+      },
+      {
+        "method": "POST",
+        "path": "/api/bookings",
+        "description": "Create a new booking request",
+        "request_body": {
+          "type": "video | phone | in-person",
+          "date": "YYYY-MM-DD",
+          "time": "HH:MM",
+          "timezone": "string (IANA timezone)",
+          "name": "string",
+          "email": "string",
+          "notes": "string (optional)"
+        },
+        "response_success": {
+          "status": 201,
+          "body": {
+            "success": true,
+            "booking": {
+              "id": "uuid",
+              "type": "string",
+              "dateTime": "ISO timestamp",
+              "meetingLink": "url",
+              "confirmationSent": true
+            }
+          }
+        },
+        "rate_limit": "10 requests/hour per IP"
+      },
+      {
+        "method": "GET",
+        "path": "/api/availability",
+        "description": "Get available time slots",
+        "query_params": {
+          "month": "YYYY-MM",
+          "type": "video | phone | in-person (optional)"
+        },
+        "response_success": {
+          "status": 200,
+          "body": {
+            "slots": [
+              {
+                "date": "YYYY-MM-DD",
+                "times": [
+                  { "time": "HH:MM", "available": true }
+                ]
+              }
+            ]
+          }
+        },
+        "rate_limit": "60 requests/hour per IP"
+      },
+      {
+        "method": "POST",
+        "path": "/api/generate-pdf",
+        "description": "Generate PDF version of CV",
+        "request_body": {
+          "language": "en | de | fa",
+          "focusFilter": "string",
+          "sections": ["string"],
+          "includeContact": "boolean",
+          "includeReferences": "boolean"
+        },
+        "response_success": {
+          "status": 200,
+          "content_type": "application/pdf",
+          "body": "binary PDF data"
+        },
+        "rate_limit": "20 requests/hour per IP"
+      }
+    ],
+    "security": {
+      "input_validation": "All user input must be sanitized against XSS",
+      "request_size_limit": "1MB",
+      "csrf_protection": "Required for state-changing operations",
+      "rate_limiting": "Per-IP rate limiting on all endpoints",
+      "spam_mitigation": ["honeypot_field", "recaptcha_v3", "email_domain_blacklist"]
+    }
+  },
+  "database_options": [
+    {
+      "name": "no_database",
+      "description": "Email-only workflow using third-party services",
+      "pros": ["simplest", "no_maintenance", "gdpr_simpler", "free_tier_sufficient"],
+      "cons": ["no_message_history", "no_analytics", "third_party_dependency"],
+      "when_to_choose": "Low traffic site, quick MVP, no message management needed",
+      "services": ["Formspree", "Netlify Forms", "Calendly"]
+    },
+    {
+      "name": "lightweight_database",
+      "description": "SQLite or PostgreSQL for booking requests",
+      "pros": ["full_control", "message_history", "can_build_admin", "works_offline"],
+      "cons": ["database_maintenance", "backup_needed", "gdpr_data_management"],
+      "when_to_choose": "Moderate traffic, need message management, building custom features",
+      "services": ["Supabase", "PlanetScale", "Neon", "SQLite"]
+    },
+    {
+      "name": "full_scheduling",
+      "description": "Google Calendar integration with webhook support",
+      "pros": ["professional_experience", "calendar_integration", "conflict_prevention", "full_analytics"],
+      "cons": ["complex_oauth", "multiple_api_dependencies", "higher_maintenance"],
+      "when_to_choose": "High-volume scheduling, professional consulting, need calendar sync",
+      "services": ["Google Calendar API", "Zoom API", "PostgreSQL", "Redis"]
+    }
+  ],
+  "auth_admin": {
+    "admin_ui_needed": true,
+    "admin_ui_reason": "To manage booking requests and view contact messages",
+    "recommended_approach": "password_protected_routes",
+    "admin_routes": [
+      "/admin/messages",
+      "/admin/bookings",
+      "/admin/availability"
+    ],
+    "auth_options": [
+      {
+        "name": "single_password",
+        "complexity": "low",
+        "security": "basic",
+        "suitable_for": "single_owner_site"
+      },
+      {
+        "name": "magic_link",
+        "complexity": "medium",
+        "security": "good",
+        "suitable_for": "no_password_to_remember"
+      },
+      {
+        "name": "oauth",
+        "complexity": "high",
+        "security": "excellent",
+        "suitable_for": "multi_user_admin"
+      }
+    ]
+  },
+  "deployment": {
+    "recommended": "serverless_functions",
+    "options": [
+      {
+        "name": "serverless_functions",
+        "description": "Netlify/Vercel functions, same domain as frontend",
+        "pros": ["no_server_management", "auto_scaling", "same_domain", "free_tier"],
+        "cons": ["cold_starts", "function_timeouts", "stateless_only"],
+        "cors_required": false
+      },
+      {
+        "name": "separate_backend",
+        "description": "Express/Hono on Railway/Render/Fly.io",
+        "pros": ["full_control", "long_running_processes", "websocket_support"],
+        "cons": ["separate_deployment", "cors_configuration", "higher_cost"],
+        "cors_required": true
+      }
+    ],
+    "environment_variables": [
+      { "name": "SENDGRID_API_KEY", "category": "email" },
+      { "name": "EMAIL_FROM", "category": "email" },
+      { "name": "EMAIL_TO", "category": "email" },
+      { "name": "DATABASE_URL", "category": "database" },
+      { "name": "RECAPTCHA_SECRET_KEY", "category": "spam_protection" },
+      { "name": "GOOGLE_CLIENT_ID", "category": "calendar" },
+      { "name": "GOOGLE_CLIENT_SECRET", "category": "calendar" },
+      { "name": "GOOGLE_REFRESH_TOKEN", "category": "calendar" },
+      { "name": "ZOOM_API_KEY", "category": "meetings" },
+      { "name": "ZOOM_API_SECRET", "category": "meetings" },
+      { "name": "ADMIN_PASSWORD", "category": "auth" },
+      { "name": "ADMIN_EMAIL", "category": "auth" },
+      { "name": "REDIS_URL", "category": "caching" }
+    ],
+    "monitoring": {
+      "minimum": ["console_logs", "sentry_free_tier"],
+      "recommended": ["structured_logging", "error_alerting", "uptime_monitoring"]
+    }
+  },
+  "solution_paths": [
+    {
+      "name": "minimal",
+      "title": "Third-Party Services Only",
+      "description": "No custom backend needed",
+      "solutions": {
+        "contact_form": "Formspree or Netlify Forms",
+        "booking": "Calendly embed",
+        "pdf": "Keep browser print",
+        "analytics": "Google Analytics 4"
+      },
+      "effort": "1-2 hours",
+      "cost": "Free (Formspree free tier: 50 submissions/month)",
+      "maintenance": "minimal",
+      "tradeoffs": {
+        "pros": ["quick_to_implement", "no_server_maintenance"],
+        "cons": ["limited_customization", "third_party_branding", "data_in_external_services"]
+      }
+    },
+    {
+      "name": "medium",
+      "title": "Serverless Functions (Recommended)",
+      "description": "Custom API with serverless architecture",
+      "solutions": {
+        "contact_form": "Vercel/Netlify function + SendGrid",
+        "booking": "Custom API + Supabase",
+        "pdf": "Puppeteer function (edge limit aware)",
+        "analytics": "Existing GA4 integration",
+        "admin": "Simple password-protected routes"
+      },
+      "stack": ["Netlify/Vercel Functions", "Supabase", "SendGrid", "Sentry"],
+      "effort": "2-3 weeks",
+      "cost": "Free tier covers low volume",
+      "maintenance": "low",
+      "tradeoffs": {
+        "pros": ["full_control", "same_domain", "good_dx"],
+        "cons": ["cold_starts", "function_timeouts"]
+      }
+    },
+    {
+      "name": "full",
+      "title": "Full Backend Service",
+      "description": "Complete custom backend for high-volume needs",
+      "solutions": {
+        "contact_form": "Express/Hono API",
+        "booking": "Custom + Google Calendar API",
+        "pdf": "LaTeX + Puppeteer service",
+        "analytics": "Custom analytics DB",
+        "admin": "Full React admin dashboard"
+      },
+      "stack": ["Hono/Express", "Fly.io/Railway", "PostgreSQL", "Redis", "Google Calendar API", "Zoom API", "SendGrid"],
+      "effort": "4-6 weeks",
+      "cost": "$5-15/month baseline",
+      "maintenance": "medium",
+      "tradeoffs": {
+        "pros": ["full_flexibility", "professional_features", "websocket_support"],
+        "cons": ["more_complexity", "separate_deployment", "cors_configuration"]
+      }
+    }
+  ],
+  "out_of_box_checks": {
+    "existing_api_references": {
+      "found": false,
+      "details": "No API base URL or endpoint references found except in TODO comments"
+    },
+    "existing_backend_stubs": {
+      "found": true,
+      "location": "backend/README.md",
+      "content_summary": "Placeholder directory with README listing future plans: contact form API, PDF generation, analytics API, admin dashboard"
+    },
+    "security_risks": [
+      {
+        "risk": "secrets_exposure",
+        "mitigation": "Use environment variables, add .env to .gitignore"
+      },
+      {
+        "risk": "input_validation",
+        "mitigation": "Sanitize all user input, use parameterized queries"
+      },
+      {
+        "risk": "email_injection",
+        "mitigation": "Validate email format, don't include user input in headers"
+      },
+      {
+        "risk": "webhook_validation",
+        "mitigation": "Validate signatures for Calendly/Zoom webhooks"
+      },
+      {
+        "risk": "csrf",
+        "mitigation": "Use CSRF tokens and SameSite cookies"
+      },
+      {
+        "risk": "rate_limiting",
+        "mitigation": "Implement per-IP rate limiting on public endpoints"
+      }
+    ]
+  },
+  "acceptance_criteria": {
+    "contact_form": [
+      "Form submission sends email to owner",
+      "Sender receives confirmation email (optional)",
+      "Rate limiting prevents spam (max 5/hour/IP)",
+      "Validation errors return 400 with details",
+      "Success returns 200 with confirmation"
+    ],
+    "booking_system": [
+      "Available slots fetched from database/calendar",
+      "Booking creates calendar event",
+      "Meeting link generated and returned",
+      "Confirmation emails sent to both parties",
+      "Conflicting slots prevented"
+    ],
+    "pdf_generation": [
+      "PDF generated server-side with consistent formatting",
+      "Supports all 3 languages (EN, DE, FA)",
+      "Respects focus filter selection",
+      "RTL support for Persian",
+      "Returns downloadable PDF within 10s"
+    ],
+    "admin_dashboard": [
+      "Password-protected access",
+      "View all contact messages",
+      "Mark messages as read/archived",
+      "View upcoming bookings",
+      "Cancel/reschedule bookings",
+      "Set availability slots"
+    ]
+  },
+  "self_overseer_checklist": {
+    "features_enumerated": true,
+    "solution_paths_proposed": 3,
+    "api_data_models_described": true,
+    "json_summary_matches_markdown": true,
+    "locked_files_unchanged": true
+  }
+}
