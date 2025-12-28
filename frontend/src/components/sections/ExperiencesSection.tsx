@@ -12,10 +12,11 @@ import {
   CaretUp,
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
+import { useTranslation, useFormatters } from '@/context/LanguageContext'
 import { isVisibleWithFilter, type FocusFilter, getStoredFocusFilter } from '@/lib/focusFilterManager'
 import type { Experience } from '@/types/cv'
 
-function parseDuration(durationStr?: string | null): { startDate: Date | null; endDate: Date | null; displayDuration: string } {
+function parseDuration(durationStr?: string | null, presentLabel: string = 'Present'): { startDate: Date | null; endDate: Date | null; displayDuration: string } {
   if (!durationStr) return { startDate: null, endDate: null, displayDuration: '' }
 
   const parts = durationStr.split('-').map(p => p.trim())
@@ -39,7 +40,7 @@ function parseDuration(durationStr?: string | null): { startDate: Date | null; e
 
   const formatDate = (dateStr: string): string => {
     if (dateStr.toLowerCase() === 'recent' || dateStr.toLowerCase() === 'present') {
-      return 'Present'
+      return presentLabel
     }
     
     try {
@@ -71,11 +72,12 @@ function inferCategory(institution?: string | null, role?: string | null): 'Acad
 
 interface ExperienceCardProps {
   experience: Experience
+  presentLabel: string
 }
 
-function ExperienceCard({ experience }: ExperienceCardProps) {
+function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const { displayDuration } = parseDuration(experience.duration)
+  const { displayDuration } = parseDuration(experience.duration, presentLabel)
   const category = inferCategory(experience.institution, experience.role)
 
   const hasExpandableContent = experience.description && experience.description.length > 150
@@ -172,7 +174,9 @@ export function ExperiencesSection() {
   const [currentFilter, setCurrentFilter] = useState<FocusFilter>('Full CV')
   
   const data = useCV()
+  const t = useTranslation()
   const experiences = data.experiences ?? []
+  const presentLabel = t.experience.present
 
   useEffect(() => {
     const filter = getStoredFocusFilter()
@@ -332,7 +336,7 @@ export function ExperiencesSection() {
                       <div className="absolute left-0 top-6 w-4 h-4 rounded-full bg-primary border-4 border-background hidden md:block" />
                     )}
                     <div className={groupBy === 'none' ? 'md:ml-10' : ''}>
-                      <ExperienceCard experience={exp} />
+                      <ExperienceCard experience={exp} presentLabel={presentLabel} />
                     </div>
                   </div>
                 ))}

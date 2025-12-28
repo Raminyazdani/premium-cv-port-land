@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useCallback } from 'react'
 import { Toaster } from 'sonner'
 import { FilterProvider, useFilter } from '@/context/FilterContext'
-import { LanguageProvider, useLanguage } from '@/context/LanguageContext'
+import { LanguageProvider, useLanguage, useTranslation } from '@/context/LanguageContext'
 import { CVDataProvider, useCVData } from '@/context/CVDataContext'
 import { KonamiProvider, useKonami } from '@/context/KonamiContext'
 import { PWAProvider } from '@/context/PWAContext'
@@ -50,6 +50,7 @@ function AppContent() {
   const { data, isValid, errors, warnings } = useCVData()
   const { justUnlocked } = useKonami()
   const { language } = useLanguage()
+  const t = useTranslation()
 
   // Initialize SEO when data or language changes
   useEffect(() => {
@@ -136,7 +137,7 @@ function AppContent() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
       >
-        Skip to main content
+        {t.a11y.skip_to_content}
       </a>
       <Header />
       <main id="main-content">

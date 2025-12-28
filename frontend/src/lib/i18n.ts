@@ -1096,3 +1096,354 @@ export function t(lang: Language, key: string): string {
 export function interpolate(template: string, vars: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (_, key) => String(vars[key] ?? ''))
 }
+
+// ============================================================================
+// LOCALE-AWARE FORMATTING UTILITIES
+// ============================================================================
+
+/**
+ * Language to locale mapping for Intl APIs
+ */
+const localeMap: Record<Language, string> = {
+  en: 'en-US',
+  de: 'de-DE',
+  fa: 'fa-IR'
+}
+
+/**
+ * Date formatting options presets
+ */
+export const dateFormatPresets = {
+  short: { year: 'numeric', month: 'short' } as Intl.DateTimeFormatOptions,
+  long: { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions,
+  full: { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' } as Intl.DateTimeFormatOptions,
+  monthYear: { year: 'numeric', month: 'long' } as Intl.DateTimeFormatOptions,
+  yearOnly: { year: 'numeric' } as Intl.DateTimeFormatOptions
+}
+
+/**
+ * Format a date according to the specified language's locale.
+ * 
+ * Examples:
+ * - EN: "January 15, 2024"
+ * - DE: "15. Januar 2024"
+ * - FA: "۱۵ دی ۱۴۰۲" (with Persian calendar)
+ * 
+ * @param date - Date to format (string, Date, or number)
+ * @param language - Target language
+ * @param options - Intl.DateTimeFormat options (defaults to 'long' preset)
+ * @returns Formatted date string or empty string if invalid
+ */
+export function formatDate(
+  date: Date | string | number | null | undefined,
+  language: Language,
+  options: Intl.DateTimeFormatOptions = dateFormatPresets.long
+): string {
+  if (!date) return ''
+
+  try {
+    const dateObj = date instanceof Date ? date : new Date(date)
+    
+    if (isNaN(dateObj.getTime())) {
+      return ''
+    }
+
+    const locale = localeMap[language]
+    
+    // For Persian, optionally use Persian calendar
+    // Note: Using Gregorian calendar by default for consistency
+    // To use Persian calendar, uncomment the calendar option below
+    const formatOptions: Intl.DateTimeFormatOptions = {
+      ...options,
+      // calendar: language === 'fa' ? 'persian' : 'gregory'
+    }
+
+    return new Intl.DateTimeFormat(locale, formatOptions).format(dateObj)
+  } catch {
+    return ''
+  }
+}
+
+/**
+ * Format a date for display, handling special cases like "present"
+ * 
+ * @param date - Date to format
+ * @param language - Target language
+ * @param options - Formatting options
+ * @returns Formatted date or "Present" translation
+ */
+export function formatDateDisplay(
+  date: Date | string | number | null | undefined,
+  language: Language,
+  options: Intl.DateTimeFormatOptions = dateFormatPresets.monthYear
+): string {
+  if (!date) return ''
+  
+  // Handle "present" case
+  if (typeof date === 'string') {
+    const lowerDate = date.toLowerCase()
+    if (lowerDate === 'present' || lowerDate === 'gegenwart' || 
+        lowerDate === 'تاکنون' || lowerDate === 'حال حاضر') {
+      const strings = getUIStrings(language)
+      return strings.education.present
+    }
+  }
+  
+  return formatDate(date, language, options)
+}
+
+/**
+ * Format a date range (start - end) according to locale
+ * 
+ * @param startDate - Start date
+ * @param endDate - End date (or "present")
+ * @param language - Target language
+ * @returns Formatted date range string
+ */
+export function formatDateRange(
+  startDate: Date | string | number | null | undefined,
+  endDate: Date | string | number | null | undefined,
+  language: Language
+): string {
+  const start = formatDateDisplay(startDate, language, dateFormatPresets.monthYear)
+  const end = formatDateDisplay(endDate, language, dateFormatPresets.monthYear)
+  
+  if (!start && !end) return ''
+  if (!start) return end
+  if (!end) {
+    const strings = getUIStrings(language)
+    return `${start} – ${strings.education.present}`
+  }
+  
+  return `${start} – ${end}`
+}
+
+/**
+ * Format a number according to the specified language's locale.
+ * 
+ * Examples:
+ * - EN: "1,234.56"
+ * - DE: "1.234,56"
+ * - FA: "۱٬۲۳۴٫۵۶" (with Persian numerals)
+ * 
+ * @param value - Number to format
+ * @param language - Target language
+ * @param options - Intl.NumberFormat options
+ * @returns Formatted number string
+ */
+export function formatNumber(
+  value: number | null | undefined,
+  language: Language,
+  options: Intl.NumberFormatOptions = {}
+): string {
+  if (value === null || value === undefined) return ''
+  
+  try {
+    const locale = localeMap[language]
+    
+    // For Persian, use Extended Arabic-Indic numerals (۰-۹)
+    // 'arabext' = Extended Arabic-Indic numerals used in Persian/Farsi
+    const formatOptions: Intl.NumberFormatOptions = {
+      ...options,
+      numberingSystem: language === 'fa' ? 'arabext' : undefined
+    }
+    
+    return new Intl.NumberFormat(locale, formatOptions).format(value)
+  } catch {
+    return String(value)
+  }
+}
+
+/**
+ * Format a currency value according to locale
+ * 
+ * @param value - Numeric value
+ * @param language - Target language
+ * @param currency - ISO 4217 currency code (default: based on language)
+ * @returns Formatted currency string
+ */
+export function formatCurrency(
+  value: number | null | undefined,
+  language: Language,
+  currency?: string
+): string {
+  if (value === null || value === undefined) return ''
+  
+  // Default currency by language
+  const defaultCurrencies: Record<Language, string> = {
+    en: 'USD',
+    de: 'EUR',
+    fa: 'IRR'
+  }
+  
+  return formatNumber(value, language, {
+    style: 'currency',
+    currency: currency || defaultCurrencies[language],
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  })
+}
+
+/**
+ * Format a percentage according to locale
+ * 
+ * @param value - Decimal value (e.g., 0.85 for 85%)
+ * @param language - Target language
+ * @returns Formatted percentage string
+ */
+export function formatPercent(
+  value: number | null | undefined,
+  language: Language
+): string {
+  if (value === null || value === undefined) return ''
+  
+  return formatNumber(value, language, {
+    style: 'percent',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1
+  })
+}
+
+/**
+ * Plural forms for supported languages
+ */
+type PluralForms = {
+  zero?: string
+  one: string
+  two?: string
+  few?: string
+  many?: string
+  other: string
+}
+
+/**
+ * Get plural form based on count and language rules.
+ * 
+ * Uses Intl.PluralRules for proper language-specific pluralization.
+ * 
+ * @param count - The count to pluralize for
+ * @param forms - Object with plural forms (one, other, and optionally zero, two, few, many)
+ * @param language - Target language
+ * @returns The appropriate plural form
+ */
+export function pluralize(
+  count: number,
+  forms: PluralForms,
+  language: Language
+): string {
+  const locale = localeMap[language]
+  const pluralRules = new Intl.PluralRules(locale)
+  const rule = pluralRules.select(count)
+  
+  // Return the matching form, with fallback to 'other'
+  switch (rule) {
+    case 'zero':
+      return forms.zero ?? forms.other
+    case 'one':
+      return forms.one
+    case 'two':
+      return forms.two ?? forms.other
+    case 'few':
+      return forms.few ?? forms.other
+    case 'many':
+      return forms.many ?? forms.other
+    default:
+      return forms.other
+  }
+}
+
+/**
+ * Helper to format a count with its pluralized label.
+ * 
+ * Example: pluralizeWithCount(5, { one: 'item', other: 'items' }, 'en') => "5 items"
+ * 
+ * @param count - The count
+ * @param forms - Plural forms
+ * @param language - Target language
+ * @returns Formatted string with count and plural label
+ */
+export function pluralizeWithCount(
+  count: number,
+  forms: PluralForms,
+  language: Language
+): string {
+  const formattedCount = formatNumber(count, language)
+  const label = pluralize(count, forms, language)
+  return `${formattedCount} ${label}`
+}
+
+/**
+ * Format relative time (e.g., "3 days ago", "in 2 hours")
+ * 
+ * @param value - Numeric value (negative for past, positive for future)
+ * @param unit - Time unit
+ * @param language - Target language
+ * @returns Formatted relative time string
+ */
+export function formatRelativeTime(
+  value: number,
+  unit: Intl.RelativeTimeFormatUnit,
+  language: Language
+): string {
+  const locale = localeMap[language]
+  
+  try {
+    const rtf = new Intl.RelativeTimeFormat(locale, {
+      numeric: 'auto',
+      style: 'long'
+    })
+    return rtf.format(value, unit)
+  } catch {
+    // Fallback for unsupported browsers
+    const absValue = Math.abs(value)
+    const unitStr = `${unit}${absValue !== 1 ? 's' : ''}`
+    if (value < 0) {
+      return `${absValue} ${unitStr} ago`
+    } else {
+      return `in ${absValue} ${unitStr}`
+    }
+  }
+}
+
+/**
+ * Get the list display format for the language
+ * 
+ * Example: formatList(['a', 'b', 'c'], 'en') => "a, b, and c"
+ *          formatList(['a', 'b', 'c'], 'de') => "a, b und c"
+ * 
+ * @param items - Array of strings to format as a list
+ * @param language - Target language
+ * @param type - List format type
+ * @returns Formatted list string
+ */
+export function formatList(
+  items: string[],
+  language: Language,
+  type: 'conjunction' | 'disjunction' = 'conjunction'
+): string {
+  if (!items || items.length === 0) return ''
+  if (items.length === 1) return items[0]
+  
+  const locale = localeMap[language]
+  
+  try {
+    const listFormatter = new Intl.ListFormat(locale, {
+      style: 'long',
+      type
+    })
+    return listFormatter.format(items)
+  } catch {
+    // Fallback for unsupported browsers
+    if (items.length === 2) {
+      const conjunction = type === 'conjunction' 
+        ? (language === 'de' ? ' und ' : language === 'fa' ? ' و ' : ' and ')
+        : (language === 'de' ? ' oder ' : language === 'fa' ? ' یا ' : ' or ')
+      return items.join(conjunction)
+    }
+    return items.slice(0, -1).join(', ') + 
+           (type === 'conjunction' 
+             ? (language === 'de' ? ' und ' : language === 'fa' ? ' و ' : ', and ')
+             : (language === 'de' ? ' oder ' : language === 'fa' ? ' یا ' : ', or ')) + 
+           items[items.length - 1]
+  }
+}
