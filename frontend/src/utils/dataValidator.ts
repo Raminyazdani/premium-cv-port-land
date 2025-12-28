@@ -407,7 +407,9 @@ export class DataValidator {
   }
 
   private isValidDate(dateStr: string): boolean {
-    if (dateStr === 'present' || dateStr === 'Present') return true
+    // Handle "present" equivalents in EN/DE/FA
+    const presentEquivalents = ['present', 'Present', 'تاکنون', 'حال حاضر', 'Gegenwart', 'heute']
+    if (presentEquivalents.includes(dateStr)) return true
 
     const isoRegex = /^\d{4}-\d{2}-\d{2}$/
     if (!isoRegex.test(dateStr)) return false
@@ -441,7 +443,10 @@ export class DataValidator {
 
 export function sanitizeDate(dateStr: string | null | undefined): string | null {
   if (!dateStr) return null
-  if (dateStr === 'present' || dateStr === 'Present') return 'present'
+  
+  // Handle "present" equivalents in EN/DE/FA
+  const presentEquivalents = ['present', 'Present', 'تاکنون', 'حال حاضر', 'Gegenwart', 'heute']
+  if (presentEquivalents.includes(dateStr)) return 'present'
 
   const validator = new DataValidator()
   if (!(validator as any).isValidDate(dateStr)) {

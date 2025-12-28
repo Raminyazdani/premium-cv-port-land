@@ -23,6 +23,7 @@ const iconMap: Record<string, typeof LinkedinLogo> = {
 function SocialLink({ profile }: { profile: Profile }) {
   const network = profile.network?.toLowerCase() ?? ''
   const Icon = iconMap[network]
+  const t = useTranslation()
   
   if (!Icon || !profile.url) return null
   
@@ -37,7 +38,7 @@ function SocialLink({ profile }: { profile: Profile }) {
         href={profile.url}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Visit ${profile.network} profile`}
+        aria-label={interpolate(t.a11y.visit_profile, { network: profile.network || '' })}
         className="flex items-center gap-1.5 sm:gap-2"
       >
         <Icon size={16} weight="bold" className="sm:w-[18px] sm:h-[18px]" />
@@ -87,7 +88,7 @@ export function Footer() {
               {interpolate(t.footer.copyright, { year: String(currentYear), name: fullName })}
             </p>
             <p className="text-xs text-muted-foreground/70 mt-1">
-              Try the Konami code 🎮
+              {t.footer.konami_hint}
             </p>
           </div>
 
