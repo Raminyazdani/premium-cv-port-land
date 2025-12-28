@@ -266,6 +266,29 @@ export interface ProjectCaseStudy {
   metrics?: { label: string; value: string }[] | null
 }
 
+export interface Article {
+  title: string
+  slug: string
+  summary?: string | null
+  content?: string | null
+  coverImage?: string | null
+  publishDate?: string | null
+  readTime?: number | null
+  tags?: string[] | null
+  external?: boolean | null
+  externalURL?: string | null
+  views?: number | null
+  featured?: boolean | null
+  type_key?: string[] | null
+}
+
+export interface VideoMedia {
+  url: string
+  type: 'youtube' | 'vimeo' | 'direct'
+  title?: string | null
+  poster?: string | null
+}
+
 export interface CVData {
   basics?: Basics[] | Basics | null
   profiles?: Profile[] | null
@@ -279,4 +302,6 @@ export interface CVData {
   references?: Reference[] | null
   experiences?: Experience[] | null
   testimonials?: Testimonial[] | null
+  articles?: Article[] | null
+  videoIntro?: VideoMedia | null
 }

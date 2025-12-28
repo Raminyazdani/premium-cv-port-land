@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { List, X } from '@phosphor-icons/react'
+import { List, DownloadSimple } from '@phosphor-icons/react'
 import { extractBasics, getFullName } from '@/lib/cv-data'
 import { useCVData } from '@/context/CVDataContext'
 import { useKonami } from '@/context/KonamiContext'
 import { ThemeSelector } from '@/components/ThemeSelector'
 import { LanguageSelector } from '@/components/LanguageSelector'
 import { FocusFilterSelector } from '@/components/FocusFilterSelector'
+import { AccessibilityControls } from '@/components/AccessibilityControls'
+import { PWAInstallButton } from '@/components/PWAInstallButton'
+import { DownloadModal } from '@/components/DownloadModal'
 import { LAYOUT_CONSTANTS } from '@/constants/app'
 import { useTranslation } from '@/context/LanguageContext'
 import { cn } from '@/lib/utils'
@@ -15,6 +18,7 @@ import { cn } from '@/lib/utils'
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [downloadModalOpen, setDownloadModalOpen] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const { data } = useCVData()
   const { isUnlocked } = useKonami()
@@ -132,7 +136,18 @@ export function Header() {
             )}>
               <FocusFilterSelector />
               <LanguageSelector />
+              <AccessibilityControls />
               <ThemeSelector konamiUnlocked={isUnlocked} />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setDownloadModalOpen(true)}
+                aria-label={t.actions.download_cv}
+                className="h-9 w-9 sm:h-10 sm:w-10"
+              >
+                <DownloadSimple size={20} weight="bold" />
+              </Button>
+              <PWAInstallButton variant="ghost" size="icon" showText={false} />
             </div>
           </nav>
 
@@ -164,12 +179,28 @@ export function Header() {
                       {item.label}
                     </a>
                   ))}
+                  {/* Mobile download button */}
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsOpen(false)
+                      setDownloadModalOpen(true)
+                    }}
+                    className="mt-4 gap-2"
+                  >
+                    <DownloadSimple size={18} weight="bold" />
+                    {t.actions.download_cv}
+                  </Button>
+                  <PWAInstallButton variant="outline" />
                 </div>
               </SheetContent>
             </Sheet>
           </div>
         </div>
       </div>
+      
+      {/* Download Modal */}
+      <DownloadModal open={downloadModalOpen} onOpenChange={setDownloadModalOpen} />
     </header>
   )
 }

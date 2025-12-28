@@ -185,3 +185,50 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Accessibility: High Contrast Mode */
+.high-contrast {
+  --foreground: oklch(0 0 0);
+  --background: oklch(1 0 0);
+  --muted-foreground: oklch(0.2 0 0);
+  --border: oklch(0 0 0);
+  
+  &.dark {
+    --foreground: oklch(1 0 0);
+    --background: oklch(0 0 0);
+    --muted-foreground: oklch(0.9 0 0);
+    --border: oklch(1 0 0);
+  }
+}
+
+/* Accessibility: Dyslexia-friendly Font */
+.dyslexia-font {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+  
+  * {
+    font-family: inherit !important;
+  }
+}
+
+/* Print styles for CV download */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+    background: white !important;
+    color: black !important;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit !important;
+  }
+  
+  .page-break {
+    page-break-before: always;
+  }
+}
