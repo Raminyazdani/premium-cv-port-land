@@ -1,22 +1,25 @@
 import { ContactForm } from '@/components/ContactForm'
 import { BookingWidget } from '@/components/BookingWidget'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useTranslation } from '@/context/LanguageContext'
 
 export function ContactSection() {
+  const t = useTranslation()
+  
   return (
     <section id="contact" className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Let's Connect</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">{t.contact.title}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Whether you want to send a message or schedule a call, I'm here to help
+            {t.contact.description}
           </p>
         </div>
 
         <Tabs defaultValue="message" className="w-full">
           <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
-            <TabsTrigger value="message">Send Message</TabsTrigger>
-            <TabsTrigger value="booking">Book a Call</TabsTrigger>
+            <TabsTrigger value="message">{t.contact.tab_message}</TabsTrigger>
+            <TabsTrigger value="booking">{t.contact.tab_booking}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="message" className="mt-0">

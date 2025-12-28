@@ -160,6 +160,26 @@ export interface UIStrings {
     copyright: string
     made_with: string
     built_with: string
+    konami_hint: string
+  }
+
+  // Contact section
+  contact: {
+    title: string
+    description: string
+    tab_message: string
+    tab_booking: string
+  }
+
+  // Error messages
+  errors: {
+    something_went_wrong: string
+    error_occurred: string
+    error_details: string
+    try_again: string
+    runtime_error: string
+    unexpected: string
+    error_details_label: string
   }
 
   // Filters
@@ -197,6 +217,32 @@ export interface UIStrings {
     select_focus: string
     open_modal: string
     close_modal: string
+    required: string
+    scroll_to_top: string
+    quick_actions: string
+    language_carousel: string
+    language_selection: string
+    loading_image: string
+    toggle_sidebar: string
+    pagination: string
+    previous_page: string
+    next_page: string
+    breadcrumb: string
+    filter_focus: string
+    testimonial_nav: string
+    media_viewer: string
+    previous_media: string
+    next_media: string
+    scroll_to_about: string
+    certified: string
+    workshop: string
+    search_certifications: string
+    search_skills: string
+    clear_search: string
+    list_view: string
+    carousel_view: string
+    search_publications: string
+    visit_profile: string
   }
 
   // Booking Widget
@@ -437,7 +483,23 @@ const translations: Record<Language, UIStrings> = {
     footer: {
       copyright: '© {year} {name}. All rights reserved.',
       made_with: 'Made with',
-      built_with: 'Built with React & TypeScript'
+      built_with: 'Built with React & TypeScript',
+      konami_hint: 'Try the Konami code 🎮'
+    },
+    contact: {
+      title: "Let's Connect",
+      description: 'Whether you want to send a message or schedule a call, I\'m here to help',
+      tab_message: 'Send Message',
+      tab_booking: 'Book a Call'
+    },
+    errors: {
+      something_went_wrong: 'Something went wrong',
+      error_occurred: 'An error occurred while loading the application',
+      error_details: 'Error details',
+      try_again: 'Try again',
+      runtime_error: 'This spark has encountered a runtime error',
+      unexpected: 'Something unexpected happened while running the application. The error details are shown below. Contact the spark author and let them know about this issue.',
+      error_details_label: 'Error Details:'
     },
     filters: {
       all: 'All',
@@ -468,7 +530,33 @@ const translations: Record<Language, UIStrings> = {
       select_theme: 'Select theme',
       select_focus: 'Select focus',
       open_modal: 'Open modal',
-      close_modal: 'Close modal'
+      close_modal: 'Close modal',
+      required: 'required',
+      scroll_to_top: 'Page corner - click to scroll to top',
+      quick_actions: 'Quick actions',
+      language_carousel: 'Language selector carousel',
+      language_selection: 'Language selection',
+      loading_image: 'Loading image',
+      toggle_sidebar: 'Toggle Sidebar',
+      pagination: 'pagination',
+      previous_page: 'Go to previous page',
+      next_page: 'Go to next page',
+      breadcrumb: 'breadcrumb',
+      filter_focus: 'Filter content focus',
+      testimonial_nav: 'Testimonial navigation',
+      media_viewer: 'Media viewer',
+      previous_media: 'Previous media',
+      next_media: 'Next media',
+      scroll_to_about: 'Scroll to about section',
+      certified: 'Certified',
+      workshop: 'Workshop',
+      search_certifications: 'Search certifications',
+      search_skills: 'Search skills',
+      clear_search: 'Clear search',
+      list_view: 'List view',
+      carousel_view: 'Carousel view',
+      search_publications: 'Search publications',
+      visit_profile: 'Visit {network} profile'
     },
     booking: {
       title: 'Schedule a Call',
@@ -692,7 +780,23 @@ const translations: Record<Language, UIStrings> = {
     footer: {
       copyright: '© {year} {name}. Alle Rechte vorbehalten.',
       made_with: 'Erstellt mit',
-      built_with: 'Erstellt mit React & TypeScript'
+      built_with: 'Erstellt mit React & TypeScript',
+      konami_hint: 'Versuchen Sie den Konami-Code 🎮'
+    },
+    contact: {
+      title: 'Kontaktieren Sie mich',
+      description: 'Ob Sie eine Nachricht senden oder einen Anruf vereinbaren möchten, ich bin hier um zu helfen',
+      tab_message: 'Nachricht senden',
+      tab_booking: 'Anruf buchen'
+    },
+    errors: {
+      something_went_wrong: 'Etwas ist schief gelaufen',
+      error_occurred: 'Beim Laden der Anwendung ist ein Fehler aufgetreten',
+      error_details: 'Fehlerdetails',
+      try_again: 'Erneut versuchen',
+      runtime_error: 'Dieser Spark hat einen Laufzeitfehler festgestellt',
+      unexpected: 'Beim Ausführen der Anwendung ist etwas Unerwartetes passiert. Die Fehlerdetails werden unten angezeigt. Kontaktieren Sie den Spark-Autor und informieren Sie ihn über dieses Problem.',
+      error_details_label: 'Fehlerdetails:'
     },
     filters: {
       all: 'Alle',
@@ -723,7 +827,33 @@ const translations: Record<Language, UIStrings> = {
       select_theme: 'Theme auswählen',
       select_focus: 'Fokus auswählen',
       open_modal: 'Modal öffnen',
-      close_modal: 'Modal schließen'
+      close_modal: 'Modal schließen',
+      required: 'erforderlich',
+      scroll_to_top: 'Seitenecke - zum Scrollen nach oben klicken',
+      quick_actions: 'Schnellaktionen',
+      language_carousel: 'Sprachauswahl-Karussell',
+      language_selection: 'Sprachauswahl',
+      loading_image: 'Bild wird geladen',
+      toggle_sidebar: 'Seitenleiste umschalten',
+      pagination: 'Seitennummerierung',
+      previous_page: 'Zur vorherigen Seite',
+      next_page: 'Zur nächsten Seite',
+      breadcrumb: 'Brotkrümelnavigation',
+      filter_focus: 'Inhaltsfokus filtern',
+      testimonial_nav: 'Testimonial-Navigation',
+      media_viewer: 'Medienbetrachter',
+      previous_media: 'Vorheriges Medium',
+      next_media: 'Nächstes Medium',
+      scroll_to_about: 'Zum Über-Bereich scrollen',
+      certified: 'Zertifiziert',
+      workshop: 'Workshop',
+      search_certifications: 'Zertifizierungen durchsuchen',
+      search_skills: 'Fähigkeiten durchsuchen',
+      clear_search: 'Suche löschen',
+      list_view: 'Listenansicht',
+      carousel_view: 'Karussellansicht',
+      search_publications: 'Veröffentlichungen durchsuchen',
+      visit_profile: '{network}-Profil besuchen'
     },
     booking: {
       title: 'Anruf vereinbaren',
@@ -947,7 +1077,23 @@ const translations: Record<Language, UIStrings> = {
     footer: {
       copyright: '© {year} {name}. تمام حقوق محفوظ است.',
       made_with: 'ساخته شده با',
-      built_with: 'ساخته شده با React و TypeScript'
+      built_with: 'ساخته شده با React و TypeScript',
+      konami_hint: 'کد کونامی را امتحان کنید 🎮'
+    },
+    contact: {
+      title: 'با من در ارتباط باشید',
+      description: 'چه بخواهید پیام بفرستید یا تماس بگیرید، من اینجا هستم تا کمک کنم',
+      tab_message: 'ارسال پیام',
+      tab_booking: 'رزرو تماس'
+    },
+    errors: {
+      something_went_wrong: 'مشکلی پیش آمد',
+      error_occurred: 'خطایی در هنگام بارگذاری برنامه رخ داد',
+      error_details: 'جزئیات خطا',
+      try_again: 'دوباره تلاش کنید',
+      runtime_error: 'این Spark با یک خطای زمان اجرا مواجه شده است',
+      unexpected: 'هنگام اجرای برنامه اتفاق غیرمنتظره‌ای رخ داد. جزئیات خطا در زیر نشان داده شده است. با نویسنده Spark تماس بگیرید و او را از این مشکل آگاه کنید.',
+      error_details_label: 'جزئیات خطا:'
     },
     filters: {
       all: 'همه',
@@ -978,7 +1124,33 @@ const translations: Record<Language, UIStrings> = {
       select_theme: 'انتخاب تم',
       select_focus: 'انتخاب تمرکز',
       open_modal: 'باز کردن مدال',
-      close_modal: 'بستن مدال'
+      close_modal: 'بستن مدال',
+      required: 'الزامی',
+      scroll_to_top: 'گوشه صفحه - برای اسکرول به بالا کلیک کنید',
+      quick_actions: 'اقدامات سریع',
+      language_carousel: 'کاروسل انتخاب زبان',
+      language_selection: 'انتخاب زبان',
+      loading_image: 'بارگذاری تصویر',
+      toggle_sidebar: 'تغییر وضعیت نوار کناری',
+      pagination: 'صفحه‌بندی',
+      previous_page: 'برو به صفحه قبلی',
+      next_page: 'برو به صفحه بعدی',
+      breadcrumb: 'مسیر صفحه',
+      filter_focus: 'فیلتر تمرکز محتوا',
+      testimonial_nav: 'ناوبری نظرات',
+      media_viewer: 'نمایشگر رسانه',
+      previous_media: 'رسانه قبلی',
+      next_media: 'رسانه بعدی',
+      scroll_to_about: 'اسکرول به بخش درباره',
+      certified: 'تایید شده',
+      workshop: 'کارگاه',
+      search_certifications: 'جستجوی گواهینامه‌ها',
+      search_skills: 'جستجوی مهارت‌ها',
+      clear_search: 'پاک کردن جستجو',
+      list_view: 'نمای لیست',
+      carousel_view: 'نمای کاروسل',
+      search_publications: 'جستجوی انتشارات',
+      visit_profile: 'بازدید از پروفایل {network}'
     },
     booking: {
       title: 'رزرو تماس',
