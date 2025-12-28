@@ -49,7 +49,7 @@
   3. Observe the "Premium Interactive Components" section
 - **Expected:** CV sections should display actual CV data
 - **Actual:** Demo section displays feature showcase with hardcoded content
-- **Screenshot:** [Enhanced UI Demo Section](qa_artifacts/screenshots/enhanced-ui-demo-section.png)
+- **Screenshot:** [Enhanced UI Demo Section](../artifacts/qa_artifacts/screenshots/enhanced-ui-demo-section.png)
 - **Suspected Code:** `frontend/src/components/sections/EnhancedUIDemo.tsx`
 - **Suggested Fix:** Remove or hide this section from production; it's developer/demo content
 
@@ -79,7 +79,7 @@
   2. Observe EnhancedUIDemo section still shows English text
 - **Expected:** Section text should be translated or section should be removed
 - **Actual:** All text remains in English: "Enhanced UI Features", "Premium Interactive Components", "3D Language Carousel", etc.
-- **Screenshot:** [Persian Full Page](qa_artifacts/screenshots/qa-fa-desktop-full.png)
+- **Screenshot:** [Persian Full Page](../artifacts/qa_artifacts/screenshots/qa-fa-desktop-full.png)
 - **Suggested Fix:** Either add translations or remove section
 
 #### BUILD-001: CSS Parsing Warnings for @media Queries
@@ -338,11 +338,11 @@
 | Footer | ✅ | ✅ | ✅ |
 
 ### Screenshot Artifacts
-- [Full Page EN Desktop](qa_artifacts/screenshots/qa-full-page-en-desktop.png)
-- [Full Page FA Desktop](qa_artifacts/screenshots/qa-fa-desktop-full.png)
-- [Enhanced UI Demo Section](qa_artifacts/screenshots/enhanced-ui-demo-section.png)
-- Section screenshots: `qa_artifacts/screenshots/{lang}/{viewport}/sections/`
-- Component screenshots: `qa_artifacts/screenshots/{lang}/{viewport}/components/`
+- [Full Page EN Desktop](../artifacts/qa_artifacts/screenshots/qa-full-page-en-desktop.png)
+- [Full Page FA Desktop](../artifacts/qa_artifacts/screenshots/qa-fa-desktop-full.png)
+- [Enhanced UI Demo Section](../artifacts/qa_artifacts/screenshots/enhanced-ui-demo-section.png)
+- Section screenshots: `../artifacts/qa_artifacts/screenshots/{lang}/{viewport}/sections/`
+- Component screenshots: `../artifacts/qa_artifacts/screenshots/{lang}/{viewport}/components/`
 
 ---
 
@@ -430,7 +430,7 @@ frontend/src/
 | Low | Consider design tokens | Consistent spacing/colors |
 | Low | Review bundle splitting | 818KB main bundle is large |
 
-See `qa_artifacts/metadata/architecture_notes.md` for detailed component inventory.
+See `../artifacts/qa_artifacts/metadata/architecture_notes.md` for detailed component inventory.
 
 ---
 
@@ -446,12 +446,12 @@ See `qa_artifacts/metadata/architecture_notes.md` for detailed component invento
 
 ## Self-Overseer Checklist
 
-- [x] Stack detected and recorded (`qa_artifacts/metadata/stack_detection.json`)
+- [x] Stack detected and recorded (`../artifacts/qa_artifacts/metadata/stack_detection.json`)
 - [x] App ran successfully (preview server on port 4173)
-- [x] Test matrix created (`qa_artifacts/metadata/test_matrix.md`)
+- [x] Test matrix created (`../artifacts/qa_artifacts/metadata/test_matrix.md`)
 - [x] Full-page screenshots captured for all language×viewport cases
 - [x] Section/component screenshots captured and referenced
-- [x] Console logs saved (`qa_artifacts/console_logs/`)
+- [x] Console logs saved (`../artifacts/qa_artifacts/console_logs/`)
 - [x] Issues documented with evidence
 - [x] QA_REPORT.md created with embedded screenshots and complete issue catalog
 - [x] QA_REPORT.html to be created as browsable gallery
@@ -481,4 +481,4 @@ Failed to load resource: 404 @ https://res.cloudinary.com/...
 Error while trying to use the following icon from the Manifest
 ```
 
-Full console logs available in `qa_artifacts/console_logs/`
+Full console logs available in `../artifacts/qa_artifacts/console_logs/`
