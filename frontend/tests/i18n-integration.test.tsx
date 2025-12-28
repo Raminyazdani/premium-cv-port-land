@@ -34,7 +34,8 @@ describe('I18N Integration Tests', () => {
     const languageButtons = await screen.findAllByLabelText(/select language/i)
     await user.click(languageButtons[0])
     
-    const germanOption = await screen.findByText(/Deutsch/i)
+    // Target the dropdown menu item specifically (role="menuitem")
+    const germanOption = await screen.findByRole('menuitem', { name: /Deutsch/i })
     await user.click(germanOption)
     
     await waitFor(() => {
@@ -57,7 +58,8 @@ describe('I18N Integration Tests', () => {
     const languageButtons = await screen.findAllByLabelText(/select language/i)
     await user.click(languageButtons[0])
     
-    const persianOption = await screen.findByText(/فارسی/i)
+    // Target the dropdown menu item specifically (role="menuitem")
+    const persianOption = await screen.findByRole('menuitem', { name: /فارسی/i })
     await user.click(persianOption)
     
     await waitFor(() => {
@@ -80,7 +82,8 @@ describe('I18N Integration Tests', () => {
     const languageButtons = await screen.findAllByLabelText(/select language/i)
     await user.click(languageButtons[0])
     
-    const germanOption = await screen.findByText(/Deutsch/i)
+    // Target the dropdown menu item specifically (role="menuitem")
+    const germanOption = await screen.findByRole('menuitem', { name: /Deutsch/i })
     await user.click(germanOption)
     
     await waitFor(() => {
@@ -96,7 +99,8 @@ describe('I18N Integration Tests', () => {
     const languageButtons = await screen.findAllByLabelText(/select language/i)
     await user.click(languageButtons[0])
     
-    const persianOption = await screen.findByText(/فارسی/i)
+    // Target the dropdown menu item specifically (role="menuitem")
+    const persianOption = await screen.findByRole('menuitem', { name: /فارسی/i })
     await user.click(persianOption)
     
     await waitFor(() => {
@@ -117,7 +121,8 @@ describe('I18N Integration Tests', () => {
     const languageButtons = await screen.findAllByLabelText(/select language/i)
     await user.click(languageButtons[0])
     
-    const germanOption = await screen.findByText(/Deutsch/i)
+    // Target the dropdown menu item specifically (role="menuitem")
+    const germanOption = await screen.findByRole('menuitem', { name: /Deutsch/i })
     await user.click(germanOption)
     
     await waitFor(() => {
@@ -145,7 +150,8 @@ describe('I18N Integration Tests', () => {
     const languageButtons = await screen.findAllByLabelText(/select language/i)
     await user.click(languageButtons[0])
     
-    const germanOption = await screen.findByText(/Deutsch/i)
+    // Target the dropdown menu item specifically (role="menuitem")
+    const germanOption = await screen.findByRole('menuitem', { name: /Deutsch/i })
     await user.click(germanOption)
     
     await waitFor(() => {

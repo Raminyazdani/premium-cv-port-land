@@ -1,13 +1,77 @@
-import { ComponentProps } from "react"
+import { ComponentProps, useState, useEffect } from "react"
+import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-function Card({ className, ...props }: ComponentProps<"div">) {
+/**
+ * Card Design System
+ * Unified card component with variants: default, elevated, outlined, interactive
+ */
+
+const cardVariants = cva(
+  "flex flex-col rounded-xl transition-all duration-200",
+  {
+    variants: {
+      variant: {
+        default: "bg-card text-card-foreground border shadow-sm",
+        elevated: "bg-card text-card-foreground shadow-lg border-0",
+        outlined: "bg-transparent text-card-foreground border-2 border-border shadow-none",
+        interactive: [
+          "bg-card text-card-foreground border shadow-sm cursor-pointer",
+          "hover:shadow-lg hover:-translate-y-1 hover:border-primary/50",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "active:translate-y-0 active:shadow-md"
+        ].join(" "),
+        ghost: "bg-transparent border-0 shadow-none",
+      },
+      size: {
+        sm: "gap-3 py-3",
+        md: "gap-4 py-4",
+        lg: "gap-6 py-6",
+      },
+      state: {
+        default: "",
+        disabled: "opacity-50 pointer-events-none",
+        loading: "pointer-events-none",
+      }
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "lg",
+      state: "default",
+    },
+  }
+)
+
+interface CardProps extends ComponentProps<"div">, VariantProps<typeof cardVariants> {
+  loading?: boolean
+}
+
+function Card({ className, variant, size, state, loading, ...props }: CardProps) {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mediaQuery.matches)
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches)
+    }
+    
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        cardVariants({ 
+          variant, 
+          size, 
+          state: loading ? 'loading' : state 
+        }),
+        prefersReducedMotion && "transition-none",
         className
       )}
       {...props}
@@ -81,6 +145,45 @@ function CardFooter({ className, ...props }: ComponentProps<"div">) {
   )
 }
 
+function CardMedia({ 
+  className, 
+  src, 
+  alt = "",
+  aspectRatio = "video",
+  ...props 
+}: ComponentProps<"div"> & { 
+  src?: string
+  alt?: string
+  aspectRatio?: "video" | "square" | "wide"
+}) {
+  const aspectClasses = {
+    video: "aspect-video",
+    square: "aspect-square",
+    wide: "aspect-[21/9]",
+  }
+  
+  return (
+    <div
+      data-slot="card-media"
+      className={cn(
+        "overflow-hidden rounded-t-xl -mt-6 -mx-0 first:mt-0",
+        aspectClasses[aspectRatio],
+        className
+      )}
+      {...props}
+    >
+      {src && (
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      )}
+    </div>
+  )
+}
+
 export {
   Card,
   CardHeader,
@@ -89,4 +192,6 @@ export {
   CardAction,
   CardDescription,
   CardContent,
+  CardMedia,
+  cardVariants,
 }

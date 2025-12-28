@@ -10,10 +10,12 @@ import { LanguageSelector } from '@/components/LanguageSelector'
 import { FocusFilterSelector } from '@/components/FocusFilterSelector'
 import { LAYOUT_CONSTANTS } from '@/constants/app'
 import { useTranslation } from '@/context/LanguageContext'
+import { cn } from '@/lib/utils'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const { data } = useCVData()
   const { isUnlocked } = useKonami()
   const basics = extractBasics(data)
@@ -29,6 +31,19 @@ export function Header() {
     { label: t.nav.skills, href: '#skills' },
     { label: t.nav.contact, href: '#contact' },
   ]
+
+  // Check for reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mediaQuery.matches)
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches)
+    }
+    
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,34 +69,67 @@ export function Header() {
 
   return (
     <header
-      className={`no-print fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={cn(
+        'no-print fixed top-0 left-0 right-0 z-50',
+        prefersReducedMotion 
+          ? '' 
+          : 'transition-all duration-300 ease-out',
         isScrolled
           ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-sm'
           : 'bg-transparent'
-      }`}
+      )}
     >
-      <div className="container mx-auto px-3 sm:px-4 lg:px-6">
-        <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20">
+      <div className={cn(
+        'container mx-auto px-3 sm:px-4 lg:px-6',
+        prefersReducedMotion ? '' : 'transition-all duration-300'
+      )}>
+        <div className={cn(
+          'flex items-center justify-between',
+          prefersReducedMotion ? '' : 'transition-all duration-300',
+          isScrolled 
+            ? 'h-12 sm:h-14 lg:h-16' 
+            : 'h-14 sm:h-16 lg:h-20'
+        )}>
           <a
             href="#hero"
             onClick={(e) => handleNavClick(e, '#hero')}
-            className="text-base sm:text-lg lg:text-xl font-bold font-heading hover:text-primary transition-colors truncate max-w-[150px] sm:max-w-none"
+            className={cn(
+              'font-bold font-heading hover:text-primary transition-colors truncate',
+              prefersReducedMotion ? '' : 'transition-all duration-300',
+              isScrolled 
+                ? 'text-sm sm:text-base lg:text-lg max-w-[120px] sm:max-w-[180px]' 
+                : 'text-base sm:text-lg lg:text-xl max-w-[150px] sm:max-w-none'
+            )}
           >
             {fullName || 'Portfolio'}
           </a>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className={cn(
+            'hidden lg:flex items-center',
+            prefersReducedMotion ? '' : 'transition-all duration-300',
+            isScrolled ? 'gap-0.5' : 'gap-1'
+          )}>
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className="px-3 xl:px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors"
+                className={cn(
+                  'font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors',
+                  prefersReducedMotion ? '' : 'transition-all duration-300',
+                  isScrolled 
+                    ? 'px-2 xl:px-3 py-1.5 text-xs' 
+                    : 'px-3 xl:px-4 py-2 text-sm'
+                )}
               >
                 {item.label}
               </a>
             ))}
-            <div className="flex items-center gap-2 ml-2">
+            <div className={cn(
+              'flex items-center ml-2',
+              prefersReducedMotion ? '' : 'transition-all duration-300',
+              isScrolled ? 'gap-1' : 'gap-2'
+            )}>
               <FocusFilterSelector />
               <LanguageSelector />
               <ThemeSelector konamiUnlocked={isUnlocked} />
