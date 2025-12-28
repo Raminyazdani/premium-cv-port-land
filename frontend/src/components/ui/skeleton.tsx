@@ -162,17 +162,21 @@ function SkeletonTimeline({
  * Skeleton Skills Grid - for skills section
  */
 function SkeletonSkillsGrid({ className }: { className?: string }) {
+  // Predefined widths for skill badges (deterministic, no Math.random)
+  const firstRowWidths = [80, 70, 90, 60, 85, 75, 95, 65]
+  const secondRowWidths = [75, 85, 60, 90, 70, 80]
+  
   return (
     <div className={cn("space-y-6", className)}>
       {/* Category */}
       <div className="space-y-3">
         <Skeleton className="h-6 w-32" />
         <div className="flex flex-wrap gap-2">
-          {Array.from({ length: 8 }).map((_, i) => (
+          {firstRowWidths.map((width, i) => (
             <Skeleton 
               key={i} 
               className="h-8 rounded-full"
-              style={{ width: `${60 + Math.random() * 40}px` }}
+              style={{ width: `${width}px` }}
             />
           ))}
         </div>
@@ -182,11 +186,11 @@ function SkeletonSkillsGrid({ className }: { className?: string }) {
       <div className="space-y-3">
         <Skeleton className="h-6 w-40" />
         <div className="flex flex-wrap gap-2">
-          {Array.from({ length: 6 }).map((_, i) => (
+          {secondRowWidths.map((width, i) => (
             <Skeleton 
               key={i} 
               className="h-8 rounded-full"
-              style={{ width: `${60 + Math.random() * 40}px` }}
+              style={{ width: `${width}px` }}
             />
           ))}
         </div>

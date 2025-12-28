@@ -115,7 +115,15 @@ export function SoundEffectsProvider({ children }: SoundEffectsProviderProps) {
   const getAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
       try {
-        audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
+        // Use standard AudioContext with webkit fallback
+        const AudioContextClass = window.AudioContext || 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (window as any).webkitAudioContext
+        if (!AudioContextClass) {
+          console.warn('Web Audio API not available')
+          return null
+        }
+        audioContextRef.current = new AudioContextClass()
         gainNodeRef.current = audioContextRef.current.createGain()
         gainNodeRef.current.connect(audioContextRef.current.destination)
       } catch (e) {
