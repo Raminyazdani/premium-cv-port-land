@@ -324,4 +324,168 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  transition: font-weight 0.2s ease-out;
+}
+
+/* Variable font weight transitions for headings on hover */
+@media (prefers-reduced-motion: no-preference) {
+  h1:hover, h2:hover, h3:hover {
+    font-weight: 700;
+  }
+}
+
+/* Variable font fallback styles */
+.fonts-loaded h1,
+.fonts-loaded h2,
+.fonts-loaded h3,
+.fonts-loaded h4,
+.fonts-loaded h5,
+.fonts-loaded h6 {
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  font-optical-sizing: auto;
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
+/* System font fallback */
+.fonts-loading h1,
+.fonts-loading h2,
+.fonts-loading h3,
+.fonts-loading h4,
+.fonts-loading h5,
+.fonts-loading h6 {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ============================================
+   Enhanced UI Animations
+   ============================================ */
+
+/* Skeleton shimmer effect */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted) / 0.7) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Micro-feedback pop animation */
+@keyframes feedback-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -70%) scale(0.8);
+  }
+}
+
+.animate-feedback-pop {
+  animation: feedback-pop 1s ease-out forwards;
+}
+
+/* Scale-in animation */
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+/* Checkmark draw animation */
+@keyframes check-draw {
+  0% {
+    stroke-dashoffset: 20;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.animate-check-draw {
+  animation: check-draw 0.3s ease-out 0.1s both;
+}
+
+/* Fade-in animation */
+@keyframes fade-in-animation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in-animation 0.2s ease-out;
+}
+
+/* Shake animation for error feedback */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Reduced motion fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+    background: hsl(var(--muted));
+  }
+  
+  .animate-feedback-pop,
+  .animate-scale-in,
+  .animate-check-draw,
+  .animate-fade-in,
+  .animate-shake {
+    animation: none;
+    opacity: 1;
+  }
 }

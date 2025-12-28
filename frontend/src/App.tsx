@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useCallback } from 'react'
 import { Toaster } from 'sonner'
 import { FilterProvider, useFilter } from '@/context/FilterContext'
 import { LanguageProvider, useLanguage } from '@/context/LanguageContext'
@@ -11,9 +11,13 @@ import { CursorFollower } from '@/components/CursorFollower'
 import { FloatingActionButton } from '@/components/FloatingActionButton'
 import { ScrollProgressIndicator } from '@/components/ScrollProgressIndicator'
 import { CelebrationAnimation } from '@/components/CelebrationAnimation'
+import { PageCornerCurl } from '@/components/PageCornerCurl'
+import { MicroFeedbackProvider } from '@/components/MicroFeedback'
+import { SoundEffectsProvider } from '@/components/SoundEffects'
 import { extractAllTypeKeys } from '@/utils/dataLoader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/ErrorFallback'
+import { SkeletonSection } from '@/components/ui/skeleton'
 
 const BasicsSection = lazy(() => import('@/components/sections/BasicsSection').then(m => ({ default: m.BasicsSection })))
 const ProfilesSection = lazy(() => import('@/components/sections/ProfilesSection').then(m => ({ default: m.ProfilesSection })))
@@ -29,15 +33,7 @@ const ContactSection = lazy(() => import('@/components/sections/ContactSection')
 const Footer = lazy(() => import('@/components/sections/Footer').then(m => ({ default: m.Footer })))
 
 function SectionSkeleton() {
-  return (
-    <div className="w-full py-16 flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-8 w-48 bg-muted animate-pulse rounded" />
-        <div className="h-4 w-96 bg-muted animate-pulse rounded" />
-        <div className="h-4 w-80 bg-muted animate-pulse rounded" />
-      </div>
-    </div>
-  )
+  return <SkeletonSection items={2} />
 }
 
 function AppContent() {
@@ -63,6 +59,14 @@ function AppContent() {
     console.error('Data validation failed. Displaying with best effort.')
   }
 
+  // Scroll to top handler for page corner curl
+  const handleCornerClick = useCallback(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }, [])
+
   return (
     <div className="relative">
       {/* Custom cursor follower */}
@@ -76,6 +80,9 @@ function AppContent() {
       
       {/* Floating action button */}
       <FloatingActionButton />
+      
+      {/* Page corner curl effect */}
+      <PageCornerCurl onClick={handleCornerClick} />
       
       <a
         href="#main-content"
@@ -141,7 +148,11 @@ function App() {
         <CVDataProvider>
           <FilterProvider>
             <KonamiProvider>
-              <AppContent />
+              <SoundEffectsProvider>
+                <MicroFeedbackProvider>
+                  <AppContent />
+                </MicroFeedbackProvider>
+              </SoundEffectsProvider>
             </KonamiProvider>
           </FilterProvider>
         </CVDataProvider>
