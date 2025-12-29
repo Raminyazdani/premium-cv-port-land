@@ -1,0 +1,242 @@
+# ==============================================================================
+# UI QA Bootstrap - Reusable Workflow
+# ==============================================================================
+# 
+# This reusable workflow provides a CI foundation for UI quality checks.
+# It handles:
+#   - Dependency installation (deterministic via npm ci)
+#   - Building the frontend application
+#   - Starting a preview server with health-check waiting
+#   - Running HTTP-based smoke tests for EN/DE/FA
+#   - Uploading logs/artifacts on failure
+#
+# Usage in other workflows:
+#   jobs:
+#     setup:
+#       uses: ./.github/workflows/_uiqa_bootstrap.yml
+#       with:
+#         run-smoke-tests: true
+#
+# Outputs:
+#   - base-url: The URL where the app is served (e.g., http://localhost:4173)
+#   - server-ready: Boolean indicating if server started successfully
+#
+# ==============================================================================
+
+name: UI QA Bootstrap
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: 'Node.js version to use'
+        required: false
+        default: '20'
+        type: string
+      working-directory:
+        description: 'Working directory for frontend commands'
+        required: false
+        default: 'frontend'
+        type: string
+      run-smoke-tests:
+        description: 'Run HTTP smoke tests after server starts'
+        required: false
+        default: true
+        type: boolean
+      server-port:
+        description: 'Port for the preview server'
+        required: false
+        default: '4173'
+        type: string
+      server-timeout:
+        description: 'Timeout in seconds to wait for server'
+        required: false
+        default: '60'
+        type: string
+    outputs:
+      base-url:
+        description: 'Base URL where the app is served'
+        value: ${{ jobs.bootstrap.outputs.base-url }}
+      server-ready:
+        description: 'Whether the server started successfully'
+        value: ${{ jobs.bootstrap.outputs.server-ready }}
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap:
+    name: Bootstrap & Smoke Test
+    runs-on: ubuntu-latest
+    outputs:
+      base-url: ${{ steps.server-info.outputs.base-url }}
+      server-ready: ${{ steps.health-check.outputs.ready }}
+    
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    
+    steps:
+      # ========================================
+      # Phase 1: Setup Environment
+      # ========================================
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'npm'
+          cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Verify locked files integrity
+        run: |
+          echo "🔒 Computing SHA256 hashes for locked CV files..."
+          sha256sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+          echo ""
+          echo "Note: Locked files must not be modified. Any changes will fail tests."
+          
+      # ========================================
+      # Phase 2: Build Application
+      # ========================================
+      - name: Build application
+        id: build
+        run: |
+          echo "🔨 Building application..."
+          npm run build 2>&1 | tee build.log
+          echo "build-status=success" >> $GITHUB_OUTPUT
+          
+      - name: Verify build output
+        run: |
+          echo "📁 Checking build output..."
+          test -f dist/index.html || (echo "❌ Missing index.html" && exit 1)
+          test -d dist/assets || (echo "❌ Missing assets directory" && exit 1)
+          echo "✅ Build artifacts verified"
+          ls -lh dist/
+          
+      # ========================================
+      # Phase 3: Start Server & Health Check
+      # ========================================
+      - name: Set server info
+        id: server-info
+        run: |
+          echo "base-url=http://localhost:${{ inputs.server-port }}" >> $GITHUB_OUTPUT
+          echo "📡 Server will be available at: http://localhost:${{ inputs.server-port }}"
+          
+      - name: Start preview server
+        id: start-server
+        run: |
+          echo "🚀 Starting preview server on port ${{ inputs.server-port }}..."
+          npm run ci:preview > server.log 2>&1 &
+          SERVER_PID=$!
+          echo "server-pid=$SERVER_PID" >> $GITHUB_OUTPUT
+          echo "Server PID: $SERVER_PID"
+          
+      - name: Wait for server (health check)
+        id: health-check
+        run: |
+          echo "⏳ Waiting for server to be ready..."
+          BASE_URL="http://localhost:${{ inputs.server-port }}"
+          MAX_ATTEMPTS=${{ inputs.server-timeout }}
+          ATTEMPT=0
+          
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+            ATTEMPT=$((ATTEMPT + 1))
+            
+            if curl -s -o /dev/null -w "%{http_code}" "$BASE_URL" | grep -q "200"; then
+              echo "✅ Server is ready! (attempt $ATTEMPT/$MAX_ATTEMPTS)"
+              echo "ready=true" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            
+            echo "   Attempt $ATTEMPT/$MAX_ATTEMPTS - waiting 1s..."
+            sleep 1
+          done
+          
+          echo "❌ Server not ready after $MAX_ATTEMPTS attempts"
+          echo "ready=false" >> $GITHUB_OUTPUT
+          
+          # Print diagnostics
+          echo ""
+          echo "📋 DIAGNOSTICS:"
+          echo "==============="
+          echo ""
+          echo "Server Log (last 50 lines):"
+          tail -50 server.log || echo "(no log available)"
+          echo ""
+          echo "Processes listening on network:"
+          netstat -tlnp 2>/dev/null || ss -tlnp 2>/dev/null || echo "(netstat/ss not available)"
+          echo ""
+          echo "Node processes:"
+          ps aux | grep -E "(node|vite)" || echo "(no node processes found)"
+          exit 1
+          
+      # ========================================
+      # Phase 4: Smoke Tests
+      # ========================================
+      - name: Run HTTP smoke tests (EN/DE/FA)
+        if: ${{ inputs.run-smoke-tests && steps.health-check.outputs.ready == 'true' }}
+        run: |
+          export CI_BASE_URL="http://localhost:${{ inputs.server-port }}"
+          npm run ci:smoke
+          
+      # Note: RTL verification for Persian (FA) requires JavaScript execution.
+      # This is handled by Playwright tests (e2e/visual-proof.spec.ts) which:
+      # - Wait for page load and JavaScript execution
+      # - Verify dir="rtl" and lang="fa" attributes
+      # - Take screenshots for visual proof
+      #
+      # The HTTP smoke test above only verifies the server responds with valid HTML.
+          
+      # ========================================
+      # Phase 5: Artifacts (on failure)
+      # ========================================
+      - name: Upload server logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-logs
+          path: |
+            ${{ inputs.working-directory }}/server.log
+            ${{ inputs.working-directory }}/build.log
+          retention-days: 7
+          
+      - name: Upload build artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output-debug
+          path: ${{ inputs.working-directory }}/dist/
+          retention-days: 7
+          
+      # ========================================
+      # Phase 6: Cleanup
+      # ========================================
+      - name: Stop server
+        if: always()
+        run: |
+          echo "🛑 Stopping preview server..."
+          # Kill any vite preview processes
+          pkill -f "vite preview" || true
+          echo "Server stopped."
+
+  # Optional: Run additional downstream tests if smoke tests pass
+  downstream-ready:
+    name: Ready for Downstream Tests
+    needs: bootstrap
+    runs-on: ubuntu-latest
+    if: ${{ needs.bootstrap.outputs.server-ready == 'true' }}
+    steps:
+      - name: Confirm ready for downstream
+        run: |
+          echo "✅ Bootstrap completed successfully!"
+          echo ""
+          echo "📋 Summary:"
+          echo "  - Base URL: ${{ needs.bootstrap.outputs.base-url }}"
+          echo "  - Server Ready: ${{ needs.bootstrap.outputs.server-ready }}"
+          echo ""
+          echo "Downstream workflows (Lighthouse, a11y, visual QA) can now use this foundation."

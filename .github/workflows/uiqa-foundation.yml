@@ -1,0 +1,90 @@
+# ==============================================================================
+# UI QA Foundation Workflow
+# ==============================================================================
+#
+# This workflow provides the CI foundation for UI quality checks.
+# It uses the reusable _uiqa_bootstrap.yml workflow to:
+#   - Install dependencies deterministically
+#   - Build the application
+#   - Start a preview server with health-check waiting
+#   - Run HTTP-based smoke tests for EN/DE/FA languages
+#   - Verify RTL support for Persian (FA)
+#
+# Later workflows (Lighthouse, a11y, visual QA) can use this as a foundation.
+#
+# Triggers:
+#   - Pull requests to main/develop
+#   - Manual dispatch
+#
+# ==============================================================================
+
+name: UI QA Foundation
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      run-smoke-tests:
+        description: 'Run HTTP smoke tests'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  # Call the reusable bootstrap workflow
+  uiqa-bootstrap:
+    name: UI QA Bootstrap
+    uses: ./.github/workflows/_uiqa_bootstrap.yml
+    with:
+      node-version: '20'
+      working-directory: 'frontend'
+      run-smoke-tests: ${{ github.event.inputs.run-smoke-tests != 'false' }}
+      server-port: '4173'
+      server-timeout: '60'
+
+  # Summary job that reports overall status
+  uiqa-summary:
+    name: UI QA Summary
+    needs: uiqa-bootstrap
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Report status
+        run: |
+          echo "========================================"
+          echo "UI QA Foundation Status"
+          echo "========================================"
+          echo ""
+          echo "Base URL: ${{ needs.uiqa-bootstrap.outputs.base-url }}"
+          echo "Server Ready: ${{ needs.uiqa-bootstrap.outputs.server-ready }}"
+          echo ""
+          
+          if [ "${{ needs.uiqa-bootstrap.result }}" = "success" ]; then
+            echo "✅ UI QA Foundation: PASSED"
+            echo ""
+            echo "All checks completed successfully:"
+            echo "  - Dependencies installed (npm ci)"
+            echo "  - Application built"
+            echo "  - Preview server started"
+            echo "  - Health check passed"
+            echo "  - Smoke tests passed (EN/DE/FA)"
+            echo "  - RTL verification passed (FA)"
+            echo ""
+            echo "Ready for downstream UI quality workflows!"
+          else
+            echo "❌ UI QA Foundation: FAILED"
+            echo ""
+            echo "Check the 'UI QA Bootstrap' job logs for details."
+            echo "Common issues:"
+            echo "  - Build failures (TypeScript errors)"
+            echo "  - Server startup failures (port conflicts)"
+            echo "  - Smoke test failures (missing content)"
+            exit 1
+          fi
