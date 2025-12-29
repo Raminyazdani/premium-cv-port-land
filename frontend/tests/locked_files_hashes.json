@@ -3,17 +3,17 @@
   "locked_files": {
     "src/data/cv.json": {
       "description": "English CV data - locked up to and including 'projects' section",
-      "hash": "d877a83792dbe4d628397edfc3e0ce858ac93510399229cbd6bdd915111874bf"
+      "hash": "9382f3aa36e5de8ec11971dc62ef362012a87e9778e245a798e902b857625433"
     },
     "src/data/ramin_de.json": {
       "description": "German CV data - locked up to and including 'projects' section",
-      "hash": "57abced49ccde1b8c887aa078aec0685a0f696355fecf43c86475cb3121cb551"
+      "hash": "55a8856434617d890dc85ef0cea6a2205aad44f1f8faa99523952efdd335a645"
     },
     "src/data/ramin_fa.json": {
       "description": "Persian CV data - locked up to and including 'projects' section",
-      "hash": "83096a6ddcb9a99c8469e310f10fe44bd65162948656bd33b1077236c61aade2"
+      "hash": "be36e64a47634fc54a99554662d5a070de536520d1de13784a0728d6aa6a7880"
     }
   },
   "instructions": "To regenerate hashes after intentional file changes, run: npm run generate-hashes",
-  "generated_at": "2025-12-28T08:51:29.945Z"
+  "generated_at": "2025-12-29T01:20:34.269Z"
 }
