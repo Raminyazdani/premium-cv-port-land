@@ -2,37 +2,36 @@
  * DEBUG UTILITY: Data Flow Diagnostic
  * 
  * This file helps diagnose why content is not showing in sections.
- * Temporary - should be removed after bug is fixed.
+ * Logs are controlled via VITE_DEBUG_CV=true environment variable.
  */
 
 import type { CVData } from '@/types/cv'
+import { logger } from '@/lib/logger'
 
-export function logDataSummary(label: string, data: any) {
-  if (!import.meta.env.DEV) return
-  
-  console.group(`🔍 [DEBUG] ${label}`)
-  console.log('Type:', typeof data)
-  console.log('Is Array:', Array.isArray(data))
-  console.log('Is null/undefined:', data === null || data === undefined)
+export function logDataSummary(label: string, data: unknown) {
+  logger.group(`🔍 [DEBUG] ${label}`)
+  logger.debug('Type:', typeof data)
+  logger.debug('Is Array:', Array.isArray(data))
+  logger.debug('Is null/undefined:', data === null || data === undefined)
   
   if (data && typeof data === 'object') {
     if (Array.isArray(data)) {
-      console.log('Array length:', data.length)
+      logger.debug('Array length:', data.length)
       if (data.length > 0) {
-        console.log('First item:', data[0])
-        console.log('First item keys:', Object.keys(data[0] || {}))
+        logger.debug('First item:', data[0])
+        logger.debug('First item keys:', Object.keys((data[0] as object) || {}))
       }
     } else {
-      console.log('Object keys:', Object.keys(data))
+      logger.debug('Object keys:', Object.keys(data))
       const firstKey = Object.keys(data)[0]
       if (firstKey) {
-        console.log(`First key "${firstKey}" value type:`, typeof data[firstKey])
-        console.log(`First key "${firstKey}" is array:`, Array.isArray(data[firstKey]))
+        logger.debug(`First key "${firstKey}" value type:`, typeof (data as Record<string, unknown>)[firstKey])
+        logger.debug(`First key "${firstKey}" is array:`, Array.isArray((data as Record<string, unknown>)[firstKey]))
       }
     }
   }
   
-  console.groupEnd()
+  logger.groupEnd()
 }
 
 export function validateCVDataStructure(data: CVData): {
@@ -119,27 +118,25 @@ export function validateCVDataStructure(data: CVData): {
 
 export function logSectionRenderDecision(
   sectionName: string,
-  data: any,
-  filteredData: any,
+  data: unknown,
+  filteredData: unknown,
   selectedFocus: string
 ) {
-  if (!import.meta.env.DEV) return
-  
-  console.group(`📋 [RENDER] ${sectionName}`)
-  console.log('Selected Focus:', selectedFocus)
-  console.log('Raw data length:', Array.isArray(data) ? data.length : 'N/A (not array)')
-  console.log('Filtered data length:', Array.isArray(filteredData) ? filteredData.length : 'N/A (not array)')
+  logger.group(`📋 [RENDER] ${sectionName}`)
+  logger.debug('Selected Focus:', selectedFocus)
+  logger.debug('Raw data length:', Array.isArray(data) ? data.length : 'N/A (not array)')
+  logger.debug('Filtered data length:', Array.isArray(filteredData) ? filteredData.length : 'N/A (not array)')
   
   if (Array.isArray(data) && data.length > 0) {
-    console.log('First item type_key:', data[0]?.type_key)
+    logger.debug('First item type_key:', (data[0] as Record<string, unknown>)?.type_key)
   }
   
   if (Array.isArray(filteredData)) {
     if (filteredData.length === 0 && Array.isArray(data) && data.length > 0) {
-      console.warn('⚠️  All items filtered out!')
-      console.log('First raw item:', data[0])
+      logger.warn('All items filtered out!')
+      logger.debug('First raw item:', data[0])
     }
   }
   
-  console.groupEnd()
+  logger.groupEnd()
 }

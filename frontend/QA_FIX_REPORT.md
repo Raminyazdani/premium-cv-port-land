@@ -653,3 +653,177 @@ npm run build
 
 **Status**: ✅ **FIXED**  
 **Date**: 2025-12-29
+
+---
+
+# F-08: Logging Hygiene — Reduce Noisy Dev Logs; Introduce Consistent Log Levels
+
+## Executive Summary
+
+**Issue**: The report noted 200+ log lines during page load in dev mode. Default verbosity made debugging harder and could hide real problems.
+
+**Root Cause**: Multiple files used raw `console.log`, `console.warn`, and `console.error` calls without any central control. Most logs were debug-level information displayed unconditionally during development.
+
+**Solution**: Implemented a centralized logging utility (`src/lib/logger.ts`) with log levels and environment-based control:
+- **Error/Warn**: Always visible (critical issues)
+- **Info**: Visible in development mode only
+- **Debug**: Only when `VITE_DEBUG_CV=true` environment variable is set
+
+## Strategy
+
+**Approach: Centralized Logger with Log Levels**
+
+The logging strategy follows industry best practices:
+
+1. **Log Levels**:
+   - `error` - Critical errors, always visible
+   - `warn` - Warnings, always visible  
+   - `info` - General information, development mode only
+   - `debug` - Verbose debugging, requires `VITE_DEBUG_CV=true`
+
+2. **Environment Control**:
+   - Production builds: Only error/warn logs
+   - Development mode: Error/warn + info logs
+   - Debug mode: All logs (enabled via `VITE_DEBUG_CV=true`)
+
+3. **Usage**:
+   ```typescript
+   import { logger } from '@/lib/logger'
+   
+   logger.error('Critical error')    // Always visible
+   logger.warn('Warning')            // Always visible
+   logger.info('Info message')       // Dev mode only
+   logger.debug('Debug details')     // Only with VITE_DEBUG_CV=true
+   ```
+
+## Changes Made
+
+### 1. New File: `src/lib/logger.ts`
+
+Created centralized logging utility with:
+- Type-safe log levels (`LogLevel` type)
+- Environment detection (`isProduction()`, `isDevelopment()`, `isDebugEnabled()`)
+- Log level gating (`shouldLog()`)
+- Console group support (`logger.group()`, `logger.groupEnd()`)
+- Configuration access (`logger.getConfig()`, `logger.isDebugEnabled()`)
+
+### 2. Updated Files
+
+| File | Changes |
+|------|---------|
+| `src/context/CVDataContext.tsx` | Replaced console.* with logger.* |
+| `src/utils/dataLoader.ts` | Replaced console.* with logger.* |
+| `src/utils/dataNormalizer.ts` | Replaced console.* with logger.* |
+| `src/utils/dataValidator.ts` | Replaced console.warn with logger.warn |
+| `src/utils/debugDataFlow.ts` | Replaced console.* with logger.* |
+| `src/utils/debugNormalizer.ts` | Replaced console.* with logger.*, changed auto-run condition |
+| `src/utils/performance.ts` | Replaced console.* with logger.* |
+| `src/utils/analytics.ts` | Replaced console.* with logger.* |
+| `src/App.tsx` | Replaced console.* with logger.* |
+| `src/components/sections/ProjectsSection.tsx` | Replaced console.* with logger.* |
+| `src/components/sections/EducationSection.tsx` | Replaced console.* with logger.* |
+
+### 3. New Test: `tests/logger.test.ts`
+
+Added 11 tests covering:
+- Error logging (always visible)
+- Warning logging (always visible)
+- Info logging (dev mode only)
+- Debug logging (requires VITE_DEBUG_CV)
+- Configuration access
+- Log level prefixes with emojis
+
+## Before/After Comparison
+
+### Before (Default Dev Mode)
+```
+🏁 [CVDataContext] STARTING DATA LOAD FOR: en
+==================== LOADING DATA FOR LANGUAGE: en ====================
+📂 [PHASE 2] RAW DATA LOADING
+   Language: en
+   typeof rawData: object
+   ... 200+ more lines
+```
+
+### After (Default Dev Mode)
+```
+⚠️ [WARN] Data validation warnings: [
+  'Certification 0.0: Invalid date format "2020-9-31"'
+]
+```
+
+### After (With VITE_DEBUG_CV=true)
+```bash
+VITE_DEBUG_CV=true npm run dev
+```
+```
+🔍 [DEBUG] [CVDataContext] Starting data load for: en
+🔍 [DEBUG] ==================== LOADING DATA FOR LANGUAGE: en ====================
+... (full debug output available when needed)
+```
+
+## How to Enable Debug Logging
+
+### Development
+```bash
+# Enable verbose debug logs
+VITE_DEBUG_CV=true npm run dev
+
+# Or in .env.local
+VITE_DEBUG_CV=true
+```
+
+### Tests
+```bash
+# Enable debug logs during tests
+DEBUG_CV=true npm run test
+```
+
+## Verification
+
+### Tests
+All 190 tests pass (including 11 new logger tests):
+```
+ Test Files  13 passed (13)
+      Tests  190 passed (190)
+```
+
+### Build
+Production build succeeds with no debug logs in output.
+
+### Locked Files Unchanged
+- `frontend/src/data/cv.json` — ✅ Not modified
+- `frontend/src/data/ramin_de.json` — ✅ Not modified  
+- `frontend/src/data/ramin_fa.json` — ✅ Not modified
+
+## Self-Audit Checklist
+
+- [x] Debug logs can be enabled/disabled deterministically (via VITE_DEBUG_CV)
+- [x] Production build has no debug spam
+- [x] Critical warnings still visible
+- [x] Tests pass (190/190)
+- [x] Locked JSON files unchanged
+
+## Files Changed
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| `src/lib/logger.ts` | Created | Centralized logging utility with log levels |
+| `src/context/CVDataContext.tsx` | Modified | Use logger instead of console |
+| `src/utils/dataLoader.ts` | Modified | Use logger instead of console |
+| `src/utils/dataNormalizer.ts` | Modified | Use logger instead of console |
+| `src/utils/dataValidator.ts` | Modified | Use logger instead of console |
+| `src/utils/debugDataFlow.ts` | Modified | Use logger instead of console |
+| `src/utils/debugNormalizer.ts` | Modified | Use logger, only auto-run when debug enabled |
+| `src/utils/performance.ts` | Modified | Use logger instead of console |
+| `src/utils/analytics.ts` | Modified | Use logger instead of console |
+| `src/App.tsx` | Modified | Use logger instead of console |
+| `src/components/sections/ProjectsSection.tsx` | Modified | Use logger instead of console |
+| `src/components/sections/EducationSection.tsx` | Modified | Use logger instead of console |
+| `tests/logger.test.ts` | Created | Tests for logger behavior |
+| `QA_FIX_REPORT.md` | Modified | Added F-08 fix documentation |
+
+---
+
+**Status**: ✅ **FIXED**  
+**Date**: 2025-12-29

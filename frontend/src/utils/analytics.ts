@@ -5,6 +5,8 @@
  * Supports development mode logging and Do Not Track header respect.
  */
 
+import { logger } from '@/lib/logger'
+
 type EventCategory =
   | 'page_view'
   | 'section_scroll'
@@ -85,7 +87,7 @@ export function initAnalytics(userConfig: Partial<AnalyticsConfig> = {}): void {
     consentGiven = storedConsent === 'true'
     
     if (config.debug) {
-      console.log('[Analytics] Initialized with config:', {
+      logger.debug('[Analytics] Initialized with config:', {
         ...config,
         consentGiven,
         dntEnabled: isDoNotTrackEnabled()
@@ -98,7 +100,7 @@ export function initAnalytics(userConfig: Partial<AnalyticsConfig> = {}): void {
       eventQueue = []
     }
   } catch (e) {
-    console.warn('[Analytics] Failed to read consent from storage:', e)
+    logger.warn('[Analytics] Failed to read consent from storage:', e)
   }
 }
 
@@ -113,7 +115,7 @@ export function setAnalyticsConsent(consent: boolean): void {
     localStorage.setItem(CONSENT_TIMESTAMP_KEY, String(Date.now()))
     
     if (config.debug) {
-      console.log('[Analytics] Consent set to:', consent)
+      logger.debug('[Analytics] Consent set to:', consent)
     }
     
     // Process queued events if consent given
@@ -122,7 +124,7 @@ export function setAnalyticsConsent(consent: boolean): void {
       eventQueue = []
     }
   } catch (e) {
-    console.warn('[Analytics] Failed to save consent to storage:', e)
+    logger.warn('[Analytics] Failed to save consent to storage:', e)
   }
 }
 
@@ -145,10 +147,10 @@ export function revokeAnalyticsConsent(): void {
     localStorage.removeItem(CONSENT_TIMESTAMP_KEY)
     
     if (config.debug) {
-      console.log('[Analytics] Consent revoked')
+      logger.debug('[Analytics] Consent revoked')
     }
   } catch (e) {
-    console.warn('[Analytics] Failed to clear consent from storage:', e)
+    logger.warn('[Analytics] Failed to clear consent from storage:', e)
   }
 }
 
@@ -158,7 +160,7 @@ export function revokeAnalyticsConsent(): void {
 function sendEvent(event: AnalyticsEvent): void {
   // In debug mode, always log to console
   if (config.debug) {
-    console.log('[Analytics] Event:', {
+    logger.debug('[Analytics] Event:', {
       category: event.category,
       action: event.action,
       label: event.label,

@@ -22,6 +22,7 @@ import {
   safeUrl,
   hasContent
 } from '@/utils/dataValidation'
+import { logger } from '@/lib/logger'
 
 interface EducationCardProps {
   education: Education
@@ -153,18 +154,16 @@ export function EducationSection() {
   const t = useTranslation()
   
   // DEBUG: Log what we receive
-  if (import.meta.env.DEV) {
-    console.group('📋 [EducationSection] Render')
-    console.log('cvData.education exists:', cvData.education !== undefined)
-    console.log('cvData.education is array:', Array.isArray(cvData.education))
-    console.log('education length:', education.length)
-    console.log('selectedFocus:', selectedFocus)
-    if (education.length > 0) {
-      console.log('First education item:', education[0])
-      console.log('First education type_key:', education[0]?.type_key)
-    }
-    console.groupEnd()
+  logger.group('📋 [EducationSection] Render')
+  logger.debug('cvData.education exists:', cvData.education !== undefined)
+  logger.debug('cvData.education is array:', Array.isArray(cvData.education))
+  logger.debug('education length:', education.length)
+  logger.debug('selectedFocus:', selectedFocus)
+  if (education.length > 0) {
+    logger.debug('First education item:', education[0])
+    logger.debug('First education type_key:', education[0]?.type_key)
   }
+  logger.groupEnd()
   
   const [selectedFilter, setSelectedFilter] = useState<string>(t.filters.all)
   

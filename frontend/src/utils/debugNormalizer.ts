@@ -1,44 +1,46 @@
 /**
  * DEBUG UTILITY: Diagnose normalization issues
- * This file helps identify why sections are empty after normalization
+ * This file helps identify why sections are empty after normalization.
+ * Logs are controlled via VITE_DEBUG_CV=true environment variable.
  */
 
 import { normalizeCVData, type Language } from './dataNormalizer'
 import cvDataEN from '@/data/cv.json'
 import cvDataDE from '@/data/ramin_de.json'
 import cvDataFA from '@/data/ramin_fa.json'
+import { logger } from '@/lib/logger'
 
 export function diagnoseNormalization(lang: Language = 'en') {
-  console.group(`🔍 NORMALIZATION DIAGNOSIS for ${lang.toUpperCase()}`)
+  logger.group(`🔍 NORMALIZATION DIAGNOSIS for ${lang.toUpperCase()}`)
   
   // Load raw data
-  let rawData: any
+  let rawData: Record<string, unknown>
   switch (lang) {
     case 'de':
-      rawData = cvDataDE
+      rawData = cvDataDE as Record<string, unknown>
       break
     case 'fa':
-      rawData = cvDataFA
+      rawData = cvDataFA as Record<string, unknown>
       break
     default:
-      rawData = cvDataEN
+      rawData = cvDataEN as Record<string, unknown>
   }
   
-  console.log('📥 Raw Data Keys:', Object.keys(rawData))
-  console.log('📥 Raw Data Sample (first 3 keys):', 
+  logger.debug('📥 Raw Data Keys:', Object.keys(rawData))
+  logger.debug('📥 Raw Data Sample (first 3 keys):', 
     Object.keys(rawData).slice(0, 3).reduce((acc, key) => {
       const value = rawData[key]
       acc[key] = Array.isArray(value) 
         ? `Array(${value.length})` 
         : typeof value === 'object' 
-          ? `Object(${Object.keys(value).length} keys)` 
+          ? `Object(${Object.keys(value as object).length} keys)` 
           : typeof value
       return acc
-    }, {} as Record<string, any>)
+    }, {} as Record<string, string>)
   )
   
   // Check specific sections
-  console.group('📊 Section Analysis')
+  logger.group('📊 Section Analysis')
   
   const sections = [
     'basics', 'grunddaten', 'اطلاعات_پایه',
@@ -50,18 +52,18 @@ export function diagnoseNormalization(lang: Language = 'en') {
   sections.forEach(key => {
     if (rawData[key] !== undefined) {
       const value = rawData[key]
-      console.log(`✓ Found: ${key} =`, Array.isArray(value) ? `Array(${value.length})` : typeof value)
+      logger.debug(`✓ Found: ${key} =`, Array.isArray(value) ? `Array(${value.length})` : typeof value)
     }
   })
   
-  console.groupEnd()
+  logger.groupEnd()
   
   // Normalize
-  console.log('\n🔄 Normalizing...')
+  logger.debug('🔄 Normalizing...')
   const normalized = normalizeCVData(rawData, lang)
   
-  console.log('📤 Normalized Keys:', Object.keys(normalized))
-  console.log('📤 Normalized Data Summary:', {
+  logger.debug('📤 Normalized Keys:', Object.keys(normalized))
+  logger.debug('📤 Normalized Data Summary:', {
     basics: Array.isArray(normalized.basics) ? `Array(${normalized.basics.length})` : typeof normalized.basics,
     profiles: Array.isArray(normalized.profiles) ? `Array(${normalized.profiles?.length || 0})` : typeof normalized.profiles,
     education: Array.isArray(normalized.education) ? `Array(${normalized.education?.length || 0})` : typeof normalized.education,
@@ -75,25 +77,25 @@ export function diagnoseNormalization(lang: Language = 'en') {
   })
   
   // Check for empty arrays
-  console.group('⚠️  Empty Section Check')
+  logger.group('⚠️  Empty Section Check')
   Object.entries(normalized).forEach(([key, value]) => {
     if (Array.isArray(value) && value.length === 0) {
-      console.warn(`Empty array: ${key}`)
+      logger.warn(`Empty array: ${key}`)
     }
     if (typeof value === 'object' && value !== null && !Array.isArray(value) && Object.keys(value).length === 0) {
-      console.warn(`Empty object: ${key}`)
+      logger.warn(`Empty object: ${key}`)
     }
   })
-  console.groupEnd()
+  logger.groupEnd()
   
-  console.groupEnd()
+  logger.groupEnd()
   
   return { rawData, normalized }
 }
 
-// Run diagnostics in dev mode
-if (import.meta.env.DEV) {
-  console.log('🚀 Running normalization diagnostics...')
+// Run diagnostics only when debug logging is explicitly enabled
+if (logger.isDebugEnabled()) {
+  logger.debug('🚀 Running normalization diagnostics...')
   diagnoseNormalization('en')
   diagnoseNormalization('de')
   diagnoseNormalization('fa')
