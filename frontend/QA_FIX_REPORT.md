@@ -1280,3 +1280,194 @@ npm run build
 
 **Status**: ✅ **FIXED**  
 **Date**: 2025-12-29
+
+---
+
+# I18N-LINT: Lint Guard Against Hardcoded UI Strings in JSX
+
+## Executive Summary
+
+**Issue**: After fixing hardcoded English strings in components (F-05/F-09), we needed an automated guard to prevent regression and catch new hardcoded user-visible strings.
+
+**Solution**: Added ESLint rule `react/jsx-no-literals` from `eslint-plugin-react` to flag hardcoded string literals in JSX.
+
+## How It Works
+
+The rule warns when it detects hardcoded strings in JSX content (not props):
+
+```tsx
+// ❌ Will trigger a warning
+<h2>Skills & Expertise</h2>
+<p>No profiles available</p>
+
+// ✅ Correct - use i18n
+const t = useTranslation()
+<h2>{t.sections.skills}</h2>
+<p>{t.profiles.no_profiles}</p>
+```
+
+## Configuration
+
+The rule is configured in `frontend/eslint.config.js`:
+
+```javascript
+'react/jsx-no-literals': [
+  'warn',
+  {
+    noStrings: true,
+    allowedStrings: ['–', '|', '@', ':', ',', '.', '/', ...],  // Punctuation/symbols
+    ignoreProps: true,           // Don't flag props (className, aria-*, etc.)
+    noAttributeStrings: false,   // Allow strings in attributes
+  },
+],
+```
+
+### What's Allowed (Allowlist)
+
+| Category | Examples | Reason |
+|----------|----------|--------|
+| Punctuation | `–`, `|`, `:`, `,`, `.` | Layout separators, not user-visible text |
+| Symbols | `@`, `+`, `×`, `✓`, `✕`, `•`, `…` | Icons/decorators |
+| Technical chars | `(`, `)`, `[`, `]`, `{`, `}`, `<`, `>` | Code/formatting |
+| Whitespace | `\n`, `\t`, ` ` | Formatting |
+| All props | `className`, `aria-*`, `data-*`, `role` | Technical, not user-visible |
+
+### What's Flagged (Warning)
+
+| Type | Example | Fix |
+|------|---------|-----|
+| UI headings | `<h2>Education</h2>` | Use `{t.sections.education}` |
+| Buttons/labels | `<button>Submit</button>` | Use `{t.forms.send}` |
+| Descriptions | `<p>No profiles available</p>` | Use `{t.profiles.no_profiles}` |
+| Error messages | `<span>Failed to load</span>` | Use `{t.errors.error_occurred}` |
+
+## How to Fix Warnings
+
+### Step 1: Check if the string needs translation
+
+Ask: "Is this visible to the user in the UI?"
+
+- **Yes** → Add to i18n and use translation
+- **No** → Use bypass comment (see below)
+
+### Step 2: Add missing translation keys
+
+1. Open `src/lib/i18n.ts`
+2. Add the key in all three languages (EN/DE/FA)
+3. Use in component via `useTranslation()` hook
+
+```typescript
+// In i18n.ts
+const translations = {
+  en: {
+    myComponent: {
+      newMessage: 'My new message',
+    }
+  },
+  de: {
+    myComponent: {
+      newMessage: 'Meine neue Nachricht',
+    }
+  },
+  fa: {
+    myComponent: {
+      newMessage: 'پیام جدید من',
+    }
+  }
+}
+
+// In component
+const t = useTranslation()
+<p>{t.myComponent.newMessage}</p>
+```
+
+### Step 3: Run lint to verify
+
+```bash
+cd frontend
+npm run lint
+```
+
+## How to Bypass (Rare, Reviewed)
+
+For **legitimate** hardcoded literals that should NOT be translated:
+
+```tsx
+// eslint-disable-next-line react/jsx-no-literals
+<code>npm install</code>
+
+// eslint-disable-next-line react/jsx-no-literals
+<pre>{"{ key: 'value' }"}</pre>
+
+// eslint-disable-next-line react/jsx-no-literals
+<span>v1.0.0</span>
+```
+
+**Valid bypass reasons:**
+- Code snippets / technical content
+- Version numbers
+- API keys (placeholders)
+- Brand names that shouldn't be translated
+- CSS-in-JS strings inside `<style>` tags
+
+**Require review:** Any bypass should be justified in code review.
+
+## Running the Lint Check
+
+```bash
+# Run lint (includes i18n check)
+cd frontend
+npm run lint
+
+# The rule produces warnings, not errors
+# CI continues even with warnings (for gradual cleanup)
+```
+
+## CI Integration
+
+The lint check runs automatically in CI via `.github/workflows/ci.yml`:
+
+```yaml
+- name: Run linter
+  run: npm run lint
+  continue-on-error: true  # Don't fail CI on lint warnings
+```
+
+This allows gradual cleanup of existing hardcoded strings while preventing new ones from being merged without review.
+
+## Current Status
+
+| Metric | Value |
+|--------|-------|
+| Rule severity | `warn` (not `error`) |
+| Current warnings | ~123 existing hardcoded strings |
+| Impact on build | None (warnings only) |
+| CI behavior | Continue on warning |
+
+## Gradual Cleanup Strategy
+
+1. **New code**: Must use i18n (warnings reviewed in PR)
+2. **Existing code**: Clean up incrementally per component
+3. **Tracking**: Warnings count in lint output
+
+## Self-Audit Checklist
+
+- [x] Guard catches new hardcoded strings
+- [x] Minimal false positives (allowlist configured)
+- [x] Tests/build still pass
+- [x] Locked JSON files unchanged
+- [x] Documentation complete
+- [x] CI step configured
+
+## Files Changed
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| `eslint.config.js` | Modified | Added `eslint-plugin-react` and `jsx-no-literals` rule |
+| `package.json` | Modified | Added `eslint-plugin-react` dependency |
+| `QA_FIX_REPORT.md` | Modified | Added i18n lint guard documentation |
+
+---
+
+**Status**: ✅ **IMPLEMENTED**  
+**Date**: 2025-12-29

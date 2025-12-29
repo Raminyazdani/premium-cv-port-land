@@ -2,8 +2,32 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import react from 'eslint-plugin-react'
 import tseslint from 'typescript-eslint'
 import prettierConfig from 'eslint-config-prettier'
+
+/**
+ * Allowed strings for jsx-no-literals rule.
+ * These are intentionally allowed as they are:
+ * - Punctuation/separators used for layout
+ * - Icons/symbols/decorators
+ * - Technical characters for code/formatting
+ * - Whitespace characters
+ */
+const I18N_ALLOWED_STRINGS = [
+  // Punctuation & separators
+  '–', '|', ':', ',', '.', '/', '\\', '-',
+  // Symbols & operators
+  '+', '×', '✓', '✕', '•', '…', '&', '*', '#',
+  // Brackets & delimiters
+  '(', ')', '[', ']', '{', '}', '<', '>',
+  // Comparison & logic
+  '=', '!', '?', '%', '$', '^', '~', '`',
+  // Quotes
+  '"', "'", '@',
+  // Whitespace
+  '\n', '\t', ' ',
+]
 
 export default tseslint.config(
   { ignores: ['dist', 'node_modules', 'coverage', 'playwright-report', 'test-results', 'e2e-screenshots'] },
@@ -17,6 +41,12 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      react: react,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -28,6 +58,30 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
+      /**
+       * i18n enforcement: Warn on hardcoded string literals in JSX.
+       * 
+       * This rule helps catch user-visible text that should use the i18n system.
+       * Use `useTranslation()` hook and `t.` namespace instead of hardcoded strings.
+       * 
+       * ALLOWLIST: Single characters defined in I18N_ALLOWED_STRINGS above.
+       * Props are ignored (className, aria-*, data-*, role, etc.)
+       * 
+       * TO BYPASS (rare, reviewed): Add an eslint-disable comment:
+       *   // eslint-disable-next-line react/jsx-no-literals
+       *   <span>Allowed literal</span>
+       * 
+       * @see frontend/QA_FIX_REPORT.md for full documentation
+       */
+      'react/jsx-no-literals': [
+        'warn',
+        {
+          noStrings: true,
+          allowedStrings: I18N_ALLOWED_STRINGS,
+          ignoreProps: true,
+          noAttributeStrings: false,
+        },
+      ],
     },
   },
   prettierConfig,
