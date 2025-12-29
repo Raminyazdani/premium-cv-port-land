@@ -138,7 +138,7 @@ export function HeroSection() {
             {fullName}
           </h1>
 
-          <div className="min-h-[2rem] sm:min-h-[2.5rem] mb-4 sm:mb-6 px-4">
+          <div className="min-h-[2rem] sm:min-h-[2.5rem] mb-4 sm:mb-6 px-4" aria-live="polite">
             {roles.length > 0 && (
               <p
                 className={`text-lg sm:text-xl lg:text-2xl font-medium transition-opacity duration-500 ${

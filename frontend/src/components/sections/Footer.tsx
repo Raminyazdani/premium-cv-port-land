@@ -87,9 +87,6 @@ export function Footer() {
             <p className="text-xs sm:text-sm text-muted-foreground">
               {interpolate(t.footer.copyright, { year: String(currentYear), name: fullName })}
             </p>
-            <p className="text-xs text-muted-foreground/70 mt-1">
-              {t.footer.konami_hint}
-            </p>
           </div>
 
           <div className="flex flex-col items-center gap-3 sm:gap-4 order-1 md:order-2 w-full md:w-auto">
