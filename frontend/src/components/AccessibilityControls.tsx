@@ -23,7 +23,7 @@ import {
   ArrowCounterClockwise,
   Eye,
   TextT,
-  AccessibilityMotion
+  WheelchairMotion
 } from '@phosphor-icons/react'
 import { useAccessibility } from '@/context/AccessibilityContext'
 import { useTranslation } from '@/context/LanguageContext'
@@ -153,7 +153,7 @@ export function AccessibilityControls({ className }: AccessibilityControlsProps)
           {/* Reduced Motion Status */}
           {reducedMotion && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <AccessibilityMotion size={18} />
+              <WheelchairMotion size={18} />
               <span>{t.accessibility?.reduced_motion || 'Reduced motion enabled'}</span>
             </div>
           )}

@@ -29,4 +29,14 @@ export default defineConfig({
     include: ['react', 'react-dom'],
     exclude: ['@github/spark']
   },
+  build: {
+    sourcemap: true,
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Suppress sourcemap resolution errors from dependencies
+        if (warning.code === 'SOURCEMAP_ERROR') return
+        warn(warning)
+      }
+    }
+  }
 });
