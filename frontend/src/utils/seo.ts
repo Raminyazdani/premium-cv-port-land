@@ -230,7 +230,7 @@ export function generatePersonJsonLd(
   }
   
   // Only add image if we have a valid URL to prevent 404 errors in JSON-LD
-  if (image) {
+  if (image && image.trim() !== '') {
     jsonLd.image = image
   }
   
@@ -317,11 +317,14 @@ export function updateMetaTags(meta: PageMeta, config: Partial<SEOConfig> = {}):
   setMeta('keywords', meta.keywords.join(', '))
   setMeta('author', meta.author)
   
+  // Helper to check if image URL is valid (not empty or whitespace)
+  const hasValidImage = meta.image && meta.image.trim() !== ''
+  
   // Open Graph tags
   setMeta('og:title', meta.title, true)
   setMeta('og:description', meta.description, true)
   // Only set og:image if we have a valid image URL to prevent 404 errors
-  if (meta.image) {
+  if (hasValidImage) {
     setMeta('og:image', meta.image, true)
   }
   setMeta('og:url', meta.url, true)
@@ -330,11 +333,11 @@ export function updateMetaTags(meta: PageMeta, config: Partial<SEOConfig> = {}):
   setMeta('og:site_name', cfg.siteName, true)
   
   // Twitter tags
-  setMeta('twitter:card', meta.image ? 'summary_large_image' : 'summary')
+  setMeta('twitter:card', hasValidImage ? 'summary_large_image' : 'summary')
   setMeta('twitter:title', meta.title)
   setMeta('twitter:description', meta.description)
   // Only set twitter:image if we have a valid image URL to prevent 404 errors
-  if (meta.image) {
+  if (hasValidImage) {
     setMeta('twitter:image', meta.image)
   }
   if (cfg.twitterHandle) {
