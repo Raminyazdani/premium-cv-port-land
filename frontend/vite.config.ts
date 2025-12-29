@@ -39,10 +39,11 @@ export default defineConfig({
       },
       output: {
         manualChunks(id) {
-          // Split react and react-dom into vendor chunk
-          if (id.includes('node_modules/react-dom')) {
+          // Split react-dom into its own chunk (must check before react)
+          if (id.includes('node_modules/react-dom/')) {
             return 'react-dom'
           }
+          // Split react core into its own chunk
           if (id.includes('node_modules/react/')) {
             return 'react'
           }
