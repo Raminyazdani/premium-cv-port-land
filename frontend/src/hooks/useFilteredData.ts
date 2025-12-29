@@ -53,7 +53,7 @@ export function useFilteredData<T>({
   return useMemo(() => {
     // Filter by selected focus
     const filtered = data.filter((item) =>
-      shouldShowEntry(getTypeKey(item) ?? undefined, selectedFocus)
+      shouldShowEntry(getTypeKey(item), selectedFocus)
     )
 
     // Apply sorting if provided
