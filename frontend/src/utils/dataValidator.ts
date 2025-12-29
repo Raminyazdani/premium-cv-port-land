@@ -1,5 +1,6 @@
 import type { CVData } from '@/types/cv'
 import { logger } from '@/lib/logger'
+import { sanitizeDateString } from './dataValidation'
 
 export interface ValidationResult {
   isValid: boolean
@@ -442,20 +443,34 @@ export class DataValidator {
   }
 }
 
+/**
+ * Sanitizes a date string, clamping invalid dates to the last valid day of month.
+ * 
+ * Policy: CLAMP_TO_LAST_VALID_DAY
+ * - Invalid dates like "2020-9-31" are clamped to "2020-09-30"
+ * - "Present" equivalents in EN/DE/FA are normalized to "present"
+ * - Completely unparseable dates return null
+ * 
+ * @param dateStr - Date string to sanitize
+ * @returns Sanitized date string (ISO format), "present", or null if unparseable
+ */
 export function sanitizeDate(dateStr: string | null | undefined): string | null {
   if (!dateStr) return null
   
-  // Handle "present" equivalents in EN/DE/FA
-  const presentEquivalents = ['present', 'Present', 'تاکنون', 'حال حاضر', 'Gegenwart', 'heute']
-  if (presentEquivalents.includes(dateStr)) return 'present'
-
-  const validator = new DataValidator()
-  if (!(validator as any).isValidDate(dateStr)) {
+  // Use the robust date sanitizer from dataValidation
+  const sanitized = sanitizeDateString(dateStr)
+  
+  if (!sanitized) {
     logger.warn(`Invalid date format: "${dateStr}", returning null`)
     return null
   }
-
-  return dateStr
+  
+  // Log if the date was clamped
+  if (sanitized.wasModified) {
+    logger.warn(`Date "${dateStr}" was clamped to "${sanitized.isoString}"`)
+  }
+  
+  return sanitized.isoString
 }
 
 export function deduplicateArray<T>(
