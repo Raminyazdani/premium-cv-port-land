@@ -515,17 +515,23 @@ export function deduplicateArray<T>(
  * 
  * Use this when you need to know which items were removed for testing or debugging.
  * 
+ * **Tracking Behavior**:
+ * - Uses a Map to track key → first occurrence index
+ * - When a duplicate is found, logs the original index and the duplicate index
+ * - Removed items include their original array index, the item itself, and the key
+ * 
  * @param array - The array to deduplicate
  * @param getKey - Function to extract the deduplication key from each item
  * @param context - Optional context string for logging (e.g., "projects", "experiences")
- * @returns Object containing deduplicated items and list of removed items
+ * @returns Object containing deduplicated items and list of removed items with their original indexes
  */
 export function deduplicateArrayWithDetails<T>(
   array: T[],
   getKey: (item: T) => string,
   context?: string
 ): DeduplicationResult<T> {
-  const seen = new Map<string, number>() // key -> first occurrence index
+  // Track key → first occurrence index for deterministic duplicate detection
+  const seen = new Map<string, number>()
   const removedItems: { index: number; item: T; key: string }[] = []
   
   const items = array.filter((item, index) => {
