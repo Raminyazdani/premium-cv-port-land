@@ -445,6 +445,14 @@ export interface UIStrings {
     play: string
     of: string
   }
+
+  // SEO (seo.ts) - fully translated titles and descriptions per language
+  seo?: {
+    name: string
+    title: string
+    description: string
+    separator: string
+  }
 }
 
 const translations: Record<Language, UIStrings> = {
@@ -825,6 +833,12 @@ const translations: Record<Language, UIStrings> = {
       pause: 'Pause auto-rotation',
       play: 'Resume auto-rotation',
       of: 'of'
+    },
+    seo: {
+      name: 'Ramin Yazdani',
+      title: 'Biotechnologist & Developer',
+      description: 'CV of Ramin Yazdani - Biotechnologist and Software Developer',
+      separator: ' - '
     }
   },
 
@@ -1205,6 +1219,12 @@ const translations: Record<Language, UIStrings> = {
       pause: 'Automatische Rotation pausieren',
       play: 'Automatische Rotation fortsetzen',
       of: 'von'
+    },
+    seo: {
+      name: 'Ramin Yazdani',
+      title: 'Biotechnologe & Entwickler',
+      description: 'Lebenslauf von Ramin Yazdani - Biotechnologe und Softwareentwickler',
+      separator: ' - '
     }
   },
 
@@ -1585,6 +1605,12 @@ const translations: Record<Language, UIStrings> = {
       pause: 'توقف چرخش خودکار',
       play: 'ادامه چرخش خودکار',
       of: 'از'
+    },
+    seo: {
+      name: 'رامین یزدانی',
+      title: 'زیست‌فناور و توسعه‌دهنده',
+      description: 'رزومه رامین یزدانی - زیست‌فناور و توسعه‌دهنده نرم‌افزار',
+      separator: ' - '
     }
   }
 }

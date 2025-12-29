@@ -7,6 +7,7 @@
 
 import type { CVData, Basics, Skills } from '@/types/cv'
 import type { Language } from '@/utils/dataNormalizer'
+import { getUIStrings } from '@/lib/i18n'
 
 export interface SEOConfig {
   siteUrl: string
@@ -168,6 +169,7 @@ export function generatePageMeta(
 ): PageMeta {
   const cfg = { ...DEFAULT_CONFIG, ...config }
   const basics = cvData.basics
+  const uiStrings = getUIStrings(language)
   
   const fullName = getFullName(basics)
   const jobTitles = getJobTitles(basics)
@@ -175,13 +177,20 @@ export function generatePageMeta(
   const image = getProfileImage(basics)
   const skillKeywords = getSkillKeywords(cvData.skills as Skills)
   
-  // Build title
-  const title = `${fullName} - ${jobTitles.slice(0, 2).join(' & ')}`
+  // Build title using translated SEO strings (fully translated per language)
+  // Falls back to dynamic title if SEO translations not available
+  const seo = uiStrings.seo
+  const title = seo 
+    ? `${seo.name}${seo.separator}${seo.title}`
+    : `${fullName} - ${jobTitles.slice(0, 2).join(' & ')}`
   
-  // Build description
-  const description = summary 
-    ? summary.slice(0, 160) 
-    : `CV and portfolio of ${fullName} - ${jobTitles.join(', ')} specializing in ${skillKeywords.slice(0, 5).join(', ')}.`
+  // Build description using translated SEO strings
+  // Falls back to dynamic description if SEO translations not available or summary exists
+  const description = seo?.description 
+    ? seo.description
+    : summary 
+      ? summary.slice(0, 160) 
+      : `CV and portfolio of ${fullName} - ${jobTitles.join(', ')} specializing in ${skillKeywords.slice(0, 5).join(', ')}.`
   
   // Build keywords
   const keywords = [
@@ -197,7 +206,7 @@ export function generatePageMeta(
     title,
     description,
     keywords,
-    author: fullName,
+    author: seo?.name || fullName,
     url: cfg.siteUrl,
     image,
     type: 'profile',
