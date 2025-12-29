@@ -1,6 +1,153 @@
 import { DEFAULT_VALUES } from '@/constants/app'
 
 /**
+ * "Present" equivalents in EN/DE/FA for date handling
+ */
+const PRESENT_EQUIVALENTS = [
+  'present',
+  'Present',
+  'PRESENT',
+  'تاکنون',      // Persian: "until now"
+  'حال حاضر',   // Persian: "current"
+  'Gegenwart',  // German: "present"
+  'heute',      // German: "today"
+  'Heute',
+  'aktuell',    // German: "current"
+  'Aktuell',
+]
+
+/**
+ * Returns the number of days in a given month.
+ * @param year - Full year (e.g., 2020)
+ * @param month - Month (1-12)
+ * @returns Number of days in that month
+ */
+function getDaysInMonth(year: number, month: number): number {
+  // Month in Date constructor is 0-indexed, so we pass month (1-12) and day 0
+  // This gives us the last day of the previous month, which is our month
+  return new Date(year, month, 0).getDate()
+}
+
+/**
+ * Sanitizes a date string by parsing flexible formats and clamping invalid days.
+ * 
+ * Policy: CLAMP_TO_LAST_VALID_DAY
+ * - If the day exceeds the number of days in the month, clamp to the last valid day.
+ * - Example: "2020-9-31" → "2020-09-30" (September has 30 days)
+ * 
+ * Handles:
+ * - ISO format with or without leading zeros: "2020-09-15", "2020-9-15"
+ * - "Present" equivalents in EN/DE/FA
+ * - Year-month only: "2020-09" → "2020-09-01"
+ * - Year only: "2020" → "2020-01-01"
+ * 
+ * @param dateStr - Date string to sanitize
+ * @returns Object with sanitized ISO string and parsed Date, or null if unparseable
+ */
+export function sanitizeDateString(dateStr: unknown): {
+  isoString: string
+  date: Date
+  wasModified: boolean
+  originalValue: string
+} | null {
+  if (!dateStr) return null
+  if (typeof dateStr !== 'string') return null
+  
+  const trimmed = dateStr.trim()
+  if (!trimmed) return null
+  
+  // Handle "present" equivalents
+  if (PRESENT_EQUIVALENTS.includes(trimmed)) {
+    const now = new Date()
+    return {
+      isoString: 'present',
+      date: now,
+      wasModified: false,
+      originalValue: trimmed,
+    }
+  }
+  
+  // Try to parse as date-like string with flexible format
+  // Supports: YYYY-MM-DD, YYYY-M-D, YYYY-MM, YYYY
+  const datePatterns = [
+    // Full date with potential single-digit month/day: YYYY-M-D or YYYY-MM-DD
+    /^(\d{4})-(\d{1,2})-(\d{1,2})$/,
+    // Year and month only: YYYY-MM or YYYY-M
+    /^(\d{4})-(\d{1,2})$/,
+    // Year only: YYYY
+    /^(\d{4})$/,
+  ]
+  
+  for (const pattern of datePatterns) {
+    const match = trimmed.match(pattern)
+    if (match) {
+      const year = parseInt(match[1], 10)
+      let month = match[2] ? parseInt(match[2], 10) : 1
+      let day = match[3] ? parseInt(match[3], 10) : 1
+      let wasModified = false
+      
+      // Validate year range
+      if (year < 1900 || year > 2100) {
+        continue // Try next pattern or fail
+      }
+      
+      // Clamp month to valid range
+      if (month < 1) {
+        month = 1
+        wasModified = true
+      } else if (month > 12) {
+        month = 12
+        wasModified = true
+      }
+      
+      // Clamp day to valid range for the month
+      const maxDays = getDaysInMonth(year, month)
+      if (day < 1) {
+        day = 1
+        wasModified = true
+      } else if (day > maxDays) {
+        day = maxDays
+        wasModified = true
+      }
+      
+      // Format with leading zeros
+      const isoString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+      const date = new Date(year, month - 1, day)
+      
+      // Final validation that Date object is valid
+      if (isNaN(date.getTime())) {
+        continue
+      }
+      
+      return {
+        isoString,
+        date,
+        wasModified,
+        originalValue: trimmed,
+      }
+    }
+  }
+  
+  // Try native Date parsing as fallback for other formats
+  try {
+    const date = new Date(trimmed)
+    if (!isNaN(date.getTime())) {
+      const isoString = date.toISOString().split('T')[0]
+      return {
+        isoString,
+        date,
+        wasModified: false,
+        originalValue: trimmed,
+      }
+    }
+  } catch {
+    // Parsing failed
+  }
+  
+  return null
+}
+
+/**
  * Safely converts a value to a string with fallback.
  * @param value - Value to convert
  * @param fallback - Default value if conversion fails
@@ -41,25 +188,36 @@ export function safeObject<T extends Record<string, unknown>>(
 
 /**
  * Validates if a value can be parsed as a valid date.
+ * Uses the sanitizeDateString function for consistent validation.
  * @param dateStr - Date string or number to validate
  * @returns true if valid date, false otherwise
  */
 export function isValidDate(dateStr: unknown): boolean {
   if (!dateStr) return false
-  if (typeof dateStr !== 'string' && typeof dateStr !== 'number') return false
   
-  const date = new Date(dateStr)
-  return !isNaN(date.getTime())
+  // Handle numbers directly
+  if (typeof dateStr === 'number') {
+    const date = new Date(dateStr)
+    return !isNaN(date.getTime())
+  }
+  
+  // Use sanitizer for strings
+  const sanitized = sanitizeDateString(dateStr)
+  return sanitized !== null
 }
 
 /**
  * Formats a date string safely, handling invalid dates gracefully.
- * Special case: "present" (case-insensitive) returns "Present"
- * Invalid dates return the original value with "(Invalid Date)" suffix
+ * Uses sanitizeDateString to handle malformed dates by clamping.
+ * 
+ * Policy: CLAMP_TO_LAST_VALID_DAY
+ * - Invalid dates like "2020-9-31" are clamped to "2020-09-30"
+ * - "Present" equivalents in EN/DE/FA are formatted as "Present"
+ * - Completely unparseable dates return empty string (no "Invalid Date" shown)
  * 
  * @param dateStr - Date to format
  * @param options - Intl date formatting options
- * @returns Formatted date string or error message
+ * @returns Formatted date string or empty string if unparseable
  */
 export function formatDateSafe(
   dateStr: unknown,
@@ -67,18 +225,23 @@ export function formatDateSafe(
 ): string {
   if (!dateStr) return ''
   
-  if (typeof dateStr === 'string' && dateStr.toLowerCase() === 'present') {
+  // Try to sanitize the date string
+  const sanitized = sanitizeDateString(dateStr)
+  
+  if (!sanitized) {
+    // Completely unparseable - return empty string instead of showing "Invalid Date"
+    return ''
+  }
+  
+  // Handle "present" equivalents
+  if (sanitized.isoString === 'present') {
     return 'Present'
   }
   
   try {
-    const date = new Date(dateStr as string | number)
-    if (isNaN(date.getTime())) {
-      return `${dateStr} (Invalid Date)`
-    }
-    return date.toLocaleDateString('en-US', options)
+    return sanitized.date.toLocaleDateString('en-US', options)
   } catch {
-    return `${dateStr} (Invalid Date)`
+    return ''
   }
 }
 
@@ -88,7 +251,9 @@ export function formatDateRangeSafe(
 ): string {
   const start = formatDateSafe(startDate)
   
-  if (!endDate || endDate === 'present') {
+  // Check for "present" equivalents using sanitizer
+  const endSanitized = sanitizeDateString(endDate)
+  if (!endDate || (endSanitized && endSanitized.isoString === 'present')) {
     return start ? `${start} – Present` : ''
   }
   
@@ -101,19 +266,29 @@ export function formatDateRangeSafe(
   return `${start} – ${end}`
 }
 
+/**
+ * Parses a date string safely, handling invalid dates by clamping.
+ * Uses sanitizeDateString for consistent parsing and validation.
+ * 
+ * @param dateStr - Date string to parse
+ * @returns Date object or null if unparseable
+ */
 export function parseDateSafe(dateStr: unknown): Date | null {
   if (!dateStr) return null
   
-  if (typeof dateStr === 'string' && dateStr.toLowerCase() === 'present') {
-    return new Date()
+  // Handle numbers directly
+  if (typeof dateStr === 'number') {
+    try {
+      const date = new Date(dateStr)
+      return isNaN(date.getTime()) ? null : date
+    } catch {
+      return null
+    }
   }
   
-  try {
-    const date = new Date(dateStr as string | number)
-    return isNaN(date.getTime()) ? null : date
-  } catch {
-    return null
-  }
+  // Use sanitizer for strings
+  const sanitized = sanitizeDateString(dateStr)
+  return sanitized ? sanitized.date : null
 }
 
 export function safeUrl(url: unknown): string | null {

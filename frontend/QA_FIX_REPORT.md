@@ -827,3 +827,180 @@ Production build succeeds with no debug logs in output.
 
 **Status**: ✅ **FIXED**  
 **Date**: 2025-12-29
+
+---
+
+# F-03: Date Sanitization/Validation — Handle Invalid Dates in Locked JSON Without Editing Data
+
+## Executive Summary
+
+**Issue**: A warning existed for an invalid date format:
+> `Invalid date format "2020-9-31"`
+
+The date `2020-9-31` is invalid because September only has 30 days. Because CV JSON files are locked/final, we cannot correct the date in the data file. The website must be robust to imperfect date strings.
+
+**Root Cause**: The `sanitizeDate()` function in `dataValidator.ts` validated dates using a basic check, but returned `null` for invalid dates like `2020-9-31` (September 31st doesn't exist). This caused dates to be lost during data loading.
+
+**Solution (Policy: CLAMP_TO_LAST_VALID_DAY)**: Implemented a robust date parsing/sanitization layer that:
+1. Accepts a reasonable set of date inputs (including missing leading zeros like `2020-9-15`)
+2. Clamps invalid day numbers to the last valid day of the month (e.g., `2020-9-31` → `2020-09-30`)
+3. Normalizes to ISO format with leading zeros (e.g., `2020-9-15` → `2020-09-15`)
+4. Handles "present" equivalents in EN/DE/FA
+5. Returns `null` only for completely unparseable values
+
+## Policy Decision: CLAMP_TO_LAST_VALID_DAY
+
+**Rationale**: When a date has an invalid day number (like September 31st), clamping to the last valid day of the month is a reasonable interpretation of user intent. This is preferable to:
+- Showing "Invalid Date" in the UI (poor user experience)
+- Showing nothing/blank (loses information)
+- Crashing the application (unacceptable)
+
+**Behavior Examples**:
+| Input | Output | Reason |
+|-------|--------|--------|
+| `2020-9-31` | `2020-09-30` | September has 30 days, clamp to 30 |
+| `2020-02-30` | `2020-02-29` | 2020 is leap year, clamp to 29 |
+| `2021-02-29` | `2021-02-28` | 2021 is not leap year, clamp to 28 |
+| `2020-04-31` | `2020-04-30` | April has 30 days, clamp to 30 |
+| `2020-9-15` | `2020-09-15` | Valid date, normalize format only |
+| `present` | `present` | Recognized keyword |
+| `heute` | `present` | German equivalent normalized |
+| `تاکنون` | `present` | Persian equivalent normalized |
+
+## Changes Made
+
+### 1. New File: `src/utils/dataValidation.ts`
+
+Created comprehensive date sanitization utilities:
+
+**`sanitizeDateString(dateStr: unknown)`**: Returns sanitized date with metadata
+- Parses date strings with/without leading zeros
+- Clamps invalid days to last valid day of month
+- Returns `{ isoString, wasModified }` or `null` for unparseable
+
+**`formatDateSafe(dateStr: unknown, options?)`**: Formats dates for display
+- Uses `sanitizeDateString()` internally
+- Supports custom locale and formatting options
+- Never returns "Invalid Date"
+
+**`parseDateSafe(dateStr: unknown)`**: Parses dates to Date objects
+- Returns a valid Date object or `null`
+- Handles clamping internally
+
+**`formatDateRangeSafe(startDate, endDate, options?)`**: Formats date ranges
+- Handles "present" for ongoing activities
+- Uses localized "Present" text
+
+**`isValidDate(dateStr: unknown)`**: Validates dates
+- Returns `true` for valid/clampable dates
+- Returns `false` for `null`, `undefined`, empty, or garbage
+
+**Helper Functions**:
+- `isLeapYear(year)`: Checks if year is a leap year
+- `getDaysInMonth(year, month)`: Gets days in a month
+- `PRESENT_EQUIVALENTS`: Array of "present" keywords in EN/DE/FA
+
+### 2. Updated `src/utils/dataValidator.ts`
+
+Modified `sanitizeDate()` function to use the new `sanitizeDateString()`:
+- Now imports and uses `sanitizeDateString` from `dataValidation.ts`
+- Returns clamped ISO date instead of `null` for invalid dates
+- Logs when dates are clamped (for debugging)
+- JSDoc updated to document the CLAMP_TO_LAST_VALID_DAY policy
+
+### 3. New Tests: `tests/date-sanitization.test.ts`
+
+Added 58 comprehensive tests covering:
+- ISO format normalization (15 tests)
+- Day clamping for invalid days (6 tests)
+- "Present" equivalents handling (6 tests)
+- Invalid/empty value handling (5 tests)
+- `formatDateSafe` behavior (12 tests)
+- `parseDateSafe` behavior (8 tests)
+- `isValidDate` behavior (4 tests)
+- Integration with locked CV JSON (2 tests)
+
+## Before/After Behavior
+
+### Before
+| Date String | Sanitized | UI Display |
+|-------------|-----------|------------|
+| `2020-9-31` | `null` | (blank) |
+| `2020-02-30` | `null` | (blank) |
+| `2020-9-15` | `2020-9-15` (unchanged) | Sep 15, 2020 |
+
+### After  
+| Date String | Sanitized | UI Display |
+|-------------|-----------|------------|
+| `2020-9-31` | `2020-09-30` | Sep 30, 2020 |
+| `2020-02-30` | `2020-02-29` | Feb 29, 2020 |
+| `2020-9-15` | `2020-09-15` | Sep 15, 2020 |
+
+### Console Logging
+When a date is clamped, a warning is logged:
+```
+⚠️ [WARN] Date "2020-9-31" was clamped to "2020-09-30"
+```
+
+## Visual Proof
+
+### Before Fix
+The certification with date `2020-9-31` showed no date:
+![Before](https://github.com/user-attachments/assets/564e8d34-f649-4b88-9f94-b627038dbb42)
+
+### After Fix
+The certification now shows "Sep 30, 2020" (clamped from 31 to 30):
+![After](https://github.com/user-attachments/assets/bccf868e-c384-4c40-b86b-92d947b0aabd)
+
+## Verification
+
+### Tests Passed
+All 248 tests pass (including 58 new date sanitization tests):
+```
+ ✓ tests/date-sanitization.test.ts (58 tests) 43ms
+ ...
+ Test Files  14 passed (14)
+      Tests  248 passed (248)
+```
+
+### Build Successful
+```bash
+npm run build
+# ✓ built in 15.40s
+```
+
+### Manual Verification
+- ✅ EN: Certifications section shows "Sep 30, 2020" for the previously missing date
+- ✅ DE: Works correctly with German formatting
+- ✅ FA: Works correctly with Persian formatting and RTL layout
+- ✅ Console shows clamping warning: `Date "2020-9-31" was clamped to "2020-09-30"`
+- ✅ No "Invalid Date" or "undefined" strings in UI
+
+### Locked Files Unchanged
+- `frontend/src/data/cv.json` — ✅ Not modified
+- `frontend/src/data/ramin_de.json` — ✅ Not modified  
+- `frontend/src/data/ramin_fa.json` — ✅ Not modified
+
+## Self-Audit Checklist
+
+- [x] No UI shows "Invalid Date" or "undefined"
+- [x] Invalid date inputs handled deterministically (clamped to last valid day)
+- [x] Tests cover the edge case(s) (58 tests)
+- [x] Policy documented (CLAMP_TO_LAST_VALID_DAY)
+- [x] Locked JSON files unchanged
+- [x] Build succeeds
+- [x] All languages render correctly
+
+## Files Changed
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| `src/utils/dataValidation.ts` | Created | New date sanitization utilities with clamping logic |
+| `src/utils/dataValidator.ts` | Modified | Updated `sanitizeDate()` to use new sanitizer with clamping |
+| `tests/date-sanitization.test.ts` | Created | 58 tests for date sanitization behavior |
+| `QA_FIX_REPORT.md` | Modified | Added F-03 fix documentation |
+
+---
+
+**Status**: ✅ **FIXED**  
+**Date**: 2025-12-29
