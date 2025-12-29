@@ -199,7 +199,8 @@ function sanitizeEducation(education: CVData['education']): CVData['education'] 
       institution: item?.institution,
       studyType: item?.studyType,
       startDate: item?.startDate
-    })
+    }),
+    'education'
   )
 }
 
@@ -284,7 +285,8 @@ function sanitizeExperiences(experiences: CVData['experiences']): CVData['experi
       role: item?.role,
       institution: item?.institution,
       duration: item?.duration
-    })
+    }),
+    'experiences'
   )
 }
 
@@ -304,7 +306,8 @@ function sanitizeProjects(projects: CVData['projects']): CVData['projects'] {
     JSON.stringify({
       title: item?.title,
       url: item?.url
-    })
+    }),
+    'projects'
   )
 }
 

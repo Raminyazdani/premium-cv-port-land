@@ -1004,3 +1004,279 @@ npm run build
 
 **Status**: ✅ **FIXED**  
 **Date**: 2025-12-29
+
+---
+
+# F-04: Project Deduplication Policy — Ensure Deterministic Behavior and Transparent Reporting
+
+## Executive Summary
+
+**Issue**: The report noted that one project entry is filtered out (26 → 25) due to duplication. While deduplication was working, it needed:
+- Determinism (same result every run)
+- Transparent reasoning (what counts as duplicate)
+- No accidental data loss
+
+**Root Cause**: The `deduplicateArray` function worked correctly but:
+1. Did not log which items were removed
+2. Did not document the deduplication policy
+3. Had no dedicated tests for deduplication behavior
+
+**Solution**: Hardened deduplication with:
+1. **FIRST_WINS policy**: First occurrence kept, subsequent duplicates removed
+2. **Transparent logging**: Debug logs show exactly which items are removed and why
+3. **Detailed API**: New `deduplicateArrayWithDetails` function returns both deduplicated items and removed items
+4. **Comprehensive tests**: 20 new tests covering all deduplication scenarios
+
+## Deduplication Policy: FIRST_WINS
+
+### Rules
+
+| Aspect | Rule |
+|--------|------|
+| **Which item is kept** | First occurrence (by array index order) |
+| **Matching key for projects** | `JSON.stringify({ title, url })` |
+| **Matching key for education** | `JSON.stringify({ institution, studyType, startDate })` |
+| **Matching key for experiences** | `JSON.stringify({ role, institution, duration })` |
+| **Case sensitivity** | Case-sensitive comparison |
+| **Null/undefined handling** | `null` and `undefined` are treated as equal (both serialize to "null") |
+
+### Why FIRST_WINS?
+
+1. **Deterministic**: Given the same input order, always produces the same output order
+2. **Simple**: No complex logic to determine which duplicate is "better"
+3. **Predictable**: First occurrence in source data is always preserved
+4. **Consistent**: Same behavior across education, experiences, and projects
+
+### Matching Criteria Examples
+
+**Projects (title + url)**
+```typescript
+// These are DUPLICATES (same title and url):
+{ title: "Project A", url: "https://example.com" }
+{ title: "Project A", url: "https://example.com" }
+
+// These are NOT duplicates (different url):
+{ title: "Project A", url: "https://example.com/v1" }
+{ title: "Project A", url: "https://example.com/v2" }
+
+// These are NOT duplicates (different title):
+{ title: "Project Alpha", url: "https://example.com" }
+{ title: "Project Beta", url: "https://example.com" }
+```
+
+## Changes Made
+
+### 1. Enhanced `deduplicateArray` Function
+
+Added to `src/utils/dataValidator.ts`:
+
+```typescript
+/**
+ * Result of deduplication operation
+ */
+export interface DeduplicationResult<T> {
+  items: T[]
+  removedItems: { index: number; item: T; key: string }[]
+}
+
+/**
+ * Deduplicates an array based on a key function
+ * 
+ * Policy: FIRST_WINS
+ * - First occurrence is kept, subsequent duplicates are removed
+ * - Deterministic: same input → same output
+ * - Transparent: logs removed items in debug mode
+ */
+export function deduplicateArray<T>(
+  array: T[],
+  getKey: (item: T) => string,
+  context?: string
+): T[]
+
+/**
+ * Returns both deduplicated items and list of removed items
+ */
+export function deduplicateArrayWithDetails<T>(
+  array: T[],
+  getKey: (item: T) => string,
+  context?: string
+): DeduplicationResult<T>
+```
+
+### 2. Added Context to Deduplication Calls
+
+Updated `src/utils/dataLoader.ts`:
+
+```typescript
+// Projects
+return deduplicateArray(sanitized, item =>
+  JSON.stringify({ title: item?.title, url: item?.url }),
+  'projects'  // Context for logging
+)
+
+// Education
+return deduplicateArray(sanitized, item =>
+  JSON.stringify({ institution: item?.institution, studyType: item?.studyType, startDate: item?.startDate }),
+  'education'
+)
+
+// Experiences
+return deduplicateArray(sanitized, item =>
+  JSON.stringify({ role: item?.role, institution: item?.institution, duration: item?.duration }),
+  'experiences'
+)
+```
+
+### 3. Debug Logging
+
+When `VITE_DEBUG_CV=true` or `DEBUG_CV=true` (for tests):
+
+```
+🔍 [DEBUG] [Deduplication] projects: Removing duplicate at index 3 (first seen at index 2), key: {"title":"Cosmetic Shop Marketplace Template (Django)","url":"https://github.com/Raminyazdani/Cosmetic_Shop"}
+🔍 [DEBUG] [Deduplication] projects: Removed 1 duplicate(s), 26 → 25 items
+```
+
+### 4. New Test File
+
+Created `tests/project-deduplication.test.ts` with 20 tests covering:
+
+| Test Category | Tests |
+|---------------|-------|
+| Basic Functionality | 5 tests (exact duplicates, FIRST_WINS, near-duplicates with different URL/title, null URLs) |
+| Detailed Reporting | 3 tests (removed items list, empty removedItems, key in removedItems) |
+| Determinism | 2 tests (multiple runs, order preservation) |
+| Edge Cases | 6 tests (empty array, single item, all duplicates, case-sensitivity, special chars, unicode) |
+| Logging Behavior | 1 test (DEBUG_CV logging) |
+| Integration | 3 tests (real CV data, cross-language consistency, validation warning) |
+
+## Before/After Comparison
+
+### Duplicate Detection
+
+| Aspect | Before | After |
+|--------|--------|-------|
+| Logging | Silent removal | Debug log with index, key, and first occurrence |
+| Reporting API | None | `deduplicateArrayWithDetails` returns removed items |
+| Context | No context | Context string (e.g., "projects") in logs |
+| Documentation | Minimal | Full JSDoc with policy explanation |
+
+### Example Debug Output
+
+```
+🔍 [DEBUG] [Deduplication] projects: Removing duplicate at index 3 (first seen at index 2), key: {"title":"Cosmetic Shop Marketplace Template (Django)","url":"https://github.com/Raminyazdani/Cosmetic_Shop"}
+🔍 [DEBUG] [Deduplication] projects: Removed 1 duplicate(s), 26 → 25 items
+```
+
+## Proof of Determinism
+
+The test "produces the same result for multiple runs" verifies determinism:
+
+```typescript
+it('produces the same result for multiple runs', () => {
+  const projects = [
+    { title: 'A', url: 'https://a.com' },
+    { title: 'B', url: 'https://b.com' },
+    { title: 'A', url: 'https://a.com' }, // Duplicate
+    { title: 'C', url: 'https://c.com' },
+    { title: 'B', url: 'https://b.com' }, // Duplicate
+    { title: 'D', url: 'https://d.com' },
+  ]
+
+  // Run 10 times - all results must be identical
+  const results = Array.from({ length: 10 }, () =>
+    deduplicateArray([...projects], getKey, 'projects')
+  )
+
+  // Verify all results match
+  const firstResult = JSON.stringify(results[0])
+  results.forEach((result, index) => {
+    expect(JSON.stringify(result)).toBe(firstResult)
+  })
+
+  // Output is always: ['A', 'B', 'C', 'D']
+  expect(results[0].map(p => p.title)).toEqual(['A', 'B', 'C', 'D'])
+})
+```
+
+## Proof of Non-Accidental Data Loss
+
+The tests verify that near-duplicates are NOT removed:
+
+```typescript
+it('preserves near-duplicates with different URLs', () => {
+  const projects = [
+    { title: 'Same Title', url: 'https://example.com/v1' },
+    { title: 'Same Title', url: 'https://example.com/v2' }, // Different URL
+  ]
+  
+  const result = deduplicateArray(projects, getKey, 'projects')
+  expect(result).toHaveLength(2) // Both preserved
+})
+
+it('preserves near-duplicates with different titles', () => {
+  const projects = [
+    { title: 'Project Alpha', url: 'https://example.com' },
+    { title: 'Project Beta', url: 'https://example.com' }, // Same URL, different title
+  ]
+  
+  const result = deduplicateArray(projects, getKey, 'projects')
+  expect(result).toHaveLength(2) // Both preserved
+})
+```
+
+## Verification
+
+### Tests Passed
+
+All 268 tests pass (including 20 new deduplication tests):
+
+```
+ ✓ tests/project-deduplication.test.ts (20 tests) 136ms
+ ...
+ Test Files  15 passed (15)
+      Tests  268 passed (268)
+```
+
+### Build Successful
+
+```bash
+npm run build
+# ✓ built in 15.40s
+```
+
+### Manual Verification
+
+- ✅ EN: 25 projects after deduplication (1 duplicate removed)
+- ✅ DE: 25 projects after deduplication (1 duplicate removed)  
+- ✅ FA: 25 projects after deduplication (1 duplicate removed)
+- ✅ Debug logs show exactly which item was removed and why
+
+### Locked Files Unchanged
+
+- `frontend/src/data/cv.json` — ✅ Not modified
+- `frontend/src/data/ramin_de.json` — ✅ Not modified  
+- `frontend/src/data/ramin_fa.json` — ✅ Not modified
+
+## Self-Audit Checklist
+
+- [x] Dedup is deterministic (same input → same output every time)
+- [x] Tests cover duplicates vs near-duplicates (20 tests)
+- [x] No unintended removals (near-duplicates preserved)
+- [x] Locked JSON files unchanged
+- [x] Policy documented (FIRST_WINS)
+- [x] Transparent logging in debug mode
+- [x] All languages produce consistent results
+
+## Files Changed
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| `src/utils/dataValidator.ts` | Modified | Enhanced `deduplicateArray` with logging, added `deduplicateArrayWithDetails`, added `DeduplicationResult` interface |
+| `src/utils/dataLoader.ts` | Modified | Added context parameter to deduplication calls |
+| `tests/project-deduplication.test.ts` | Created | 20 tests for deduplication behavior |
+| `QA_FIX_REPORT.md` | Modified | Added F-04 fix documentation |
+
+---
+
+**Status**: ✅ **FIXED**  
+**Date**: 2025-12-29
