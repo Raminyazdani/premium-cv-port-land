@@ -112,6 +112,27 @@ describe('debugDataLoading utility', () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>
   let consoleWarnSpy: ReturnType<typeof vi.spyOn>
 
+  // Helper to create mock CVData
+  const createMockCVData = (): CVData => ({
+    basics: [],
+    profiles: [],
+    education: [],
+    experiences: [],
+    projects: [],
+    publications: [],
+    skills: {},
+    languages: [],
+    workshop_and_certifications: [],
+    references: [],
+  })
+
+  // Helper to create mock validation result
+  const createMockValidationResult = () => ({
+    isValid: true,
+    errors: [] as string[],
+    warnings: [] as string[],
+  })
+
   beforeEach(() => {
     consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     consoleGroupSpy = vi.spyOn(console, 'group').mockImplementation(() => {})
@@ -133,24 +154,8 @@ describe('debugDataLoading utility', () => {
   })
 
   it('accepts language, data, and validation result', () => {
-    const mockData: CVData = {
-      basics: [],
-      profiles: [],
-      education: [],
-      experiences: [],
-      projects: [],
-      publications: [],
-      skills: {},
-      languages: [],
-      workshop_and_certifications: [],
-      references: [],
-    }
-
-    const mockValidationResult = {
-      isValid: true,
-      errors: [],
-      warnings: [],
-    }
+    const mockData = createMockCVData()
+    const mockValidationResult = createMockValidationResult()
 
     // Should not throw
     expect(() => {
@@ -159,24 +164,8 @@ describe('debugDataLoading utility', () => {
   })
 
   it('handles all supported languages', () => {
-    const mockData: CVData = {
-      basics: [],
-      profiles: [],
-      education: [],
-      experiences: [],
-      projects: [],
-      publications: [],
-      skills: {},
-      languages: [],
-      workshop_and_certifications: [],
-      references: [],
-    }
-
-    const mockValidationResult = {
-      isValid: true,
-      errors: [],
-      warnings: [],
-    }
+    const mockData = createMockCVData()
+    const mockValidationResult = createMockValidationResult()
 
     const languages: Array<'en' | 'de' | 'fa'> = ['en', 'de', 'fa']
     languages.forEach((lang) => {

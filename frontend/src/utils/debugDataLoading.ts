@@ -36,8 +36,8 @@ export function logDataLoadingDebug(
     validationResult.isValid ? '✅ Valid' : '❌ Invalid'
   )
 
-  // Log each section
-  const sections = [
+  // Log each section - use keyof CVData for type safety
+  const sections: (keyof CVData)[] = [
     'basics',
     'profiles',
     'education',
@@ -48,7 +48,7 @@ export function logDataLoadingDebug(
     'languages',
     'workshop_and_certifications',
     'references',
-  ] as const
+  ]
 
   sections.forEach((section) => {
     const value = data[section]
