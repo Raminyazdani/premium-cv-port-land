@@ -29,11 +29,11 @@
       "bilder": [
         {
           "typ_auf": "profil",
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/c_pad,b_gen_fill,w_1200,h_1200,ar_1:1/v1748294090/IMG_9262_wioxcp.jpg"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/cv_profile_photo.jpg"
         },
         {
           "typ_auf": "titelbild",
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/c_crop,w_1200,h_900,ar_4:3,g_auto/v1748294940/IMG_5283_1200x1800_a2wxn9_c_pad_b_gen_fill_w_1600_h_400_1_lnwatm.jpg"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/cv_cover_photo.jpg"
         }
       ]
     }
@@ -187,7 +187,7 @@
           "max_punktzahl": 9.0,
           "min_punktzahl": 0.0,
           "pruefungsdatum": "2023-12-28",
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_ielts_jw47oo.pdf"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_ielts.pdf"
         }
       ]
     },
@@ -221,10 +221,10 @@
       "zertifikate": [
         {
           "name": "Mikroarray Datenanalyse in R Software und Systembiologie",
-          "datum": "2020-09-30",
+          "datum": "2020-9-31",
           "dauer": "18 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_TUV_north_Academy_MicroArray_dspdq4.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_TUV_north_Academy_MicroArray.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -237,7 +237,7 @@
           "datum": "2021-04-10",
           "dauer": "58 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_TUV_north_Academy_MD_wfwvnm.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_TUV_north_Academy_MD.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -255,7 +255,7 @@
           "datum": "2023-12-08",
           "dauer": "16 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/certificate_ICAD_glp_EN_vjmbcp.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_ICAD_glp_EN.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -273,7 +273,7 @@
           "datum": "2023-12-09",
           "dauer": "8 Stunden",
           "zertifikat": false,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_Biosafety_biosecurity_and_biological_risk_xeazln.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Biosafety_biosecurity_and_biological_risk.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -315,7 +315,7 @@
           "datum": "2023-09-13",
           "dauer": "15 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530890/certificate_UoT_Histological_Techniques_and_Equipment_cyqakk.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Histological_Techniques_and_Equipment.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -327,7 +327,7 @@
           "datum": "2023-09-10",
           "dauer": "45 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530888/certificate_UoT_Fundamental_Principles_of_Molecular_Testing_Techniques_stnnhk.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Fundamental_Principles_of_Molecular_Testing_Techniques.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -339,7 +339,7 @@
           "datum": "2023-09-20",
           "dauer": "6 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530888/certificate_UoT_Fundamental_Techniques_for_Handling_Bleeding_and_Injection_of_Lab_Animals_oiho0j.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Fundamental_Techniques_for_Handling_Bleeding_and_Injection_of_Lab_Animals.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -351,7 +351,7 @@
           "datum": "2023-09-20",
           "dauer": "10 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/certificate_UoT_Applied_Bioinformatics_urbeov.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Applied_Bioinformatics.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -364,7 +364,7 @@
           "datum": "2023-09-15",
           "dauer": "10 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530888/certificate_UoT_Fundamental_Principles_of_In_Vitro_Cell_Culture_Techniques_vsz0f3.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Fundamental_Principles_of_In_Vitro_Cell_Culture_Techniques.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -376,7 +376,7 @@
           "datum": "2023-09-17",
           "dauer": "10 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530890/certificate_UoT_Introduction_to_Microbiological_Lab_Techniques_gflaji.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Introduction_to_Microbiological_Lab_Techniques.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -594,7 +594,7 @@
           "datum": "2023-01-18",
           "dauer": "400 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530890/certificate_maktabsharif_python_django_qi5tcd.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_maktabsharif_python_django.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -613,7 +613,7 @@
           "datum": "2020-09-18",
           "dauer": "70 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/certificate_maktabkhune_front_end_pt2jrn.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_maktabkhune_front_end.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Akademisch",
@@ -625,7 +625,7 @@
           "datum": "2020-07-23",
           "dauer": "57 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530890/certificate_maktabkhune_beginner_python_zvfwzv.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_maktabkhune_beginner_python.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -639,7 +639,7 @@
           "datum": "2021-12-11",
           "dauer": "57 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/certificate_maktabkhune_advanced_python_porkqg.pdf",
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_maktabkhune_advanced_python.pdf",
           "typ_schluessel": [
             "Voller_Lebenslauf",
             "Biotechnologie",
@@ -675,49 +675,49 @@
           "datum": "2023-07-15",
           "dauer": "3 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531338/certificate_Hamrah_academy_Fundamentals_and_Roadmap_of_Data_Science_lea7xa.pdf"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Fundamentals_and_Roadmap_of_Data_Science.pdf"
         },
         {
           "name": "Mathematics für Daten Science und Artificial Intelligence",
           "datum": "2023-09-01",
           "dauer": "8 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531339/certificate_Hamrah_academy_Mathematics_for_Data_Science_and_Artificial_Intelligence_tufiqi.pdf"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Mathematics_for_Data_Science_and_Artificial_Intelligence.pdf"
         },
         {
           "name": "Daten Mining und Business Intelligence mit KNIME",
           "datum": "2023-09-05",
           "dauer": "6 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531339/certificate_Hamrah_academy_Data_Mining_and_Business_Intelligence_with_KNIME_kctnfx.pdf"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Data_Mining_and_Business_Intelligence_with_KNIME.pdf"
         },
         {
           "name": "Umfassend Python Programmierung",
           "datum": "2023-09-12",
           "dauer": "12 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531338/certificate_Hamrah_academy_Comprehensive_Python_Programming_aofpwo.pdf"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Comprehensive_Python_Programming.pdf"
         },
         {
           "name": "Daten Visualisierung Tools",
           "datum": "2023-10-22",
           "dauer": "5 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531339/certificate_Hamrah_academy_Data_Visualization_Tools_ooqjbj.pdf"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Data_Visualization_Tools.pdf"
         },
         {
           "name": "Introductory Datenbank Prinzipien",
           "datum": "2023-10-19",
           "dauer": "10 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531339/certificate_Hamrah_academy_Introductory_Database_Principles_dby3im.pdf"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Introductory_Database_Principles.pdf"
         },
         {
           "name": "Daten Mining mit Python",
           "datum": "2023-11-01",
           "dauer": "8 Stunden",
           "zertifikat": true,
-          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531338/certificate_Hamrah_academy_Data_Mining_with_Python_fz3e0c.pdf"
+          "url": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Data_Mining_with_Python.pdf"
         }
       ]
     },
@@ -2007,7 +2007,7 @@
           ]
         },
         {
-          "voller_name": "Medienvorbereitungaration & Optimierung",
+          "voller_name": "Medienvorbereitung & Optimierung",
           "kurzer_name": "Medienvorbereitung",
           "typ_schluessel": [
             "Voller_Lebenslauf",
@@ -2629,6 +2629,16 @@
       ]
     },
     {
+      "titel": "Marktplatz-Template für Kosmetikshop (Django)",
+      "beschreibung": "Baute ein Multi-App-Django‑4.1-Marktplatz-Template für einen Kosmetikshop mit einer wiederverwendbaren Core-Schicht (zentralisierte Field-Factories, Basismodelle mit Soft-Delete, gemeinsame Mixins und ein eigener App-Scaffolding-Befehl) sowie Produktkatalog (Liste/Suche/Filter), Warenkorb- und Checkout-Flow und Bestell-/Zahlungs-/Versandmodelle, gerendert mit Bootstrap-Templates auf SQLite.",
+      "link": "https://github.com/Raminyazdani/Cosmetic_Shop",
+      "typ_schluessel": [
+        "Voller_Lebenslauf",
+        "Programmierung",
+        "Akademisch"
+      ]
+    },
+    {
       "titel": "Maktab-78-Dateispeicher (framework-loses Python + PostgreSQL)",
       "beschreibung": "Entwickelte ein lehrreiches, framework-loses Python-Projekt mit einem verschachtelten CLI-Router/Menüsystem mit dynamischen Callbacks, einer leichten PostgreSQL-Persistenzschicht (psycopg2) mit kleinen ORM-ähnlichen Modellen und Query-Buildern für CRUD sowie Domänenmodulen für Nutzer, Dateien, Kommentare, Warenkörbe und Bestellpositionen.",
       "link": "https://github.com/Raminyazdani/m78bookstore",
@@ -3200,7 +3210,7 @@
         "Ba.khalili@iau.ac.ir"
       ],
       "telefon": null,
-      "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/Reference_Babak__Khalili_Hadad_lb2rxf.pdf",
+      "url": "https://res.cloudinary.com/dgflx4rum/image/upload/Reference_Babak__Khalili_Hadad.pdf",
       "typ_schluessel": [
         "Voller_Lebenslauf",
         "Biotechnologie",
@@ -3218,7 +3228,7 @@
         "biodibio@yahoo.com"
       ],
       "telefon": null,
-      "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/Reference_Hedieh_Dibah_ynttbv.pdf",
+      "url": "https://res.cloudinary.com/dgflx4rum/image/upload/Reference_Hedieh_Dibah.pdf",
       "typ_schluessel": [
         "Voller_Lebenslauf",
         "Biotechnologie",
@@ -3242,7 +3252,7 @@
           "nummer": "9123961780"
         }
       ],
-      "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/Reference_Simin_Nabizadeh_sf74hi.pdf",
+      "url": "https://res.cloudinary.com/dgflx4rum/image/upload/Reference_Simin_Nabizadeh.pdf",
       "typ_schluessel": [
         "Voller_Lebenslauf",
         "Biotechnologie",
@@ -3266,7 +3276,7 @@
           "nummer": "9105969589"
         }
       ],
-      "url": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/Reference_Mohammad_Amin_Boojari_oln3ua.pdf",
+      "url": "https://res.cloudinary.com/dgflx4rum/image/upload/Reference_Mohammad_Amin_Boojari.pdf",
       "typ_schluessel": [
         "Voller_Lebenslauf",
         "Biotechnologie",
