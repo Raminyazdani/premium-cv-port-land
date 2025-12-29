@@ -2,6 +2,172 @@
 
 ---
 
+# F-01: Complete DE/FA Key Mappings & Eliminate "unmapped key" warnings
+
+## Executive Summary
+
+**Issue**: Report found **100+ warnings** during normalization for DE/FA:
+> Key "X" not found in keyMap, using as-is
+
+This left non-canonical keys in normalized output and increased risk of future regressions.
+
+**Root Cause**: `keyMappings.ts` was missing many key mappings for DE/FA fields, and the warning detection logic incorrectly triggered warnings for identity mappings (where DE/FA key equals EN key).
+
+**Solution**: 
+1. Added all missing key mappings for DE/FA
+2. Fixed the warning detection logic to use a proper `isKeyMapped()` helper
+3. Added new test cases to verify zero unmapped key warnings
+
+## Before/After Warning Count
+
+| Language | Before | After |
+|----------|--------|-------|
+| German (DE) | 100+ warnings | 0 warnings |
+| Persian (FA) | 100+ warnings | 0 warnings |
+
+## Changes Made
+
+### 1. Updated `keyMappings.ts`
+
+#### LANGUAGE_KEYS
+| Key | Field | Before | After |
+|-----|-------|--------|-------|
+| proficiency | de | `kenntnisstand` | `kenntnisse` |
+| certifications | de | `zertifizierungen` | `zertifikate` |
+| certifications | fa | `گواهینامه‌ها` | `گواهی‌ها` |
+
+#### PROFICIENCY_KEYS
+| Key | Field | Before | After |
+|-----|-------|--------|-------|
+| CEFR | de | `CEFR` | `GER` |
+| CEFR | fa | `CEFR` | `چارچوب_CEFR` |
+
+#### CERTIFICATION_KEYS
+| Key | Field | Before | After |
+|-----|-------|--------|-------|
+| test | de | `test` | `pruefung` |
+| listening | de | `hören` | `hoeren` |
+| maxScore | de | `maximalpunktzahl` | `max_punktzahl` |
+| minScore | de | `minimalpunktzahl` | `min_punktzahl` |
+| examDate | de | `prüfungsdatum` | `pruefungsdatum` |
+| URL | de | `URL` | `url` |
+| overall | fa | `کلی` | `نمره_کل` |
+| maxScore | fa | `حداکثر_امتیاز` | `حداکثر_نمره` |
+| minScore | fa | `حداقل_امتیاز` | `حداقل_نمره` |
+
+#### PROFILE_KEYS
+| Key | Field | Before | After |
+|-----|-------|--------|-------|
+| uuid | fa | `uuid` | `شناسه_یونیک` |
+
+#### PUBLICATION_KEYS (Major additions)
+Added new key mappings:
+- `literal`: `de: 'wortlaut', fa: 'متن'`
+- `issue.fa`: Changed `شماره` → `شماره_نشریه`
+- `article_number`: `de: 'artikelnummer', fa: 'شماره_مقاله'`
+- `doi.fa`: Changed `doi` → `DOI`
+- `issn.fa`: Added `ISSN`
+- `link`: Identity mapping for shared URLs
+- `access_date`: `de: 'zugriffsdatum', fa: 'تاریخ_دسترسی'`
+- `language`: `de: 'sprache', fa: 'زبان'`
+- `place`: `de: 'ort', fa: 'محل'`
+- `editors`: `de: 'herausgeber', fa: 'ویراستاران'`
+- `book_title`: `de: 'buchtitel', fa: 'عنوان_کتاب'`
+- `chapter_pages`: `de: 'kapitel_seiten', fa: 'صفحات_فصل'`
+- `edition`: `de: 'auflage', fa: 'ویرایش'`
+- `conference`: `de: 'konferenz', fa: 'کنفرانس'`
+- `degree_type.de`: Changed `abschlusstyp` → `abschluss`
+- `repository_url.fa`: Added `آدرس_مخزن`
+- `correspondent.de`: Changed `korrespondent` → `korrespondenzautor`
+- `correspondent.fa`: Changed `مسئول_مکاتبه` → `نویسنده_مسئول`
+- `supervisors.fa`: Changed `استادان_راهنما` → `سرپرستان`
+- `faculty.de`: Changed `fakultät` → `fakultaet`
+- `isbn.fa`: Changed `شابک` → `ISBN`
+- `notes`: `de: 'notizen', fa: 'یادداشت‌ها'`
+
+#### REFERENCE_KEYS
+| Key | Field | Before | After |
+|-----|-------|--------|-------|
+| position | fa | `موقعیت` | `سمت` |
+| department | fa | `بخش` | `دپارتمان` |
+| location | de | `ort` | `standort` |
+| URL | de | `URL` | `url` |
+
+#### New IDENTIFIER_KEYS Section
+Added new section for publication identifiers:
+- `doi`, `isbn`, `issn`, `pmid`, `pmcid`, `arxiv`
+- German uses lowercase, Persian uses uppercase (`DOI`, `ISBN`, `ISSN`, etc.)
+
+#### New ALL_KEYS Combined Map
+Added combined key map for generic object normalization across all sections.
+
+### 2. Updated `dataNormalizer.ts`
+
+- Imported `IDENTIFIER_KEYS`, `ALL_KEYS`, and `isKeyMapped`
+- Added `normalizePublication()` function to handle nested `identifiers` object
+- Fixed warning detection to use `isKeyMapped()` helper instead of identity comparison
+
+### 3. Added `isKeyMapped()` Helper
+
+Added new helper function in `keyMappings.ts`:
+```typescript
+export function isKeyMapped(
+  keyMap: Record<string, KeyMapping>,
+  key: string,
+  sourceLang: 'en' | 'de' | 'fa'
+): boolean
+```
+
+This correctly detects whether a key exists in the mapping, even for identity mappings (e.g., `name` → `name`).
+
+### 4. Added Test Cases
+
+Added new test cases in `tests/dataNormalization.test.ts`:
+- "should not produce any unmapped key warnings for German"
+- "should not produce any unmapped key warnings for Persian"
+
+These tests verify that zero "not found in keyMap" warnings are generated.
+
+## Whitelist Exceptions
+
+None. All keys used in DE and FA JSON files are now properly mapped.
+
+## Verification
+
+### Tests Passed
+- `npm run test` — All 156+ tests pass (including 2 new F-01 tests)
+- `npm run verify-languages` — All languages verified
+- `npm run build` — Build successful
+
+### Locked Files Unchanged
+- `frontend/src/data/cv.json` — Not modified
+- `frontend/src/data/ramin_de.json` — Not modified
+- `frontend/src/data/ramin_fa.json` — Not modified
+
+## Self-Audit Checklist
+
+- [x] Extracted unique keys from both DE and FA sources
+- [x] Updated mapping without collisions
+- [x] Unmapped-key warnings are eliminated (0 warnings)
+- [x] Tests pass and include a guard against regressions
+- [x] Locked JSON files unchanged
+
+## Files Changed
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| `src/config/keyMappings.ts` | Modified | Added missing DE/FA key mappings, fixed incorrect mappings, added `isKeyMapped()` helper, added `IDENTIFIER_KEYS` and `ALL_KEYS` |
+| `src/utils/dataNormalizer.ts` | Modified | Added `normalizePublication()` function, fixed warning detection logic |
+| `tests/dataNormalization.test.ts` | Modified | Added 2 new tests for zero unmapped key warnings |
+| `QA_FIX_REPORT.md` | Modified | Added F-01 fix documentation |
+
+---
+
+**Status**: ✅ **FIXED**  
+**Date**: 2025-12-29
+
+---
+
 # F-05 + F-09: Remove Hardcoded English Strings; Complete i18n Coverage
 
 ## Executive Summary

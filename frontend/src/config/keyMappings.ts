@@ -3,7 +3,8 @@
  * 
  * This file maps all JSON keys across the three language files.
  * English keys are the canonical internal schema.
- * DO NOT MODIFY - Generated from locked data files.
+ * 
+ * UPDATED: F-01 fix - Complete DE/FA key mappings to eliminate warnings.
  */
 
 export interface KeyMapping {
@@ -209,7 +210,7 @@ export const PROFILE_KEYS: Record<string, KeyMapping> = {
   uuid: {
     en: 'uuid',
     de: 'uuid',
-    fa: 'uuid'
+    fa: 'شناسه_یونیک'
   }
 }
 
@@ -275,13 +276,13 @@ export const LANGUAGE_KEYS: Record<string, KeyMapping> = {
   },
   proficiency: {
     en: 'proficiency',
-    de: 'kenntnisstand',
+    de: 'kenntnisse',
     fa: 'مهارت'
   },
   certifications: {
     en: 'certifications',
-    de: 'zertifizierungen',
-    fa: 'گواهینامه‌ها'
+    de: 'zertifikate',
+    fa: 'گواهی‌ها'
   }
 }
 
@@ -296,8 +297,8 @@ export const PROFICIENCY_KEYS: Record<string, KeyMapping> = {
   },
   CEFR: {
     en: 'CEFR',
-    de: 'CEFR',
-    fa: 'CEFR'
+    de: 'GER',
+    fa: 'چارچوب_CEFR'
   },
   status: {
     en: 'status',
@@ -312,7 +313,7 @@ export const PROFICIENCY_KEYS: Record<string, KeyMapping> = {
 export const CERTIFICATION_KEYS: Record<string, KeyMapping> = {
   test: {
     en: 'test',
-    de: 'test',
+    de: 'pruefung',
     fa: 'آزمون'
   },
   organization: {
@@ -323,7 +324,7 @@ export const CERTIFICATION_KEYS: Record<string, KeyMapping> = {
   overall: {
     en: 'overall',
     de: 'gesamt',
-    fa: 'کلی'
+    fa: 'نمره_کل'
   },
   reading: {
     en: 'reading',
@@ -337,7 +338,7 @@ export const CERTIFICATION_KEYS: Record<string, KeyMapping> = {
   },
   listening: {
     en: 'listening',
-    de: 'hören',
+    de: 'hoeren',
     fa: 'شنیدن'
   },
   speaking: {
@@ -347,22 +348,22 @@ export const CERTIFICATION_KEYS: Record<string, KeyMapping> = {
   },
   maxScore: {
     en: 'maxScore',
-    de: 'maximalpunktzahl',
-    fa: 'حداکثر_امتیاز'
+    de: 'max_punktzahl',
+    fa: 'حداکثر_نمره'
   },
   minScore: {
     en: 'minScore',
-    de: 'minimalpunktzahl',
-    fa: 'حداقل_امتیاز'
+    de: 'min_punktzahl',
+    fa: 'حداقل_نمره'
   },
   examDate: {
     en: 'examDate',
-    de: 'prüfungsdatum',
+    de: 'pruefungsdatum',
     fa: 'تاریخ_آزمون'
   },
   URL: {
     en: 'URL',
-    de: 'URL',
+    de: 'url',
     fa: 'نشانی_وب'
   }
 }
@@ -521,6 +522,11 @@ export const PUBLICATION_KEYS: Record<string, KeyMapping> = {
     de: 'autoren_strukturiert',
     fa: 'نویسندگان_ساخت‌یافته'
   },
+  literal: {
+    en: 'literal',
+    de: 'wortlaut',
+    fa: 'متن'
+  },
   type: {
     en: 'type',
     de: 'typ',
@@ -564,37 +570,102 @@ export const PUBLICATION_KEYS: Record<string, KeyMapping> = {
   issue: {
     en: 'issue',
     de: 'ausgabe',
-    fa: 'شماره'
+    fa: 'شماره_نشریه'
   },
   pages: {
     en: 'pages',
     de: 'seiten',
     fa: 'صفحات'
   },
+  article_number: {
+    en: 'article_number',
+    de: 'artikelnummer',
+    fa: 'شماره_مقاله'
+  },
   doi: {
     en: 'doi',
     de: 'doi',
-    fa: 'doi'
+    fa: 'DOI'
+  },
+  issn: {
+    en: 'issn',
+    de: 'issn',
+    fa: 'ISSN'
   },
   url: {
     en: 'url',
     de: 'url',
     fa: 'پیوند'
   },
+  link: {
+    en: 'link',
+    de: 'link',
+    fa: 'پیوند'
+  },
+  access_date: {
+    en: 'access_date',
+    de: 'zugriffsdatum',
+    fa: 'تاریخ_دسترسی'
+  },
+  language: {
+    en: 'language',
+    de: 'sprache',
+    fa: 'زبان'
+  },
   publisher: {
     en: 'publisher',
     de: 'verlag',
     fa: 'ناشر'
   },
+  place: {
+    en: 'place',
+    de: 'ort',
+    fa: 'محل'
+  },
+  editors: {
+    en: 'editors',
+    de: 'herausgeber',
+    fa: 'ویراستاران'
+  },
+  book_title: {
+    en: 'book_title',
+    de: 'buchtitel',
+    fa: 'عنوان_کتاب'
+  },
+  chapter_pages: {
+    en: 'chapter_pages',
+    de: 'kapitel_seiten',
+    fa: 'صفحات_فصل'
+  },
+  edition: {
+    en: 'edition',
+    de: 'auflage',
+    fa: 'ویرایش'
+  },
+  conference: {
+    en: 'conference',
+    de: 'konferenz',
+    fa: 'کنفرانس'
+  },
+  degree_type: {
+    en: 'degree_type',
+    de: 'abschluss',
+    fa: 'نوع_مدرک'
+  },
+  repository_url: {
+    en: 'repository_url',
+    de: 'repository_url',
+    fa: 'آدرس_مخزن'
+  },
   correspondent: {
     en: 'correspondent',
-    de: 'korrespondent',
-    fa: 'مسئول_مکاتبه'
+    de: 'korrespondenzautor',
+    fa: 'نویسنده_مسئول'
   },
   supervisors: {
     en: 'supervisors',
     de: 'betreuer',
-    fa: 'استادان_راهنما'
+    fa: 'سرپرستان'
   },
   institution: {
     en: 'institution',
@@ -603,7 +674,7 @@ export const PUBLICATION_KEYS: Record<string, KeyMapping> = {
   },
   faculty: {
     en: 'faculty',
-    de: 'fakultät',
+    de: 'fakultaet',
     fa: 'دانشکده'
   },
   school: {
@@ -614,12 +685,7 @@ export const PUBLICATION_KEYS: Record<string, KeyMapping> = {
   isbn: {
     en: 'isbn',
     de: 'isbn',
-    fa: 'شابک'
-  },
-  degree_type: {
-    en: 'degree_type',
-    de: 'abschlusstyp',
-    fa: 'نوع_مدرک'
+    fa: 'ISBN'
   },
   submissionDate: {
     en: 'submissionDate',
@@ -630,6 +696,11 @@ export const PUBLICATION_KEYS: Record<string, KeyMapping> = {
     en: 'identifiers',
     de: 'kennungen',
     fa: 'شناسه‌ها'
+  },
+  notes: {
+    en: 'notes',
+    de: 'notizen',
+    fa: 'یادداشت‌ها'
   },
   URL: {
     en: 'URL',
@@ -655,12 +726,12 @@ export const REFERENCE_KEYS: Record<string, KeyMapping> = {
   position: {
     en: 'position',
     de: 'position',
-    fa: 'موقعیت'
+    fa: 'سمت'
   },
   department: {
     en: 'department',
     de: 'abteilung',
-    fa: 'بخش'
+    fa: 'دپارتمان'
   },
   institution: {
     en: 'institution',
@@ -669,7 +740,7 @@ export const REFERENCE_KEYS: Record<string, KeyMapping> = {
   },
   location: {
     en: 'location',
-    de: 'ort',
+    de: 'standort',
     fa: 'موقعیت'
   },
   email: {
@@ -684,7 +755,7 @@ export const REFERENCE_KEYS: Record<string, KeyMapping> = {
   },
   URL: {
     en: 'URL',
-    de: 'URL',
+    de: 'url',
     fa: 'نشانی_وب'
   },
   type_key: {
@@ -692,6 +763,72 @@ export const REFERENCE_KEYS: Record<string, KeyMapping> = {
     de: 'typ_schluessel',
     fa: 'کلید_نوع'
   }
+}
+
+/**
+ * Publication identifier keys (nested inside identifiers object)
+ */
+export const IDENTIFIER_KEYS: Record<string, KeyMapping> = {
+  doi: {
+    en: 'doi',
+    de: 'doi',
+    fa: 'DOI'
+  },
+  isbn: {
+    en: 'isbn',
+    de: 'isbn',
+    fa: 'ISBN'
+  },
+  issn: {
+    en: 'issn',
+    de: 'issn',
+    fa: 'ISSN'
+  },
+  pmid: {
+    en: 'pmid',
+    de: 'pmid',
+    fa: 'PMID'
+  },
+  pmcid: {
+    en: 'pmcid',
+    de: 'pmcid',
+    fa: 'PMCID'
+  },
+  arxiv: {
+    en: 'arxiv',
+    de: 'arxiv',
+    fa: 'arXiv'
+  }
+}
+
+/**
+ * Combined key map for generic object normalization.
+ * This includes all keys from all sections for use in deep normalization.
+ * 
+ * NOTE: Key collisions are intentional when the same key has identical mappings
+ * across sections (e.g., 'type_key', 'name', 'institution'). Later sections
+ * in the spread order take precedence, but since mappings for shared keys
+ * are identical, this is safe.
+ */
+export const ALL_KEYS: Record<string, KeyMapping> = {
+  ...SECTION_KEYS,
+  ...BASICS_KEYS,
+  ...PHONE_KEYS,
+  ...LOCATION_KEYS,
+  ...PICTURES_KEYS,
+  ...PROFILE_KEYS,
+  ...EDUCATION_KEYS,
+  ...LANGUAGE_KEYS,
+  ...PROFICIENCY_KEYS,
+  ...CERTIFICATION_KEYS,
+  ...WORKSHOP_ISSUER_KEYS,
+  ...WORKSHOP_CERT_KEYS,
+  ...SKILL_KEYS,
+  ...EXPERIENCE_KEYS,
+  ...PROJECT_KEYS,
+  ...PUBLICATION_KEYS,
+  ...REFERENCE_KEYS,
+  ...IDENTIFIER_KEYS,
 }
 
 /**
@@ -719,4 +856,18 @@ export function getEnglishKey(
   
   const entry = Object.entries(keyMap).find(([_, mapping]) => mapping[sourceLang] === key)
   return entry ? entry[0] : key
+}
+
+/**
+ * Helper function to check if a key exists in the keyMap for a given language.
+ * Returns true if the key is found in the keyMap, false otherwise.
+ */
+export function isKeyMapped(
+  keyMap: Record<string, KeyMapping>,
+  key: string,
+  sourceLang: 'en' | 'de' | 'fa'
+): boolean {
+  if (sourceLang === 'en') return true
+  
+  return Object.values(keyMap).some(mapping => mapping[sourceLang] === key)
 }

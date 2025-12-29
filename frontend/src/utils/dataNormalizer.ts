@@ -24,7 +24,10 @@ import {
   PROJECT_KEYS,
   PUBLICATION_KEYS,
   REFERENCE_KEYS,
+  IDENTIFIER_KEYS,
+  ALL_KEYS,
   getEnglishKey,
+  isKeyMapped,
   type KeyMapping
 } from '@/config/keyMappings'
 
@@ -128,7 +131,7 @@ function normalizeSectionData(sectionName: string, data: any, sourceLang: Langua
     
     case 'publications':
       return Array.isArray(data)
-        ? data.map(item => normalizeObject(item, PUBLICATION_KEYS, sourceLang))
+        ? data.map(item => normalizePublication(item, sourceLang))
         : []
     
     case 'references':
@@ -240,6 +243,29 @@ function normalizeSkills(data: any, sourceLang: Language): any {
 }
 
 /**
+ * Normalizes publication with nested identifiers and authors_structured
+ */
+function normalizePublication(data: any, sourceLang: Language): any {
+  if (!data || typeof data !== 'object') return data
+
+  const normalized = normalizeObject(data, PUBLICATION_KEYS, sourceLang)
+
+  // Normalize nested identifiers object
+  if (normalized.identifiers && typeof normalized.identifiers === 'object') {
+    normalized.identifiers = normalizeObject(normalized.identifiers, IDENTIFIER_KEYS, sourceLang)
+  }
+
+  // Normalize authors_structured array - contains objects with 'literal' key (already in PUBLICATION_KEYS)
+  if (Array.isArray(normalized.authors_structured)) {
+    normalized.authors_structured = normalized.authors_structured.map((author: any) =>
+      typeof author === 'object' ? normalizeObject(author, PUBLICATION_KEYS, sourceLang) : author
+    )
+  }
+
+  return normalized
+}
+
+/**
  * Normalizes reference with phone handling
  */
 function normalizeReference(data: any, sourceLang: Language): any {
@@ -274,7 +300,8 @@ function normalizeObject(
     const enKey = getEnglishKey(keyMap, sourceKey, sourceLang)
     normalized[enKey] = obj[sourceKey]
     
-    if (import.meta.env.DEV && enKey === sourceKey && sourceLang !== 'en') {
+    // Only warn if the key was NOT found in the keyMap
+    if (import.meta.env.DEV && sourceLang !== 'en' && !isKeyMapped(keyMap, sourceKey, sourceLang)) {
       console.warn(`⚠️  [normalizeObject] Key "${sourceKey}" not found in keyMap, using as-is`)
     }
   })
