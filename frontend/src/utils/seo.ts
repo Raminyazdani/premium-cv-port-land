@@ -7,6 +7,7 @@
 
 import type { CVData, Basics, Skills } from '@/types/cv'
 import type { Language } from '@/utils/dataNormalizer'
+import { getUIStrings } from '@/lib/i18n'
 
 export interface SEOConfig {
   siteUrl: string
@@ -159,6 +160,39 @@ export function getAlternateLocales(_currentLang: Language): { lang: Language; l
 }
 
 /**
+ * Build page title from SEO translations or fallback to dynamic title
+ */
+function buildPageTitle(
+  seo: { name: string; separator: string; title: string } | undefined,
+  fullName: string,
+  jobTitles: string[]
+): string {
+  if (seo) {
+    return `${seo.name}${seo.separator}${seo.title}`
+  }
+  return `${fullName} - ${jobTitles.slice(0, 2).join(' & ')}`
+}
+
+/**
+ * Build page description from SEO translations or fallback to dynamic description
+ */
+function buildPageDescription(
+  seo: { description: string } | undefined,
+  summary: string,
+  fullName: string,
+  jobTitles: string[],
+  skillKeywords: string[]
+): string {
+  if (seo?.description) {
+    return seo.description
+  }
+  if (summary) {
+    return summary.slice(0, 160)
+  }
+  return `CV and portfolio of ${fullName} - ${jobTitles.join(', ')} specializing in ${skillKeywords.slice(0, 5).join(', ')}.`
+}
+
+/**
  * Generate page meta data from CV data
  */
 export function generatePageMeta(
@@ -168,6 +202,7 @@ export function generatePageMeta(
 ): PageMeta {
   const cfg = { ...DEFAULT_CONFIG, ...config }
   const basics = cvData.basics
+  const uiStrings = getUIStrings(language)
   
   const fullName = getFullName(basics)
   const jobTitles = getJobTitles(basics)
@@ -175,13 +210,9 @@ export function generatePageMeta(
   const image = getProfileImage(basics)
   const skillKeywords = getSkillKeywords(cvData.skills as Skills)
   
-  // Build title
-  const title = `${fullName} - ${jobTitles.slice(0, 2).join(' & ')}`
-  
-  // Build description
-  const description = summary 
-    ? summary.slice(0, 160) 
-    : `CV and portfolio of ${fullName} - ${jobTitles.join(', ')} specializing in ${skillKeywords.slice(0, 5).join(', ')}.`
+  const seo = uiStrings.seo
+  const title = buildPageTitle(seo, fullName, jobTitles)
+  const description = buildPageDescription(seo, summary, fullName, jobTitles, skillKeywords)
   
   // Build keywords
   const keywords = [
@@ -197,7 +228,7 @@ export function generatePageMeta(
     title,
     description,
     keywords,
-    author: fullName,
+    author: seo?.name || fullName,
     url: cfg.siteUrl,
     image,
     type: 'profile',
