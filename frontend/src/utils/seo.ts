@@ -27,10 +27,15 @@ export interface PageMeta {
 }
 
 // Default configuration - can be overridden
+// Note: defaultImage URL returns 404 and should be updated with a valid image URL
+// or update image URLs in CV data files:
+//   - frontend/src/data/cv.json (basics[0].Pictures[].URL)
+//   - frontend/src/data/ramin_de.json (grunddaten[0].bilder[].url)
+//   - frontend/src/data/ramin_fa.json (اطلاعات_پایه[0].تصاویر[].نشانی_وب)
 const DEFAULT_CONFIG: SEOConfig = {
   siteUrl: 'https://your-domain.com',
   siteName: 'Ramin Yazdani - Portfolio',
-  defaultImage: 'https://res.cloudinary.com/dgflx4rum/image/upload/v1748294090/IMG_9262_wioxcp.jpg',
+  defaultImage: '', // Cloudinary URL removed - returns 404. Update CV data or provide valid URL
   twitterHandle: '@raminyazdani'
 }
 
