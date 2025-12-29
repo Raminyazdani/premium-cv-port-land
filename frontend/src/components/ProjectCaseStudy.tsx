@@ -330,7 +330,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.problem && (
               <CaseStudySectionBlock
                 icon={<Lightbulb className="h-4 w-4 text-yellow-500" />}
-                title={t.caseStudy?.problem || 'Problem'}
+                title={t.caseStudy?.problem ?? ''}
                 content={caseStudy.problem}
               />
             )}
@@ -339,7 +339,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.solution && (
               <CaseStudySectionBlock
                 icon={<Target className="h-4 w-4 text-green-500" />}
-                title={t.caseStudy?.solution || 'Solution'}
+                title={t.caseStudy?.solution ?? ''}
                 content={caseStudy.solution}
               />
             )}
@@ -348,7 +348,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.process && (
               <CaseStudySectionBlock
                 icon={<Wrench className="h-4 w-4 text-blue-500" />}
-                title={t.caseStudy?.process || 'Process'}
+                title={t.caseStudy?.process ?? ''}
                 content={caseStudy.process}
               />
             )}
@@ -357,7 +357,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.results && (
               <CaseStudySectionBlock
                 icon={<ChartLineUp className="h-4 w-4 text-purple-500" />}
-                title={t.caseStudy?.results || 'Results'}
+                title={t.caseStudy?.results ?? ''}
                 content={caseStudy.results}
               />
             )}
