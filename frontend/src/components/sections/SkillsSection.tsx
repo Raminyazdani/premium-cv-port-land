@@ -8,12 +8,15 @@ import { Button } from '@/components/ui/button'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 import { SkillsCarousel } from '@/components/SkillsCarousel'
+import { useTranslation } from '@/context/LanguageContext'
+import { interpolate } from '@/lib/i18n'
 
 type ViewMode = 'list' | 'carousel'
 
 export function SkillsSection() {
   const data = useCV()
   const skills = (data.skills as Skills) ?? {}
+  const t = useTranslation()
   
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
@@ -108,9 +111,9 @@ export function SkillsSection() {
     >
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-2">Skills & Expertise</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2">{t.sections.skills}</h2>
           <p className="text-sm sm:text-base text-muted-foreground">
-            {totalSkills} skills across {skillsArray.length} domains
+            {interpolate(t.skills?.skills_across_domains || '{count} skills across {domains} domains', { count: totalSkills, domains: skillsArray.length })}
           </p>
         </div>
 
@@ -122,11 +125,11 @@ export function SkillsSection() {
             />
             <Input
               type="text"
-              placeholder="Search skills..."
+              placeholder={t.skills?.search_placeholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 pr-10 h-10 text-sm"
-              aria-label="Search skills"
+              aria-label={t.a11y.search_skills}
             />
             {searchQuery && (
               <Button
@@ -134,7 +137,7 @@ export function SkillsSection() {
                 variant="ghost"
                 onClick={() => setSearchQuery('')}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                aria-label="Clear search"
+                aria-label={t.a11y.clear_search}
               >
                 <X size={16} />
               </Button>
@@ -149,7 +152,7 @@ export function SkillsSection() {
                 variant={viewMode === 'list' ? 'default' : 'ghost'}
                 onClick={() => setViewMode('list')}
                 className="h-8 w-8 p-0"
-                aria-label="List view"
+                aria-label={t.a11y.list_view}
               >
                 <ListBullets size={16} weight="bold" />
               </Button>
@@ -158,7 +161,7 @@ export function SkillsSection() {
                 variant={viewMode === 'carousel' ? 'default' : 'ghost'}
                 onClick={() => setViewMode('carousel')}
                 className="h-8 w-8 p-0"
-                aria-label="Carousel view"
+                aria-label={t.a11y.carousel_view}
               >
                 <SquaresFour size={16} weight="bold" />
               </Button>
@@ -173,7 +176,7 @@ export function SkillsSection() {
                   disabled={allExpanded}
                   className="text-xs sm:text-sm"
                 >
-                  Expand All
+                  {t.actions?.expand_all}
                 </Button>
                 <Button 
                   size="sm" 
@@ -182,7 +185,7 @@ export function SkillsSection() {
                   disabled={noneExpanded}
                   className="text-xs sm:text-sm"
                 >
-                  Collapse All
+                  {t.actions?.collapse_all}
                 </Button>
               </>
             )}
@@ -193,7 +196,7 @@ export function SkillsSection() {
           <div className="text-center py-12 sm:py-16 bg-card border border-border rounded-lg">
             <MagnifyingGlass size={40} className="sm:w-12 sm:h-12 mx-auto mb-4 opacity-30" />
             <p className="text-base sm:text-lg px-4 text-muted-foreground">
-              No skills found matching "{searchQuery}"
+              {interpolate(t.skills?.no_skills_matching || 'No skills found matching "{query}"', { query: searchQuery })}
             </p>
           </div>
         ) : viewMode === 'carousel' ? (

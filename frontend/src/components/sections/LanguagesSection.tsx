@@ -24,6 +24,7 @@ import { MediaModal } from '@/components/MediaModal'
 import { detectMediaType } from '@/utils/mediaDetector'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import type { Language, LanguageCertification } from '@/types/cv'
+import { useTranslation } from '@/context/LanguageContext'
 
 function getProficiencyLevel(level?: string | null, cefr?: string | null): number {
   if (cefr) {
@@ -337,6 +338,7 @@ function LanguageCard({ language }: LanguageCardProps) {
 export function LanguagesSection() {
   const cvData = useCV()
   const languages = cvData.languages ?? []
+  const t = useTranslation()
   
   const { containerRef, getItemStyle } = useStaggeredScrollAnimation(languages.length, {
     threshold: 0.1,
@@ -350,9 +352,9 @@ export function LanguagesSection() {
           <div className="text-center">
             <Translate size={48} weight="duotone" className="mx-auto mb-4 text-muted-foreground" />
             <h2 id="languages-heading" className="text-3xl font-bold mb-2">
-              Languages
+              {t.sections.languages}
             </h2>
-            <p className="text-muted-foreground">No language proficiency information available</p>
+            <p className="text-muted-foreground">{t.empty.no_languages}</p>
           </div>
         </div>
       </section>
@@ -367,10 +369,10 @@ export function LanguagesSection() {
             <Translate size={32} weight="duotone" className="text-primary" />
           </div>
           <h2 id="languages-heading" className="text-4xl font-bold mb-3">
-            Languages
+            {t.sections.languages}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Communication skills across multiple languages
+            {t.languages_section?.description}
           </p>
         </div>
         

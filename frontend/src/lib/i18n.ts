@@ -63,6 +63,12 @@ export interface UIStrings {
     hide_phone: string
     email: string
     phone: string
+    expand_all: string
+    collapse_all: string
+    back_to_top: string
+    retry: string
+    open_pdf: string
+    theme: string
   }
 
   // Forms
@@ -129,6 +135,11 @@ export interface UIStrings {
     years: string
     category: string
     all_skills: string
+    skills_across_domains: string
+    no_skills_matching: string
+    search_placeholder: string
+    more_categories: string
+    skills_count: string
   }
 
   // Languages
@@ -142,6 +153,7 @@ export interface UIStrings {
     beginner: string
     studying: string
     certification: string
+    description: string
   }
 
   // References
@@ -243,6 +255,28 @@ export interface UIStrings {
     carousel_view: string
     search_publications: string
     visit_profile: string
+    page_scroll_progress: string
+    previous_skill_category: string
+    next_skill_category: string
+    skill_category_nav: string
+    go_to_slide: string
+    close_quick_actions: string
+    open_quick_actions: string
+    social_profiles: string
+  }
+
+  // Media
+  media: {
+    failed_to_load: string
+    image_could_not_load: string
+    click_to_open_pdf: string
+    pdf_document: string
+  }
+
+  // Profiles
+  profiles: {
+    right_click_to_copy: string
+    no_profiles: string
   }
 
   // Booking Widget
@@ -404,7 +438,13 @@ const translations: Record<Language, UIStrings> = {
       show_phone: 'Show phone',
       hide_phone: 'Hide phone',
       email: 'Email',
-      phone: 'Phone'
+      phone: 'Phone',
+      expand_all: 'Expand All',
+      collapse_all: 'Collapse All',
+      back_to_top: 'Back to top',
+      retry: 'Retry',
+      open_pdf: 'Open PDF',
+      theme: 'Theme'
     },
     forms: {
       name: 'Name',
@@ -458,7 +498,12 @@ const translations: Record<Language, UIStrings> = {
       proficiency: 'Proficiency',
       years: 'Years of Experience',
       category: 'Category',
-      all_skills: 'All Skills'
+      all_skills: 'All Skills',
+      skills_across_domains: '{count} skills across {domains} domains',
+      no_skills_matching: 'No skills found matching "{query}"',
+      search_placeholder: 'Search skills...',
+      more_categories: '+{count} more categories',
+      skills_count: '{count} skills'
     },
     languages_section: {
       language: 'Language',
@@ -469,7 +514,8 @@ const translations: Record<Language, UIStrings> = {
       intermediate: 'Intermediate',
       beginner: 'Beginner',
       studying: 'Studying',
-      certification: 'Certification'
+      certification: 'Certification',
+      description: 'Communication skills across multiple languages'
     },
     references: {
       available_on_request: 'References available upon request',
@@ -556,7 +602,25 @@ const translations: Record<Language, UIStrings> = {
       list_view: 'List view',
       carousel_view: 'Carousel view',
       search_publications: 'Search publications',
-      visit_profile: 'Visit {network} profile'
+      visit_profile: 'Visit {network} profile',
+      page_scroll_progress: 'Page scroll progress',
+      previous_skill_category: 'Previous skill category',
+      next_skill_category: 'Next skill category',
+      skill_category_nav: 'Skill category navigation',
+      go_to_slide: 'Go to slide {number}',
+      close_quick_actions: 'Close quick actions',
+      open_quick_actions: 'Open quick actions',
+      social_profiles: 'Social media profiles'
+    },
+    media: {
+      failed_to_load: 'Failed to load image',
+      image_could_not_load: 'The image could not be loaded',
+      click_to_open_pdf: 'Click below to open in a new tab',
+      pdf_document: 'PDF Document'
+    },
+    profiles: {
+      right_click_to_copy: 'Right-click to copy link',
+      no_profiles: 'No profiles available'
     },
     booking: {
       title: 'Schedule a Call',
@@ -701,7 +765,13 @@ const translations: Record<Language, UIStrings> = {
       show_phone: 'Telefon anzeigen',
       hide_phone: 'Telefon ausblenden',
       email: 'E-Mail',
-      phone: 'Telefon'
+      phone: 'Telefon',
+      expand_all: 'Alle erweitern',
+      collapse_all: 'Alle einklappen',
+      back_to_top: 'Nach oben',
+      retry: 'Erneut versuchen',
+      open_pdf: 'PDF öffnen',
+      theme: 'Design'
     },
     forms: {
       name: 'Name',
@@ -755,7 +825,12 @@ const translations: Record<Language, UIStrings> = {
       proficiency: 'Kenntnisstand',
       years: 'Jahre Erfahrung',
       category: 'Kategorie',
-      all_skills: 'Alle Fähigkeiten'
+      all_skills: 'Alle Fähigkeiten',
+      skills_across_domains: '{count} Fähigkeiten in {domains} Bereichen',
+      no_skills_matching: 'Keine Fähigkeiten gefunden für "{query}"',
+      search_placeholder: 'Fähigkeiten suchen...',
+      more_categories: '+{count} weitere Kategorien',
+      skills_count: '{count} Fähigkeiten'
     },
     languages_section: {
       language: 'Sprache',
@@ -766,7 +841,8 @@ const translations: Record<Language, UIStrings> = {
       intermediate: 'Mittel',
       beginner: 'Anfänger',
       studying: 'In Ausbildung',
-      certification: 'Zertifizierung'
+      certification: 'Zertifizierung',
+      description: 'Kommunikationsfähigkeiten in mehreren Sprachen'
     },
     references: {
       available_on_request: 'Referenzen auf Anfrage verfügbar',
@@ -853,7 +929,25 @@ const translations: Record<Language, UIStrings> = {
       list_view: 'Listenansicht',
       carousel_view: 'Karussellansicht',
       search_publications: 'Veröffentlichungen durchsuchen',
-      visit_profile: '{network}-Profil besuchen'
+      visit_profile: '{network}-Profil besuchen',
+      page_scroll_progress: 'Seitenfortschritt',
+      previous_skill_category: 'Vorherige Fähigkeitskategorie',
+      next_skill_category: 'Nächste Fähigkeitskategorie',
+      skill_category_nav: 'Navigation der Fähigkeitskategorien',
+      go_to_slide: 'Zu Folie {number} gehen',
+      close_quick_actions: 'Schnellaktionen schließen',
+      open_quick_actions: 'Schnellaktionen öffnen',
+      social_profiles: 'Social-Media-Profile'
+    },
+    media: {
+      failed_to_load: 'Bild konnte nicht geladen werden',
+      image_could_not_load: 'Das Bild konnte nicht geladen werden',
+      click_to_open_pdf: 'Klicken Sie unten, um in einem neuen Tab zu öffnen',
+      pdf_document: 'PDF-Dokument'
+    },
+    profiles: {
+      right_click_to_copy: 'Rechtsklick zum Kopieren des Links',
+      no_profiles: 'Keine Profile verfügbar'
     },
     booking: {
       title: 'Anruf vereinbaren',
@@ -998,7 +1092,13 @@ const translations: Record<Language, UIStrings> = {
       show_phone: 'نمایش تلفن',
       hide_phone: 'مخفی کردن تلفن',
       email: 'ایمیل',
-      phone: 'تلفن'
+      phone: 'تلفن',
+      expand_all: 'گسترش همه',
+      collapse_all: 'جمع کردن همه',
+      back_to_top: 'بازگشت به بالا',
+      retry: 'تلاش مجدد',
+      open_pdf: 'باز کردن PDF',
+      theme: 'تم'
     },
     forms: {
       name: 'نام',
@@ -1052,7 +1152,12 @@ const translations: Record<Language, UIStrings> = {
       proficiency: 'مهارت',
       years: 'سال تجربه',
       category: 'دسته',
-      all_skills: 'تمام مهارت‌ها'
+      all_skills: 'تمام مهارت‌ها',
+      skills_across_domains: '{count} مهارت در {domains} حوزه',
+      no_skills_matching: 'مهارتی با "{query}" یافت نشد',
+      search_placeholder: 'جستجوی مهارت‌ها...',
+      more_categories: '+{count} دسته بیشتر',
+      skills_count: '{count} مهارت'
     },
     languages_section: {
       language: 'زبان',
@@ -1063,7 +1168,8 @@ const translations: Record<Language, UIStrings> = {
       intermediate: 'متوسط',
       beginner: 'مبتدی',
       studying: 'در حال یادگیری',
-      certification: 'گواهینامه'
+      certification: 'گواهینامه',
+      description: 'مهارت‌های ارتباطی در چند زبان'
     },
     references: {
       available_on_request: 'مراجع در صورت درخواست در دسترس هستند',
@@ -1150,7 +1256,25 @@ const translations: Record<Language, UIStrings> = {
       list_view: 'نمای لیست',
       carousel_view: 'نمای کاروسل',
       search_publications: 'جستجوی انتشارات',
-      visit_profile: 'بازدید از پروفایل {network}'
+      visit_profile: 'بازدید از پروفایل {network}',
+      page_scroll_progress: 'پیشرفت اسکرول صفحه',
+      previous_skill_category: 'دسته مهارت قبلی',
+      next_skill_category: 'دسته مهارت بعدی',
+      skill_category_nav: 'ناوبری دسته‌های مهارت',
+      go_to_slide: 'رفتن به اسلاید {number}',
+      close_quick_actions: 'بستن اقدامات سریع',
+      open_quick_actions: 'باز کردن اقدامات سریع',
+      social_profiles: 'پروفایل‌های شبکه‌های اجتماعی'
+    },
+    media: {
+      failed_to_load: 'بارگذاری تصویر ناموفق بود',
+      image_could_not_load: 'تصویر بارگذاری نشد',
+      click_to_open_pdf: 'برای باز کردن در تب جدید کلیک کنید',
+      pdf_document: 'سند PDF'
+    },
+    profiles: {
+      right_click_to_copy: 'راست‌کلیک برای کپی لینک',
+      no_profiles: 'پروفایلی موجود نیست'
     },
     booking: {
       title: 'رزرو تماس',

@@ -20,6 +20,7 @@ import { useCV } from '@/context/CVDataContext'
 import { extractBasics, extractProfilePhotoUrl, getInitials, formatLocation, getFullName, getRoles } from '@/lib/cv-data'
 import { copyToClipboard } from '@/lib/clipboard'
 import { useTranslation } from '@/context/LanguageContext'
+import { interpolate } from '@/lib/i18n'
 import type { Profile } from '@/types/cv'
 
 const iconMap: Record<string, typeof LinkedinLogo> = {
@@ -29,7 +30,7 @@ const iconMap: Record<string, typeof LinkedinLogo> = {
   default: Globe
 }
 
-function SocialLink({ profile }: { profile: Profile }) {
+function SocialLink({ profile, t }: { profile: Profile; t: ReturnType<typeof useTranslation> }) {
   const network = profile.network?.toLowerCase() ?? 'default'
   const Icon = iconMap[network] ?? iconMap.default
   
@@ -46,7 +47,7 @@ function SocialLink({ profile }: { profile: Profile }) {
         href={profile.url}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Visit ${profile.network} profile`}
+        aria-label={interpolate(t.a11y.visit_profile, { network: profile.network || '' })}
       >
         <Icon size={20} weight="fill" />
       </a>
@@ -138,7 +139,7 @@ export function BasicsSection() {
             {basics.profiles && basics.profiles.length > 0 && (
               <div className="flex gap-2 flex-wrap justify-center lg:justify-start">
                 {basics.profiles.map((profile, idx) => (
-                  <SocialLink key={idx} profile={profile} />
+                  <SocialLink key={idx} profile={profile} t={t} />
                 ))}
               </div>
             )}

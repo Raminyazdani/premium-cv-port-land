@@ -117,13 +117,13 @@ export function FloatingActionButton({
     },
     {
       icon: Envelope,
-      label: 'Contact',
+      label: t.actions?.contact || 'Contact',
       onClick: handleContact,
       className: 'bg-accent hover:bg-accent/90',
     },
     {
       icon: Palette,
-      label: 'Theme',
+      label: t.actions?.theme || 'Theme',
       onClick: handleTheme,
       className: 'bg-muted hover:bg-muted/90',
     },
@@ -134,7 +134,7 @@ export function FloatingActionButton({
       className="fixed bottom-6 right-6 z-50 no-print"
       onKeyDown={handleKeyDown}
       role="group"
-      aria-label="Quick actions"
+      aria-label={t.a11y?.quick_actions}
     >
       {/* Action buttons - shown when expanded */}
       <div
@@ -182,7 +182,7 @@ export function FloatingActionButton({
           'min-touch-target',
           isExpanded && 'rotate-45 bg-destructive hover:bg-destructive/90'
         )}
-        aria-label={isExpanded ? 'Close quick actions' : 'Open quick actions'}
+        aria-label={isExpanded ? t.a11y?.close_quick_actions : t.a11y?.open_quick_actions}
         aria-expanded={isExpanded}
         style={{
           animation: isVisible && !isExpanded ? 'fab-pulse 2s ease-in-out infinite' : 'none',

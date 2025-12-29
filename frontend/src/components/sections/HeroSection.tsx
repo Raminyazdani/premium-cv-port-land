@@ -15,13 +15,14 @@ import { optimizeCloudinaryImage } from '@/utils/imageOptimizer'
 import type { Profile } from '@/types/cv'
 import { useTranslation } from '@/context/LanguageContext'
 import { useParallax } from '@/hooks/use-parallax'
+import { interpolate } from '@/lib/i18n'
 
 const iconMap: Record<string, typeof LinkedinLogo> = {
   linkedin: LinkedinLogo,
   github: GithubLogo,
 }
 
-function SocialButton({ profile }: { profile: Profile }) {
+function SocialButton({ profile, t }: { profile: Profile; t: ReturnType<typeof useTranslation> }) {
   const network = profile.network?.toLowerCase() ?? ''
   const Icon = iconMap[network]
   
@@ -38,7 +39,7 @@ function SocialButton({ profile }: { profile: Profile }) {
         href={profile.url}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Visit ${profile.network} profile`}
+        aria-label={interpolate(t.a11y.visit_profile, { network: profile.network || '' })}
       >
         <Icon size={20} weight="fill" className="sm:w-5 sm:h-5" />
       </a>
@@ -180,7 +181,8 @@ export function HeroSection() {
               return (
                 <SocialButton 
                   key={profileData?.network || `profile-${index}`} 
-                  profile={profileData} 
+                  profile={profileData}
+                  t={t}
                 />
               )
             })}
@@ -189,7 +191,7 @@ export function HeroSection() {
           <button
             onClick={handleScrollToAbout}
             className={`mt-8 sm:mt-12 animate-bounce touch-manipulation p-2 ${optimizedCover ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
-            aria-label="Scroll to about section"
+            aria-label={t.a11y.scroll_to_about}
           >
             <ArrowDown size={28} weight="bold" className="sm:w-8 sm:h-8" />
           </button>
