@@ -19,7 +19,8 @@ export function logDataSummary(label: string, data: unknown) {
       logger.debug('Array length:', data.length)
       if (data.length > 0) {
         logger.debug('First item:', data[0])
-        logger.debug('First item keys:', Object.keys((data[0] as object) || {}))
+        const firstItem = data[0]
+        logger.debug('First item keys:', firstItem && typeof firstItem === 'object' ? Object.keys(firstItem) : [])
       }
     } else {
       logger.debug('Object keys:', Object.keys(data))

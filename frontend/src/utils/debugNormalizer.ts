@@ -32,8 +32,8 @@ export function diagnoseNormalization(lang: Language = 'en') {
       const value = rawData[key]
       acc[key] = Array.isArray(value) 
         ? `Array(${value.length})` 
-        : typeof value === 'object' 
-          ? `Object(${Object.keys(value as object).length} keys)` 
+        : value && typeof value === 'object'
+          ? `Object(${Object.keys(value).length} keys)` 
           : typeof value
       return acc
     }, {} as Record<string, string>)

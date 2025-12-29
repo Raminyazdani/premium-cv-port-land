@@ -45,14 +45,20 @@ export function loadAndValidateData(lang: Language = 'en'): LoadDataResult {
   logger.debug(`   typeof rawData: ${typeof rawData}`)
   logger.debug(`   rawData is null: ${rawData === null}`)
   logger.debug(`   rawData is undefined: ${rawData === undefined}`)
-  logger.debug(`   Raw data keys:`, Object.keys(rawData as object))
+  
+  // Type guard for object
+  const rawDataObj = rawData && typeof rawData === 'object' && !Array.isArray(rawData) 
+    ? rawData as Record<string, unknown>
+    : {}
+  
+  logger.debug(`   Raw data keys:`, Object.keys(rawDataObj))
   
   // Detailed check of each section
-  Object.keys(rawData as object).forEach(key => {
-    const value = (rawData as Record<string, unknown>)[key]
+  Object.keys(rawDataObj).forEach(key => {
+    const value = rawDataObj[key]
     logger.debug(`   - ${key}: ${Array.isArray(value) ? `array[${value.length}]` : typeof value}`)
-    if (Array.isArray(value) && value.length > 0 && typeof value[0] === 'object' && value[0] !== null) {
-      logger.debug(`     → First item keys:`, Object.keys(value[0] as object))
+    if (Array.isArray(value) && value.length > 0 && value[0] && typeof value[0] === 'object') {
+      logger.debug(`     → First item keys:`, Object.keys(value[0]))
     }
   })
   
