@@ -384,6 +384,67 @@ export interface UIStrings {
     dyslexia_font: string
     reduced_motion: string
   }
+
+  // Case Study (ProjectCaseStudy.tsx)
+  caseStudy?: {
+    viewCaseStudy: string
+    collapse: string
+    problem: string
+    solution: string
+    process: string
+    results: string
+    technologies: string
+    gallery: string
+    links: string
+    metrics: string
+    viewProject: string
+    viewCode: string
+    liveDemo: string
+    close: string
+    of: string
+    previous: string
+    next: string
+  }
+
+  // Charts/Skills Visualization (SkillsVisualizationDashboard.tsx)
+  charts?: {
+    title: string
+    description: string
+    radar: string
+    bar: string
+    bubble: string
+    category: string
+    skills: string
+    skillCount: string
+    viewDetails: string
+    totalSkills: string
+    categories: string
+    clickToFilter: string
+  }
+
+  // Cookie Consent (CookieConsentBanner.tsx)
+  cookies?: {
+    title: string
+    message: string
+    accept: string
+    decline: string
+    dntMessage: string
+    privacyPolicy: string
+    close: string
+  }
+
+  // Testimonials (TestimonialsSection.tsx)
+  testimonials?: {
+    title: string
+    subtitle: string
+    linkedIn: string
+    noTestimonials: string
+    previous: string
+    next: string
+    pause: string
+    play: string
+    of: string
+  }
 }
 
 const translations: Record<Language, UIStrings> = {
@@ -711,6 +772,59 @@ const translations: Record<Language, UIStrings> = {
       reset_font: 'Reset font size',
       dyslexia_font: 'Dyslexia-friendly font',
       reduced_motion: 'Reduced motion'
+    },
+    caseStudy: {
+      viewCaseStudy: 'View Case Study',
+      collapse: 'Collapse',
+      problem: 'Problem',
+      solution: 'Solution',
+      process: 'Process',
+      results: 'Results',
+      technologies: 'Technologies',
+      gallery: 'Gallery',
+      links: 'Links',
+      metrics: 'Key Metrics',
+      viewProject: 'View Project',
+      viewCode: 'View Code',
+      liveDemo: 'Live Demo',
+      close: 'Close',
+      of: 'of',
+      previous: 'Previous image',
+      next: 'Next image'
+    },
+    charts: {
+      title: 'Skills Visualization',
+      description: 'Interactive view of skills across different domains',
+      radar: 'Radar Chart',
+      bar: 'Bar Chart',
+      bubble: 'Bubble Chart',
+      category: 'Category',
+      skills: 'Skills',
+      skillCount: 'Skill Count',
+      viewDetails: 'View Details',
+      totalSkills: 'Total Skills',
+      categories: 'Categories',
+      clickToFilter: 'Click to filter'
+    },
+    cookies: {
+      title: 'Cookie Consent',
+      message: 'We use cookies to analyze site traffic and improve your experience. You can opt out at any time.',
+      accept: 'Accept',
+      decline: 'Decline',
+      dntMessage: 'We detected that you have Do Not Track enabled. Analytics tracking is disabled.',
+      privacyPolicy: 'Privacy Policy',
+      close: 'Close'
+    },
+    testimonials: {
+      title: 'Testimonials & Recommendations',
+      subtitle: 'What colleagues and clients say',
+      linkedIn: 'View on LinkedIn',
+      noTestimonials: 'No testimonials available',
+      previous: 'Previous testimonial',
+      next: 'Next testimonial',
+      pause: 'Pause auto-rotation',
+      play: 'Resume auto-rotation',
+      of: 'of'
     }
   },
 
@@ -1038,6 +1152,59 @@ const translations: Record<Language, UIStrings> = {
       reset_font: 'Schriftgröße zurücksetzen',
       dyslexia_font: 'Legasthenie-freundliche Schrift',
       reduced_motion: 'Reduzierte Bewegung'
+    },
+    caseStudy: {
+      viewCaseStudy: 'Fallstudie ansehen',
+      collapse: 'Einklappen',
+      problem: 'Problem',
+      solution: 'Lösung',
+      process: 'Prozess',
+      results: 'Ergebnisse',
+      technologies: 'Technologien',
+      gallery: 'Galerie',
+      links: 'Links',
+      metrics: 'Wichtige Kennzahlen',
+      viewProject: 'Projekt ansehen',
+      viewCode: 'Code ansehen',
+      liveDemo: 'Live-Demo',
+      close: 'Schließen',
+      of: 'von',
+      previous: 'Vorheriges Bild',
+      next: 'Nächstes Bild'
+    },
+    charts: {
+      title: 'Fähigkeiten-Visualisierung',
+      description: 'Interaktive Ansicht der Fähigkeiten in verschiedenen Bereichen',
+      radar: 'Radardiagramm',
+      bar: 'Balkendiagramm',
+      bubble: 'Blasendiagramm',
+      category: 'Kategorie',
+      skills: 'Fähigkeiten',
+      skillCount: 'Anzahl der Fähigkeiten',
+      viewDetails: 'Details anzeigen',
+      totalSkills: 'Gesamtzahl der Fähigkeiten',
+      categories: 'Kategorien',
+      clickToFilter: 'Klicken zum Filtern'
+    },
+    cookies: {
+      title: 'Cookie-Zustimmung',
+      message: 'Wir verwenden Cookies, um den Website-Traffic zu analysieren und Ihre Erfahrung zu verbessern. Sie können jederzeit ablehnen.',
+      accept: 'Akzeptieren',
+      decline: 'Ablehnen',
+      dntMessage: 'Wir haben erkannt, dass Sie Do Not Track aktiviert haben. Analytics-Tracking ist deaktiviert.',
+      privacyPolicy: 'Datenschutzrichtlinie',
+      close: 'Schließen'
+    },
+    testimonials: {
+      title: 'Empfehlungen & Testimonials',
+      subtitle: 'Was Kollegen und Kunden sagen',
+      linkedIn: 'Auf LinkedIn ansehen',
+      noTestimonials: 'Keine Empfehlungen verfügbar',
+      previous: 'Vorherige Empfehlung',
+      next: 'Nächste Empfehlung',
+      pause: 'Automatische Rotation pausieren',
+      play: 'Automatische Rotation fortsetzen',
+      of: 'von'
     }
   },
 
@@ -1365,6 +1532,59 @@ const translations: Record<Language, UIStrings> = {
       reset_font: 'بازنشانی اندازه فونت',
       dyslexia_font: 'فونت مناسب دیسلکسی',
       reduced_motion: 'حرکت کمتر'
+    },
+    caseStudy: {
+      viewCaseStudy: 'مشاهده مطالعه موردی',
+      collapse: 'جمع کردن',
+      problem: 'مسئله',
+      solution: 'راه‌حل',
+      process: 'فرآیند',
+      results: 'نتایج',
+      technologies: 'فناوری‌ها',
+      gallery: 'گالری',
+      links: 'لینک‌ها',
+      metrics: 'معیارهای کلیدی',
+      viewProject: 'مشاهده پروژه',
+      viewCode: 'مشاهده کد',
+      liveDemo: 'نسخه آزمایشی',
+      close: 'بستن',
+      of: 'از',
+      previous: 'تصویر قبلی',
+      next: 'تصویر بعدی'
+    },
+    charts: {
+      title: 'تجسم مهارت‌ها',
+      description: 'نمای تعاملی مهارت‌ها در حوزه‌های مختلف',
+      radar: 'نمودار راداری',
+      bar: 'نمودار میله‌ای',
+      bubble: 'نمودار حبابی',
+      category: 'دسته',
+      skills: 'مهارت‌ها',
+      skillCount: 'تعداد مهارت',
+      viewDetails: 'مشاهده جزئیات',
+      totalSkills: 'مجموع مهارت‌ها',
+      categories: 'دسته‌ها',
+      clickToFilter: 'برای فیلتر کلیک کنید'
+    },
+    cookies: {
+      title: 'رضایت کوکی',
+      message: 'ما از کوکی‌ها برای تحلیل ترافیک سایت و بهبود تجربه شما استفاده می‌کنیم. شما می‌توانید هر زمان انصراف دهید.',
+      accept: 'پذیرفتن',
+      decline: 'رد کردن',
+      dntMessage: 'ما تشخیص دادیم که شما Do Not Track را فعال کرده‌اید. ردیابی تحلیلی غیرفعال است.',
+      privacyPolicy: 'سیاست حفظ حریم خصوصی',
+      close: 'بستن'
+    },
+    testimonials: {
+      title: 'توصیه‌ها و نظرات',
+      subtitle: 'نظر همکاران و مشتریان',
+      linkedIn: 'مشاهده در لینکدین',
+      noTestimonials: 'توصیه‌ای موجود نیست',
+      previous: 'توصیه قبلی',
+      next: 'توصیه بعدی',
+      pause: 'توقف چرخش خودکار',
+      play: 'ادامه چرخش خودکار',
+      of: 'از'
     }
   }
 }

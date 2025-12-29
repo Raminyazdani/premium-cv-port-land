@@ -33,69 +33,8 @@ import {
   CaretLeft,
   CaretRight
 } from '@phosphor-icons/react'
-import { useLanguage } from '@/context/LanguageContext'
+import { useLanguage, useTranslation } from '@/context/LanguageContext'
 import type { Project } from '@/types/cv'
-
-// Translations
-const caseStudyTranslations = {
-  en: {
-    viewCaseStudy: 'View Case Study',
-    collapse: 'Collapse',
-    problem: 'Problem',
-    solution: 'Solution',
-    process: 'Process',
-    results: 'Results',
-    technologies: 'Technologies',
-    gallery: 'Gallery',
-    links: 'Links',
-    metrics: 'Key Metrics',
-    viewProject: 'View Project',
-    viewCode: 'View Code',
-    liveDemo: 'Live Demo',
-    close: 'Close',
-    of: 'of',
-    previous: 'Previous image',
-    next: 'Next image'
-  },
-  de: {
-    viewCaseStudy: 'Fallstudie ansehen',
-    collapse: 'Einklappen',
-    problem: 'Problem',
-    solution: 'Lösung',
-    process: 'Prozess',
-    results: 'Ergebnisse',
-    technologies: 'Technologien',
-    gallery: 'Galerie',
-    links: 'Links',
-    metrics: 'Wichtige Kennzahlen',
-    viewProject: 'Projekt ansehen',
-    viewCode: 'Code ansehen',
-    liveDemo: 'Live-Demo',
-    close: 'Schließen',
-    of: 'von',
-    previous: 'Vorheriges Bild',
-    next: 'Nächstes Bild'
-  },
-  fa: {
-    viewCaseStudy: 'مشاهده مطالعه موردی',
-    collapse: 'جمع کردن',
-    problem: 'مسئله',
-    solution: 'راه‌حل',
-    process: 'فرآیند',
-    results: 'نتایج',
-    technologies: 'فناوری‌ها',
-    gallery: 'گالری',
-    links: 'لینک‌ها',
-    metrics: 'معیارهای کلیدی',
-    viewProject: 'مشاهده پروژه',
-    viewCode: 'مشاهده کد',
-    liveDemo: 'نسخه آزمایشی',
-    close: 'بستن',
-    of: 'از',
-    previous: 'تصویر قبلی',
-    next: 'تصویر بعدی'
-  }
-}
 
 interface ProjectCaseStudyCardProps {
   project: Project
@@ -112,8 +51,8 @@ interface ImageGalleryProps {
 function ImageGallery({ images, title }: ImageGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { language, isRTL } = useLanguage()
-  const t = caseStudyTranslations[language] || caseStudyTranslations.en
+  const { isRTL } = useLanguage()
+  const t = useTranslation()
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
@@ -157,7 +96,7 @@ function ImageGallery({ images, title }: ImageGalleryProps) {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-4xl p-0 overflow-hidden">
           <DialogHeader className="sr-only">
-            <DialogTitle>{title} - {t.gallery}</DialogTitle>
+            <DialogTitle>{title} - {t.caseStudy?.gallery}</DialogTitle>
             <DialogDescription>Image {currentIndex + 1} of {images.length}</DialogDescription>
           </DialogHeader>
           
@@ -178,7 +117,7 @@ function ImageGallery({ images, title }: ImageGalleryProps) {
                     isRTL ? 'right-2' : 'left-2'
                   }`}
                   onClick={goToPrevious}
-                  aria-label={t.previous}
+                  aria-label={t.caseStudy?.previous}
                 >
                   <CaretLeft className="h-6 w-6" />
                 </Button>
@@ -189,7 +128,7 @@ function ImageGallery({ images, title }: ImageGalleryProps) {
                     isRTL ? 'left-2' : 'right-2'
                   }`}
                   onClick={goToNext}
-                  aria-label={t.next}
+                  aria-label={t.caseStudy?.next}
                 >
                   <CaretRight className="h-6 w-6" />
                 </Button>
@@ -198,7 +137,7 @@ function ImageGallery({ images, title }: ImageGalleryProps) {
 
             {/* Counter */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/70 rounded-full text-white text-sm">
-              {currentIndex + 1} {t.of} {images.length}
+              {currentIndex + 1} {t.caseStudy?.of} {images.length}
             </div>
 
             {/* Close button */}
@@ -207,7 +146,7 @@ function ImageGallery({ images, title }: ImageGalleryProps) {
               size="icon"
               className="absolute top-2 right-2 h-8 w-8 text-white bg-black/50 hover:bg-black/70"
               onClick={() => setIsModalOpen(false)}
-              aria-label={t.close}
+              aria-label={t.caseStudy?.close}
             >
               <X className="h-5 w-5" />
             </Button>
@@ -259,10 +198,9 @@ export function ProjectCaseStudyCard({
   deepLinked = false
 }: ProjectCaseStudyCardProps) {
   const [expanded, setExpanded] = useState(isExpanded || deepLinked)
-  const { language, isRTL } = useLanguage()
+  const { isRTL } = useLanguage()
   const cardRef = useRef<HTMLDivElement>(null)
-  
-  const t = caseStudyTranslations[language] || caseStudyTranslations.en
+  const t = useTranslation()
 
   const title = project.title || project.name || 'Untitled Project'
   const description = project.description || ''
@@ -354,7 +292,7 @@ export function ProjectCaseStudyCard({
             <Button variant="outline" size="sm" asChild>
               <a href={project.url} target="_blank" rel="noopener noreferrer">
                 <GithubLogo className="h-4 w-4 mr-2" />
-                {t.viewCode}
+                {t.caseStudy?.viewCode}
               </a>
             </Button>
           </div>
@@ -372,12 +310,12 @@ export function ProjectCaseStudyCard({
             {expanded ? (
               <>
                 <CaretUp className="h-4 w-4" />
-                {t.collapse}
+                {t.caseStudy?.collapse}
               </>
             ) : (
               <>
                 <CaretDown className="h-4 w-4" />
-                {t.viewCaseStudy}
+                {t.caseStudy?.viewCaseStudy}
               </>
             )}
           </Button>
@@ -392,7 +330,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.problem && (
               <CaseStudySectionBlock
                 icon={<Lightbulb className="h-4 w-4 text-yellow-500" />}
-                title={t.problem}
+                title={t.caseStudy?.problem ?? ''}
                 content={caseStudy.problem}
               />
             )}
@@ -401,7 +339,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.solution && (
               <CaseStudySectionBlock
                 icon={<Target className="h-4 w-4 text-green-500" />}
-                title={t.solution}
+                title={t.caseStudy?.solution ?? ''}
                 content={caseStudy.solution}
               />
             )}
@@ -410,7 +348,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.process && (
               <CaseStudySectionBlock
                 icon={<Wrench className="h-4 w-4 text-blue-500" />}
-                title={t.process}
+                title={t.caseStudy?.process ?? ''}
                 content={caseStudy.process}
               />
             )}
@@ -419,7 +357,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.results && (
               <CaseStudySectionBlock
                 icon={<ChartLineUp className="h-4 w-4 text-purple-500" />}
-                title={t.results}
+                title={t.caseStudy?.results ?? ''}
                 content={caseStudy.results}
               />
             )}
@@ -429,7 +367,7 @@ export function ProjectCaseStudyCard({
               <div className="space-y-2">
                 <h4 className="font-semibold text-sm sm:text-base flex items-center gap-2">
                   <ChartLineUp className="h-4 w-4" />
-                  {t.metrics}
+                  {t.caseStudy?.metrics}
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {caseStudy.metrics.map((metric, idx) => (
@@ -443,7 +381,7 @@ export function ProjectCaseStudyCard({
             {caseStudy.technologies && caseStudy.technologies.length > 0 && (
               <div className="space-y-2">
                 <h4 className="font-semibold text-sm sm:text-base">
-                  {t.technologies}
+                  {t.caseStudy?.technologies}
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {caseStudy.technologies.map((tech, idx) => (
@@ -460,7 +398,7 @@ export function ProjectCaseStudyCard({
               <div className="space-y-2">
                 <h4 className="font-semibold text-sm sm:text-base flex items-center gap-2">
                   <ImageIcon className="h-4 w-4" />
-                  {t.gallery}
+                  {t.caseStudy?.gallery}
                 </h4>
                 <ImageGallery images={caseStudy.images} title={title} />
               </div>
@@ -470,14 +408,14 @@ export function ProjectCaseStudyCard({
             {(project.url || (caseStudy.links && caseStudy.links.length > 0)) && (
               <div className="space-y-2">
                 <h4 className="font-semibold text-sm sm:text-base">
-                  {t.links}
+                  {t.caseStudy?.links}
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {project.url && (
                     <Button variant="outline" size="sm" asChild>
                       <a href={project.url} target="_blank" rel="noopener noreferrer">
                         <GithubLogo className="h-4 w-4 mr-2" />
-                        {t.viewCode}
+                        {t.caseStudy?.viewCode}
                         <ArrowSquareOut className="h-3 w-3 ml-1" />
                       </a>
                     </Button>

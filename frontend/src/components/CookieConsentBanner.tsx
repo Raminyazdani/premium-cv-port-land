@@ -14,50 +14,18 @@ import {
   setAnalyticsConsent, 
   isDoNotTrackEnabled 
 } from '@/utils/analytics'
-import { useLanguage } from '@/context/LanguageContext'
+import { useLanguage, useTranslation } from '@/context/LanguageContext'
 
 interface CookieConsentBannerProps {
   onAccept?: () => void
   onDecline?: () => void
 }
 
-// Translations for the consent banner
-const consentTranslations = {
-  en: {
-    title: 'Cookie Consent',
-    message: 'We use cookies to analyze site traffic and improve your experience. You can opt out at any time.',
-    accept: 'Accept',
-    decline: 'Decline',
-    dntMessage: 'We detected that you have Do Not Track enabled. Analytics tracking is disabled.',
-    privacyPolicy: 'Privacy Policy',
-    close: 'Close'
-  },
-  de: {
-    title: 'Cookie-Zustimmung',
-    message: 'Wir verwenden Cookies, um den Website-Traffic zu analysieren und Ihre Erfahrung zu verbessern. Sie können jederzeit ablehnen.',
-    accept: 'Akzeptieren',
-    decline: 'Ablehnen',
-    dntMessage: 'Wir haben erkannt, dass Sie Do Not Track aktiviert haben. Analytics-Tracking ist deaktiviert.',
-    privacyPolicy: 'Datenschutzrichtlinie',
-    close: 'Schließen'
-  },
-  fa: {
-    title: 'رضایت کوکی',
-    message: 'ما از کوکی‌ها برای تحلیل ترافیک سایت و بهبود تجربه شما استفاده می‌کنیم. شما می‌توانید هر زمان انصراف دهید.',
-    accept: 'پذیرفتن',
-    decline: 'رد کردن',
-    dntMessage: 'ما تشخیص دادیم که شما Do Not Track را فعال کرده‌اید. ردیابی تحلیلی غیرفعال است.',
-    privacyPolicy: 'سیاست حفظ حریم خصوصی',
-    close: 'بستن'
-  }
-}
-
 export function CookieConsentBanner({ onAccept, onDecline }: CookieConsentBannerProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [dntEnabled, setDntEnabled] = useState(false)
-  const { language, isRTL } = useLanguage()
-  
-  const t = consentTranslations[language] || consentTranslations.en
+  const { isRTL } = useLanguage()
+  const t = useTranslation()
   
   useEffect(() => {
     // Check if consent has already been given or if DNT is enabled
@@ -134,14 +102,14 @@ export function CookieConsentBanner({ onAccept, onDecline }: CookieConsentBanner
                   id="cookie-consent-title"
                   className="text-base sm:text-lg font-semibold"
                 >
-                  {t.title}
+                  {t.cookies?.title}
                 </h3>
                 <Button
                   variant="ghost"
                   size="icon"
                   className="shrink-0 h-8 w-8"
                   onClick={handleClose}
-                  aria-label={t.close}
+                  aria-label={t.cookies?.close}
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -151,7 +119,7 @@ export function CookieConsentBanner({ onAccept, onDecline }: CookieConsentBanner
                 id="cookie-consent-description"
                 className="text-sm text-muted-foreground mb-4"
               >
-                {dntEnabled ? t.dntMessage : t.message}
+                {dntEnabled ? t.cookies?.dntMessage : t.cookies?.message}
               </p>
               
               {!dntEnabled && (
@@ -161,7 +129,7 @@ export function CookieConsentBanner({ onAccept, onDecline }: CookieConsentBanner
                     size="sm"
                     className="min-w-[100px]"
                   >
-                    {t.accept}
+                    {t.cookies?.accept}
                   </Button>
                   <Button
                     variant="outline"
@@ -169,7 +137,7 @@ export function CookieConsentBanner({ onAccept, onDecline }: CookieConsentBanner
                     size="sm"
                     className="min-w-[100px]"
                   >
-                    {t.decline}
+                    {t.cookies?.decline}
                   </Button>
                 </div>
               )}
