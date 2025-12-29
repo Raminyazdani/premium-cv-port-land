@@ -1,6 +1,11 @@
 import { createRoot } from 'react-dom/client'
 import { ErrorBoundary } from "react-error-boundary"
-import "@github/spark/spark"
+
+// Only import @github/spark in development mode
+// The spark runtime requires /_spark/* API endpoints that only exist in Spark workbench
+if (import.meta.env.DEV) {
+  import("@github/spark/spark")
+}
 
 import App from './App.tsx'
 import { ErrorFallback } from './ErrorFallback.tsx'
