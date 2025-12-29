@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, DownloadSimple } from '@phosphor-icons/react'
@@ -10,10 +10,11 @@ import { LanguageSelector } from '@/components/LanguageSelector'
 import { FocusFilterSelector } from '@/components/FocusFilterSelector'
 import { AccessibilityControls } from '@/components/AccessibilityControls'
 import { PWAInstallButton } from '@/components/PWAInstallButton'
-import { DownloadModal } from '@/components/DownloadModal'
 import { LAYOUT_CONSTANTS } from '@/constants/app'
 import { useTranslation } from '@/context/LanguageContext'
 import { cn } from '@/lib/utils'
+
+const DownloadModal = lazy(() => import('@/components/DownloadModal').then(m => ({ default: m.DownloadModal })))
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -200,7 +201,11 @@ export function Header() {
       </div>
       
       {/* Download Modal */}
-      <DownloadModal open={downloadModalOpen} onOpenChange={setDownloadModalOpen} />
+      {downloadModalOpen && (
+        <Suspense fallback={null}>
+          <DownloadModal open={downloadModalOpen} onOpenChange={setDownloadModalOpen} />
+        </Suspense>
+      )}
     </header>
   )
 }
