@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 import { SkillsCarousel } from '@/components/SkillsCarousel'
-import { useTranslation } from '@/context/LanguageContext'
+import { useTranslation, useSkillCategoryLabel } from '@/context/LanguageContext'
 import { interpolate } from '@/lib/i18n'
 
 type ViewMode = 'list' | 'carousel'
@@ -17,6 +17,7 @@ export function SkillsSection() {
   const data = useCV()
   const skills = (data.skills as Skills) ?? {}
   const t = useTranslation()
+  const getSkillLabel = useSkillCategoryLabel()
   
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
@@ -60,12 +61,18 @@ export function SkillsSection() {
     return Object.entries(filteredSkills).map(([category, subcategories]) => {
       const groups = Object.entries(subcategories).map(([name, items]) => ({
         name,
+        displayName: getSkillLabel(name), // Localized subcategory label
         items: Array.isArray(items) ? items : []
       }))
       const totalCount = groups.reduce((sum, g) => sum + g.items.length, 0)
-      return { category, groups, totalCount }
+      return { 
+        category, 
+        displayCategory: getSkillLabel(category), // Localized category label
+        groups, 
+        totalCount 
+      }
     })
-  }, [filteredSkills])
+  }, [filteredSkills, getSkillLabel])
 
   useEffect(() => {
     if (skillsArray.length > 0 && expandedCategories.size === 0) {
@@ -203,7 +210,7 @@ export function SkillsSection() {
           <SkillsCarousel skills={filteredSkills} />
         ) : (
           <div className="space-y-3">
-            {skillsArray.map(({ category, groups, totalCount }) => {
+            {skillsArray.map(({ category, displayCategory, groups, totalCount }) => {
               const isExpanded = expandedCategories.has(category)
               
               return (
@@ -225,7 +232,7 @@ export function SkillsSection() {
                           isExpanded ? 'rotate-0' : '-rotate-90'
                         }`}
                       />
-                      <h3 className="text-base sm:text-lg font-semibold truncate">{category}</h3>
+                      <h3 className="text-base sm:text-lg font-semibold truncate">{displayCategory}</h3>
                       <Badge variant="secondary" className="text-xs flex-shrink-0">
                         {totalCount}
                       </Badge>
@@ -240,7 +247,7 @@ export function SkillsSection() {
                       {groups.map((group) => (
                         <div key={group.name} className="space-y-2">
                           <h4 className="text-sm font-medium text-muted-foreground">
-                            {group.name}
+                            {group.displayName}
                           </h4>
                           <div className="flex flex-wrap gap-1.5 sm:gap-2">
                             {group.items.map((skill, idx) => (

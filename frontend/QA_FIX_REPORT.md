@@ -484,3 +484,172 @@ These files are considered locked and must NOT be modified directly:
 
 **Status**: ✅ **FIXED**  
 **Date**: 2025-12-29
+
+---
+
+# F-02 + F-10: Skills Category Normalization Strategy & Visualization Labels
+
+## Executive Summary
+
+**Issue F-02**: Skills categories remained language-specific keys in normalized data. After normalization, German skills used keys like `programmierung_und_skripting` and Persian used `برنامه‌نویسی_و_اسکریپت‌نویسی` instead of canonical English keys.
+
+**Issue F-10**: Skills visualization labels displayed raw category keys (underscores, snake_case, foreign language technical keys) instead of proper human-readable display labels.
+
+**Root Cause**: The `normalizeSkills()` function in `dataNormalizer.ts` only normalized the skill item keys (e.g., `voller_name` → `long_name`) but preserved the original language-specific category and subcategory keys unchanged.
+
+**Solution (Strategy A - Recommended)**: Keep canonical internal keys (EN) + attach per-language display names.
+
+1. Created `skillCategoryMappings.ts` with mappings from DE/FA category keys to EN canonical keys
+2. Updated `normalizeSkills()` to convert category keys during normalization
+3. Added display label mappings for localized rendering
+4. Updated UI components to use display labels instead of raw keys
+5. Added `useSkillCategoryLabel()` hook for easy access to localized labels
+
+## Strategy Justification
+
+**Why Strategy A (canonical keys + display labels)?**
+
+1. **Consistent internal structure**: Components and charts behave consistently regardless of language
+2. **Stable testing**: Tests can rely on canonical keys without worrying about language variations
+3. **Separation of concerns**: Internal data structure is separate from display presentation
+4. **Easy maintenance**: Adding new languages only requires adding display labels, not changing internal logic
+5. **No data duplication**: Category keys are normalized once at load time
+
+**Alternatives considered:**
+
+- **Strategy B** (keep language-specific keys + resolve via mapping): Would require every component to handle mapping, more error-prone
+- **Strategy C** (embed display labels in normalized data): Would increase data size and complexity
+
+## Changes Made
+
+### 1. New File: `src/config/skillCategoryMappings.ts`
+
+Created comprehensive mappings for:
+- **8 top-level categories**: Programming & Scripting, DevOps & Infrastructure, etc.
+- **31 subcategories**: Programming Languages, Machine Learning & Data Science, etc.
+- **Display labels** for EN/DE/FA with proper formatting (no underscores)
+
+Helper functions:
+- `getCanonicalSkillCategoryKey()`: Maps DE/FA keys to EN canonical keys
+- `getSkillCategoryDisplayLabel()`: Gets localized display label for a canonical key
+- `formatSkillCategoryForDisplay()`: Fallback formatting for unknown keys
+
+### 2. Updated `src/utils/dataNormalizer.ts`
+
+Modified `normalizeSkills()` function to:
+- Import and use `getCanonicalSkillCategoryKey()`
+- Convert both top-level and sub-category keys to canonical English
+- Log normalized categories in dev mode for debugging
+
+### 3. Updated `src/context/LanguageContext.tsx`
+
+Added new hook:
+```typescript
+export function useSkillCategoryLabel() {
+  const { language } = useLanguage()
+  return (canonicalKey: string) => getSkillCategoryDisplayLabel(canonicalKey, language)
+}
+```
+
+### 4. Updated UI Components
+
+| Component | Changes |
+|-----------|---------|
+| `SkillsSection.tsx` | Uses `useSkillCategoryLabel()` hook, displays `displayCategory` and `displayName` |
+| `SkillsCarousel.tsx` | Uses `useSkillCategoryLabel()` hook, displays localized labels |
+| `SkillsVisualizationDashboard.tsx` | Uses localized labels in charts, tooltips, legend, and detail panel |
+
+### 5. New Tests: `tests/skills-normalization.test.ts`
+
+Added 23 new tests covering:
+- Canonical key mapping for DE and FA
+- Subcategory normalization
+- Skill count preservation during normalization
+- Display label correctness for EN/DE/FA
+- No raw technical keys (underscores) in display labels
+- Schema invariants (number of categories, mapping completeness)
+
+## Before/After Examples
+
+### Category Keys (Internal Structure)
+
+| Aspect | Before | After |
+|--------|--------|-------|
+| German normalized skills | `{ programmierung_und_skripting: {...} }` | `{ 'Programming & Scripting': {...} }` |
+| Persian normalized skills | `{ 'برنامه‌نویسی_و_اسکریپت‌نویسی': {...} }` | `{ 'Programming & Scripting': {...} }` |
+| Subcategory keys | Language-specific with underscores | Canonical English keys |
+
+### Display Labels (UI)
+
+| Language | Before (raw keys) | After (display labels) |
+|----------|-------------------|------------------------|
+| DE | `programmierung_und_skripting` | `Programmierung & Skripting` |
+| FA | `برنامه‌نویسی_و_اسکریپت‌نویسی` | `برنامه‌نویسی و اسکریپت‌نویسی` |
+| EN | `Programming & Scripting` | `Programming & Scripting` |
+
+### Chart Labels (Visualization)
+
+| Chart Type | Before | After |
+|------------|--------|-------|
+| Radar chart axis | Raw keys with underscores | Localized display labels |
+| Bar chart Y-axis | Raw keys | Localized display labels |
+| Tooltips | Raw category names | Localized labels |
+| Legend buttons | Raw keys | Localized labels |
+
+## Edge Cases Handled
+
+1. **Unknown categories**: Falls back to humanized key (underscores → spaces)
+2. **English data**: Passes through unchanged (no normalization needed)
+3. **Missing mappings**: Returns original key, does not crash
+4. **RTL layout**: Persian labels display correctly with RTL text direction
+
+## Verification
+
+### Tests Passed
+```
+Test Files  12 passed (12)
+Tests  179 passed (179)
+```
+
+Including 23 new tests for skills normalization:
+- 10 tests for canonical key mapping
+- 6 tests for getCanonicalSkillCategoryKey()
+- 7 tests for display labels and schema invariants
+
+### Build Successful
+```bash
+npm run build
+# ✓ built in 13.09s
+```
+
+### Locked Files Unchanged
+- `frontend/src/data/cv.json` — ✅ Not modified
+- `frontend/src/data/ramin_de.json` — ✅ Not modified  
+- `frontend/src/data/ramin_fa.json` — ✅ Not modified
+
+## Self-Audit Checklist
+
+- [x] I confirmed the normalized `skills` schema across languages
+- [x] I implemented an intentional strategy for internal keys vs display labels
+- [x] Skills visualization labels are correct for EN/DE/FA
+- [x] RTL remains correct for FA
+- [x] Tests cover this and pass (23 new tests)
+- [x] Locked JSON files unchanged
+
+## Files Changed
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| `src/config/skillCategoryMappings.ts` | Created | New file with skill category mappings and helper functions |
+| `src/utils/dataNormalizer.ts` | Modified | Updated `normalizeSkills()` to use canonical key mappings |
+| `src/context/LanguageContext.tsx` | Modified | Added `useSkillCategoryLabel()` hook |
+| `src/components/sections/SkillsSection.tsx` | Modified | Uses display labels for category and subcategory names |
+| `src/components/SkillsCarousel.tsx` | Modified | Uses display labels for category and subcategory names |
+| `src/components/SkillsVisualizationDashboard.tsx` | Modified | Uses display labels in charts, tooltips, legend, and detail panel |
+| `tests/skills-normalization.test.ts` | Created | 23 new tests for skills normalization and display labels |
+| `QA_FIX_REPORT.md` | Modified | Added F-02/F-10 fix documentation |
+
+---
+
+**Status**: ✅ **FIXED**  
+**Date**: 2025-12-29

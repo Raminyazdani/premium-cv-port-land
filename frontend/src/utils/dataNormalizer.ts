@@ -30,6 +30,7 @@ import {
   isKeyMapped,
   type KeyMapping
 } from '@/config/keyMappings'
+import { getCanonicalSkillCategoryKey } from '@/config/skillCategoryMappings'
 
 export type Language = 'en' | 'de' | 'fa'
 
@@ -213,6 +214,7 @@ function normalizeWorkshopIssuer(data: any, sourceLang: Language): any {
 
 /**
  * Normalizes skills section (nested structure)
+ * Converts language-specific category keys to canonical English keys
  */
 function normalizeSkills(data: any, sourceLang: Language): any {
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
@@ -224,20 +226,31 @@ function normalizeSkills(data: any, sourceLang: Language): any {
   Object.keys(data).forEach((topCategoryKey) => {
     const topCategory = data[topCategoryKey]
     
+    // Get canonical English key for the top category
+    const canonicalTopKey = getCanonicalSkillCategoryKey(topCategoryKey, sourceLang, true)
+    
     if (topCategory && typeof topCategory === 'object' && !Array.isArray(topCategory)) {
-      normalized[topCategoryKey] = {}
+      normalized[canonicalTopKey] = {}
       
       Object.keys(topCategory).forEach((subCategoryKey) => {
         const items = topCategory[subCategoryKey]
         
+        // Get canonical English key for the subcategory
+        const canonicalSubKey = getCanonicalSkillCategoryKey(subCategoryKey, sourceLang, false)
+        
         if (Array.isArray(items)) {
-          normalized[topCategoryKey][subCategoryKey] = items.map(item =>
+          normalized[canonicalTopKey][canonicalSubKey] = items.map(item =>
             normalizeObject(item, SKILL_KEYS, sourceLang)
           )
         }
       })
     }
   })
+
+  if (import.meta.env.DEV && sourceLang !== 'en') {
+    console.log(`🔧 [normalizeSkills] Normalized skill categories for ${sourceLang}:`)
+    console.log(`   Top categories:`, Object.keys(normalized))
+  }
 
   return normalized
 }

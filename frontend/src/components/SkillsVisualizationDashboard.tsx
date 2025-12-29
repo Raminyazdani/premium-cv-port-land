@@ -30,7 +30,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ChartLine, ChartBar, ChartScatter, Eye } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
-import { useLanguage } from '@/context/LanguageContext'
+import { useLanguage, useSkillCategoryLabel } from '@/context/LanguageContext'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 import type { Skills } from '@/types/cv'
 
@@ -93,25 +93,46 @@ const chartTranslations = {
   }
 }
 
+/**
+ * Data structure for skill category chart visualization.
+ * - category: Canonical English key used for internal logic (e.g., "Programming & Scripting")
+ * - displayCategory: Localized display label for UI rendering (e.g., "Programmierung & Skripting" for DE)
+ */
 interface SkillCategoryData {
+  /** Canonical English key for internal logic and data consistency */
   category: string
+  /** Localized display label for the current language */
+  displayCategory: string
   count: number
   fullMark: number
-  subcategories: { name: string; count: number }[]
+  /** Subcategories with both canonical keys and localized display names */
+  subcategories: { name: string; displayName: string; count: number }[]
 }
 
+/**
+ * Data structure for bubble chart visualization.
+ * - name/category: Canonical English keys for internal logic
+ * - displayName/displayCategory: Localized labels for UI rendering
+ */
 interface BubbleData {
   x: number
   y: number
   z: number
+  /** Canonical English key for subcategory */
   name: string
+  /** Localized display label for subcategory */
+  displayName: string
+  /** Canonical English key for top category */
   category: string
+  /** Localized display label for top category */
+  displayCategory: string
 }
 
 export function SkillsVisualizationDashboard() {
   const data = useCV()
   const skills = (data.skills as Skills) ?? {}
   const { language, isRTL } = useLanguage()
+  const getSkillLabel = useSkillCategoryLabel()
   const { ref, isVisible } = useScrollAnimation()
   const [chartType, setChartType] = useState<ChartType>('radar')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -129,10 +150,10 @@ export function SkillsVisualizationDashboard() {
     return () => mediaQuery.removeEventListener('change', handler)
   }, [])
 
-  // Transform skills data for charts
+  // Transform skills data for charts with display labels
   const chartData = useMemo((): SkillCategoryData[] => {
     return Object.entries(skills).map(([category, subcategories]) => {
-      const subcatData: { name: string; count: number }[] = []
+      const subcatData: { name: string; displayName: string; count: number }[] = []
       let totalCount = 0
       
       if (typeof subcategories === 'object' && subcategories !== null) {
@@ -140,21 +161,26 @@ export function SkillsVisualizationDashboard() {
           if (Array.isArray(skillList)) {
             const count = skillList.length
             totalCount += count
-            subcatData.push({ name, count })
+            subcatData.push({ 
+              name, 
+              displayName: getSkillLabel(name),
+              count 
+            })
           }
         })
       }
       
       return {
         category,
+        displayCategory: getSkillLabel(category),
         count: totalCount,
         fullMark: 50, // Max for radar chart
         subcategories: subcatData
       }
     }).filter(d => d.count > 0)
-  }, [skills])
+  }, [skills, getSkillLabel])
 
-  // Bubble chart data
+  // Bubble chart data with display labels
   const bubbleData = useMemo((): BubbleData[] => {
     const data: BubbleData[] = []
     let xIndex = 0
@@ -166,7 +192,9 @@ export function SkillsVisualizationDashboard() {
           y: catIndex * 100 + Math.random() * 50,
           z: subcat.count * 100,
           name: subcat.name,
-          category: cat.category
+          displayName: subcat.displayName,
+          category: cat.category,
+          displayCategory: cat.displayCategory
         })
       })
       xIndex += 100
@@ -248,7 +276,7 @@ export function SkillsVisualizationDashboard() {
                     <RadarChart data={chartData} cx="50%" cy="50%" outerRadius="80%">
                       <PolarGrid stroke="hsl(var(--border))" />
                       <PolarAngleAxis 
-                        dataKey="category" 
+                        dataKey="displayCategory" 
                         tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }}
                         className="text-xs"
                       />
@@ -271,13 +299,13 @@ export function SkillsVisualizationDashboard() {
                             const data = payload[0].payload as SkillCategoryData
                             return (
                               <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
-                                <p className="font-semibold text-sm">{data.category}</p>
+                                <p className="font-semibold text-sm">{data.displayCategory}</p>
                                 <p className="text-muted-foreground text-sm">
                                   {t.skillCount}: {data.count}
                                 </p>
                                 <div className="mt-2 text-xs text-muted-foreground">
                                   {data.subcategories.slice(0, 3).map((sub, i) => (
-                                    <div key={i}>{sub.name}: {sub.count}</div>
+                                    <div key={i}>{sub.displayName}: {sub.count}</div>
                                   ))}
                                   {data.subcategories.length > 3 && (
                                     <div>+{data.subcategories.length - 3} more</div>
@@ -307,7 +335,7 @@ export function SkillsVisualizationDashboard() {
                       <XAxis type="number" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
                       <YAxis 
                         type="category" 
-                        dataKey="category" 
+                        dataKey="displayCategory" 
                         tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }}
                         width={90}
                       />
@@ -317,7 +345,7 @@ export function SkillsVisualizationDashboard() {
                             const data = payload[0].payload as SkillCategoryData
                             return (
                               <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
-                                <p className="font-semibold text-sm">{data.category}</p>
+                                <p className="font-semibold text-sm">{data.displayCategory}</p>
                                 <p className="text-muted-foreground text-sm">
                                   {t.skillCount}: {data.count}
                                 </p>
@@ -376,8 +404,8 @@ export function SkillsVisualizationDashboard() {
                             const data = payload[0].payload as BubbleData
                             return (
                               <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
-                                <p className="font-semibold text-sm">{data.name}</p>
-                                <p className="text-muted-foreground text-xs">{data.category}</p>
+                                <p className="font-semibold text-sm">{data.displayName}</p>
+                                <p className="text-muted-foreground text-xs">{data.displayCategory}</p>
                                 <p className="text-primary text-sm mt-1">
                                   {Math.round(data.z / 100)} {t.skills}
                                 </p>
@@ -418,7 +446,7 @@ export function SkillsVisualizationDashboard() {
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: COLORS[index % COLORS.length] }}
                     />
-                    {cat.category}
+                    {cat.displayCategory}
                     <Badge variant="secondary" className="ml-1 text-xs">
                       {cat.count}
                     </Badge>
@@ -442,7 +470,7 @@ export function SkillsVisualizationDashboard() {
               <div className="mt-6 p-4 bg-muted/50 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
                   <Eye className="h-4 w-4" />
-                  {selectedCategory}
+                  {chartData.find(c => c.category === selectedCategory)?.displayCategory || selectedCategory}
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                   {chartData
@@ -452,7 +480,7 @@ export function SkillsVisualizationDashboard() {
                         key={i}
                         className="flex items-center justify-between p-2 bg-background rounded border"
                       >
-                        <span className="text-sm">{sub.name}</span>
+                        <span className="text-sm">{sub.displayName}</span>
                         <Badge variant="secondary" className="text-xs">
                           {sub.count}
                         </Badge>

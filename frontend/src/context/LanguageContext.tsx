@@ -257,3 +257,15 @@ export function useFormatters() {
     language
   }
 }
+
+/**
+ * Hook for getting skill category display labels
+ * Returns a function that maps canonical category keys to localized display labels
+ */
+import { getSkillCategoryDisplayLabel } from '@/config/skillCategoryMappings'
+
+export function useSkillCategoryLabel() {
+  const { language } = useLanguage()
+  
+  return (canonicalKey: string) => getSkillCategoryDisplayLabel(canonicalKey, language)
+}
