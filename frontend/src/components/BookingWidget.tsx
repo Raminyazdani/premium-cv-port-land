@@ -104,11 +104,13 @@ export function BookingWidget() {
         }),
       })
 
-      console.log('Booking details (would be sent to backend):', {
-        type: selectedType,
-        date: selectedDate,
-        time: selectedTime,
-      })
+      if (import.meta.env.DEV) {
+        console.log('Booking details (would be sent to backend):', {
+          type: selectedType,
+          date: selectedDate,
+          time: selectedTime,
+        })
+      }
     } catch (error) {
       setStatusMessage(t.booking.error_description)
       toast.error(t.booking.error_title, {
