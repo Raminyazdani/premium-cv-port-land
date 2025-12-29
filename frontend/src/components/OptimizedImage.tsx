@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
+import { logger } from '@/lib/logger'
 
 interface OptimizedImageProps {
   src: string
@@ -10,6 +11,7 @@ interface OptimizedImageProps {
   priority?: boolean
   aspectRatio?: string
   onLoad?: () => void
+  onError?: () => void
 }
 
 export function OptimizedImage({
@@ -21,6 +23,7 @@ export function OptimizedImage({
   priority = false,
   aspectRatio,
   onLoad,
+  onError,
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
@@ -60,8 +63,11 @@ export function OptimizedImage({
   }
 
   const handleError = () => {
+    // Log the error for debugging - helps identify broken Cloudinary URLs
+    logger.debug(`[OptimizedImage] Failed to load image: ${src}`)
     setHasError(true)
     setIsLoaded(true)
+    onError?.()
   }
 
   return (
