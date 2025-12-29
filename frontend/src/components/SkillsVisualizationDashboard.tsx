@@ -30,7 +30,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ChartLine, ChartBar, ChartScatter, Eye } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
-import { useLanguage, useSkillCategoryLabel } from '@/context/LanguageContext'
+import { useLanguage, useSkillCategoryLabel, useTranslation } from '@/context/LanguageContext'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 import type { Skills } from '@/types/cv'
 
@@ -46,52 +46,6 @@ const COLORS = [
   'hsl(var(--chart-4, 280 65% 60%))',
   'hsl(var(--chart-5, 340 75% 55%))'
 ]
-
-// Translations
-const chartTranslations = {
-  en: {
-    title: 'Skills Visualization',
-    description: 'Interactive view of skills across different domains',
-    radar: 'Radar Chart',
-    bar: 'Bar Chart',
-    bubble: 'Bubble Chart',
-    category: 'Category',
-    skills: 'Skills',
-    skillCount: 'Skill Count',
-    viewDetails: 'View Details',
-    totalSkills: 'Total Skills',
-    categories: 'Categories',
-    clickToFilter: 'Click to filter'
-  },
-  de: {
-    title: 'Fähigkeiten-Visualisierung',
-    description: 'Interaktive Ansicht der Fähigkeiten in verschiedenen Bereichen',
-    radar: 'Radardiagramm',
-    bar: 'Balkendiagramm',
-    bubble: 'Blasendiagramm',
-    category: 'Kategorie',
-    skills: 'Fähigkeiten',
-    skillCount: 'Anzahl der Fähigkeiten',
-    viewDetails: 'Details anzeigen',
-    totalSkills: 'Gesamtzahl der Fähigkeiten',
-    categories: 'Kategorien',
-    clickToFilter: 'Klicken zum Filtern'
-  },
-  fa: {
-    title: 'تجسم مهارت‌ها',
-    description: 'نمای تعاملی مهارت‌ها در حوزه‌های مختلف',
-    radar: 'نمودار راداری',
-    bar: 'نمودار میله‌ای',
-    bubble: 'نمودار حبابی',
-    category: 'دسته',
-    skills: 'مهارت‌ها',
-    skillCount: 'تعداد مهارت',
-    viewDetails: 'مشاهده جزئیات',
-    totalSkills: 'مجموع مهارت‌ها',
-    categories: 'دسته‌ها',
-    clickToFilter: 'برای فیلتر کلیک کنید'
-  }
-}
 
 /**
  * Data structure for skill category chart visualization.
@@ -131,14 +85,13 @@ interface BubbleData {
 export function SkillsVisualizationDashboard() {
   const data = useCV()
   const skills = (data.skills as Skills) ?? {}
-  const { language, isRTL } = useLanguage()
+  const { isRTL } = useLanguage()
   const getSkillLabel = useSkillCategoryLabel()
   const { ref, isVisible } = useScrollAnimation()
   const [chartType, setChartType] = useState<ChartType>('radar')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-  
-  const t = chartTranslations[language] || chartTranslations.en
+  const t = useTranslation()
 
   // Check for reduced motion preference
   useEffect(() => {
@@ -233,20 +186,20 @@ export function SkillsVisualizationDashboard() {
               <div>
                 <CardTitle className="text-xl sm:text-2xl font-bold flex items-center gap-2">
                   <ChartLine className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                  {t.title}
+                  {t.charts?.title}
                 </CardTitle>
                 <CardDescription className="mt-1">
-                  {t.description}
+                  {t.charts?.description}
                 </CardDescription>
               </div>
               
               {/* Stats badges */}
               <div className="flex gap-2">
                 <Badge variant="secondary" className="text-sm">
-                  {t.totalSkills}: {totalSkills}
+                  {t.charts?.totalSkills}: {totalSkills}
                 </Badge>
                 <Badge variant="outline" className="text-sm">
-                  {t.categories}: {chartData.length}
+                  {t.charts?.categories}: {chartData.length}
                 </Badge>
               </div>
             </div>
@@ -257,15 +210,15 @@ export function SkillsVisualizationDashboard() {
               <TabsList className="mb-6">
                 <TabsTrigger value="radar" className="gap-2">
                   <ChartLine className="h-4 w-4" />
-                  <span className="hidden sm:inline">{t.radar}</span>
+                  <span className="hidden sm:inline">{t.charts?.radar}</span>
                 </TabsTrigger>
                 <TabsTrigger value="bar" className="gap-2">
                   <ChartBar className="h-4 w-4" />
-                  <span className="hidden sm:inline">{t.bar}</span>
+                  <span className="hidden sm:inline">{t.charts?.bar}</span>
                 </TabsTrigger>
                 <TabsTrigger value="bubble" className="gap-2">
                   <ChartScatter className="h-4 w-4" />
-                  <span className="hidden sm:inline">{t.bubble}</span>
+                  <span className="hidden sm:inline">{t.charts?.bubble}</span>
                 </TabsTrigger>
               </TabsList>
               
@@ -286,7 +239,7 @@ export function SkillsVisualizationDashboard() {
                         tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                       />
                       <Radar
-                        name={t.skills}
+                        name={t.charts?.skills}
                         dataKey="count"
                         stroke="hsl(var(--primary))"
                         fill="hsl(var(--primary))"
@@ -301,7 +254,7 @@ export function SkillsVisualizationDashboard() {
                               <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
                                 <p className="font-semibold text-sm">{data.displayCategory}</p>
                                 <p className="text-muted-foreground text-sm">
-                                  {t.skillCount}: {data.count}
+                                  {t.charts?.skillCount}: {data.count}
                                 </p>
                                 <div className="mt-2 text-xs text-muted-foreground">
                                   {data.subcategories.slice(0, 3).map((sub, i) => (
@@ -347,7 +300,7 @@ export function SkillsVisualizationDashboard() {
                               <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
                                 <p className="font-semibold text-sm">{data.displayCategory}</p>
                                 <p className="text-muted-foreground text-sm">
-                                  {t.skillCount}: {data.count}
+                                  {t.charts?.skillCount}: {data.count}
                                 </p>
                               </div>
                             )
@@ -407,7 +360,7 @@ export function SkillsVisualizationDashboard() {
                                 <p className="font-semibold text-sm">{data.displayName}</p>
                                 <p className="text-muted-foreground text-xs">{data.displayCategory}</p>
                                 <p className="text-primary text-sm mt-1">
-                                  {Math.round(data.z / 100)} {t.skills}
+                                  {Math.round(data.z / 100)} {t.charts?.skills}
                                 </p>
                               </div>
                             )
@@ -432,7 +385,7 @@ export function SkillsVisualizationDashboard() {
             
             {/* Category Legend */}
             <div className="mt-6 pt-6 border-t border-border">
-              <p className="text-sm text-muted-foreground mb-3">{t.clickToFilter}:</p>
+              <p className="text-sm text-muted-foreground mb-3">{t.charts?.clickToFilter}:</p>
               <div className="flex flex-wrap gap-2">
                 {chartData.map((cat, index) => (
                   <Button

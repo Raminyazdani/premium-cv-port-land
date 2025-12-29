@@ -21,49 +21,12 @@ import {
   Play
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
-import { useLanguage } from '@/context/LanguageContext'
+import { useLanguage, useTranslation } from '@/context/LanguageContext'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 import type { Testimonial } from '@/types/cv'
 
 // Auto-rotation interval in milliseconds
 const AUTO_ROTATE_INTERVAL = 6000
-
-// Translations
-const testimonialTranslations = {
-  en: {
-    title: 'Testimonials & Recommendations',
-    subtitle: 'What colleagues and clients say',
-    linkedIn: 'View on LinkedIn',
-    noTestimonials: 'No testimonials available',
-    previous: 'Previous testimonial',
-    next: 'Next testimonial',
-    pause: 'Pause auto-rotation',
-    play: 'Resume auto-rotation',
-    of: 'of'
-  },
-  de: {
-    title: 'Empfehlungen & Testimonials',
-    subtitle: 'Was Kollegen und Kunden sagen',
-    linkedIn: 'Auf LinkedIn ansehen',
-    noTestimonials: 'Keine Empfehlungen verfügbar',
-    previous: 'Vorherige Empfehlung',
-    next: 'Nächste Empfehlung',
-    pause: 'Automatische Rotation pausieren',
-    play: 'Automatische Rotation fortsetzen',
-    of: 'von'
-  },
-  fa: {
-    title: 'توصیه‌ها و نظرات',
-    subtitle: 'نظر همکاران و مشتریان',
-    linkedIn: 'مشاهده در لینکدین',
-    noTestimonials: 'توصیه‌ای موجود نیست',
-    previous: 'توصیه قبلی',
-    next: 'توصیه بعدی',
-    pause: 'توقف چرخش خودکار',
-    play: 'ادامه چرخش خودکار',
-    of: 'از'
-  }
-}
 
 // Sample testimonials for demo (can be removed when real data is available)
 const sampleTestimonials: Testimonial[] = [
@@ -114,8 +77,9 @@ function StarRating({ rating, max = 5 }: StarRatingProps) {
 
 export function TestimonialsSection() {
   const data = useCV()
-  const { language, isRTL } = useLanguage()
+  const { isRTL } = useLanguage()
   const { ref, isVisible } = useScrollAnimation()
+  const t = useTranslation()
   
   // Use sample testimonials if no real data
   const testimonials = data.testimonials?.length ? data.testimonials : sampleTestimonials
@@ -125,8 +89,6 @@ export function TestimonialsSection() {
   const [isHovered, setIsHovered] = useState(false)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const autoRotateRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  
-  const t = testimonialTranslations[language] || testimonialTranslations.en
 
   // Navigate to previous testimonial
   const goToPrevious = useCallback(() => {
@@ -218,17 +180,17 @@ export function TestimonialsSection() {
       className={`w-full py-12 sm:py-16 px-3 sm:px-4 bg-muted/20 transition-all duration-700 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
-      aria-label={t.title}
+      aria-label={t.testimonials?.title}
     >
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold mb-2 flex items-center justify-center gap-2">
             <Quotes className="h-6 w-6 sm:h-8 sm:w-8 text-primary" weight="fill" />
-            {t.title}
+            {t.testimonials?.title}
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground">
-            {t.subtitle}
+            {t.testimonials?.subtitle}
           </p>
           <Separator className="mt-4 max-w-xs mx-auto" />
         </div>
@@ -292,7 +254,7 @@ export function TestimonialsSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-primary transition-colors"
-                        aria-label={t.linkedIn}
+                        aria-label={t.testimonials?.linkedIn}
                       >
                         <LinkedinLogo className="h-5 w-5" />
                       </a>
@@ -314,7 +276,7 @@ export function TestimonialsSection() {
                   isRTL ? 'right-2 sm:-right-5' : 'left-2 sm:-left-5'
                 }`}
                 onClick={isRTL ? goToNext : goToPrevious}
-                aria-label={t.previous}
+                aria-label={t.testimonials?.previous}
               >
                 <CaretLeft className="h-5 w-5" />
               </Button>
@@ -327,7 +289,7 @@ export function TestimonialsSection() {
                   isRTL ? 'left-2 sm:-left-5' : 'right-2 sm:-right-5'
                 }`}
                 onClick={isRTL ? goToPrevious : goToNext}
-                aria-label={t.next}
+                aria-label={t.testimonials?.next}
               >
                 <CaretRight className="h-5 w-5" />
               </Button>
@@ -351,7 +313,7 @@ export function TestimonialsSection() {
                   onClick={() => setCurrentIndex(index)}
                   role="tab"
                   aria-selected={index === currentIndex}
-                  aria-label={`Testimonial ${index + 1} ${t.of} ${testimonials.length}`}
+                  aria-label={`Testimonial ${index + 1} ${t.testimonials?.of} ${testimonials.length}`}
                 />
               ))}
             </div>
@@ -362,7 +324,7 @@ export function TestimonialsSection() {
               size="sm"
               className="h-8 w-8 p-0"
               onClick={() => setIsPaused(!isPaused)}
-              aria-label={isPaused ? t.play : t.pause}
+              aria-label={isPaused ? t.testimonials?.play : t.testimonials?.pause}
             >
               {isPaused ? (
                 <Play className="h-4 w-4" />
