@@ -4,13 +4,43 @@
  * Ensures that DE and FA JSON files are correctly normalized to English schema
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { normalizeCVData, validateNormalizedData } from '../src/utils/dataNormalizer'
 import cvDataEN from '../src/data/cv.json'
 import cvDataDE from '../src/data/ramin_de.json'
 import cvDataFA from '../src/data/ramin_fa.json'
 
 describe('Data Normalization', () => {
+  describe('Zero unmapped key warnings (F-01)', () => {
+    it('should not produce any unmapped key warnings for German', () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      
+      normalizeCVData(cvDataDE, 'de')
+      
+      // Check that no warning contains "not found in keyMap"
+      const unmappedWarnings = warnSpy.mock.calls.filter(
+        call => typeof call[0] === 'string' && call[0].includes('not found in keyMap')
+      )
+      
+      warnSpy.mockRestore()
+      expect(unmappedWarnings.length).toBe(0)
+    })
+
+    it('should not produce any unmapped key warnings for Persian', () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      
+      normalizeCVData(cvDataFA, 'fa')
+      
+      // Check that no warning contains "not found in keyMap"
+      const unmappedWarnings = warnSpy.mock.calls.filter(
+        call => typeof call[0] === 'string' && call[0].includes('not found in keyMap')
+      )
+      
+      warnSpy.mockRestore()
+      expect(unmappedWarnings.length).toBe(0)
+    })
+  })
+
   describe('English (no normalization)', () => {
     it('should pass through English data unchanged', () => {
       const normalized = normalizeCVData(cvDataEN, 'en')
