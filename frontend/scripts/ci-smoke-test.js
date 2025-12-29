@@ -123,11 +123,20 @@ async function testLanguageRoute(lang) {
   const content = result.content;
   
   // Check for undefined/null strings in HTML (these would be rendering bugs)
-  if (content.includes('>undefined<') || content.includes('>null<')) {
-    errors.push('Contains "undefined" or "null" strings in HTML');
-    log(colors.red, `   ❌ Contains undefined/null strings`);
+  // Use regex with word boundaries to catch various patterns like ">undefined<", ">null<", standalone text
+  const undefinedPattern = />\s*undefined\s*</i;
+  const nullPattern = />\s*null\s*</i;
+  const standaloneUndefined = /\bundefined\b/gi;
+  const standaloneNull = /\bnull\b/gi;
+  
+  // Count occurrences (null and undefined are common in code/scripts, so we check specific patterns)
+  const hasRenderBug = undefinedPattern.test(content) || nullPattern.test(content);
+  
+  if (hasRenderBug) {
+    errors.push('Contains "undefined" or "null" strings in rendered HTML');
+    log(colors.red, `   ❌ Contains undefined/null strings in content`);
   } else {
-    passed.push('No undefined/null strings');
+    passed.push('No undefined/null strings in content');
     log(colors.green, `   ✅ No undefined/null strings`);
   }
   
