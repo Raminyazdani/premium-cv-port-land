@@ -82,6 +82,56 @@ export default tseslint.config(
           noAttributeStrings: false,
         },
       ],
+
+      /**
+       * Prevent console.log in production code.
+       * 
+       * Use console.warn and console.error for warnings/errors.
+       * For development-only logging, guard with: if (import.meta.env.DEV)
+       * 
+       * @see docs/CODING_CONVENTIONS.md
+       */
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+
+      /**
+       * Prevent large files (max 400 lines).
+       * 
+       * Blank lines and comments are excluded from the count.
+       * If a file must be larger, add a file-specific override below.
+       * 
+       * @see docs/CODING_CONVENTIONS.md
+       */
+      'max-lines': ['warn', { max: 400, skipBlankLines: true, skipComments: true }],
+
+      /**
+       * Prevent large functions (max 80 lines).
+       * 
+       * This encourages breaking down complex logic into smaller, testable units.
+       * Blank lines and comments are excluded from the count.
+       * 
+       * @see docs/CODING_CONVENTIONS.md
+       */
+      'max-lines-per-function': ['warn', { max: 80, skipBlankLines: true, skipComments: true }],
+    },
+  },
+  /**
+   * File-specific overrides for legitimately large files.
+   * 
+   * These files are excluded from max-lines rules because:
+   * - Generated UI components (src/components/ui/*)
+   * - i18n translation file (necessarily large with all translations)
+   * - Config/mapping files (data configuration)
+   */
+  {
+    files: [
+      'src/components/ui/**/*.tsx',
+      'src/lib/i18n.ts',
+      'src/config/keyMappings.ts',
+      'src/config/skillCategoryMappings.ts',
+    ],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
     },
   },
   prettierConfig,
