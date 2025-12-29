@@ -23,38 +23,9 @@ import {
 import { useCV } from '@/context/CVDataContext'
 import { useLanguage, useTranslation } from '@/context/LanguageContext'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
-import type { Testimonial } from '@/types/cv'
 
 // Auto-rotation interval in milliseconds
 const AUTO_ROTATE_INTERVAL = 6000
-
-// Sample testimonials for demo (can be removed when real data is available)
-const sampleTestimonials: Testimonial[] = [
-  {
-    quote: "Ramin is an exceptional bioinformatician with a deep understanding of both computational methods and biological systems. His work on single-cell RNA-seq analysis was instrumental in advancing our research.",
-    author: "Dr. Jane Smith",
-    title: "Principal Investigator",
-    company: "University Research Lab",
-    rating: 5,
-    date: "2024-01"
-  },
-  {
-    quote: "Working with Ramin was a pleasure. He consistently delivered high-quality code and his expertise in data science helped us solve complex analytical challenges.",
-    author: "John Doe",
-    title: "Senior Data Scientist",
-    company: "Tech Company",
-    rating: 5,
-    date: "2023-12"
-  },
-  {
-    quote: "Ramin's full-stack development skills and attention to detail made him an invaluable team member. He always went above and beyond to ensure project success.",
-    author: "Sarah Johnson",
-    title: "Product Manager",
-    company: "Software Startup",
-    rating: 5,
-    date: "2023-08"
-  }
-]
 
 interface StarRatingProps {
   rating: number
@@ -81,8 +52,8 @@ export function TestimonialsSection() {
   const { ref, isVisible } = useScrollAnimation()
   const t = useTranslation()
   
-  // Use sample testimonials if no real data
-  const testimonials = data.testimonials?.length ? data.testimonials : sampleTestimonials
+  // Only use real testimonials - don't show placeholder data
+  const testimonials = data.testimonials?.length ? data.testimonials : []
   
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
