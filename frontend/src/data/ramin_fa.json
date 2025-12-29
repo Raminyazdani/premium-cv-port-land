@@ -29,11 +29,11 @@
       "تصاویر": [
         {
           "نوع_مورد": "پروفایل",
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/c_pad,b_gen_fill,w_1200,h_1200,ar_1:1/v1748294090/IMG_9262_wioxcp.jpg"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/cv_profile_photo.jpg"
         },
         {
           "نوع_مورد": "کاور",
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/c_crop,w_1200,h_900,ar_4:3,g_auto/v1748294940/IMG_5283_1200x1800_a2wxn9_c_pad_b_gen_fill_w_1600_h_400_1_lnwatm.jpg"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/cv_cover_photo.jpg"
         }
       ]
     }
@@ -187,7 +187,7 @@
           "حداکثر_نمره": 9.0,
           "حداقل_نمره": 0.0,
           "تاریخ_آزمون": "2023-12-28",
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_ielts_jw47oo.pdf"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_ielts.pdf"
         }
       ]
     },
@@ -221,10 +221,10 @@
       "گواهی‌ها": [
         {
           "نام": "میکرواری تحلیل داده در R Software و زیست‌شناسی سامانه‌ای",
-          "تاریخ": "2020-09-30",
+          "تاریخ": "2020-9-31",
           "مدت": "18 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_TUV_north_Academy_MicroArray_dspdq4.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_TUV_north_Academy_MicroArray.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -237,7 +237,7 @@
           "تاریخ": "2021-04-10",
           "مدت": "58 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_TUV_north_Academy_MD_wfwvnm.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_TUV_north_Academy_MD.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -255,7 +255,7 @@
           "تاریخ": "2023-12-08",
           "مدت": "16 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/certificate_ICAD_glp_EN_vjmbcp.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_ICAD_glp_EN.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -273,7 +273,7 @@
           "تاریخ": "2023-12-09",
           "مدت": "8 ساعت",
           "گواهی_دارد": false,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/certificate_Biosafety_biosecurity_and_biological_risk_xeazln.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Biosafety_biosecurity_and_biological_risk.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -315,7 +315,7 @@
           "تاریخ": "2023-09-13",
           "مدت": "15 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530890/certificate_UoT_Histological_Techniques_and_Equipment_cyqakk.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Histological_Techniques_and_Equipment.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -327,7 +327,7 @@
           "تاریخ": "2023-09-10",
           "مدت": "45 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530888/certificate_UoT_Fundamental_Principles_of_Molecular_Testing_Techniques_stnnhk.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Fundamental_Principles_of_Molecular_Testing_Techniques.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -339,7 +339,7 @@
           "تاریخ": "2023-09-20",
           "مدت": "6 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530888/certificate_UoT_Fundamental_Techniques_for_Handling_Bleeding_and_Injection_of_Lab_Animals_oiho0j.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Fundamental_Techniques_for_Handling_Bleeding_and_Injection_of_Lab_Animals.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -351,7 +351,7 @@
           "تاریخ": "2023-09-20",
           "مدت": "10 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/certificate_UoT_Applied_Bioinformatics_urbeov.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Applied_Bioinformatics.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -364,7 +364,7 @@
           "تاریخ": "2023-09-15",
           "مدت": "10 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530888/certificate_UoT_Fundamental_Principles_of_In_Vitro_Cell_Culture_Techniques_vsz0f3.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Fundamental_Principles_of_In_Vitro_Cell_Culture_Techniques.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -376,7 +376,7 @@
           "تاریخ": "2023-09-17",
           "مدت": "10 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530890/certificate_UoT_Introduction_to_Microbiological_Lab_Techniques_gflaji.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_UoT_Introduction_to_Microbiological_Lab_Techniques.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -594,7 +594,7 @@
           "تاریخ": "2023-01-18",
           "مدت": "400 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530890/certificate_maktabsharif_python_django_qi5tcd.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_maktabsharif_python_django.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -613,7 +613,7 @@
           "تاریخ": "2020-09-18",
           "مدت": "70 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/certificate_maktabkhune_front_end_pt2jrn.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_maktabkhune_front_end.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "دانشگاهی",
@@ -625,7 +625,7 @@
           "تاریخ": "2020-07-23",
           "مدت": "57 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530890/certificate_maktabkhune_beginner_python_zvfwzv.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_maktabkhune_beginner_python.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -639,7 +639,7 @@
           "تاریخ": "2021-12-11",
           "مدت": "57 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/certificate_maktabkhune_advanced_python_porkqg.pdf",
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_maktabkhune_advanced_python.pdf",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -675,49 +675,49 @@
           "تاریخ": "2023-07-15",
           "مدت": "3 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531338/certificate_Hamrah_academy_Fundamentals_and_Roadmap_of_Data_Science_lea7xa.pdf"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Fundamentals_and_Roadmap_of_Data_Science.pdf"
         },
         {
           "نام": "ریاضیات برای علم داده و هوش مصنوعی",
           "تاریخ": "2023-09-01",
           "مدت": "8 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531339/certificate_Hamrah_academy_Mathematics_for_Data_Science_and_Artificial_Intelligence_tufiqi.pdf"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Mathematics_for_Data_Science_and_Artificial_Intelligence.pdf"
         },
         {
           "نام": "داده‌کاوی و هوش تجاری با KNIME",
           "تاریخ": "2023-09-05",
           "مدت": "6 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531339/certificate_Hamrah_academy_Data_Mining_and_Business_Intelligence_with_KNIME_kctnfx.pdf"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Data_Mining_and_Business_Intelligence_with_KNIME.pdf"
         },
         {
           "نام": "جامع Python برنامه‌نویسی",
           "تاریخ": "2023-09-12",
           "مدت": "12 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531338/certificate_Hamrah_academy_Comprehensive_Python_Programming_aofpwo.pdf"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Comprehensive_Python_Programming.pdf"
         },
         {
           "نام": "داده تصورسازی ابزارها",
           "تاریخ": "2023-10-22",
           "مدت": "5 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531339/certificate_Hamrah_academy_Data_Visualization_Tools_ooqjbj.pdf"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Data_Visualization_Tools.pdf"
         },
         {
           "نام": "اصول مقدماتی پایگاه داده",
           "تاریخ": "2023-10-19",
           "مدت": "10 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531339/certificate_Hamrah_academy_Introductory_Database_Principles_dby3im.pdf"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Introductory_Database_Principles.pdf"
         },
         {
           "نام": "داده کاوش با Python",
           "تاریخ": "2023-11-01",
           "مدت": "8 ساعت",
           "گواهی_دارد": true,
-          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749531338/certificate_Hamrah_academy_Data_Mining_with_Python_fz3e0c.pdf"
+          "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/certificate_Hamrah_academy_Data_Mining_with_Python.pdf"
         }
       ]
     },
@@ -787,7 +787,7 @@
       "یادگیری_ماشین_و_علم_داده": [
         {
           "نام_کامل": "یادگیری نظارت‌شده و بدون‌نظارت",
-          "نام_کوتاه": "Supervised/Unsupervised",
+          "نام_کوتاه": "نظارت‌شده/بدون‌نظارت",
           "کلید_نوع": [
             "رزومه_کامل",
             "برنامه‌نویسی",
@@ -1305,7 +1305,7 @@
         },
         {
           "نام_کامل": "ACID تراکنش",
-          "نام_ک��تاه": "ACID",
+          "نام_کوتاه": "ACID",
           "کلید_نوع": [
             "رزومه_کامل",
             "برنامه‌نویسی"
@@ -1478,8 +1478,8 @@
           ]
         },
         {
-          "نام_کامل": "Interactive Dashboards",
-          "نام_کوتاه": "Dashboards",
+          "نام_کامل": "داشبوردهای تعاملی",
+          "نام_کوتاه": "داشبوردها",
           "کلید_نوع": [
             "رزومه_کامل",
             "بیوانفورماتیک",
@@ -2135,8 +2135,8 @@
           ]
         },
         {
-          "نام_کامل": "Anesthesia & Analgesia",
-          "نام_کوتاه": "Anesthesia",
+          "نام_کامل": "بیهوشی و بی‌دردی",
+          "نام_کوتاه": "بیهوشی",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2144,8 +2144,8 @@
           ]
         },
         {
-          "نام_کامل": "Oral Gavage",
-          "نام_کوتاه": "Gavage",
+          "نام_کامل": "گاواژ دهانی",
+          "نام_کوتاه": "گاواژ",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2153,8 +2153,8 @@
           ]
         },
         {
-          "نام_کامل": "Blood Collection",
-          "نام_کوتاه": "Blood Draw",
+          "نام_کامل": "نمونه‌گیری خون",
+          "نام_کوتاه": "خون‌گیری",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2162,8 +2162,8 @@
           ]
         },
         {
-          "نام_کامل": "Environmental Enrichment",
-          "نام_کوتاه": "Enrichment",
+          "نام_کامل": "غنی‌سازی محیطی",
+          "نام_کوتاه": "غنی‌سازی",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2180,8 +2180,8 @@
           ]
         },
         {
-          "نام_کامل": "Ethical Guidelines",
-          "نام_کوتاه": "Ethics",
+          "نام_کامل": "دستورالعمل‌های اخلاقی",
+          "نام_کوتاه": "اخلاق",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2247,8 +2247,8 @@
           ]
         },
         {
-          "نام_کامل": "Confocal Microscope",
-          "نام_کوتاه": "Confocal Scope",
+          "نام_کامل": "میکروسکوپ کانفوکال",
+          "نام_کوتاه": "میکروسکوپ کانفوکال",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2256,8 +2256,8 @@
           ]
         },
         {
-          "نام_کامل": "Fluorescence Microscope",
-          "نام_کوتاه": "Fluoro Scope",
+          "نام_کامل": "میکروسکوپ فلورسانس",
+          "نام_کوتاه": "میکروسکوپ فلورو",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2283,8 +2283,8 @@
           ]
         },
         {
-          "نام_کامل": "Conductivity Meter",
-          "نام_کوتاه": "Cond. Meter",
+          "نام_کامل": "هدایت‌سنج",
+          "نام_کوتاه": "هدایت‌سنج",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2348,7 +2348,7 @@
           ]
         },
         {
-          "نام_کامل": "Nutrient Feed Regulation",
+          "نام_کامل": "تنظیم تغذیه‌دهی مواد مغذی",
           "نام_کوتاه": "Feed کنترل",
           "کلید_نوع": [
             "رزومه_کامل",
@@ -2384,8 +2384,8 @@
           ]
         },
         {
-          "نام_کامل": "Wet Weight Determination",
-          "نام_کوتاه": "Wet Wt",
+          "نام_کامل": "تعیین وزن مرطوب",
+          "نام_کوتاه": "وزن مرطوب",
           "کلید_نوع": [
             "رزومه_کامل",
             "زیست‌فناوری",
@@ -2489,22 +2489,22 @@
     "مهارت‌های_نرم": {
       "مهارت‌های_نرم_اصلی": [
         {
-          "نام_کامل": "Analytical Thinking",
-          "نام_کوتاه": "Analytical Thinking",
+          "نام_کامل": "تفکر تحلیلی",
+          "نام_کوتاه": "تفکر تحلیلی",
           "کلید_نوع": [
             "رزومه_کامل"
           ]
         },
         {
-          "نام_کامل": "Problem-Solving",
-          "نام_کوتاه": "Problem-Solving",
+          "نام_کامل": "حل مسئله",
+          "نام_کوتاه": "حل مسئله",
           "کلید_نوع": [
             "رزومه_کامل"
           ]
         },
         {
-          "نام_کامل": "Team Collaboration",
-          "نام_کوتاه": "Team Collaboration",
+          "نام_کامل": "همکاری تیمی",
+          "نام_کوتاه": "همکاری تیمی",
           "کلید_نوع": [
             "رزومه_کامل"
           ]
@@ -2517,8 +2517,8 @@
           ]
         },
         {
-          "نام_کامل": "Scientific Writing",
-          "نام_کوتاه": "Scientific Writing",
+          "نام_کامل": "نگارش علمی",
+          "نام_کوتاه": "نگارش علمی",
           "کلید_نوع": [
             "رزومه_کامل"
           ]
@@ -2545,15 +2545,15 @@
           ]
         },
         {
-          "نام_کامل": "Research & Critical تحلیل",
-          "نام_کوتاه": "Research & تحلیل",
+          "نام_کامل": "پژوهش و تحلیل انتقادی",
+          "نام_کوتاه": "پژوهش و تحلیل",
           "کلید_نوع": [
             "رزومه_کامل"
           ]
         },
         {
           "نام_کامل": "خودانگیختگی و ابتکار",
-          "نام_کوتاه": "Self-Motivation",
+          "نام_کوتاه": "خودانگیختگی",
           "کلید_نوع": [
             "رزومه_کامل"
           ]
@@ -2612,6 +2612,16 @@
       "عنوان": "بررسی‌گر انطباق سیاست‌ها (Flask + React + SQLite)",
       "توضیحات": "یک وب‌اپلیکیشن با پشتهٔ FReMP ساختم تا سیاست‌های امنیتی پویا و داده‌های کاربران (JSON/CSV) بارگذاری شود، انطباق هر کاربر در سمت سرور ارزیابی گردد، و نتایج قبولی/ردی به‌صورت قابل فیلتر و خروجی‌گرفتن همراه با توضیحات در رابط React نمایش داده شود.",
       "پیوند": "https://github.com/Raminyazdani/policy-compliance-checker",
+      "کلید_نوع": [
+        "رزومه_کامل",
+        "برنامه‌نویسی",
+        "دانشگاهی"
+      ]
+    },
+    {
+      "عنوان": "قالب مارکت‌پلیس فروشگاه لوازم آرایشی (Django)",
+      "توضیحات": "یک قالب مارکت‌پلیس چنداپی با Django 4.1 برای فروشگاه لوازم آرایشی ساختم که شامل لایهٔ Core قابل‌استفاده‌مجدد (فکتوری‌های متمرکز برای فیلدها، مدل‌های پایه با soft-delete، میکسین‌های مشترک و فرمان سفارشی برای ساخت اسکلت اپ) به‌همراه فهرست/جست‌وجو/فیلتر محصولات، جریان سبد و پرداخت، و مدل‌های سفارش/پرداخت/ارسال با قالب‌های Bootstrap روی SQLite است.",
+      "پیوند": "https://github.com/Raminyazdani/Cosmetic_Shop",
       "کلید_نوع": [
         "رزومه_کامل",
         "برنامه‌نویسی",
@@ -3200,7 +3210,7 @@
         "Ba.khalili@iau.ac.ir"
       ],
       "تلفن": null,
-      "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530886/Reference_Babak__Khalili_Hadad_lb2rxf.pdf",
+      "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/Reference_Babak__Khalili_Hadad.pdf",
       "کلید_نوع": [
         "رزومه_کامل",
         "زیست‌فناوری",
@@ -3218,7 +3228,7 @@
         "biodibio@yahoo.com"
       ],
       "تلفن": null,
-      "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/Reference_Hedieh_Dibah_ynttbv.pdf",
+      "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/Reference_Hedieh_Dibah.pdf",
       "کلید_نوع": [
         "رزومه_کامل",
         "زیست‌فناوری",
@@ -3242,7 +3252,7 @@
           "شماره": "9123961780"
         }
       ],
-      "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/Reference_Simin_Nabizadeh_sf74hi.pdf",
+      "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/Reference_Simin_Nabizadeh.pdf",
       "کلید_نوع": [
         "رزومه_کامل",
         "زیست‌فناوری",
@@ -3266,7 +3276,7 @@
           "شماره": "9105969589"
         }
       ],
-      "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/v1749530887/Reference_Mohammad_Amin_Boojari_oln3ua.pdf",
+      "نشانی_وب": "https://res.cloudinary.com/dgflx4rum/image/upload/Reference_Mohammad_Amin_Boojari.pdf",
       "کلید_نوع": [
         "رزومه_کامل",
         "زیست‌فناوری",
