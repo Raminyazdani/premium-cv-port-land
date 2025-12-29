@@ -2,17 +2,17 @@
  * NORMALIZATION TEST
  * 
  * This file can be run to test normalization without starting the full app.
- * Run with: npx tsx src/utils/testNormalization.ts
+ * Run with: npx tsx scripts/testNormalization.ts
  * (requires tsx: npm install -D tsx)
  */
 
-import { normalizeCVData } from './dataNormalizer'
-import type { Language } from './dataNormalizer'
+import { normalizeCVData } from '../src/utils/dataNormalizer'
+import type { Language } from '../src/utils/dataNormalizer'
 
-// Import JSON files (adjust paths if needed)
-import cvDataEN from '../data/cv.json'
-import cvDataDE from '../data/ramin_de.json'
-import cvDataFA from '../data/ramin_fa.json'
+// Import JSON files
+import cvDataEN from '../src/data/cv.json'
+import cvDataDE from '../src/data/ramin_de.json'
+import cvDataFA from '../src/data/ramin_fa.json'
 
 console.log('🧪 NORMALIZATION TEST SUITE\n')
 

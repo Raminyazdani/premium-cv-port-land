@@ -161,7 +161,9 @@ export function ContactForm() {
       setIsSubmitting(false)
     }
 
-    console.log('Form data (would be sent to backend):', formData)
+    if (import.meta.env.DEV) {
+      console.log('Form data (would be sent to backend):', formData)
+    }
   }
 
   return (

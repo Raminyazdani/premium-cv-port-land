@@ -3,11 +3,13 @@
  * 
  * This script extracts the actual keys from the locked JSON files
  * to identify mismatches with keyMappings.ts
+ * 
+ * Run with: npx tsx scripts/extractActualKeys.ts
  */
 
-import cvDataEN from '../data/cv.json'
-import cvDataDE from '../data/ramin_de.json'
-import cvDataFA from '../data/ramin_fa.json'
+import cvDataEN from '../src/data/cv.json'
+import cvDataDE from '../src/data/ramin_de.json'
+import cvDataFA from '../src/data/ramin_fa.json'
 
 console.log('🔍 EXTRACTING ACTUAL KEYS FROM LOCKED FILES\n')
 console.log('=' .repeat(80))

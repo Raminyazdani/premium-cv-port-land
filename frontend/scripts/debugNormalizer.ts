@@ -1,14 +1,16 @@
 /**
  * DEBUG UTILITY: Diagnose normalization issues
  * This file helps identify why sections are empty after normalization.
- * Logs are controlled via VITE_DEBUG_CV=true environment variable.
+ * 
+ * Run with: npx tsx scripts/debugNormalizer.ts
+ * (requires tsx: npm install -D tsx)
  */
 
-import { normalizeCVData, type Language } from './dataNormalizer'
-import cvDataEN from '@/data/cv.json'
-import cvDataDE from '@/data/ramin_de.json'
-import cvDataFA from '@/data/ramin_fa.json'
-import { logger } from '@/lib/logger'
+import { normalizeCVData, type Language } from '../src/utils/dataNormalizer'
+import cvDataEN from '../src/data/cv.json'
+import cvDataDE from '../src/data/ramin_de.json'
+import cvDataFA from '../src/data/ramin_fa.json'
+import { logger } from '../src/lib/logger'
 
 export function diagnoseNormalization(lang: Language = 'en') {
   logger.group(`🔍 NORMALIZATION DIAGNOSIS for ${lang.toUpperCase()}`)
@@ -91,12 +93,4 @@ export function diagnoseNormalization(lang: Language = 'en') {
   logger.groupEnd()
   
   return { rawData, normalized }
-}
-
-// Run diagnostics only when debug logging is explicitly enabled
-if (logger.isDebugEnabled()) {
-  logger.debug('🚀 Running normalization diagnostics...')
-  diagnoseNormalization('en')
-  diagnoseNormalization('de')
-  diagnoseNormalization('fa')
 }
