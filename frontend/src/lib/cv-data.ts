@@ -1,30 +1,19 @@
 /**
  * CV Data Utilities: Helper functions for accessing CV data
- * 
- * IMPORTANT: These functions are now deprecated in favor of using
- * useCVData() hook directly in components. They are kept for
- * backward compatibility but should not be used in new code.
- * 
- * Use the CVDataContext instead:
+ *
+ * These are pure utility functions that work with CV data.
+ * For accessing CV data in components, use the CVDataContext:
+ *
  * ```tsx
- * import { useCV } from '@/context/CVDataContext'
- * const data = useCV()
+ * import { useCVData } from '@/context/CVDataContext'
+ * const { data } = useCVData()
+ * const basics = extractBasics(data)
  * ```
  */
 
 import type { CVData, Basics, Location } from '@/types/cv'
 import { safeArray, safeString, safeUrl } from '@/utils/dataValidation'
 import { DEFAULT_VALUES } from '@/constants/app'
-
-/**
- * @deprecated Use useCVData() hook instead
- * This function no longer works correctly with language switching.
- * It's kept for backward compatibility only.
- */
-export function getCVData(): CVData {
-  console.warn('getCVData() is deprecated. Use useCVData() hook instead.')
-  return {} as CVData
-}
 
 /**
  * Helper function to extract basics from CV data
@@ -42,14 +31,6 @@ export function extractBasics(data: CVData): Basics | null {
   } catch {
     return null
   }
-}
-
-/**
- * @deprecated Use useCVData() + extractBasics() instead
- */
-export function getBasics(): Basics | null {
-  console.warn('getBasics() is deprecated. Use useCVData() + extractBasics() instead.')
-  return null
 }
 
 export function getFullName(basics: Basics | null | undefined): string {
@@ -94,14 +75,6 @@ export function extractProfilePhotoUrl(basics: Basics | null): string | null {
 }
 
 /**
- * @deprecated Use useCVData() + extractProfilePhotoUrl() instead
- */
-export function getProfilePhotoUrl(): string | null {
-  console.warn('getProfilePhotoUrl() is deprecated. Use useCVData() + extractProfilePhotoUrl() instead.')
-  return null
-}
-
-/**
  * Extract cover photo URL from basics data
  */
 export function extractCoverPhotoUrl(basics: Basics | null): string | null {
@@ -123,14 +96,6 @@ export function extractCoverPhotoUrl(basics: Basics | null): string | null {
 }
 
 /**
- * @deprecated Use useCVData() + extractCoverPhotoUrl() instead
- */
-export function getCoverPhotoUrl(): string | null {
-  console.warn('getCoverPhotoUrl() is deprecated. Use useCVData() + extractCoverPhotoUrl() instead.')
-  return null
-}
-
-/**
  * Extract profiles from CV data
  */
 export function extractProfiles(data: CVData) {
@@ -139,14 +104,6 @@ export function extractProfiles(data: CVData) {
   } catch {
     return []
   }
-}
-
-/**
- * @deprecated Use useCVData() + extractProfiles() instead
- */
-export function getProfiles() {
-  console.warn('getProfiles() is deprecated. Use useCVData() + extractProfiles() instead.')
-  return []
 }
 
 export function getInitials(name?: string | null): string {

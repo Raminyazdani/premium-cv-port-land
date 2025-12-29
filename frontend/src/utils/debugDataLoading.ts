@@ -5,6 +5,11 @@
  * following the Single Responsibility Principle.
  *
  * Debug output is controlled via VITE_DEBUG_CV=true environment variable.
+ *
+ * NOTE: In development mode with React StrictMode, you may see duplicate
+ * "Starting data load" messages. This is expected behavior in development
+ * and does not occur in production builds. React intentionally double-invokes
+ * certain lifecycle methods in development to help detect side effects.
  */
 
 import type { CVData } from '@/types/cv'
