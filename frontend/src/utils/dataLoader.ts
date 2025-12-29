@@ -5,6 +5,7 @@ import cvDataEN from '@/data/cv.json'
 import cvDataDE from '@/data/ramin_de.json'
 import cvDataFA from '@/data/ramin_fa.json'
 import { validateCVDataStructure } from './debugDataFlow'
+import { logger } from '@/lib/logger'
 
 export interface LoadDataResult {
   data: CVData
@@ -34,104 +35,104 @@ function loadCVDataForLanguage(lang: Language): unknown {
  * Loads, normalizes, and validates CV data for the specified language
  */
 export function loadAndValidateData(lang: Language = 'en'): LoadDataResult {
-  console.log(`\n==================== LOADING DATA FOR LANGUAGE: ${lang} ====================`)
+  logger.debug(`==================== LOADING DATA FOR LANGUAGE: ${lang} ====================`)
   
   // Load raw data for language
   const rawData = loadCVDataForLanguage(lang)
   
-  if (import.meta.env.DEV) {
-    console.log(`📂 [PHASE 2] RAW DATA LOADING`)
-    console.log(`   Language: ${lang}`)
-    console.log(`   typeof rawData: ${typeof rawData}`)
-    console.log(`   rawData is null: ${rawData === null}`)
-    console.log(`   rawData is undefined: ${rawData === undefined}`)
-    console.log(`   Raw data keys:`, Object.keys(rawData))
-    
-    // Detailed check of each section
-    Object.keys(rawData).forEach(key => {
-      const value = rawData[key]
-      console.log(`   - ${key}: ${Array.isArray(value) ? `array[${value.length}]` : typeof value}`)
-      if (Array.isArray(value) && value.length > 0) {
-        console.log(`     → First item keys:`, Object.keys(value[0]))
-      }
-    })
-  }
+  logger.debug(`[PHASE 2] RAW DATA LOADING`)
+  logger.debug(`   Language: ${lang}`)
+  logger.debug(`   typeof rawData: ${typeof rawData}`)
+  logger.debug(`   rawData is null: ${rawData === null}`)
+  logger.debug(`   rawData is undefined: ${rawData === undefined}`)
+  
+  // Type guard for object
+  const rawDataObj = rawData && typeof rawData === 'object' && !Array.isArray(rawData) 
+    ? rawData as Record<string, unknown>
+    : {}
+  
+  logger.debug(`   Raw data keys:`, Object.keys(rawDataObj))
+  
+  // Detailed check of each section
+  Object.keys(rawDataObj).forEach(key => {
+    const value = rawDataObj[key]
+    logger.debug(`   - ${key}: ${Array.isArray(value) ? `array[${value.length}]` : typeof value}`)
+    if (Array.isArray(value) && value.length > 0 && value[0] && typeof value[0] === 'object') {
+      logger.debug(`     → First item keys:`, Object.keys(value[0]))
+    }
+  })
   
   // Normalize to canonical English schema
-  console.log(`\n🔄 [PHASE 3] NORMALIZATION STARTING`)
+  logger.debug(`[PHASE 3] NORMALIZATION STARTING`)
   const normalized = normalizeCVData(rawData, lang)
   
-  if (import.meta.env.DEV) {
-    console.log(`✅ [PHASE 3] NORMALIZATION COMPLETE`)
-    console.log(`   Normalized keys:`, Object.keys(normalized))
-    
-    // Validate structure
-    const structureValidation = validateCVDataStructure(normalized as CVData)
-    if (!structureValidation.isValid) {
-      console.error(`❌ [PHASE 3] STRUCTURE VALIDATION FAILED:`)
-      structureValidation.issues.forEach(issue => console.error(`   - ${issue}`))
-    } else {
-      console.log(`✅ [PHASE 3] Structure validation passed`)
-    }
-    
-    // Log each normalized section
-    Object.keys(normalized).forEach(key => {
-      const value = normalized[key]
-      const typeInfo = Array.isArray(value) ? `array[${value.length}]` : typeof value
-      console.log(`   - ${key}: ${typeInfo}`)
-      
-      if (Array.isArray(value) && value.length > 0) {
-        console.log(`     → First item:`, value[0])
-      } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-        console.log(`     → Object keys:`, Object.keys(value))
-      }
-    })
+  logger.debug(`✅ [PHASE 3] NORMALIZATION COMPLETE`)
+  logger.debug(`   Normalized keys:`, Object.keys(normalized))
+  
+  // Validate structure
+  const structureValidation = validateCVDataStructure(normalized as CVData)
+  if (!structureValidation.isValid) {
+    logger.error(`[PHASE 3] STRUCTURE VALIDATION FAILED:`)
+    structureValidation.issues.forEach(issue => logger.error(`   - ${issue}`))
+  } else {
+    logger.debug(`✅ [PHASE 3] Structure validation passed`)
   }
+  
+  // Log each normalized section
+  Object.keys(normalized).forEach(key => {
+    const value = normalized[key]
+    const typeInfo = Array.isArray(value) ? `array[${value.length}]` : typeof value
+    logger.debug(`   - ${key}: ${typeInfo}`)
+    
+    if (Array.isArray(value) && value.length > 0) {
+      logger.debug(`     → First item:`, value[0])
+    } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      logger.debug(`     → Object keys:`, Object.keys(value))
+    }
+  })
   
   // Validate normalized data
   const validator = new DataValidator()
   const validationResult = validator.validate(normalized)
 
   if (validationResult.errors.length > 0) {
-    console.error('❌ Data validation errors:', validationResult.errors)
+    logger.error('Data validation errors:', validationResult.errors)
   }
 
   if (validationResult.warnings.length > 0) {
-    console.warn('⚠️  Data validation warnings:', validationResult.warnings)
+    logger.warn('Data validation warnings:', validationResult.warnings)
   }
 
   // Sanitize normalized data
-  console.log(`\n🧹 [PHASE 3 - SANITIZATION] Starting`)
+  logger.debug(`[PHASE 3 - SANITIZATION] Starting`)
   const sanitizedData = sanitizeData(normalized as CVData)
   
-  if (import.meta.env.DEV) {
-    console.log(`✅ [PHASE 3 - SANITIZATION] Complete`)
-    Object.keys(sanitizedData).forEach(key => {
-      const value = sanitizedData[key]
-      const beforeValue = normalized[key]
-      const typeInfo = Array.isArray(value) ? `array[${value.length}]` : typeof value
-      const beforeLength = Array.isArray(beforeValue) ? beforeValue.length : 'N/A'
-      const afterLength = Array.isArray(value) ? value.length : 'N/A'
-      
-      console.log(`   - ${key}: ${typeInfo}`)
-      if (Array.isArray(value) && Array.isArray(beforeValue)) {
-        if (beforeValue.length !== value.length) {
-          console.warn(`     ⚠️  Length changed: ${beforeLength} → ${afterLength}`)
-        }
-      }
-    })
+  logger.debug(`✅ [PHASE 3 - SANITIZATION] Complete`)
+  Object.keys(sanitizedData).forEach(key => {
+    const value = sanitizedData[key]
+    const beforeValue = normalized[key]
+    const typeInfo = Array.isArray(value) ? `array[${value.length}]` : typeof value
+    const beforeLength = Array.isArray(beforeValue) ? beforeValue.length : 'N/A'
+    const afterLength = Array.isArray(value) ? value.length : 'N/A'
     
-    // Final validation
-    const finalValidation = validateCVDataStructure(sanitizedData)
-    if (!finalValidation.isValid) {
-      console.error(`❌ [FINAL] SANITIZED DATA HAS ISSUES:`)
-      finalValidation.issues.forEach(issue => console.error(`   - ${issue}`))
-    } else {
-      console.log(`✅ [FINAL] Sanitized data structure is valid`)
+    logger.debug(`   - ${key}: ${typeInfo}`)
+    if (Array.isArray(value) && Array.isArray(beforeValue)) {
+      if (beforeValue.length !== value.length) {
+        logger.warn(`     Length changed: ${beforeLength} → ${afterLength}`)
+      }
     }
+  })
+  
+  // Final validation
+  const finalValidation = validateCVDataStructure(sanitizedData)
+  if (!finalValidation.isValid) {
+    logger.error(`[FINAL] SANITIZED DATA HAS ISSUES:`)
+    finalValidation.issues.forEach(issue => logger.error(`   - ${issue}`))
+  } else {
+    logger.debug(`✅ [FINAL] Sanitized data structure is valid`)
   }
   
-  console.log(`==================== DATA LOADING COMPLETE ====================\n`)
+  logger.debug(`==================== DATA LOADING COMPLETE ====================`)
 
   return {
     data: sanitizedData,

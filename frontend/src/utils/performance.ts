@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger'
+
 export function initPerformanceMonitoring() {
   if (typeof window === 'undefined') return
 
@@ -8,29 +10,29 @@ export function initPerformanceMonitoring() {
           if (entry.entryType === 'largest-contentful-paint') {
             const lcp = entry.startTime
             if (lcp < 2500) {
-              console.debug('✓ LCP: Good', lcp.toFixed(0) + 'ms')
+              logger.debug('✓ LCP: Good', lcp.toFixed(0) + 'ms')
             } else if (lcp < 4000) {
-              console.warn('⚠ LCP: Needs improvement', lcp.toFixed(0) + 'ms')
+              logger.warn('LCP: Needs improvement', lcp.toFixed(0) + 'ms')
             } else {
-              console.error('✗ LCP: Poor', lcp.toFixed(0) + 'ms')
+              logger.error('LCP: Poor', lcp.toFixed(0) + 'ms')
             }
           }
 
           if (entry.entryType === 'first-input') {
             const fid = (entry as PerformanceEventTiming).processingStart - entry.startTime
             if (fid < 100) {
-              console.debug('✓ FID: Good', fid.toFixed(0) + 'ms')
+              logger.debug('✓ FID: Good', fid.toFixed(0) + 'ms')
             } else if (fid < 300) {
-              console.warn('⚠ FID: Needs improvement', fid.toFixed(0) + 'ms')
+              logger.warn('FID: Needs improvement', fid.toFixed(0) + 'ms')
             } else {
-              console.error('✗ FID: Poor', fid.toFixed(0) + 'ms')
+              logger.error('FID: Poor', fid.toFixed(0) + 'ms')
             }
           }
 
-          if (entry.entryType === 'layout-shift' && !(entry as any).hadRecentInput) {
-            const cls = (entry as any).value
+          if (entry.entryType === 'layout-shift' && !(entry as { hadRecentInput?: boolean }).hadRecentInput) {
+            const cls = (entry as { value?: number }).value ?? 0
             if (cls > 0.1) {
-              console.warn('⚠ CLS detected:', cls.toFixed(3))
+              logger.warn('CLS detected:', cls.toFixed(3))
             }
           }
         }
@@ -38,7 +40,7 @@ export function initPerformanceMonitoring() {
 
       observer.observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] })
     } catch {
-      console.debug('Performance monitoring not supported')
+      logger.debug('Performance monitoring not supported')
     }
   }
 
@@ -49,10 +51,10 @@ export function initPerformanceMonitoring() {
       const connectTime = perfData.responseEnd - perfData.requestStart
       const renderTime = perfData.domComplete - perfData.domLoading
 
-      console.debug('⏱ Performance Metrics:')
-      console.debug('  Page Load:', pageLoadTime + 'ms')
-      console.debug('  Server Response:', connectTime + 'ms')
-      console.debug('  Render Time:', renderTime + 'ms')
+      logger.debug('⏱ Performance Metrics:')
+      logger.debug('  Page Load:', pageLoadTime + 'ms')
+      logger.debug('  Server Response:', connectTime + 'ms')
+      logger.debug('  Render Time:', renderTime + 'ms')
     }
   })
 }
@@ -91,14 +93,14 @@ export function reportWebVitals() {
         loadComplete: navigationTiming.loadEventEnd - navigationTiming.fetchStart,
       }
 
-      console.debug('📊 Detailed Timing Metrics:')
-      console.debug('  DNS Lookup:', metrics.dns.toFixed(0) + 'ms')
-      console.debug('  TCP Connection:', metrics.tcp.toFixed(0) + 'ms')
-      console.debug('  Time to First Byte:', metrics.ttfb.toFixed(0) + 'ms')
-      console.debug('  Download:', metrics.download.toFixed(0) + 'ms')
-      console.debug('  DOM Interactive:', metrics.domInteractive.toFixed(0) + 'ms')
-      console.debug('  DOM Complete:', metrics.domComplete.toFixed(0) + 'ms')
-      console.debug('  Load Complete:', metrics.loadComplete.toFixed(0) + 'ms')
+      logger.debug('📊 Detailed Timing Metrics:')
+      logger.debug('  DNS Lookup:', metrics.dns.toFixed(0) + 'ms')
+      logger.debug('  TCP Connection:', metrics.tcp.toFixed(0) + 'ms')
+      logger.debug('  Time to First Byte:', metrics.ttfb.toFixed(0) + 'ms')
+      logger.debug('  Download:', metrics.download.toFixed(0) + 'ms')
+      logger.debug('  DOM Interactive:', metrics.domInteractive.toFixed(0) + 'ms')
+      logger.debug('  DOM Complete:', metrics.domComplete.toFixed(0) + 'ms')
+      logger.debug('  Load Complete:', metrics.loadComplete.toFixed(0) + 'ms')
     }
   })
 }

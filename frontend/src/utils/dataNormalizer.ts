@@ -25,12 +25,12 @@ import {
   PUBLICATION_KEYS,
   REFERENCE_KEYS,
   IDENTIFIER_KEYS,
-  ALL_KEYS,
   getEnglishKey,
   isKeyMapped,
   type KeyMapping
 } from '@/config/keyMappings'
 import { getCanonicalSkillCategoryKey } from '@/config/skillCategoryMappings'
+import { logger } from '@/lib/logger'
 
 export type Language = 'en' | 'de' | 'fa'
 
@@ -42,10 +42,8 @@ export function normalizeCVData(rawData: any, sourceLang: Language): CVData {
     return rawData as CVData
   }
 
-  if (import.meta.env.DEV) {
-    console.log(`🔧 [normalizeCVData] Starting normalization for language: ${sourceLang}`)
-    console.log(`📥 [normalizeCVData] Raw data keys:`, Object.keys(rawData))
-  }
+  logger.debug(`[normalizeCVData] Starting normalization for language: ${sourceLang}`)
+  logger.debug(`[normalizeCVData] Raw data keys:`, Object.keys(rawData))
 
   const normalized: any = {}
 
@@ -53,34 +51,26 @@ export function normalizeCVData(rawData: any, sourceLang: Language): CVData {
     const mapping = SECTION_KEYS[enKey]
     const sourceKey = mapping[sourceLang]
     
-    if (import.meta.env.DEV) {
-      console.log(`🔍 [normalizeCVData] Section: ${enKey}`)
-      console.log(`   - Looking for source key: "${sourceKey}"`)
-      console.log(`   - Found in raw data: ${rawData[sourceKey] !== undefined}`)
-      if (rawData[sourceKey] !== undefined) {
-        const sectionData = rawData[sourceKey]
-        console.log(`   - Data type: ${Array.isArray(sectionData) ? `array[${sectionData.length}]` : typeof sectionData}`)
-      }
+    logger.debug(`[normalizeCVData] Section: ${enKey}`)
+    logger.debug(`   - Looking for source key: "${sourceKey}"`)
+    logger.debug(`   - Found in raw data: ${rawData[sourceKey] !== undefined}`)
+    if (rawData[sourceKey] !== undefined) {
+      const sectionData = rawData[sourceKey]
+      logger.debug(`   - Data type: ${Array.isArray(sectionData) ? `array[${sectionData.length}]` : typeof sectionData}`)
     }
     
     if (rawData[sourceKey] !== undefined) {
       const sectionData = rawData[sourceKey]
       normalized[enKey] = normalizeSectionData(enKey, sectionData, sourceLang)
       
-      if (import.meta.env.DEV) {
-        const result = normalized[enKey]
-        console.log(`   ✅ Normalized result type: ${Array.isArray(result) ? `array[${result.length}]` : typeof result}`)
-      }
+      const result = normalized[enKey]
+      logger.debug(`   ✅ Normalized result type: ${Array.isArray(result) ? `array[${result.length}]` : typeof result}`)
     } else {
-      if (import.meta.env.DEV) {
-        console.log(`   ⚠️  Source key "${sourceKey}" not found in raw data`)
-      }
+      logger.debug(`   ⚠️  Source key "${sourceKey}" not found in raw data`)
     }
   })
 
-  if (import.meta.env.DEV) {
-    console.log(`📤 [normalizeCVData] Normalized data keys:`, Object.keys(normalized))
-  }
+  logger.debug(`[normalizeCVData] Normalized data keys:`, Object.keys(normalized))
 
   return normalized as CVData
 }
@@ -247,9 +237,9 @@ function normalizeSkills(data: any, sourceLang: Language): any {
     }
   })
 
-  if (import.meta.env.DEV && sourceLang !== 'en') {
-    console.log(`🔧 [normalizeSkills] Normalized skill categories for ${sourceLang}:`)
-    console.log(`   Top categories:`, Object.keys(normalized))
+  if (sourceLang !== 'en') {
+    logger.debug(`[normalizeSkills] Normalized skill categories for ${sourceLang}:`)
+    logger.debug(`   Top categories:`, Object.keys(normalized))
   }
 
   return normalized
@@ -314,8 +304,8 @@ function normalizeObject(
     normalized[enKey] = obj[sourceKey]
     
     // Only warn if the key was NOT found in the keyMap
-    if (import.meta.env.DEV && sourceLang !== 'en' && !isKeyMapped(keyMap, sourceKey, sourceLang)) {
-      console.warn(`⚠️  [normalizeObject] Key "${sourceKey}" not found in keyMap, using as-is`)
+    if (sourceLang !== 'en' && !isKeyMapped(keyMap, sourceKey, sourceLang)) {
+      logger.warn(`[normalizeObject] Key "${sourceKey}" not found in keyMap, using as-is`)
     }
   })
 

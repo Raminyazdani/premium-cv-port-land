@@ -9,6 +9,7 @@ import React, { createContext, useContext, useMemo } from 'react'
 import type { CVData } from '@/types/cv'
 import { loadAndValidateData } from '@/utils/dataLoader'
 import { useLanguage } from './LanguageContext'
+import { logger } from '@/lib/logger'
 
 interface CVDataContextType {
   data: CVData
@@ -23,13 +24,13 @@ export function CVDataProvider({ children }: { children: React.ReactNode }) {
   const { language } = useLanguage()
 
   const cvDataState = useMemo(() => {
-    console.log(`\n🏁 [CVDataContext] STARTING DATA LOAD FOR: ${language}`)
+    logger.debug(`[CVDataContext] Starting data load for: ${language}`)
     const { data, validationResult } = loadAndValidateData(language)
 
-    console.group('📊 [CVDataContext] Data Summary')
-    console.log('Language:', language)
-    console.log('Data keys:', Object.keys(data))
-    console.log('Validation result:', validationResult.isValid ? '✅ Valid' : '❌ Invalid')
+    logger.group('📊 [CVDataContext] Data Summary')
+    logger.debug('Language:', language)
+    logger.debug('Data keys:', Object.keys(data))
+    logger.debug('Validation result:', validationResult.isValid ? '✅ Valid' : '❌ Invalid')
     
     // Log each section
     const sections = [
@@ -40,46 +41,46 @@ export function CVDataProvider({ children }: { children: React.ReactNode }) {
     sections.forEach(section => {
       const value = data[section]
       if (Array.isArray(value)) {
-        console.log(`   ${section}: array[${value.length}]`)
+        logger.debug(`   ${section}: array[${value.length}]`)
       } else if (typeof value === 'object' && value !== null) {
-        console.log(`   ${section}: object with ${Object.keys(value).length} keys`)
+        logger.debug(`   ${section}: object with ${Object.keys(value).length} keys`)
       } else {
-        console.log(`   ${section}: ${typeof value} (${value})`)
+        logger.debug(`   ${section}: ${typeof value} (${value})`)
       }
     })
     
     // Specific checks for education and projects
     if (Array.isArray(data.education)) {
       if (data.education.length > 0) {
-        console.log(`✅ Education has ${data.education.length} entries`)
-        console.log('   First education item:', data.education[0])
+        logger.debug(`✅ Education has ${data.education.length} entries`)
+        logger.debug('   First education item:', data.education[0])
       } else {
-        console.error('❌ Education array is EMPTY!')
+        logger.error('Education array is EMPTY!')
       }
     } else {
-      console.error('❌ Education is NOT an array:', typeof data.education)
+      logger.error('Education is NOT an array:', typeof data.education)
     }
     
     if (Array.isArray(data.projects)) {
       if (data.projects.length > 0) {
-        console.log(`✅ Projects has ${data.projects.length} entries`)
-        console.log('   First project item:', data.projects[0])
+        logger.debug(`✅ Projects has ${data.projects.length} entries`)
+        logger.debug('   First project item:', data.projects[0])
       } else {
-        console.error('❌ Projects array is EMPTY!')
+        logger.error('Projects array is EMPTY!')
       }
     } else {
-      console.error('❌ Projects is NOT an array:', typeof data.projects)
+      logger.error('Projects is NOT an array:', typeof data.projects)
     }
     
     if (validationResult.errors.length > 0) {
-      console.error('❌ Validation errors:', validationResult.errors)
+      logger.error('Validation errors:', validationResult.errors)
     }
     if (validationResult.warnings.length > 0) {
-      console.warn('⚠️  Validation warnings:', validationResult.warnings)
+      logger.warn('Validation warnings:', validationResult.warnings)
     }
     
-    console.groupEnd()
-    console.log(`🏁 [CVDataContext] DATA LOAD COMPLETE\n`)
+    logger.groupEnd()
+    logger.debug(`[CVDataContext] Data load complete for: ${language}`)
 
     return {
       data,

@@ -1,4 +1,5 @@
 import type { CVData } from '@/types/cv'
+import { logger } from '@/lib/logger'
 
 export interface ValidationResult {
   isValid: boolean
@@ -450,7 +451,7 @@ export function sanitizeDate(dateStr: string | null | undefined): string | null 
 
   const validator = new DataValidator()
   if (!(validator as any).isValidDate(dateStr)) {
-    console.warn(`Invalid date format: "${dateStr}", returning null`)
+    logger.warn(`Invalid date format: "${dateStr}", returning null`)
     return null
   }
 

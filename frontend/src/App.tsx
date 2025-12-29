@@ -23,6 +23,7 @@ import { initAnalytics, trackPageView, setupExternalLinkTracking, createSectionO
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/ErrorFallback'
 import { SkeletonSection } from '@/components/ui/skeleton'
+import { logger } from '@/lib/logger'
 
 const BasicsSection = lazy(() => import('@/components/sections/BasicsSection').then(m => ({ default: m.BasicsSection })))
 const ProfilesSection = lazy(() => import('@/components/sections/ProfilesSection').then(m => ({ default: m.ProfilesSection })))
@@ -83,13 +84,11 @@ function AppContent() {
   }, [])
 
   useEffect(() => {
-    if (import.meta.env.DEV) {
-      if (errors.length > 0) {
-        console.error('❌ Data validation errors:', errors)
-      }
-      if (warnings.length > 0) {
-        console.warn('⚠️  Data validation warnings:', warnings)
-      }
+    if (errors.length > 0) {
+      logger.error('Data validation errors:', errors)
+    }
+    if (warnings.length > 0) {
+      logger.warn('Data validation warnings:', warnings)
     }
 
     const focusOptions = extractAllTypeKeys(data)
@@ -97,7 +96,7 @@ function AppContent() {
   }, [data, errors, warnings, setAvailableFocusOptions])
 
   if (!isValid) {
-    console.error('Data validation failed. Displaying with best effort.')
+    logger.error('Data validation failed. Displaying with best effort.')
   }
 
   // Scroll to top handler for page corner curl
