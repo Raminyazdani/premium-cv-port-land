@@ -3,6 +3,7 @@ import { X, ArrowLeft, ArrowRight, FilePdf, WarningCircle } from '@phosphor-icon
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { detectMediaType } from '@/utils/mediaDetector'
+import { useTranslation } from '@/context/LanguageContext'
 
 interface MediaModalProps {
   url: string
@@ -28,6 +29,7 @@ export function MediaModal({
   const previousFocusRef = useRef<HTMLElement | null>(null)
   const mediaType = detectMediaType(url)
   const hasGallery = mediaList.length > 1
+  const t = useTranslation()
   
   const [imageLoading, setImageLoading] = useState(true)
   const [imageError, setImageError] = useState(false)
@@ -118,7 +120,7 @@ export function MediaModal({
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
-      aria-label="Media viewer"
+      aria-label={t.a11y.media_viewer}
     >
       <div 
         role="status" 
@@ -145,7 +147,7 @@ export function MediaModal({
             size="icon"
             onClick={onClose}
             className="bg-black/60 hover:bg-black/80 text-white rounded-full"
-            aria-label="Close modal"
+            aria-label={t.a11y.close_modal}
           >
             <X size={24} weight="bold" />
           </Button>
@@ -156,21 +158,21 @@ export function MediaModal({
             <div className="relative w-full h-full flex items-center justify-center">
               {imageLoading && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Spinner size={48} label="Loading image" />
+                  <Spinner size={48} label={t.a11y.loading_image} />
                 </div>
               )}
               {imageError ? (
                 <div className="flex flex-col items-center gap-4 p-8">
                   <WarningCircle size={64} className="text-destructive" weight="fill" />
-                  <p className="text-lg font-medium">Failed to load image</p>
-                  <p className="text-sm text-muted-foreground">The image could not be loaded</p>
+                  <p className="text-lg font-medium">{t.media?.failed_to_load}</p>
+                  <p className="text-sm text-muted-foreground">{t.media?.image_could_not_load}</p>
                   <Button 
                     onClick={() => {
                       setImageError(false)
                       setImageLoading(true)
                     }}
                   >
-                    Retry
+                    {t.actions?.retry}
                   </Button>
                 </div>
               ) : (
@@ -198,9 +200,9 @@ export function MediaModal({
             <div className="w-full h-full flex flex-col items-center justify-center gap-6">
               <FilePdf size={64} weight="fill" className="text-destructive" />
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold">{alt || 'PDF Document'}</h3>
+                <h3 className="text-xl font-semibold">{alt || t.media?.pdf_document}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Click below to open in a new tab
+                  {t.media?.click_to_open_pdf}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -215,7 +217,7 @@ export function MediaModal({
                     className="gap-2"
                   >
                     <FilePdf size={20} weight="fill" />
-                    Open PDF
+                    {t.actions?.open_pdf}
                   </a>
                 </Button>
               </div>
@@ -236,7 +238,7 @@ export function MediaModal({
               onClick={handlePrevious}
               disabled={currentIndex === 0}
               className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full disabled:opacity-30"
-              aria-label="Previous media"
+              aria-label={t.a11y.previous_media}
             >
               <ArrowLeft size={24} weight="bold" />
             </Button>
@@ -247,7 +249,7 @@ export function MediaModal({
               onClick={handleNext}
               disabled={currentIndex === mediaList.length - 1}
               className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full disabled:opacity-30"
-              aria-label="Next media"
+              aria-label={t.a11y.next_media}
             >
               <ArrowRight size={24} weight="bold" />
             </Button>

@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button'
 import { CaretLeft, CaretRight } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import type { Skills } from '@/types/cv'
+import { useTranslation } from '@/context/LanguageContext'
+import { interpolate } from '@/lib/i18n'
 
 interface SkillsCarouselProps {
   skills: Skills
@@ -16,6 +18,7 @@ interface SkillsCarouselProps {
 }
 
 export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
+  const t = useTranslation()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cardsPerView, setCardsPerView] = useState(1)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
@@ -152,7 +155,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
               'disabled:opacity-30 disabled:hover:scale-100',
               '-translate-x-1/2'
             )}
-            aria-label="Previous skill category"
+            aria-label={t.a11y?.previous_skill_category}
           >
             <CaretLeft size={20} weight="bold" />
           </Button>
@@ -169,7 +172,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
               'disabled:opacity-30 disabled:hover:scale-100',
               'translate-x-1/2'
             )}
-            aria-label="Next skill category"
+            aria-label={t.a11y?.next_skill_category}
           >
             <CaretRight size={20} weight="bold" />
           </Button>
@@ -201,7 +204,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
               <div className="mb-4">
                 <h3 className="text-lg font-semibold mb-1">{category}</h3>
                 <Badge variant="secondary" className="text-xs">
-                  {totalCount} skills
+                  {interpolate(t.skills?.skills_count || '{count} skills', { count: totalCount })}
                 </Badge>
               </div>
 
@@ -232,7 +235,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
                 ))}
                 {groups.length > 3 && (
                   <p className="text-xs text-muted-foreground">
-                    +{groups.length - 3} more categories
+                    {interpolate(t.skills?.more_categories || '+{count} more categories', { count: groups.length - 3 })}
                   </p>
                 )}
               </div>
@@ -243,7 +246,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
 
       {/* Dot Indicators */}
       {skillsArray.length > cardsPerView && (
-        <div className="flex justify-center gap-2 mt-6" role="tablist" aria-label="Skill category navigation">
+        <div className="flex justify-center gap-2 mt-6" role="tablist" aria-label={t.a11y?.skill_category_nav}>
           {Array.from({ length: maxIndex + 1 }).map((_, index) => (
             <button
               key={index}
@@ -255,7 +258,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
                   ? 'bg-primary w-8' 
                   : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
               )}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={interpolate(t.a11y?.go_to_slide || 'Go to slide {number}', { number: index + 1 })}
               aria-selected={index === currentIndex}
               role="tab"
             />

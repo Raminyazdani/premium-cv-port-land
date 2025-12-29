@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -10,6 +9,8 @@ import { useCV } from '@/context/CVDataContext'
 import { copyToClipboard } from '@/lib/clipboard'
 import { toast } from 'sonner'
 import type { Profile } from '@/types/cv'
+import { useTranslation } from '@/context/LanguageContext'
+import { interpolate } from '@/lib/i18n'
 
 function normalizeNetwork(network?: string | null): string {
   if (!network) return 'unknown'
@@ -56,7 +57,7 @@ function SocialIcon({ network }: { network: string }) {
   }
 }
 
-function ProfileLink({ profile }: { profile: Profile }) {
+function ProfileLink({ profile, t }: { profile: Profile; t: ReturnType<typeof useTranslation> }) {
   const network = profile.network ?? 'Profile'
   const normalizedNetwork = normalizeNetwork(profile.network)
 
@@ -86,7 +87,7 @@ function ProfileLink({ profile }: { profile: Profile }) {
             href={profile.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Visit ${network} profile${profile.username ? ' for ' + profile.username : ''}`}
+            aria-label={interpolate(t.a11y.visit_profile, { network })}
             onContextMenu={handleCopy}
           >
             <SocialIcon network={normalizedNetwork} />
@@ -108,7 +109,7 @@ function ProfileLink({ profile }: { profile: Profile }) {
             </span>
           )}
         </p>
-        <p className="text-xs text-muted-foreground">Right-click to copy link</p>
+        <p className="text-xs text-muted-foreground">{t.profiles?.right_click_to_copy}</p>
       </TooltipContent>
     </Tooltip>
   )
@@ -117,15 +118,16 @@ function ProfileLink({ profile }: { profile: Profile }) {
 export function ProfilesSection() {
   const cvData = useCV()
   const profiles = cvData.profiles ?? []
+  const t = useTranslation()
 
   if (profiles.length === 0) {
     return (
       <section className="py-8" aria-labelledby="profiles-heading" id="profiles">
         <div className="container max-w-6xl px-4">
           <h2 id="profiles-heading" className="text-2xl font-bold mb-4">
-            Professional Profiles
+            {t.sections.profiles}
           </h2>
-          <p className="text-muted-foreground">No profiles available</p>
+          <p className="text-muted-foreground">{t.profiles?.no_profiles}</p>
         </div>
       </section>
     )
@@ -151,17 +153,17 @@ export function ProfilesSection() {
       <section className="py-12 bg-muted/30" aria-labelledby="profiles-heading" id="profiles">
         <div className="container max-w-6xl px-4">
           <h2 id="profiles-heading" className="text-3xl font-bold mb-6 text-center">
-            Connect With Me
+            {t.sections.profiles}
           </h2>
           
           <div 
             className="flex flex-wrap items-center justify-center gap-3"
             role="list"
-            aria-label="Social media profiles"
+            aria-label={t.a11y?.social_profiles}
           >
             {sortedProfiles.map((profile, idx) => (
               <div key={idx} role="listitem">
-                <ProfileLink profile={profile} />
+                <ProfileLink profile={profile} t={t} />
               </div>
             ))}
           </div>
