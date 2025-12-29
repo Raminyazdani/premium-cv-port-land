@@ -225,9 +225,13 @@ export function generatePersonJsonLd(
     '@type': 'Person',
     name: fullName,
     url: cfg.siteUrl,
-    image: image,
     jobTitle: jobTitles[0] || 'Professional',
     description: getSummary(basics) || `${fullName} - ${jobTitles.join(', ')}`
+  }
+  
+  // Only add image if we have a valid URL to prevent 404 errors in JSON-LD
+  if (image) {
+    jsonLd.image = image
   }
   
   // Add email if available
@@ -316,17 +320,23 @@ export function updateMetaTags(meta: PageMeta, config: Partial<SEOConfig> = {}):
   // Open Graph tags
   setMeta('og:title', meta.title, true)
   setMeta('og:description', meta.description, true)
-  setMeta('og:image', meta.image, true)
+  // Only set og:image if we have a valid image URL to prevent 404 errors
+  if (meta.image) {
+    setMeta('og:image', meta.image, true)
+  }
   setMeta('og:url', meta.url, true)
   setMeta('og:type', meta.type, true)
   setMeta('og:locale', meta.locale, true)
   setMeta('og:site_name', cfg.siteName, true)
   
   // Twitter tags
-  setMeta('twitter:card', 'summary_large_image')
+  setMeta('twitter:card', meta.image ? 'summary_large_image' : 'summary')
   setMeta('twitter:title', meta.title)
   setMeta('twitter:description', meta.description)
-  setMeta('twitter:image', meta.image)
+  // Only set twitter:image if we have a valid image URL to prevent 404 errors
+  if (meta.image) {
+    setMeta('twitter:image', meta.image)
+  }
   if (cfg.twitterHandle) {
     setMeta('twitter:creator', cfg.twitterHandle)
   }

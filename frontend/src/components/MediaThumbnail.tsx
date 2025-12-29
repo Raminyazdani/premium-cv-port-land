@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { FilePdf, Image as ImageIcon, X } from '@phosphor-icons/react'
+import { FilePdf, Image as ImageIcon } from '@phosphor-icons/react'
 import { detectMediaType } from '@/utils/mediaDetector'
+import { logger } from '@/lib/logger'
 
 interface MediaThumbnailProps {
   url: string
@@ -26,6 +27,12 @@ export function MediaThumbnail({ url, alt = 'Media', className = '', onClick }: 
       e.preventDefault()
       onClick?.()
     }
+  }
+
+  const handleImageError = () => {
+    // Log the error for debugging - helps identify broken Cloudinary URLs
+    logger.debug(`[MediaThumbnail] Failed to load image: ${url}`)
+    setImageError(true)
   }
 
   if (mediaType === 'pdf') {
@@ -57,7 +64,7 @@ export function MediaThumbnail({ url, alt = 'Media', className = '', onClick }: 
             src={url}
             alt={alt}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            onError={() => setImageError(true)}
+            onError={handleImageError}
             loading="lazy"
           />
         ) : (
