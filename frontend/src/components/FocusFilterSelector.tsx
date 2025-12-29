@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useFilter } from '@/context/FilterContext'
 import { useCV } from '@/context/CVDataContext'
+import { useTranslation } from '@/context/LanguageContext'
 import type { CVData } from '@/types/cv'
 
 interface FilterOption {
@@ -62,6 +63,7 @@ function deriveFilterOptions(cvData: CVData): FilterOption[] {
 export function FocusFilterSelector() {
   const { selectedFocus, setSelectedFocus, setAvailableFocusOptions } = useFilter()
   const cvData = useCV()
+  const t = useTranslation()
   const [announcement, setAnnouncement] = useState('')
   
   const filterOptions = useMemo(() => deriveFilterOptions(cvData), [cvData])
@@ -93,7 +95,7 @@ export function FocusFilterSelector() {
             variant="outline" 
             size="icon"
             className="relative"
-            aria-label="Filter content focus"
+            aria-label={t.a11y.filter_focus}
           >
             <FunnelSimple className="h-5 w-5" />
           </Button>

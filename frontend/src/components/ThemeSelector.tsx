@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Spinner } from '@/components/ui/spinner'
+import { useTranslation } from '@/context/LanguageContext'
 import { 
   type ThemeName, 
   getAvailableThemes,
@@ -25,6 +26,7 @@ export function ThemeSelector({ konamiUnlocked = false }: ThemeSelectorProps = {
   const [currentTheme, setCurrentTheme] = useState<ThemeName>('normal')
   const [isChanging, setIsChanging] = useState(false)
   const [announcement, setAnnouncement] = useState('')
+  const t = useTranslation()
 
   const availableThemes = getAvailableThemes(konamiUnlocked)
 
@@ -64,7 +66,7 @@ export function ThemeSelector({ konamiUnlocked = false }: ThemeSelectorProps = {
             variant="outline" 
             size="icon"
             className="relative"
-            aria-label="Select theme"
+            aria-label={t.a11y.select_theme}
             disabled={isChanging}
             data-theme-selector
           >
