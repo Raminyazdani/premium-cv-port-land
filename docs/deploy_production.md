@@ -72,12 +72,12 @@ Choose your preferred platform and follow the link:
 
 **Framework Preset**: Vite (auto-detected)
 
-**Build Settings** (auto-populated, verify):
-- **Build Command**: `npm run build`
-- **Output Directory**: `dist`
-- **Install Command**: `npm install`
+**Build Settings** (auto-populated from root `vercel.json`):
+- **Build Command**: `cd frontend && npm run build`
+- **Output Directory**: `frontend/dist`
+- **Install Command**: `cd frontend && npm install`
 
-**Root Directory**: Leave blank (use root)
+**Root Directory**: Leave blank (use root - the root `vercel.json` handles the frontend subdirectory)
 
 **Environment Variables**: None required (leave empty)
 
