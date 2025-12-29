@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { CaretLeft, CaretRight } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import type { Skills } from '@/types/cv'
-import { useTranslation } from '@/context/LanguageContext'
+import { useTranslation, useSkillCategoryLabel } from '@/context/LanguageContext'
 import { interpolate } from '@/lib/i18n'
 
 interface SkillsCarouselProps {
@@ -19,6 +19,7 @@ interface SkillsCarouselProps {
 
 export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
   const t = useTranslation()
+  const getSkillLabel = useSkillCategoryLabel()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cardsPerView, setCardsPerView] = useState(1)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
@@ -56,17 +57,23 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
     return () => window.removeEventListener('resize', updateCardsPerView)
   }, [])
 
-  // Convert skills object to array
+  // Convert skills object to array with display labels
   const skillsArray = useMemo(() => {
     return Object.entries(skills).map(([category, subcategories]) => {
       const groups = Object.entries(subcategories).map(([name, items]) => ({
         name,
+        displayName: getSkillLabel(name), // Localized subcategory label
         items: Array.isArray(items) ? items : []
       }))
       const totalCount = groups.reduce((sum, g) => sum + g.items.length, 0)
-      return { category, groups, totalCount }
+      return { 
+        category, 
+        displayCategory: getSkillLabel(category), // Localized category label
+        groups, 
+        totalCount 
+      }
     })
-  }, [skills])
+  }, [skills, getSkillLabel])
 
   const maxIndex = Math.max(0, skillsArray.length - cardsPerView)
 
@@ -190,7 +197,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
             transform: `translateX(-${currentIndex * (100 / cardsPerView + 1.5)}%)`,
           }}
         >
-          {skillsArray.map(({ category, groups, totalCount }, index) => (
+          {skillsArray.map(({ category, displayCategory, groups, totalCount }, index) => (
             <div
               key={category}
               className={cn(
@@ -202,7 +209,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
               )}
             >
               <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-1">{category}</h3>
+                <h3 className="text-lg font-semibold mb-1">{displayCategory}</h3>
                 <Badge variant="secondary" className="text-xs">
                   {interpolate(t.skills?.skills_count || '{count} skills', { count: totalCount })}
                 </Badge>
@@ -212,7 +219,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
                 {groups.slice(0, 3).map((group) => (
                   <div key={group.name}>
                     <h4 className="text-sm font-medium text-muted-foreground mb-1.5">
-                      {group.name}
+                      {group.displayName}
                     </h4>
                     <div className="flex flex-wrap gap-1.5">
                       {group.items.slice(0, 6).map((skill, idx) => (
