@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Check, FunnelSimple } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,7 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useFilter } from '@/context/FilterContext'
-import { getCVData } from '@/lib/cv-data'
+import { useCV } from '@/context/CVDataContext'
+import type { CVData } from '@/types/cv'
 
 interface FilterOption {
   id: string
@@ -18,26 +19,26 @@ interface FilterOption {
   description: string
 }
 
-function deriveFilterOptions(): FilterOption[] {
-  const cvData = getCVData()
+function deriveFilterOptions(cvData: CVData): FilterOption[] {
   const typeKeySet = new Set<string>()
   
   typeKeySet.add('Full CV')
 
-  const collectTypeKeys = (data: any) => {
+  const collectTypeKeys = (data: unknown) => {
     if (!data) return
     
     if (Array.isArray(data)) {
       data.forEach(item => collectTypeKeys(item))
-    } else if (typeof data === 'object') {
-      if (data.type_key && Array.isArray(data.type_key)) {
-        data.type_key.forEach((key: string) => {
-          if (key && key !== 'Full CV') {
+    } else if (typeof data === 'object' && data !== null) {
+      const obj = data as Record<string, unknown>
+      if (obj.type_key && Array.isArray(obj.type_key)) {
+        obj.type_key.forEach((key: unknown) => {
+          if (typeof key === 'string' && key && key !== 'Full CV') {
             typeKeySet.add(key)
           }
         })
       }
-      Object.values(data).forEach(value => collectTypeKeys(value))
+      Object.values(obj).forEach(value => collectTypeKeys(value))
     }
   }
 
@@ -60,12 +61,14 @@ function deriveFilterOptions(): FilterOption[] {
 
 export function FocusFilterSelector() {
   const { selectedFocus, setSelectedFocus, setAvailableFocusOptions } = useFilter()
+  const cvData = useCV()
   const [announcement, setAnnouncement] = useState('')
-  const filterOptions = deriveFilterOptions()
+  
+  const filterOptions = useMemo(() => deriveFilterOptions(cvData), [cvData])
 
   useEffect(() => {
     setAvailableFocusOptions(filterOptions.map(o => o.id))
-  }, [])
+  }, [filterOptions, setAvailableFocusOptions])
 
   const handleFilterChange = (filter: string) => {
     setSelectedFocus(filter)
