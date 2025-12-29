@@ -473,17 +473,85 @@ export function sanitizeDate(dateStr: string | null | undefined): string | null 
   return sanitized.isoString
 }
 
+/**
+ * Result of deduplication operation
+ */
+export interface DeduplicationResult<T> {
+  /** The deduplicated array */
+  items: T[]
+  /** Items that were removed as duplicates */
+  removedItems: { index: number; item: T; key: string }[]
+}
+
+/**
+ * Deduplicates an array based on a key function
+ * 
+ * **Policy: FIRST_WINS**
+ * - The first occurrence of a key is kept, subsequent duplicates are removed
+ * - Deterministic: given the same input order, produces the same output order
+ * - Transparent: logs removed items in debug mode
+ * 
+ * **Matching Criteria**:
+ * - Uses JSON.stringify of key fields for exact matching
+ * - Case-sensitive comparison
+ * - null/undefined are treated as equal (both serialize to "null")
+ * 
+ * @param array - The array to deduplicate
+ * @param getKey - Function to extract the deduplication key from each item
+ * @param context - Optional context string for logging (e.g., "projects", "experiences")
+ * @returns The deduplicated array
+ */
 export function deduplicateArray<T>(
   array: T[],
-  getKey: (item: T) => string
+  getKey: (item: T) => string,
+  context?: string
 ): T[] {
-  const seen = new Set<string>()
-  return array.filter(item => {
+  const result = deduplicateArrayWithDetails(array, getKey, context)
+  return result.items
+}
+
+/**
+ * Deduplicates an array and returns details about removed items
+ * 
+ * Use this when you need to know which items were removed for testing or debugging.
+ * 
+ * @param array - The array to deduplicate
+ * @param getKey - Function to extract the deduplication key from each item
+ * @param context - Optional context string for logging (e.g., "projects", "experiences")
+ * @returns Object containing deduplicated items and list of removed items
+ */
+export function deduplicateArrayWithDetails<T>(
+  array: T[],
+  getKey: (item: T) => string,
+  context?: string
+): DeduplicationResult<T> {
+  const seen = new Map<string, number>() // key -> first occurrence index
+  const removedItems: { index: number; item: T; key: string }[] = []
+  
+  const items = array.filter((item, index) => {
     const key = getKey(item)
-    if (seen.has(key)) {
+    const firstIndex = seen.get(key)
+    
+    if (firstIndex !== undefined) {
+      removedItems.push({ index, item, key })
+      logger.debug(
+        `[Deduplication] ${context || 'Array'}: Removing duplicate at index ${index} ` +
+        `(first seen at index ${firstIndex}), key: ${key}`
+      )
       return false
     }
-    seen.add(key)
+    
+    seen.set(key, index)
     return true
   })
+  
+  // Log summary if any duplicates were removed
+  if (removedItems.length > 0) {
+    logger.debug(
+      `[Deduplication] ${context || 'Array'}: Removed ${removedItems.length} duplicate(s), ` +
+      `${array.length} → ${items.length} items`
+    )
+  }
+  
+  return { items, removedItems }
 }
