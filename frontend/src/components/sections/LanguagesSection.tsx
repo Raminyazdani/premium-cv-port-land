@@ -122,6 +122,7 @@ function CertificationDetails({ certification, language }: CertificationDetailsP
                     <Progress 
                       value={(certification.overall / certification.maxScore) * 100} 
                       className="h-2"
+                      aria-label={`Overall score: ${certification.overall} out of ${certification.maxScore}`}
                     />
                   )}
                 </div>
@@ -146,6 +147,7 @@ function CertificationDetails({ certification, language }: CertificationDetailsP
                           <Progress 
                             value={(certification.reading / certification.maxScore) * 100} 
                             className="h-1.5"
+                            aria-label={`Reading score: ${certification.reading} out of ${certification.maxScore}`}
                           />
                         )}
                       </div>
@@ -161,6 +163,7 @@ function CertificationDetails({ certification, language }: CertificationDetailsP
                           <Progress 
                             value={(certification.listening / certification.maxScore) * 100} 
                             className="h-1.5"
+                            aria-label={`Listening score: ${certification.listening} out of ${certification.maxScore}`}
                           />
                         )}
                       </div>
@@ -176,6 +179,7 @@ function CertificationDetails({ certification, language }: CertificationDetailsP
                           <Progress 
                             value={(certification.writing / certification.maxScore) * 100} 
                             className="h-1.5"
+                            aria-label={`Writing score: ${certification.writing} out of ${certification.maxScore}`}
                           />
                         )}
                       </div>
@@ -191,6 +195,7 @@ function CertificationDetails({ certification, language }: CertificationDetailsP
                           <Progress 
                             value={(certification.speaking / certification.maxScore) * 100} 
                             className="h-1.5"
+                            aria-label={`Speaking score: ${certification.speaking} out of ${certification.maxScore}`}
                           />
                         )}
                       </div>
@@ -293,7 +298,11 @@ function LanguageCard({ language }: LanguageCardProps) {
                 <span>Proficiency</span>
                 <span className="font-medium">{proficiencyPercent}%</span>
               </div>
-              <Progress value={proficiencyPercent} className="h-2" />
+              <Progress 
+                value={proficiencyPercent} 
+                className="h-2" 
+                aria-label={`${language.language ?? 'Unknown Language'} proficiency: ${proficiencyPercent}%`}
+              />
             </div>
           </div>
         </div>

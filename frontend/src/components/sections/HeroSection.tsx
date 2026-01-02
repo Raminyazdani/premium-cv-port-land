@@ -171,7 +171,11 @@ export function HeroSection() {
                 asChild
                 className="gap-2 h-11 sm:h-12 text-sm sm:text-base min-w-[140px] sm:min-w-[160px]"
               >
-                <a href={`mailto:${basics.email}`} className="touch-manipulation">
+                <a 
+                  href={`mailto:${basics.email}`} 
+                  className="touch-manipulation"
+                  aria-label={t.actions.get_in_touch}
+                >
                   <EnvelopeSimple size={18} weight="fill" className="sm:w-5 sm:h-5" />
                   <span className="hidden xs:inline">{t.actions.get_in_touch}</span>
                   <span className="xs:hidden">{t.actions.contact}</span>

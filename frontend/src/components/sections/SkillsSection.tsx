@@ -13,6 +13,20 @@ import { interpolate } from '@/lib/i18n'
 
 type ViewMode = 'list' | 'carousel'
 
+/**
+ * Sanitize a string to be a valid HTML ID
+ * Removes or replaces characters that are not valid in IDs
+ */
+function toValidId(str: string): string {
+  // Replace spaces and special characters with hyphens, remove non-alphanumeric chars
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9\-_]/gi, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    || 'category' // Fallback if result is empty
+}
+
 export function SkillsSection() {
   const data = useCV()
   const skills = (data.skills as Skills) ?? {}
@@ -213,6 +227,7 @@ export function SkillsSection() {
           <div className="space-y-3">
             {skillsArray.map(({ category, displayCategory, groups, totalCount }) => {
               const isExpanded = expandedCategories.has(category)
+              const categoryId = `skills-${toValidId(category)}`
               
               return (
                 <div 
@@ -223,7 +238,7 @@ export function SkillsSection() {
                     onClick={() => toggleCategory(category)}
                     className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-accent/50 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset"
                     aria-expanded={isExpanded}
-                    aria-controls={`skills-${category}`}
+                    aria-controls={categoryId}
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <CaretDown 
@@ -242,7 +257,7 @@ export function SkillsSection() {
 
                   {isExpanded && (
                     <div 
-                      id={`skills-${category}`}
+                      id={categoryId}
                       className="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200"
                     >
                       {groups.map((group) => (
