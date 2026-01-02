@@ -25,15 +25,15 @@ const hashesFilePath = path.join(__dirname, 'locked_files_hashes.json')
 
 const files = {
   'src/data/cv.json': {
-    description: 'English CV data - locked up to and including \'projects\' section',
+    description: 'English CV data (canonical keys)',
     hash: ''
   },
-  'src/data/ramin_de.json': {
-    description: 'German CV data - locked up to and including \'projects\' section',
+  'src/data/cv_de.json': {
+    description: 'German CV data (canonical keys)',
     hash: ''
   },
-  'src/data/ramin_fa.json': {
-    description: 'Persian CV data - locked up to and including \'projects\' section',
+  'src/data/cv_fa.json': {
+    description: 'Persian CV data (canonical keys)',
     hash: ''
   }
 }
