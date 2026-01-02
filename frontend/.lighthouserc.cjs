@@ -6,10 +6,10 @@
  * Best Practices, and SEO.
  *
  * Thresholds:
- *   - Performance: >= 0.70 (70%)
- *   - Accessibility: >= 0.90 (90%)
- *   - Best Practices: >= 0.80 (80%)
- *   - SEO: >= 0.80 (80%)
+ *   - Performance: >= 0.50 (50%) - warning only
+ *   - Accessibility: >= 0.90 (90%) - error/fail
+ *   - Best Practices: >= 0.80 (80%) - warning only
+ *   - SEO: >= 0.80 (80%) - warning only
  *
  * To adjust thresholds, modify the "assert" section below.
  *
