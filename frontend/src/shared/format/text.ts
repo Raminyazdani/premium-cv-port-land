@@ -5,7 +5,8 @@
 
 /**
  * Safely converts a value to a string with fallback.
- * Re-exports from dataValidation for consistency.
+ * Similar to safeString in dataValidation, but provided here for
+ * convenient access from the shared utilities module.
  * 
  * @param value - Value to convert
  * @param fallback - Default value if conversion fails

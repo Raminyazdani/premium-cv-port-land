@@ -128,5 +128,7 @@ export function getEducationDuration(
     return `${years} year${years !== 1 ? 's' : ''}`
   }
   
-  return `${years} year${years !== 1 ? 's' : ''}, ${remainingMonths} month${remainingMonths !== 1 ? 's' : ''}`
+  const yearPart = `${years} year${years !== 1 ? 's' : ''}`
+  const monthPart = `${remainingMonths} month${remainingMonths !== 1 ? 's' : ''}`
+  return `${yearPart}, ${monthPart}`
 }

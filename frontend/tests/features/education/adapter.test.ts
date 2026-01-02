@@ -14,9 +14,36 @@ import {
   extractTags,
 } from '@/features/education/adapter'
 import type { Education } from '@/types/cv'
+import type { EducationViewModel } from '@/features/education/model'
 
 const mockTranslations = {
   unknownInstitution: 'Unknown Institution',
+}
+
+/**
+ * Creates a mock EducationViewModel with default values.
+ * Reduces test boilerplate for creating view model objects.
+ */
+function createMockViewModel(
+  overrides: Partial<EducationViewModel>
+): EducationViewModel {
+  return {
+    id: 'test-id',
+    institution: 'Test',
+    studyType: '',
+    area: '',
+    studyDescription: '',
+    location: '',
+    dateRange: '',
+    startDate: null,
+    endDate: null,
+    gpa: '',
+    logoUrl: null,
+    tags: [],
+    typeKey: [],
+    isCurrent: false,
+    ...overrides,
+  }
 }
 
 describe('toEducationViewModel', () => {
@@ -127,23 +154,10 @@ describe('toEducationViewModels', () => {
 
 describe('filterByFocus', () => {
   const viewModels = [
-    { id: '1', typeKey: ['Academic', 'Full CV'], tags: ['Academic'] },
-    { id: '2', typeKey: ['Industry', 'Full CV'], tags: ['Industry'] },
-    { id: '3', typeKey: [], tags: [] },
-  ].map(vm => ({
-    ...vm,
-    institution: 'Test',
-    studyType: '',
-    area: '',
-    studyDescription: '',
-    location: '',
-    dateRange: '',
-    startDate: null,
-    endDate: null,
-    gpa: '',
-    logoUrl: null,
-    isCurrent: false,
-  }))
+    createMockViewModel({ id: '1', typeKey: ['Academic', 'Full CV'], tags: ['Academic'] }),
+    createMockViewModel({ id: '2', typeKey: ['Industry', 'Full CV'], tags: ['Industry'] }),
+    createMockViewModel({ id: '3', typeKey: [], tags: [] }),
+  ]
 
   it('returns all items for "Full CV" focus', () => {
     const result = filterByFocus(viewModels, 'Full CV')
@@ -170,22 +184,9 @@ describe('filterByFocus', () => {
 
 describe('filterByTag', () => {
   const viewModels = [
-    { id: '1', typeKey: ['Programming'], tags: ['Programming'] },
-    { id: '2', typeKey: ['Design'], tags: ['Design'] },
-  ].map(vm => ({
-    ...vm,
-    institution: 'Test',
-    studyType: '',
-    area: '',
-    studyDescription: '',
-    location: '',
-    dateRange: '',
-    startDate: null,
-    endDate: null,
-    gpa: '',
-    logoUrl: null,
-    isCurrent: false,
-  }))
+    createMockViewModel({ id: '1', typeKey: ['Programming'], tags: ['Programming'] }),
+    createMockViewModel({ id: '2', typeKey: ['Design'], tags: ['Design'] }),
+  ]
 
   it('returns all items when tag is allLabel', () => {
     const result = filterByTag(viewModels, 'All', 'All')
@@ -207,24 +208,10 @@ describe('filterByTag', () => {
 describe('sortByDateDesc', () => {
   it('sorts by start date newest first', () => {
     const viewModels = [
-      { id: '1', startDate: new Date('2020-01-01') },
-      { id: '2', startDate: new Date('2022-01-01') },
-      { id: '3', startDate: new Date('2021-01-01') },
-    ].map(vm => ({
-      ...vm,
-      institution: 'Test',
-      studyType: '',
-      area: '',
-      studyDescription: '',
-      location: '',
-      dateRange: '',
-      endDate: null,
-      gpa: '',
-      logoUrl: null,
-      tags: [],
-      typeKey: [],
-      isCurrent: false,
-    }))
+      createMockViewModel({ id: '1', startDate: new Date('2020-01-01') }),
+      createMockViewModel({ id: '2', startDate: new Date('2022-01-01') }),
+      createMockViewModel({ id: '3', startDate: new Date('2021-01-01') }),
+    ]
 
     const result = sortByDateDesc(viewModels)
 
@@ -235,23 +222,9 @@ describe('sortByDateDesc', () => {
 
   it('places items without dates at the end', () => {
     const viewModels = [
-      { id: '1', startDate: null },
-      { id: '2', startDate: new Date('2022-01-01') },
-    ].map(vm => ({
-      ...vm,
-      institution: 'Test',
-      studyType: '',
-      area: '',
-      studyDescription: '',
-      location: '',
-      dateRange: '',
-      endDate: null,
-      gpa: '',
-      logoUrl: null,
-      tags: [],
-      typeKey: [],
-      isCurrent: false,
-    }))
+      createMockViewModel({ id: '1', startDate: null }),
+      createMockViewModel({ id: '2', startDate: new Date('2022-01-01') }),
+    ]
 
     const result = sortByDateDesc(viewModels)
 
@@ -261,23 +234,9 @@ describe('sortByDateDesc', () => {
 
   it('does not mutate original array', () => {
     const original = [
-      { id: '1', startDate: new Date('2020-01-01') },
-      { id: '2', startDate: new Date('2022-01-01') },
-    ].map(vm => ({
-      ...vm,
-      institution: 'Test',
-      studyType: '',
-      area: '',
-      studyDescription: '',
-      location: '',
-      dateRange: '',
-      endDate: null,
-      gpa: '',
-      logoUrl: null,
-      tags: [],
-      typeKey: [],
-      isCurrent: false,
-    }))
+      createMockViewModel({ id: '1', startDate: new Date('2020-01-01') }),
+      createMockViewModel({ id: '2', startDate: new Date('2022-01-01') }),
+    ]
 
     const result = sortByDateDesc(original)
 
@@ -290,24 +249,9 @@ describe('sortByDateDesc', () => {
 describe('extractTags', () => {
   it('extracts unique tags from view models', () => {
     const viewModels = [
-      { tags: ['Programming', 'Academic'] },
-      { tags: ['Programming', 'Industry'] },
-    ].map(vm => ({
-      ...vm,
-      id: 'test',
-      institution: 'Test',
-      studyType: '',
-      area: '',
-      studyDescription: '',
-      location: '',
-      dateRange: '',
-      startDate: null,
-      endDate: null,
-      gpa: '',
-      logoUrl: null,
-      typeKey: [],
-      isCurrent: false,
-    }))
+      createMockViewModel({ tags: ['Programming', 'Academic'] }),
+      createMockViewModel({ tags: ['Programming', 'Industry'] }),
+    ]
 
     const result = extractTags(viewModels)
 
@@ -319,23 +263,8 @@ describe('extractTags', () => {
 
   it('returns sorted tags', () => {
     const viewModels = [
-      { tags: ['Zebra', 'Apple'] },
-    ].map(vm => ({
-      ...vm,
-      id: 'test',
-      institution: 'Test',
-      studyType: '',
-      area: '',
-      studyDescription: '',
-      location: '',
-      dateRange: '',
-      startDate: null,
-      endDate: null,
-      gpa: '',
-      logoUrl: null,
-      typeKey: [],
-      isCurrent: false,
-    }))
+      createMockViewModel({ tags: ['Zebra', 'Apple'] }),
+    ]
 
     const result = extractTags(viewModels)
 
