@@ -115,9 +115,10 @@ jobs:
       - name: Run Visual QA tests with Playwright
         id: visual-qa-tests
         run: |
+          set -o pipefail
           echo "📸 Running Visual QA tests..."
           npx playwright test e2e/visual-qa.spec.ts 2>&1 | tee visual-qa-test.log
-          TEST_EXIT_CODE=${PIPESTATUS[0]}
+          TEST_EXIT_CODE=$?
           echo "test-exit-code=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
           
           # Don't fail here - we want to upload artifacts first
@@ -139,12 +140,23 @@ jobs:
           echo "### Captured Screenshots" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
+          # Language name lookup function
+          get_lang_name() {
+            case "$1" in
+              en) echo "English" ;;
+              de) echo "German" ;;
+              fa) echo "Persian" ;;
+              *) echo "$1" ;;
+            esac
+          }
+          
           # List all captured screenshots
           if [ -d "artifacts/visual-qa" ]; then
             for lang_dir in artifacts/visual-qa/*/; do
               if [ -d "$lang_dir" ]; then
                 lang=$(basename "$lang_dir")
-                echo "#### ${lang^^} ($(echo "$lang" | sed 's/en/English/;s/de/German/;s/fa/Persian/'))" >> $GITHUB_STEP_SUMMARY
+                lang_name=$(get_lang_name "$lang")
+                echo "#### ${lang^^} ($lang_name)" >> $GITHUB_STEP_SUMMARY
                 echo "" >> $GITHUB_STEP_SUMMARY
                 echo "| Screenshot | Path |" >> $GITHUB_STEP_SUMMARY
                 echo "|------------|------|" >> $GITHUB_STEP_SUMMARY

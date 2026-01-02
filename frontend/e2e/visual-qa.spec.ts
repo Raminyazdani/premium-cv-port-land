@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -29,15 +29,20 @@ const languages = [
 ];
 
 // CV sections to capture (if they exist)
-const sections = [
-  { testId: 'basics-section', name: 'basics' },
-  { testId: 'education-section', name: 'education' },
-  { testId: 'skills-section', name: 'skills' },
-  { testId: 'experience-section', name: 'experience' },
-  { testId: 'projects-section', name: 'projects' },
-  { testId: 'publications-section', name: 'publications' },
-  { testId: 'references-section', name: 'references' },
+// Name is derived from testId by removing '-section' suffix
+const sectionTestIds = [
+  'basics-section',
+  'education-section',
+  'skills-section',
+  'experience-section',
+  'projects-section',
+  'publications-section',
+  'references-section',
 ];
+const sections = sectionTestIds.map((testId) => ({
+  testId,
+  name: testId.replace('-section', ''),
+}));
 
 /**
  * Ensure output directory exists for a language
@@ -53,7 +58,7 @@ function ensureOutputDir(lang: string): string {
 /**
  * Wait for page to be stable (no animations, network idle)
  */
-async function waitForStableLayout(page: import('@playwright/test').Page): Promise<void> {
+async function waitForStableLayout(page: Page): Promise<void> {
   // Wait for network to be idle
   await page.waitForLoadState('networkidle');
 
