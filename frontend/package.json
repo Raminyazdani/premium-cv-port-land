@@ -22,7 +22,9 @@
         "verify-languages": "node scripts/verify-languages.js",
         "smoke-validation": "node scripts/smoke-validation.js",
         "generate-hashes": "node tests/generate-hashes.js",
-        "accessibility-audit": "node scripts/accessibility-audit.js"
+        "accessibility-audit": "node scripts/accessibility-audit.js",
+        "ci:preview": "vite preview --port 4173 --strictPort",
+        "ci:smoke": "node scripts/ci-smoke-test.js"
     },
     "dependencies": {
         "@github/spark": ">=0.43.1 <1",

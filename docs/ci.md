@@ -435,6 +435,45 @@ git push
 
 ## CI Workflow Enhancements
 
+### UI QA Foundation Workflow (NEW)
+
+**File**: `.github/workflows/uiqa-foundation.yml`
+
+**Purpose**: Provides a reusable CI foundation for UI quality checks
+
+**Features**:
+- Deterministic dependency installation (`npm ci`)
+- Production build with artifact verification
+- Preview server with health-check waiting
+- HTTP-based smoke tests for EN/DE/FA
+- RTL verification for Persian (FA)
+- Logs/artifacts upload on failure
+
+**Reusable Workflow**: `.github/workflows/_uiqa_bootstrap.yml`
+
+**Usage** (in other workflows):
+```yaml
+jobs:
+  setup:
+    uses: ./.github/workflows/_uiqa_bootstrap.yml
+    with:
+      run-smoke-tests: true
+      server-port: '4173'
+```
+
+**Outputs**:
+- `base-url`: The URL where the app is served
+- `server-ready`: Boolean indicating if server started successfully
+
+**Local Equivalent**:
+```bash
+cd frontend
+npm ci                          # Install dependencies
+npm run build                   # Build for production
+npm run ci:preview &            # Start preview server (background)
+npm run ci:smoke                # Run HTTP smoke tests
+```
+
 ### Locked File Validation Workflow
 
 **Proposed**: Add automated SHA256 validation
@@ -551,6 +590,86 @@ Displays:
 3. ✅ **Fix CI failures** promptly
 4. ✅ **Keep dependencies updated** (Dependabot PRs)
 5. ✅ **Add deployment workflow** (see deployment guides)
+
+---
+
+## Running CI Steps Locally
+
+You can run the same CI steps locally to debug issues or verify changes before pushing.
+
+### Quick CI Reproduction
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# 1. Install dependencies (same as CI)
+npm ci
+
+# 2. Run linter
+npm run lint
+
+# 3. Run tests
+npm run test
+
+# 4. Verify language data
+npm run verify-languages
+
+# 5. Build for production
+npm run build
+
+# 6. Start preview server (background)
+npm run ci:preview &
+
+# 7. Wait for server (in CI this is automatic)
+sleep 5
+
+# 8. Run HTTP smoke tests
+npm run ci:smoke
+
+# 9. Stop the server when done
+pkill -f "vite preview"
+```
+
+### Running UI QA Foundation Locally
+
+The UI QA Foundation workflow can be simulated locally:
+
+```bash
+cd frontend
+
+# Install and build
+npm ci
+npm run build
+
+# Start preview server
+npm run ci:preview &
+SERVER_PID=$!
+
+# Wait for server
+for i in {1..30}; do
+  if curl -s http://localhost:4173 > /dev/null; then
+    echo "Server ready!"
+    break
+  fi
+  sleep 1
+done
+
+# Run smoke tests
+npm run ci:smoke
+
+# Cleanup
+kill $SERVER_PID
+```
+
+### Environment Variables
+
+The smoke test script supports configuration:
+
+```bash
+# Test against a different URL
+CI_BASE_URL=http://localhost:5173 npm run ci:smoke
+```
 
 ---
 
