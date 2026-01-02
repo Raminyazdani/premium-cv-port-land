@@ -39,6 +39,7 @@ playwright-report/
 coverage/
 .nyc_output/
 e2e-screenshots/
+frontend/artifacts/
 
 # Playwright cache
 /playwright/.cache/
