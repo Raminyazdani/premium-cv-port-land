@@ -406,22 +406,6 @@ export interface UIStrings {
     next: string
   }
 
-  // Charts/Skills Visualization (SkillsVisualizationDashboard.tsx)
-  charts?: {
-    title: string
-    description: string
-    radar: string
-    bar: string
-    bubble: string
-    category: string
-    skills: string
-    skillCount: string
-    viewDetails: string
-    totalSkills: string
-    categories: string
-    clickToFilter: string
-  }
-
   // Cookie Consent (CookieConsentBanner.tsx)
   cookies?: {
     title: string
@@ -800,20 +784,6 @@ const translations: Record<Language, UIStrings> = {
       previous: 'Previous image',
       next: 'Next image'
     },
-    charts: {
-      title: 'Skills Visualization',
-      description: 'Interactive view of skills across different domains',
-      radar: 'Radar Chart',
-      bar: 'Bar Chart',
-      bubble: 'Bubble Chart',
-      category: 'Category',
-      skills: 'Skills',
-      skillCount: 'Skill Count',
-      viewDetails: 'View Details',
-      totalSkills: 'Total Skills',
-      categories: 'Categories',
-      clickToFilter: 'Click to filter'
-    },
     cookies: {
       title: 'Cookie Consent',
       message: 'We use cookies to analyze site traffic and improve your experience. You can opt out at any time.',
@@ -1186,20 +1156,6 @@ const translations: Record<Language, UIStrings> = {
       previous: 'Vorheriges Bild',
       next: 'Nächstes Bild'
     },
-    charts: {
-      title: 'Fähigkeiten-Visualisierung',
-      description: 'Interaktive Ansicht der Fähigkeiten in verschiedenen Bereichen',
-      radar: 'Radardiagramm',
-      bar: 'Balkendiagramm',
-      bubble: 'Blasendiagramm',
-      category: 'Kategorie',
-      skills: 'Fähigkeiten',
-      skillCount: 'Anzahl der Fähigkeiten',
-      viewDetails: 'Details anzeigen',
-      totalSkills: 'Gesamtzahl der Fähigkeiten',
-      categories: 'Kategorien',
-      clickToFilter: 'Klicken zum Filtern'
-    },
     cookies: {
       title: 'Cookie-Zustimmung',
       message: 'Wir verwenden Cookies, um den Website-Traffic zu analysieren und Ihre Erfahrung zu verbessern. Sie können jederzeit ablehnen.',
@@ -1571,20 +1527,6 @@ const translations: Record<Language, UIStrings> = {
       of: 'از',
       previous: 'تصویر قبلی',
       next: 'تصویر بعدی'
-    },
-    charts: {
-      title: 'تجسم مهارت‌ها',
-      description: 'نمای تعاملی مهارت‌ها در حوزه‌های مختلف',
-      radar: 'نمودار راداری',
-      bar: 'نمودار میله‌ای',
-      bubble: 'نمودار حبابی',
-      category: 'دسته',
-      skills: 'مهارت‌ها',
-      skillCount: 'تعداد مهارت',
-      viewDetails: 'مشاهده جزئیات',
-      totalSkills: 'مجموع مهارت‌ها',
-      categories: 'دسته‌ها',
-      clickToFilter: 'برای فیلتر کلیک کنید'
     },
     cookies: {
       title: 'رضایت کوکی',
