@@ -1,0 +1,268 @@
+# ==============================================================================
+# UI QA - UI States (Scroll/Layout/Visibility) CI Workflow
+# ==============================================================================
+#
+# This workflow captures interaction-state screenshots and performs lightweight
+# assertions to catch scroll, layout, sticky, and visibility UI bugs.
+#
+# Purpose:
+#   - Detect layout shifts during scroll
+#   - Catch sticky header overlap issues
+#   - Verify visibility toggle states (accordions, carousels)
+#   - Ensure responsive breakpoints work correctly
+#   - Provide visual evidence for PR review
+#
+# Screenshots are captured for:
+#   - Scroll states: base (top), mid-scroll (50%), bottom
+#   - Visibility toggles: skills accordion expand/collapse
+#   - Language selector: open/closed states
+#   - Carousel navigation: initial and after navigation
+#   - Mobile menu states
+#
+# Determinism is ensured via:
+#   - Fixed viewport sizes (Desktop: 1280x720, Mobile: 390x844, Tablet: 768x1024)
+#   - Reduced motion preference
+#   - Network idle waiting
+#   - Chromium browser only
+#
+# Artifacts:
+#   - ui-states-screenshots/: All captured screenshots organized by language/viewport/state
+#   - ui-states-summary.json: Summary with counts and failure list
+#   - playwright-report/: HTML test report
+#
+# Triggers:
+#   - Pull requests to main/develop
+#   - Manual dispatch
+#
+# ==============================================================================
+
+name: UI QA - UI States
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  ui-states-qa:
+    name: UI States QA Screenshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # ========================================
+      # Phase 1: Setup
+      # ========================================
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify locked files integrity
+        run: |
+          echo "🔒 Verifying locked CV files exist..."
+          for file in src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing locked file: $file"
+              exit 1
+            fi
+          done
+          echo "✅ All locked files present"
+
+      # ========================================
+      # Phase 2: Install Playwright Browsers
+      # ========================================
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # ========================================
+      # Phase 3: Build Application
+      # ========================================
+      - name: Build application
+        run: |
+          echo "🔨 Building application..."
+          npm run build 2>&1 | tee build.log
+
+      - name: Verify build output
+        run: |
+          echo "📁 Checking build output..."
+          test -f dist/index.html || (echo "❌ Missing index.html" && exit 1)
+          test -d dist/assets || (echo "❌ Missing assets directory" && exit 1)
+          echo "✅ Build artifacts verified"
+          ls -lh dist/
+
+      # ========================================
+      # Phase 4: Run UI States Tests
+      # ========================================
+      - name: Create artifacts directory
+        run: mkdir -p artifacts/ui-states
+
+      - name: Run UI States tests with Playwright
+        id: ui-states-tests
+        run: |
+          set -o pipefail
+          echo "📸 Running UI States tests..."
+          npx playwright test e2e/ui-state-visual.spec.ts 2>&1 | tee ui-states-test.log
+          TEST_EXIT_CODE=$?
+          echo "test-exit-code=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          # Don't fail here - we want to upload artifacts first
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            echo "⚠️ Some UI States tests had issues (exit code: $TEST_EXIT_CODE)"
+          else
+            echo "✅ All UI States tests passed!"
+          fi
+
+      # ========================================
+      # Phase 5: Generate Summary
+      # ========================================
+      - name: Generate UI States summary
+        if: always()
+        run: |
+          echo "## 📸 UI States Visual QA" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check if summary JSON exists
+          if [ -f "artifacts/ui-states/ui-states-summary.json" ]; then
+            echo "### Summary Statistics" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Extract stats from summary JSON
+            TOTAL_SCREENSHOTS=$(jq -r '.totalScreenshots // 0' artifacts/ui-states/ui-states-summary.json)
+            SUCCESS_SCREENSHOTS=$(jq -r '.successfulScreenshots // 0' artifacts/ui-states/ui-states-summary.json)
+            FAILED_SCREENSHOTS=$(jq -r '.failedScreenshots // 0' artifacts/ui-states/ui-states-summary.json)
+            TOTAL_ASSERTIONS=$(jq -r '.totalAssertions // 0' artifacts/ui-states/ui-states-summary.json)
+            PASSED_ASSERTIONS=$(jq -r '.passedAssertions // 0' artifacts/ui-states/ui-states-summary.json)
+            FAILED_ASSERTIONS=$(jq -r '.failedAssertions // 0' artifacts/ui-states/ui-states-summary.json)
+            
+            echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| 📸 Total Screenshots | $TOTAL_SCREENSHOTS |" >> $GITHUB_STEP_SUMMARY
+            echo "| ✅ Successful Screenshots | $SUCCESS_SCREENSHOTS |" >> $GITHUB_STEP_SUMMARY
+            echo "| ❌ Failed Screenshots | $FAILED_SCREENSHOTS |" >> $GITHUB_STEP_SUMMARY
+            echo "| 🧪 Total Assertions | $TOTAL_ASSERTIONS |" >> $GITHUB_STEP_SUMMARY
+            echo "| ✅ Passed Assertions | $PASSED_ASSERTIONS |" >> $GITHUB_STEP_SUMMARY
+            echo "| ❌ Failed Assertions | $FAILED_ASSERTIONS |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # List failed assertions if any
+            if [ "$FAILED_ASSERTIONS" -gt 0 ]; then
+              echo "### ❌ Failed Assertions" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              jq -r '.assertions[] | select(.passed == false) | "- **\(.language)/\(.viewport)/\(.state)**: \(.check) - \(.details // "No details")"' artifacts/ui-states/ui-states-summary.json >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⚠️ Summary JSON not found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "### Captured Screenshots by Language/Viewport" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # List screenshots by language and viewport
+          if [ -d "artifacts/ui-states" ]; then
+            for lang_dir in artifacts/ui-states/*/; do
+              if [ -d "$lang_dir" ]; then
+                lang=$(basename "$lang_dir")
+                if [ "$lang" != "ui-states-summary.json" ]; then
+                  echo "#### ${lang^^}" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  
+                  for viewport_dir in "$lang_dir"*/; do
+                    if [ -d "$viewport_dir" ]; then
+                      viewport=$(basename "$viewport_dir")
+                      screenshot_count=$(find "$viewport_dir" -name "*.png" 2>/dev/null | wc -l)
+                      echo "- **$viewport**: $screenshot_count screenshots" >> $GITHUB_STEP_SUMMARY
+                    fi
+                  done
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                fi
+              fi
+            done
+          fi
+          
+          echo "### Test Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.ui-states-tests.outputs.test-exit-code }}" = "0" ]; then
+            echo "✅ All UI States tests passed!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some UI States tests failed. Check the Playwright report for details." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### How to Review" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download the \`ui-states-screenshots\` artifact from this workflow run" >> $GITHUB_STEP_SUMMARY
+          echo "2. Compare screenshots across different states:" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`state-base.png\`: Top of page" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`state-mid-scroll.png\`: Mid-page scroll" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`state-bottom.png\`: Bottom of page" >> $GITHUB_STEP_SUMMARY
+          echo "3. Check for:" >> $GITHUB_STEP_SUMMARY
+          echo "   - Sticky header overlapping content" >> $GITHUB_STEP_SUMMARY
+          echo "   - Elements jumping during scroll" >> $GITHUB_STEP_SUMMARY
+          echo "   - Accordion/carousel toggle working" >> $GITHUB_STEP_SUMMARY
+          echo "   - Mobile menu appearing correctly" >> $GITHUB_STEP_SUMMARY
+          echo "   - RTL layout consistency for Persian (FA)" >> $GITHUB_STEP_SUMMARY
+
+      # ========================================
+      # Phase 6: Upload Artifacts
+      # ========================================
+      - name: Upload UI States screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-states-screenshots
+          path: frontend/artifacts/ui-states/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-states-playwright-report
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-states-build-logs
+          path: |
+            frontend/build.log
+            frontend/ui-states-test.log
+          retention-days: 7
+
+      # ========================================
+      # Phase 7: Final Status Check
+      # ========================================
+      - name: Check test results
+        if: always()
+        run: |
+          if [ "${{ steps.ui-states-tests.outputs.test-exit-code }}" != "0" ]; then
+            echo "❌ UI States tests failed"
+            exit 1
+          fi
+          echo "✅ UI States tests completed successfully"
