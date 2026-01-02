@@ -19,6 +19,10 @@ import { initializeTheme } from './lib/themeManager'
 import { initPerformanceMonitoring, preloadCriticalResources, reportWebVitals } from './utils/performance'
 import { initLayoutStability } from './utils/layoutStability'
 
+// Initialize observability tools (Clarity, Sentry) - env-gated
+import { initObservability } from './lib/observability'
+initObservability()
+
 const rootElement = document.getElementById('root')
 if (!rootElement) {
   console.error('Root element not found')
