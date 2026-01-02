@@ -14,20 +14,23 @@ import {
   FileText,
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
+import { useTranslation } from '@/context/LanguageContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
 import { detectMediaType } from '@/utils/mediaDetector'
 import type { Publication } from '@/types/cv'
+import type { UIStrings } from '@/i18n'
 
 interface PublicationCardProps {
   publication: Publication
   onOpenMedia: (url: string, alt: string) => void
+  t: UIStrings
 }
 
-function PublicationCard({ publication, onOpenMedia }: PublicationCardProps) {
-  const displayTitle = publication.title || 'Untitled Publication'
+function PublicationCard({ publication, onOpenMedia, t }: PublicationCardProps) {
+  const displayTitle = publication.title || t.fallbacks.untitled_publication
   const hasLink = !!(publication.url || publication.URL || publication.identifiers?.doi)
   const externalLink = publication.url || publication.URL || (publication.identifiers?.doi ? `https://doi.org/${publication.identifiers.doi}` : null)
   const mediaType = externalLink ? detectMediaType(externalLink) : null
@@ -177,6 +180,7 @@ export function PublicationsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilter, setSelectedFilter] = useState<string>('all')
   const { selectedFocus } = useFilter()
+  const t = useTranslation()
   
   const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
@@ -361,7 +365,7 @@ export function PublicationsSection() {
             ) : (
               <div className="grid gap-6 md:grid-cols-2">
                 {filteredPublications.map((pub, index) => (
-                  <PublicationCard key={index} publication={pub} onOpenMedia={openModal} />
+                  <PublicationCard key={index} publication={pub} onOpenMedia={openModal} t={t} />
                 ))}
               </div>
             )}
@@ -370,7 +374,10 @@ export function PublicationsSection() {
 
         {filteredPublications.length > 0 && (
           <div className="text-sm text-muted-foreground text-center">
-            Showing {filteredPublications.length} of {publicationCounts.all} publication{publicationCounts.all !== 1 ? 's' : ''}
+            {t.counts.showing_x_of_y_publications
+              .replace('{current}', String(filteredPublications.length))
+              .replace('{total}', String(publicationCounts.all))
+              .replace('{plural}', publicationCounts.all !== 1 ? 's' : '')}
             {selectedFocus !== 'Full CV' && (
               <span className="ml-1">
                 (filtered by <span className="font-medium">{selectedFocus}</span>)

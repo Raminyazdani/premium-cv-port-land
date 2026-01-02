@@ -67,7 +67,7 @@ function ProfileLink({ profile, t }: { profile: Profile; t: ReturnType<typeof us
     if (profile.url) {
       const success = await copyToClipboard(profile.url, `${network} link`)
       if (success) {
-        toast.success(`${network} link copied to clipboard`)
+        toast.success(t.toasts.link_copied.replace('{network}', network))
       }
     }
   }

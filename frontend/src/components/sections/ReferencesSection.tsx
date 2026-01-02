@@ -13,24 +13,27 @@ import {
   EyeSlash,
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
+import { useTranslation } from '@/context/LanguageContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
 import type { Reference } from '@/types/cv'
+import type { UIStrings } from '@/i18n'
 import { toast } from 'sonner'
 
 interface ReferenceCardProps {
   reference: Reference
   onOpenMedia: (url: string, alt: string) => void
+  t: UIStrings
 }
 
-function ReferenceCard({ reference, onOpenMedia }: ReferenceCardProps) {
+function ReferenceCard({ reference, onOpenMedia, t }: ReferenceCardProps) {
   const [contactVisible, setContactVisible] = useState(false)
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      toast.success(`${label} copied to clipboard`)
+      toast.success(t.toasts.copied_to_clipboard.replace('{label}', label))
     })
   }
 
@@ -93,12 +96,12 @@ function ReferenceCard({ reference, onOpenMedia }: ReferenceCardProps) {
                 {contactVisible ? (
                   <>
                     <EyeSlash className="mr-1.5" size={16} />
-                    Hide Contact
+                    {t.actions.hide_contact}
                   </>
                 ) : (
                   <>
                     <Eye className="mr-1.5" size={16} />
-                    Show Contact
+                    {t.actions.show_contact}
                   </>
                 )}
               </Button>
@@ -110,7 +113,7 @@ function ReferenceCard({ reference, onOpenMedia }: ReferenceCardProps) {
                       {reference.email.map((email, idx) => (
                         <button
                           key={idx}
-                          onClick={() => copyToClipboard(email, 'Email')}
+                          onClick={() => copyToClipboard(email, t.actions.email)}
                           className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors w-full p-1.5 rounded hover:bg-muted"
                         >
                           <Envelope size={14} weight="duotone" />
@@ -126,7 +129,7 @@ function ReferenceCard({ reference, onOpenMedia }: ReferenceCardProps) {
                         reference.phone.map((phone, idx) => (
                           <button
                             key={idx}
-                            onClick={() => copyToClipboard(phone.formatted || '', 'Phone')}
+                            onClick={() => copyToClipboard(phone.formatted || '', t.actions.phone)}
                             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors w-full p-1.5 rounded hover:bg-muted"
                           >
                             <Phone size={14} weight="duotone" />
@@ -135,7 +138,7 @@ function ReferenceCard({ reference, onOpenMedia }: ReferenceCardProps) {
                         ))
                       ) : typeof reference.phone === 'string' ? (
                         <button
-                          onClick={() => copyToClipboard(reference.phone as string, 'Phone')}
+                          onClick={() => copyToClipboard(reference.phone as string, t.actions.phone)}
                           className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors w-full p-1.5 rounded hover:bg-muted"
                         >
                           <Phone size={14} weight="duotone" />
@@ -169,6 +172,7 @@ export function ReferencesSection() {
   const allReferences = cvData.references || []
   const { selectedFocus } = useFilter()
   const mediaModal = useMediaModal()
+  const t = useTranslation()
 
   const filteredReferences = allReferences.filter(reference => 
     shouldShowEntry(reference.type_key, selectedFocus)
@@ -183,14 +187,14 @@ export function ReferencesSection() {
       <div className="mb-8">
         <h2 className="text-3xl font-bold mb-3 flex items-center gap-3">
           <UserCircle weight="duotone" className="text-primary" size={36} />
-          References
+          {t.sections.references}
         </h2>
         <p className="text-muted-foreground max-w-2xl">
-          Professional references available for verification. Contact details are provided upon request for legitimate professional inquiries.
+          {t.sectionSubtitles.references}
         </p>
         <div className="mt-4 p-3 bg-muted/50 rounded-lg border border-border">
           <p className="text-sm text-muted-foreground italic">
-            Note: Contact information is hidden by default to respect privacy. Click "Show Contact" to reveal details.
+            {t.references.privacy_notice}
           </p>
         </div>
       </div>
@@ -201,6 +205,7 @@ export function ReferencesSection() {
             key={index} 
             reference={reference} 
             onOpenMedia={mediaModal.openModal}
+            t={t}
           />
         ))}
       </div>
