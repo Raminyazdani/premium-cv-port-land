@@ -45,7 +45,7 @@ export function MediaThumbnail({ url, alt = 'Media', className = '', onClick }: 
         type="button"
       >
         <FilePdf size={20} weight="fill" className="text-destructive shrink-0" />
-        <span className="text-sm font-medium truncate max-w-[200px]">{alt || 'PDF Document'}</span>
+        <span className="text-sm font-medium truncate max-w-[200px] text-accent-foreground">{alt || 'PDF Document'}</span>
       </button>
     )
   }

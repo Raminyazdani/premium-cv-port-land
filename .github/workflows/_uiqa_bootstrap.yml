@@ -157,18 +157,17 @@ jobs:
           echo "base-url=http://localhost:${{ inputs.server-port }}" >> $GITHUB_OUTPUT
           echo "📡 Server will be available at: http://localhost:${{ inputs.server-port }}"
           
-      - name: Start preview server
-        id: start-server
+      - name: Start server and health check
+        id: health-check
         run: |
           echo "🚀 Starting preview server on port ${{ inputs.server-port }}..."
           npm run ci:preview > server.log 2>&1 &
           SERVER_PID=$!
-          echo "server-pid=$SERVER_PID" >> $GITHUB_OUTPUT
           echo "Server PID: $SERVER_PID"
           
-      - name: Wait for server (health check)
-        id: health-check
-        run: |
+          # Give server a moment to start
+          sleep 3
+          
           echo "⏳ Waiting for server to be ready..."
           BASE_URL="http://localhost:${{ inputs.server-port }}"
           MAX_ATTEMPTS=${{ inputs.server-timeout }}
@@ -177,8 +176,16 @@ jobs:
           while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
             ATTEMPT=$((ATTEMPT + 1))
             
+            # Check if server process is still running
+            if ! kill -0 $SERVER_PID 2>/dev/null; then
+              echo "❌ Server process died (PID: $SERVER_PID)"
+              echo "Server Log:"
+              cat server.log
+              exit 1
+            fi
+            
             # Check for HTTP 200 status
-            HTTP_CODE=$(curl -s -o /tmp/response.html -w "%{http_code}" "$BASE_URL")
+            HTTP_CODE=$(curl -s -o /tmp/response.html -w "%{http_code}" "$BASE_URL" 2>/dev/null || echo "000")
             
             if [ "$HTTP_CODE" = "200" ]; then
               # Verify response contains valid HTML (case-insensitive)
@@ -186,6 +193,7 @@ jobs:
                 echo "✅ Server is ready! (attempt $ATTEMPT/$MAX_ATTEMPTS)"
                 echo "✅ Valid HTML content verified"
                 echo "ready=true" >> $GITHUB_OUTPUT
+                echo "server-pid=$SERVER_PID" >> $GITHUB_OUTPUT
                 
                 # Show response preview
                 echo ""
@@ -196,15 +204,12 @@ jobs:
                 exit 0
               else
                 echo "   HTTP 200 but invalid HTML content, retrying..."
-                echo "   Response preview (first 500 chars):"
-                head -c 500 /tmp/response.html
-                echo ""
               fi
-            else
-              echo "   HTTP $HTTP_CODE - waiting..."
             fi
             
-            echo "   Attempt $ATTEMPT/$MAX_ATTEMPTS - waiting 1s..."
+            if [ $((ATTEMPT % 10)) -eq 0 ]; then
+              echo "   Attempt $ATTEMPT/$MAX_ATTEMPTS - HTTP: $HTTP_CODE - waiting..."
+            fi
             sleep 1
           done
           
@@ -218,14 +223,11 @@ jobs:
           echo ""
           echo "Last HTTP Code: $HTTP_CODE"
           echo ""
-          echo "Last response (first 500 chars):"
-          head -c 500 /tmp/response.html 2>/dev/null || echo "(no response captured)"
-          echo ""
           echo "Server Log (last 50 lines):"
           tail -50 server.log || echo "(no log available)"
           echo ""
           echo "Processes listening on network:"
-          netstat -tlnp 2>/dev/null || ss -tlnp 2>/dev/null || echo "(netstat/ss not available)"
+          ss -tlnp 2>/dev/null || netstat -tlnp 2>/dev/null || echo "(ss/netstat not available)"
           echo ""
           echo "Node processes:"
           ps aux | grep -E "(node|vite)" || echo "(no node processes found)"
@@ -277,9 +279,13 @@ jobs:
         if: always()
         run: |
           echo "🛑 Stopping preview server..."
-          # Kill any vite preview processes
-          pkill -f "vite preview" || true
-          echo "Server stopped."
+          SERVER_PID="${{ steps.health-check.outputs.server-pid }}"
+          if [ -n "$SERVER_PID" ] && kill -0 "$SERVER_PID" 2>/dev/null; then
+            kill "$SERVER_PID" 2>/dev/null || true
+            echo "Stopped server (PID: $SERVER_PID)"
+          else
+            echo "Server already stopped or PID not found"
+          fi
 
   # Optional: Run additional downstream tests if smoke tests pass
   downstream-ready:
