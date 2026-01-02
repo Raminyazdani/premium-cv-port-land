@@ -51,7 +51,8 @@ describe('sanitizeData', () => {
 
     it('handles mixed array of strings and objects', () => {
       const input = ['AI', { name: 'ML' }, 'Data Science']
-      expect(sanitizeTypeKey(input as any)).toEqual(['AI', 'ML', 'Data Science'])
+      // @ts-expect-error testing mixed type array handling
+      expect(sanitizeTypeKey(input)).toEqual(['AI', 'ML', 'Data Science'])
     })
   })
 
@@ -85,7 +86,8 @@ describe('sanitizeData', () => {
           { type_of: '', URL: 'https://example.com/photo.jpg' }, // invalid - empty type_of
           null // invalid - null
         ]
-      }] as any
+      }]
+      // @ts-expect-error testing sanitization of invalid pictures array with null
       const result = sanitizeBasics(basics)
       expect(result[0]?.Pictures).toHaveLength(1)
       expect(result[0]?.Pictures?.[0]?.URL).toBe('https://example.com/avatar.jpg')
@@ -103,7 +105,8 @@ describe('sanitizeData', () => {
         { network: 'GitHub', username: '', url: '' }, // valid - has network
         { network: '', username: '', url: '' }, // invalid - no fields
         null // invalid - null
-      ] as any
+      ]
+      // @ts-expect-error testing sanitization of array with null values
       const result = sanitizeProfiles(profiles)
       expect(result).toHaveLength(2)
     })
@@ -150,7 +153,8 @@ describe('sanitizeData', () => {
         null,
         undefined,
         'not an object'
-      ] as any
+      ]
+      // @ts-expect-error testing sanitization of array with invalid values
       const result = sanitizeLanguages(languages)
       expect(result).toHaveLength(1)
     })
@@ -195,7 +199,8 @@ describe('sanitizeData', () => {
           ]
         }
       }
-      const result = sanitizeSkills(skills as any)
+      // @ts-expect-error testing sanitization of skills with invalid entries
+      const result = sanitizeSkills(skills)
       expect(result['Technical Skills']?.['Programming']).toHaveLength(1)
       expect(result['Technical Skills']?.['Programming']?.[0]?.long_name).toBe('Python')
     })
@@ -261,7 +266,8 @@ describe('sanitizeData', () => {
         { name: '', email: ['jane@example.com'] }, // valid - has email
         { name: '', email: undefined }, // invalid - no name or email
         null
-      ] as any
+      ]
+      // @ts-expect-error testing sanitization of array with null values
       const result = sanitizeReferences(references)
       expect(result).toHaveLength(2)
     })

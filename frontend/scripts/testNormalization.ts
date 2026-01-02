@@ -16,23 +16,24 @@ import cvDataFA from '../src/data/cv_fa.json'
 
 console.log('🧪 NORMALIZATION TEST SUITE\n')
 
-function testLanguage(lang: Language, rawData: any) {
+function testLanguage(lang: Language, rawData: unknown) {
   console.log(`\n${'='.repeat(60)}`)
   console.log(`Testing ${lang.toUpperCase()}`)
   console.log('='.repeat(60))
   
+  const rawDataObj = rawData as Record<string, unknown>
   console.log('\n📥 RAW DATA:')
   console.log('- typeof:', typeof rawData)
   console.log('- is null:', rawData === null)
-  console.log('- top-level keys:', Object.keys(rawData))
+  console.log('- top-level keys:', Object.keys(rawDataObj))
   
   // Check raw data content
-  Object.keys(rawData).forEach(key => {
-    const value = rawData[key]
+  Object.keys(rawDataObj).forEach(key => {
+    const value = rawDataObj[key]
     if (Array.isArray(value)) {
       console.log(`  - ${key}: array[${value.length}]`)
       if (value.length > 0 && typeof value[0] === 'object') {
-        console.log(`    → First item keys: ${Object.keys(value[0]).join(', ')}`)
+        console.log(`    → First item keys: ${Object.keys(value[0] as object).join(', ')}`)
       }
     } else if (typeof value === 'object' && value !== null) {
       console.log(`  - ${key}: object with keys: ${Object.keys(value).join(', ')}`)

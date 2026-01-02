@@ -6,6 +6,7 @@
 
 import { describe, it, expect } from 'vitest'
 import { loadCVDataForLanguage, loadAndValidateData, extractAllTypeKeys } from '@/utils/dataLoader'
+import type { CVData } from '@/types/cv'
 
 describe('loadCVDataForLanguage', () => {
   it('loads English data when lang is "en"', () => {
@@ -30,8 +31,9 @@ describe('loadCVDataForLanguage', () => {
   })
 
   it('defaults to English for unknown language', () => {
-    // Cast to bypass type checking for this test
-    const data = loadCVDataForLanguage('unknown' as any) as Record<string, unknown>
+    // Testing the default case for unknown language values
+    // @ts-expect-error testing invalid input
+    const data = loadCVDataForLanguage('unknown') as Record<string, unknown>
     const enData = loadCVDataForLanguage('en') as Record<string, unknown>
     expect(data).toEqual(enData)
   })
@@ -131,7 +133,7 @@ describe('extractAllTypeKeys', () => {
   })
 
   it('extracts type keys from education', () => {
-    const mockData = {
+    const mockData: CVData = {
       basics: [],
       profiles: [],
       education: [{ type_key: ['AI', 'ML'] }],
@@ -142,7 +144,7 @@ describe('extractAllTypeKeys', () => {
       projects: [],
       publications: [],
       references: []
-    } as any
+    }
 
     const typeKeys = extractAllTypeKeys(mockData)
 
@@ -174,7 +176,7 @@ describe('extractAllTypeKeys', () => {
   })
 
   it('returns sorted array', () => {
-    const mockData = {
+    const mockData: CVData = {
       basics: [],
       profiles: [],
       education: [{ type_key: ['Z', 'A', 'M'] }],
@@ -185,7 +187,7 @@ describe('extractAllTypeKeys', () => {
       projects: [],
       publications: [],
       references: []
-    } as any
+    }
 
     const typeKeys = extractAllTypeKeys(mockData)
 
@@ -195,7 +197,7 @@ describe('extractAllTypeKeys', () => {
   })
 
   it('removes duplicates', () => {
-    const mockData = {
+    const mockData: CVData = {
       basics: [],
       profiles: [],
       education: [{ type_key: ['AI'] }, { type_key: ['AI'] }],
@@ -206,7 +208,7 @@ describe('extractAllTypeKeys', () => {
       projects: [],
       publications: [],
       references: []
-    } as any
+    }
 
     const typeKeys = extractAllTypeKeys(mockData)
 

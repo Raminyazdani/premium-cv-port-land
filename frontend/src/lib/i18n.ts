@@ -1575,10 +1575,10 @@ export function t(lang: Language, key: string): string {
   const strings = getUIStrings(lang)
   const keys = key.split('.')
   
-  let value: any = strings
+  let value: unknown = strings
   for (const k of keys) {
     if (value && typeof value === 'object' && k in value) {
-      value = value[k]
+      value = (value as Record<string, unknown>)[k]
     } else {
       return key
     }
@@ -1968,9 +1968,13 @@ export function formatList(
   const locale = localeMap[language]
   
   try {
-    // Check if Intl.ListFormat is available
+    // Check if Intl.ListFormat is available (ES2021+)
     if (typeof Intl !== 'undefined' && 'ListFormat' in Intl) {
-      const listFormatter = new (Intl as any).ListFormat(locale, {
+      // Type assertion for Intl.ListFormat (not in ES2020 lib)
+      type ListFormatOptions = { style?: string; type?: string }
+      type ListFormatConstructor = new (locale: string, options?: ListFormatOptions) => { format: (items: string[]) => string }
+      const ListFormat = (Intl as unknown as { ListFormat: ListFormatConstructor }).ListFormat
+      const listFormatter = new ListFormat(locale, {
         style: 'long',
         type
       })

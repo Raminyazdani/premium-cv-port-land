@@ -11,12 +11,12 @@ import type { Language } from '@/utils/dataNormalizer'
 describe('i18n Dictionary Completeness', () => {
   const languages: Language[] = ['en', 'de', 'fa']
 
-  function getAllKeys(obj: any, prefix = ''): string[] {
+  function getAllKeys(obj: object, prefix = ''): string[] {
     const keys: string[] = []
     
     for (const key in obj) {
       const fullKey = prefix ? `${prefix}.${key}` : key
-      const value = obj[key]
+      const value = (obj as Record<string, unknown>)[key]
       
       if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
         keys.push(...getAllKeys(value, fullKey))
@@ -43,10 +43,10 @@ describe('i18n Dictionary Completeness', () => {
     const deStrings = getUIStrings('de')
     const faStrings = getUIStrings('fa')
 
-    const checkNoMissingTranslations = (obj: any, langCode: string, path = '') => {
+    const checkNoMissingTranslations = (obj: object, langCode: string, path = '') => {
       for (const key in obj) {
         const fullPath = path ? `${path}.${key}` : key
-        const value = obj[key]
+        const value = (obj as Record<string, unknown>)[key]
         
         if (typeof value === 'object' && value !== null) {
           checkNoMissingTranslations(value, langCode, fullPath)

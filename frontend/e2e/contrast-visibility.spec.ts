@@ -483,7 +483,7 @@ test.describe('Focus Visibility - Keyboard Navigation Checks', () => {
     expect(backwardPosition).not.toBeNull();
 
     // The key assertion: backward navigation should work (positions differ or tags differ)
-    const navigatedBackward =
+    const _navigatedBackward =
       forwardPosition!.top !== backwardPosition!.top ||
       forwardPosition!.tag !== backwardPosition!.tag;
 

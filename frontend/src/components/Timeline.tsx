@@ -71,7 +71,7 @@ export function Timeline({ entries, className }: TimelineProps) {
 
       // Determine active entry
       let newActiveIndex = -1
-      let newVisibleEntries = new Set<number>()
+      const newVisibleEntries = new Set<number>()
       
       entryRefs.current.forEach((ref, index) => {
         if (!ref) return

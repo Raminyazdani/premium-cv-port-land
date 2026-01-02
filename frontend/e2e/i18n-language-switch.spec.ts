@@ -11,7 +11,7 @@ import { test, expect } from '@playwright/test';
  */
 
 // Sample of UI elements that should change between languages
-const UI_ELEMENTS_TO_CHECK = [
+const _UI_ELEMENTS_TO_CHECK = [
   { testId: 'education', expectedTranslations: { en: 'Education', de: 'Ausbildung', fa: 'تحصیلات' } },
   { testId: 'skills', expectedTranslations: { en: 'Skills', de: 'Fähigkeiten', fa: 'مهارت‌ها' } },
   { testId: 'experience', expectedTranslations: { en: 'Experience', de: 'Erfahrung', fa: 'تجربیات' } },
@@ -166,7 +166,7 @@ test.describe('i18n Language Switch Verification', () => {
     await page.waitForLoadState('networkidle');
     
     // Find and click language selector
-    const languageButton = page.locator('button').filter({ has: page.locator('svg') }).filter({ hasText: /EN|English/i }).first();
+    const _languageButton = page.locator('button').filter({ has: page.locator('svg') }).filter({ hasText: /EN|English/i }).first();
     
     // If there's a dropdown language selector, use it
     const languageSelectors = await page.locator('[aria-label*="language" i], [aria-label*="sprache" i], [aria-label*="زبان" i]').all();

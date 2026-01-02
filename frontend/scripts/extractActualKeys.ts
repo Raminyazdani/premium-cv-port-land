@@ -15,7 +15,7 @@ console.log('🔍 EXTRACTING ACTUAL KEYS FROM LOCKED FILES\n')
 console.log('=' .repeat(80))
 
 // Helper to get keys from first item in array
-function getKeysFromFirstItem(arr: any[]): string[] {
+function getKeysFromFirstItem(arr: unknown[]): string[] {
   if (!Array.isArray(arr) || arr.length === 0) return []
   const first = arr[0]
   if (!first || typeof first !== 'object') return []
