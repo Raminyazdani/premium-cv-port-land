@@ -171,21 +171,22 @@ export function SoundEffectsProvider({ children }: SoundEffectsProviderProps) {
     config.frequencies.forEach((freq, index) => {
       const oscillator = ctx.createOscillator()
       const envelope = ctx.createGain()
+      const duration = config.durations[index] ?? 0.1
       
       oscillator.type = config.type
       oscillator.frequency.value = freq
       
       envelope.gain.value = 0
       envelope.gain.linearRampToValueAtTime(settings.volume, currentTime + 0.01)
-      envelope.gain.linearRampToValueAtTime(0, currentTime + config.durations[index])
+      envelope.gain.linearRampToValueAtTime(0, currentTime + duration)
       
       oscillator.connect(envelope)
       envelope.connect(gainNodeRef.current || ctx.destination)
       
       oscillator.start(currentTime)
-      oscillator.stop(currentTime + config.durations[index])
+      oscillator.stop(currentTime + duration)
       
-      currentTime += config.durations[index] * 0.8 // Slight overlap
+      currentTime += duration * 0.8 // Slight overlap
     })
   }, [settings.enabled, settings.volume, getAudioContext])
 
@@ -241,7 +242,10 @@ export function SoundSettingsPanel({ className }: { className?: string }) {
           </Label>
           <Slider
             value={[settings.volume * 100]}
-            onValueChange={([value]) => setVolume(value / 100)}
+            onValueChange={(values) => {
+              const value = values[0] ?? 50
+              setVolume(value / 100)
+            }}
             max={100}
             step={5}
             className="w-full"

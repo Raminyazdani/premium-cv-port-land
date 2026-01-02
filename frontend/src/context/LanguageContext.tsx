@@ -47,10 +47,14 @@ const SUPPORTED_LANGUAGES: Language[] = Object.keys(LANGUAGE_METADATA) as Langua
  * To add a new language, just add it to LANGUAGE_METADATA.
  */
 export function getAvailableLanguages(): Array<{ code: Language; displayName: string; direction: 'ltr' | 'rtl' }> {
-  return SUPPORTED_LANGUAGES.map(code => ({
-    code,
-    ...LANGUAGE_METADATA[code]
-  }))
+  return SUPPORTED_LANGUAGES.map(code => {
+    const metadata = LANGUAGE_METADATA[code] ?? { displayName: code, direction: 'ltr' as const }
+    return {
+      code,
+      displayName: metadata.displayName,
+      direction: metadata.direction
+    }
+  })
 }
 
 /**
@@ -79,8 +83,9 @@ function detectInitialLanguage(): Language {
   }
 
   // 3. Check browser language
-  const browserLang = navigator.language.split('-')[0].toLowerCase()
-  if (SUPPORTED_LANGUAGES.includes(browserLang as Language)) {
+  const browserLangParts = navigator.language.split('-')
+  const browserLang = (browserLangParts[0] ?? '').toLowerCase()
+  if (browserLang && SUPPORTED_LANGUAGES.includes(browserLang as Language)) {
     return browserLang as Language
   }
 
@@ -98,7 +103,7 @@ function applyLanguageToDOM(lang: Language) {
   html.setAttribute('lang', lang)
   
   // Set dir attribute using metadata
-  const metadata = LANGUAGE_METADATA[lang] || LANGUAGE_METADATA.en
+  const metadata = LANGUAGE_METADATA[lang] ?? LANGUAGE_METADATA['en'] ?? { displayName: 'English', direction: 'ltr' as const }
   html.setAttribute('dir', metadata.direction)
   
   // Update URL without reload
@@ -109,7 +114,7 @@ function applyLanguageToDOM(lang: Language) {
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => detectInitialLanguage())
-  const metadata = LANGUAGE_METADATA[language] || LANGUAGE_METADATA.en
+  const metadata = LANGUAGE_METADATA[language] ?? LANGUAGE_METADATA['en'] ?? { displayName: 'English', direction: 'ltr' as const }
   const isRTL = metadata.direction === 'rtl'
 
   // Apply language to DOM on mount and when language changes

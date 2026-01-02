@@ -25,20 +25,21 @@ export function CelebrationAnimation({ show, onComplete }: CelebrationAnimationP
   useEffect(() => {
     if (show) {
       // Generate random particles
+      const colors = [
+        'bg-red-500',
+        'bg-blue-500',
+        'bg-green-500',
+        'bg-yellow-500',
+        'bg-purple-500',
+        'bg-pink-500',
+        'bg-orange-500',
+      ]
       const newParticles = Array.from({ length: 50 }, (_, i) => ({
         id: i,
         left: Math.random() * 100,
         animationDelay: Math.random() * 0.5,
         duration: 2 + Math.random() * 1,
-        color: [
-          'bg-red-500',
-          'bg-blue-500',
-          'bg-green-500',
-          'bg-yellow-500',
-          'bg-purple-500',
-          'bg-pink-500',
-          'bg-orange-500',
-        ][Math.floor(Math.random() * 7)],
+        color: colors[Math.floor(Math.random() * colors.length)] ?? 'bg-blue-500',
       }))
 
       setParticles(newParticles)
@@ -51,6 +52,7 @@ export function CelebrationAnimation({ show, onComplete }: CelebrationAnimationP
 
       return () => clearTimeout(timeout)
     }
+    return undefined
   }, [show, onComplete])
 
   if (!show && particles.length === 0) {

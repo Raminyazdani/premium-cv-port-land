@@ -12,7 +12,7 @@ import {
   CaretUp,
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
-import { useTranslation, useFormatters } from '@/context/LanguageContext'
+import { useTranslation } from '@/context/LanguageContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import type { Experience } from '@/types/cv'
 
@@ -52,9 +52,12 @@ function parseDuration(durationStr?: string | null, presentLabel: string = 'Pres
     }
   }
 
-  const startDate = parseDate(parts[0])
-  const endDate = parseDate(parts[1])
-  const displayDuration = `${formatDate(parts[0])} – ${formatDate(parts[1])}`
+  const startPart = parts[0] ?? ''
+  const endPart = parts[1] ?? ''
+  
+  const startDate = parseDate(startPart)
+  const endDate = parseDate(endPart)
+  const displayDuration = `${formatDate(startPart)} – ${formatDate(endPart)}`
 
   return { startDate, endDate, displayDuration }
 }
@@ -70,15 +73,21 @@ function inferCategory(institution?: string | null, role?: string | null): 'Acad
   return isAcademic ? 'Academic' : 'Industry'
 }
 
+interface ProcessedExperience extends Omit<Experience, 'startDate' | 'endDate'> {
+  startDate: Date | null
+  endDate: Date | null
+  category: 'Academic' | 'Industry'
+}
+
 interface ExperienceCardProps {
-  experience: Experience
+  experience: ProcessedExperience
   presentLabel: string
 }
 
 function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const { displayDuration } = parseDuration(experience.duration, presentLabel)
-  const category = inferCategory(experience.institution, experience.role)
+  const category = experience.category
 
   const hasExpandableContent = experience.description && experience.description.length > 150
 
@@ -206,7 +215,7 @@ export function ExperiencesSection() {
     })
   }, [processedExperiences])
 
-  const grouped = useMemo(() => {
+  const grouped = useMemo((): Record<string, typeof sortedExperiences> => {
     if (groupBy === 'none') {
       return { All: sortedExperiences }
     }
@@ -214,10 +223,11 @@ export function ExperiencesSection() {
     const academic = sortedExperiences.filter(exp => exp.category === 'Academic')
     const industry = sortedExperiences.filter(exp => exp.category === 'Industry')
     
-    return {
-      ...(academic.length > 0 && { Academic: academic }),
-      ...(industry.length > 0 && { Industry: industry }),
-    }
+    const result: Record<string, typeof sortedExperiences> = {}
+    if (academic.length > 0) result['Academic'] = academic
+    if (industry.length > 0) result['Industry'] = industry
+    
+    return result
   }, [sortedExperiences, groupBy])
 
   if (experiences.length === 0) {

@@ -75,8 +75,9 @@ export function SkillsSection() {
   }, [filteredSkills, getSkillLabel])
 
   useEffect(() => {
-    if (skillsArray.length > 0 && expandedCategories.size === 0) {
-      setExpandedCategories(new Set([skillsArray[0].category]))
+    const firstSkill = skillsArray[0]
+    if (skillsArray.length > 0 && expandedCategories.size === 0 && firstSkill) {
+      setExpandedCategories(new Set([firstSkill.category]))
     }
   }, [skillsArray.length])
 

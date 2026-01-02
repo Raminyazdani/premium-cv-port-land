@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   BookOpen,
@@ -16,7 +15,6 @@ import {
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
-import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'

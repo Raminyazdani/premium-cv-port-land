@@ -84,22 +84,33 @@ export function LanguageCarousel() {
 
   const selectCurrent = () => {
     const selected = LANGUAGES[selectedIndex]
-    setLanguage(selected.code)
+    if (selected) {
+      setLanguage(selected.code)
+    }
   }
 
   const selectLanguage = (index: number) => {
-    setSelectedIndex(index)
-    setLanguage(LANGUAGES[index].code)
+    const lang = LANGUAGES[index]
+    if (lang) {
+      setSelectedIndex(index)
+      setLanguage(lang.code)
+    }
   }
 
   // Touch handlers for swipe support
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null)
-    setTouchStart(e.targetTouches[0].clientX)
+    const touch = e.targetTouches[0]
+    if (touch) {
+      setTouchStart(touch.clientX)
+    }
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX)
+    const touch = e.targetTouches[0]
+    if (touch) {
+      setTouchEnd(touch.clientX)
+    }
   }
 
   const handleTouchEnd = () => {

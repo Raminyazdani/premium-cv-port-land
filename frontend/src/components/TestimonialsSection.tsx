@@ -108,13 +108,19 @@ export function TestimonialsSection() {
 
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX)
+    const touch = e.touches[0]
+    if (touch) {
+      setTouchStart(touch.clientX)
+    }
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStart === null) return
 
-    const touchEnd = e.changedTouches[0].clientX
+    const touch = e.changedTouches[0]
+    if (!touch) return
+    
+    const touchEnd = touch.clientX
     const diff = touchStart - touchEnd
 
     if (Math.abs(diff) > 50) {
@@ -143,6 +149,10 @@ export function TestimonialsSection() {
   }
 
   const currentTestimonial = testimonials[currentIndex]
+  
+  if (!currentTestimonial) {
+    return null
+  }
 
   return (
     <section

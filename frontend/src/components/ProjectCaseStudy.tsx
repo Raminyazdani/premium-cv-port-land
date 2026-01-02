@@ -198,7 +198,7 @@ export function ProjectCaseStudyCard({
   deepLinked = false
 }: ProjectCaseStudyCardProps) {
   const [expanded, setExpanded] = useState(isExpanded || deepLinked)
-  const { isRTL } = useLanguage()
+  useLanguage() // Maintain hook call for context subscription
   const cardRef = useRef<HTMLDivElement>(null)
   const t = useTranslation()
 

@@ -2035,17 +2035,21 @@ export function formatList(
       return listFormatter.format(items)
     }
   } catch {
-    // Fallback for unsupported browsers
-    if (items.length === 2) {
-      const conjunction = type === 'conjunction' 
-        ? (language === 'de' ? ' und ' : language === 'fa' ? ' و ' : ' and ')
-        : (language === 'de' ? ' oder ' : language === 'fa' ? ' یا ' : ' or ')
-      return items.join(conjunction)
-    }
-    return items.slice(0, -1).join(', ') + 
-           (type === 'conjunction' 
-             ? (language === 'de' ? ' und ' : language === 'fa' ? ' و ' : ', and ')
-             : (language === 'de' ? ' oder ' : language === 'fa' ? ' یا ' : ', or ')) + 
-           items[items.length - 1]
+    // Fallback below will handle this case
   }
+  
+  // Fallback for unsupported browsers or when Intl.ListFormat is not available
+  if (items.length === 2) {
+    const conjunction = type === 'conjunction' 
+      ? (language === 'de' ? ' und ' : language === 'fa' ? ' و ' : ' and ')
+      : (language === 'de' ? ' oder ' : language === 'fa' ? ' یا ' : ' or ')
+    return items.join(conjunction)
+  }
+  
+  const lastItem = items[items.length - 1] ?? ''
+  return items.slice(0, -1).join(', ') + 
+         (type === 'conjunction' 
+           ? (language === 'de' ? ' und ' : language === 'fa' ? ' و ' : ', and ')
+           : (language === 'de' ? ' oder ' : language === 'fa' ? ' یا ' : ', or ')) + 
+         lastItem
 }

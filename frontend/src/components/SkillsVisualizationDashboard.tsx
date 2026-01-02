@@ -85,7 +85,7 @@ interface BubbleData {
 export function SkillsVisualizationDashboard() {
   const data = useCV()
   const skills = (data.skills as Skills) ?? {}
-  const { isRTL } = useLanguage()
+  const { isRTL: _ } = useLanguage() // Destructure for context subscription; unused for now
   const getSkillLabel = useSkillCategoryLabel()
   const { ref, isVisible } = useScrollAnimation()
   const [chartType, setChartType] = useState<ChartType>('radar')
@@ -249,7 +249,9 @@ export function SkillsVisualizationDashboard() {
                       <Tooltip
                         content={({ active, payload }) => {
                           if (active && payload && payload.length) {
-                            const data = payload[0].payload as SkillCategoryData
+                            const payloadItem = payload[0]
+                            if (!payloadItem) return null
+                            const data = payloadItem.payload as SkillCategoryData
                             return (
                               <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
                                 <p className="font-semibold text-sm">{data.displayCategory}</p>
@@ -295,7 +297,9 @@ export function SkillsVisualizationDashboard() {
                       <Tooltip
                         content={({ active, payload }) => {
                           if (active && payload && payload.length) {
-                            const data = payload[0].payload as SkillCategoryData
+                            const payloadItem = payload[0]
+                            if (!payloadItem) return null
+                            const data = payloadItem.payload as SkillCategoryData
                             return (
                               <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
                                 <p className="font-semibold text-sm">{data.displayCategory}</p>
@@ -354,7 +358,9 @@ export function SkillsVisualizationDashboard() {
                       <Tooltip
                         content={({ active, payload }) => {
                           if (active && payload && payload.length) {
-                            const data = payload[0].payload as BubbleData
+                            const payloadItem = payload[0]
+                            if (!payloadItem) return null
+                            const data = payloadItem.payload as BubbleData
                             return (
                               <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
                                 <p className="font-semibold text-sm">{data.displayName}</p>
