@@ -55,7 +55,7 @@ function PublicationCard({ publication, onOpenMedia }: PublicationCardProps) {
     return null
   }, [publication.journal, publication.publisher, publication.institution])
 
-  const typeVariant = useMemo(() => {
+  const typeVariant = useMemo((): 'default' | 'secondary' | 'outline' => {
     const type = publication.type?.toLowerCase() || ''
     if (type.includes('thesis')) return 'default'
     if (type.includes('chapter')) return 'secondary'
@@ -82,7 +82,7 @@ function PublicationCard({ publication, onOpenMedia }: PublicationCardProps) {
             
             <div className="flex flex-wrap gap-1.5 mb-2">
               {publication.type && (
-                <Badge variant={typeVariant as any} className="text-xs">
+                <Badge variant={typeVariant} className="text-xs">
                   <FileText className="h-3 w-3 mr-1" />
                   {publication.type}
                 </Badge>

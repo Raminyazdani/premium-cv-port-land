@@ -111,7 +111,7 @@ export function BookingWidget() {
           time: selectedTime,
         })
       }
-    } catch (error) {
+    } catch (_error) {
       setStatusMessage(t.booking.error_description)
       toast.error(t.booking.error_title, {
         description: t.booking.error_description,

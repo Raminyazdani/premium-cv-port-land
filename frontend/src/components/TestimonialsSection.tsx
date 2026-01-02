@@ -95,10 +95,18 @@ export function TestimonialsSection() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
         e.preventDefault()
-        isRTL ? goToNext() : goToPrevious()
+        if (isRTL) {
+          goToNext()
+        } else {
+          goToPrevious()
+        }
       } else if (e.key === 'ArrowRight') {
         e.preventDefault()
-        isRTL ? goToPrevious() : goToNext()
+        if (isRTL) {
+          goToPrevious()
+        } else {
+          goToNext()
+        }
       }
     }
 
@@ -125,9 +133,17 @@ export function TestimonialsSection() {
 
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
-        isRTL ? goToPrevious() : goToNext()
+        if (isRTL) {
+          goToPrevious()
+        } else {
+          goToNext()
+        }
       } else {
-        isRTL ? goToNext() : goToPrevious()
+        if (isRTL) {
+          goToNext()
+        } else {
+          goToPrevious()
+        }
       }
     }
 

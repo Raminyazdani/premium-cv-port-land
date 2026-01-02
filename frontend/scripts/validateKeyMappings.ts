@@ -54,9 +54,12 @@ function validateFieldKeys(
   deSection: string,
   faSection: string
 ) {
-  const enData = (cvDataEN as any)[enSection]
-  const deData = (cvDataDE as any)[deSection]
-  const faData = (cvDataFA as any)[faSection]
+  const cvDataENRecord = cvDataEN as Record<string, unknown>
+  const cvDataDERecord = cvDataDE as Record<string, unknown>
+  const cvDataFARecord = cvDataFA as Record<string, unknown>
+  const enData = cvDataENRecord[enSection]
+  const deData = cvDataDERecord[deSection]
+  const faData = cvDataFARecord[faSection]
   
   if (!enData || !deData || !faData) {
     console.warn(`⚠️  Skipping ${sectionName} - section not found`)
@@ -155,8 +158,10 @@ validateFieldKeys(
 
 // Validate workshop/certification structure
 const enWorkshops = cvDataEN.workshop_and_certifications
-const deWorkshops = (cvDataDE as any).schulungen_und_zertifikate
-const faWorkshops = (cvDataFA as any)['کارگاه‌ها_و_گواهینامه‌ها']
+const cvDataDERecord = cvDataDE as Record<string, unknown>
+const cvDataFARecord = cvDataFA as Record<string, unknown>
+const deWorkshops = cvDataDERecord['schulungen_und_zertifikate'] as typeof enWorkshops | undefined
+const faWorkshops = cvDataFARecord['کارگاه‌ها_و_گواهینامه‌ها'] as typeof enWorkshops | undefined
 
 if (enWorkshops && deWorkshops && faWorkshops && 
     enWorkshops.length > 0 && deWorkshops.length > 0 && faWorkshops.length > 0) {

@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
 import { CVDataProvider, useCVData, useCV } from '@/context/CVDataContext'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { logDataLoadingDebug } from '@/utils/debugDataLoading'

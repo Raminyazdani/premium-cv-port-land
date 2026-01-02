@@ -152,7 +152,7 @@ export function ContactForm() {
       setTimeout(() => {
         document.getElementById('name')?.focus()
       }, 100)
-    } catch (error) {
+    } catch (_error) {
       setStatusMessage(t.forms.error)
       toast.error(t.forms.error, {
         description: t.forms.error_message,

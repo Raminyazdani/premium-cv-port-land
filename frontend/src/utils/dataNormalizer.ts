@@ -38,7 +38,7 @@ const EXPECTED_SECTIONS = [
  * @param sourceLang - Language of the source file (for logging only)
  * @returns Validated CV data with canonical English keys
  */
-export function normalizeCVData(rawData: any, sourceLang: Language): CVData {
+export function normalizeCVData(rawData: unknown, sourceLang: Language): CVData {
   logger.debug(`[normalizeCVData] Loading CV data for language: ${sourceLang}`)
   
   if (!rawData || typeof rawData !== 'object') {
@@ -46,18 +46,19 @@ export function normalizeCVData(rawData: any, sourceLang: Language): CVData {
     throw new Error('Invalid CV data: expected an object')
   }
 
-  const dataKeys = Object.keys(rawData)
+  const typedData = rawData as Record<string, unknown>
+  const dataKeys = Object.keys(typedData)
   logger.debug(`[normalizeCVData] CV data keys:`, dataKeys)
   
   // Validate that all expected sections exist
-  const missingSections = EXPECTED_SECTIONS.filter(section => !(section in rawData))
+  const missingSections = EXPECTED_SECTIONS.filter(section => !(section in typedData))
   if (missingSections.length > 0) {
     logger.warn(`[normalizeCVData] Missing sections:`, missingSections)
   }
   
   // Log section types for debugging
   EXPECTED_SECTIONS.forEach(section => {
-    const value = rawData[section]
+    const value = typedData[section]
     if (value !== undefined) {
       const typeInfo = Array.isArray(value) 
         ? `array[${value.length}]` 
@@ -71,7 +72,7 @@ export function normalizeCVData(rawData: any, sourceLang: Language): CVData {
   logger.debug(`[normalizeCVData] ✅ CV data loaded successfully`)
   
   // Return data as-is (already in canonical format)
-  return rawData as CVData
+  return typedData as CVData
 }
 
 /**
@@ -88,7 +89,8 @@ export function validateNormalizedData(data: CVData): {
   const actualKeys = Object.keys(data)
   
   const missingKeys = expectedKeys.filter(key => !(key in data))
-  const extraKeys = actualKeys.filter(key => !expectedKeys.includes(key as any))
+  const expectedKeySet = new Set<string>(expectedKeys)
+  const extraKeys = actualKeys.filter(key => !expectedKeySet.has(key))
   
   return {
     isValid: missingKeys.length === 0,
