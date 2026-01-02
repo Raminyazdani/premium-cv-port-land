@@ -57,7 +57,7 @@ function isDebugEnabled(): boolean {
   try {
     // Check Vite environment variable
     const debugEnv = import.meta.env.VITE_DEBUG_CV
-    if (debugEnv === 'true' || debugEnv === true) {
+    if (debugEnv === 'true') {
       return true
     }
   } catch {
