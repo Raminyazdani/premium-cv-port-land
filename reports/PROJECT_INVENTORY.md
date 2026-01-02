@@ -49,9 +49,9 @@ npm run typecheck  # TypeScript type checking
 
 | Area | Technology | Version | Evidence |
 |------|------------|---------|----------|
-| **Framework** | React | 19.0.0 | `frontend/package.json:L89` |
-| **Language** | TypeScript | ~5.7.2 | `frontend/package.json:L130` |
-| **Build Tool** | Vite | 7.2.6 | `frontend/package.json:L131` |
+| **Framework** | React | 19.0.0 | `frontend/package.json:L91` |
+| **Language** | TypeScript | ~5.7.2 | `frontend/package.json:L128` |
+| **Build Tool** | Vite | 7.2.6 | `frontend/package.json:L130` |
 | **Styling** | Tailwind CSS | 4.1.11 | `frontend/package.json:L127` |
 | **UI Component Library** | Radix UI (Shadcn-style) | Multiple v1.x-2.x | `frontend/package.json:L48-L74` |
 | **Icon Library** | Phosphor Icons | 2.1.7 | `frontend/package.json:L47` |
@@ -61,11 +61,11 @@ npm run typecheck  # TypeScript type checking
 | **Form Handling** | React Hook Form + Zod | 7.54.2 / 3.25.76 | `frontend/package.json:L96,L104` |
 | **Date Utilities** | date-fns | 3.6.0 | `frontend/package.json:L84` |
 | **Charting** | Recharts + D3 | 2.15.1 / 7.9.0 | `frontend/package.json:L97,L83` |
-| **Unit Testing** | Vitest | 4.0.16 | `frontend/package.json:L132` |
-| **E2E Testing** | Playwright | 1.57.0 | `frontend/package.json:L108` |
+| **Unit Testing** | Vitest | 4.0.16 | `frontend/package.json:L131` |
+| **E2E Testing** | Playwright | 1.57.0 | `frontend/package.json:L110` |
 | **Accessibility Testing** | @axe-core/playwright | 4.10.2 | `frontend/package.json:L107` |
 | **Linting** | ESLint | 9.28.0 | `frontend/package.json:L119` |
-| **Formatting** | Prettier | 3.7.4 | `frontend/package.json:L125` |
+| **Formatting** | Prettier | 3.7.4 | `frontend/package.json:L126` |
 | **Error Tracking** | Sentry | 10.32.1 | `frontend/package.json:L75` |
 | **Performance Auditing** | Lighthouse CI | 0.15.1 | `frontend/package.json:L109` |
 | **Package Manager** | npm | N/A (lockfile v3) | `frontend/package-lock.json` |
