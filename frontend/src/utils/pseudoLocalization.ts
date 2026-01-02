@@ -66,6 +66,8 @@ export function isPseudoLocEnabled(): boolean {
   }
   
   // Check environment variable
+  // Note: Using direct import.meta.env here for SSR compatibility
+  // The env module validates this at build time
   if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_PSEUDO_LOC === 'true') {
     return true
   }
