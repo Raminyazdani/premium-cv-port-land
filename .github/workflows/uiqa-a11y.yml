@@ -107,7 +107,7 @@ jobs:
         id: a11y-tests
         run: |
           echo "♿ Running accessibility tests..."
-          npx playwright test e2e/accessibility.spec.ts --reporter=html 2>&1 | tee a11y-test.log
+          npx playwright test e2e/accessibility.spec.ts 2>&1 | tee a11y-test.log
           TEST_EXIT_CODE=${PIPESTATUS[0]}
           echo "test-exit-code=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
           

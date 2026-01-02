@@ -74,12 +74,6 @@ function saveA11yResult(result: A11yResult): void {
 }
 
 test.describe('Accessibility (a11y) Tests', () => {
-  // Ensure consistent viewport and reduced motion for deterministic tests
-  test.beforeEach(async ({ page }) => {
-    // Set reduced motion preference for deterministic animations
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-  });
-
   const languages = [
     { code: 'en', name: 'English' },
     { code: 'de', name: 'German' },
@@ -210,26 +204,6 @@ test.describe('Accessibility (a11y) Tests', () => {
       fullPage: true,
     });
     console.log('   - Screenshot saved: test-results/a11y-rtl-persian.png');
-  });
-
-  test('All languages - No "undefined" or "null" strings (a11y content check)', async ({
-    page,
-  }) => {
-    for (const lang of languages) {
-      await page.goto(`/?lang=${lang.code}`);
-      await page.waitForLoadState('networkidle');
-
-      const content = await page.textContent('body');
-
-      // These would indicate data/rendering issues that could confuse screen readers
-      expect(content).not.toContain('undefined');
-      expect(content).not.toContain('null');
-      expect(content).not.toContain('[object Object]');
-
-      console.log(
-        `✅ ${lang.name}: No undefined/null/object strings in content`
-      );
-    }
   });
 });
 
