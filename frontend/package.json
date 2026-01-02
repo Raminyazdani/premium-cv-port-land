@@ -24,6 +24,7 @@
         "test:e2e:visual": "playwright test e2e/visual-proof.spec.ts",
         "test:e2e:visual-qa": "playwright test e2e/visual-qa.spec.ts",
         "test:e2e:contrast": "playwright test e2e/contrast-visibility.spec.ts",
+        "test:e2e:ui-states": "playwright test e2e/ui-state-visual.spec.ts",
         "verify-languages": "node scripts/verify-languages.js",
         "smoke-validation": "node scripts/smoke-validation.js",
         "generate-hashes": "node tests/generate-hashes.js",
