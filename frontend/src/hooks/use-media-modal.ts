@@ -27,9 +27,12 @@ export function useMediaModal() {
 
   const navigateToIndex = (index: number) => {
     if (index >= 0 && index < mediaList.length) {
-      setCurrentIndex(index)
-      setCurrentUrl(mediaList[index].url)
-      setCurrentAlt(mediaList[index].alt || '')
+      const media = mediaList[index]
+      if (media) {
+        setCurrentIndex(index)
+        setCurrentUrl(media.url)
+        setCurrentAlt(media.alt || '')
+      }
     }
   }
 

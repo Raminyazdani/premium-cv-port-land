@@ -2,18 +2,18 @@
   "description": "SHA256 hashes of locked data files. DO NOT MODIFY. Changes to these files will cause tests to fail.",
   "locked_files": {
     "src/data/cv.json": {
-      "description": "English CV data - locked up to and including 'projects' section",
+      "description": "English CV data (canonical keys)",
       "hash": "9382f3aa36e5de8ec11971dc62ef362012a87e9778e245a798e902b857625433"
     },
-    "src/data/ramin_de.json": {
-      "description": "German CV data - locked up to and including 'projects' section",
-      "hash": "55a8856434617d890dc85ef0cea6a2205aad44f1f8faa99523952efdd335a645"
+    "src/data/cv_de.json": {
+      "description": "German CV data (canonical keys)",
+      "hash": "1a3bd2a5e233f115bfdff1e5d8b4b10ee2026016fdc380555872f58c804df8cf"
     },
-    "src/data/ramin_fa.json": {
-      "description": "Persian CV data - locked up to and including 'projects' section",
-      "hash": "be36e64a47634fc54a99554662d5a070de536520d1de13784a0728d6aa6a7880"
+    "src/data/cv_fa.json": {
+      "description": "Persian CV data (canonical keys)",
+      "hash": "9cd9c5db1eaf9781e2531fccacb911fedadea2d0387c38163b5091706f661e16"
     }
   },
   "instructions": "To regenerate hashes after intentional file changes, run: npm run generate-hashes",
-  "generated_at": "2025-12-29T01:20:34.269Z"
+  "generated_at": "2026-01-02T14:34:23.308Z"
 }

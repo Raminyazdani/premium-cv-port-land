@@ -152,7 +152,7 @@ export function getAnimationClasses(
  * Hook for staggered list animations
  */
 export function useStaggeredReveal(
-  itemCount: number,
+  _itemCount: number,
   {
     threshold = 0.1,
     rootMargin = '0px 0px -100px 0px',

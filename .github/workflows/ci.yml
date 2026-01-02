@@ -38,7 +38,7 @@ jobs:
       - name: Verify locked files integrity (SHA256)
         run: |
           echo "Computing SHA256 hashes for locked CV files..."
-          sha256sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+          sha256sum src/data/cv.json src/data/cv_de.json src/data/cv_fa.json
           echo ""
           echo "Note: Locked files must not be modified. Any changes will fail tests."
           echo "These hashes are validated in locked-files-integrity.test.ts"

@@ -43,7 +43,7 @@ const DEFAULT_CONFIG: SEOConfig = {
 /**
  * Extract full name from basics data
  */
-export function getFullName(basics: Basics | Basics[] | undefined): string {
+export function getFullName(basics: Basics | Basics[] | null | undefined): string {
   if (!basics) return 'Ramin Yazdani'
   
   const basic = Array.isArray(basics) ? basics[0] : basics
@@ -62,7 +62,7 @@ export function getFullName(basics: Basics | Basics[] | undefined): string {
 /**
  * Get job titles/labels from basics
  */
-export function getJobTitles(basics: Basics | Basics[] | undefined): string[] {
+export function getJobTitles(basics: Basics | Basics[] | null | undefined): string[] {
   if (!basics) return ['Bioinformatician', 'Data Scientist']
   
   const basic = Array.isArray(basics) ? basics[0] : basics
@@ -78,7 +78,7 @@ export function getJobTitles(basics: Basics | Basics[] | undefined): string[] {
 /**
  * Get summary/description from basics
  */
-export function getSummary(basics: Basics | Basics[] | undefined): string {
+export function getSummary(basics: Basics | Basics[] | null | undefined): string {
   if (!basics) return ''
   
   const basic = Array.isArray(basics) ? basics[0] : basics
@@ -88,7 +88,7 @@ export function getSummary(basics: Basics | Basics[] | undefined): string {
 /**
  * Get profile image URL from basics
  */
-export function getProfileImage(basics: Basics | Basics[] | undefined): string {
+export function getProfileImage(basics: Basics | Basics[] | null | undefined): string {
   if (!basics) return DEFAULT_CONFIG.defaultImage
   
   const basic = Array.isArray(basics) ? basics[0] : basics

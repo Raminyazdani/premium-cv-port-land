@@ -96,7 +96,7 @@ jobs:
       - name: Verify locked files integrity
         run: |
           echo "🔒 Verifying locked CV files exist..."
-          for file in src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json; do
+          for file in src/data/cv.json src/data/cv_de.json src/data/cv_fa.json; do
             if [ ! -f "$file" ]; then
               echo "❌ Missing locked file: $file"
               exit 1
@@ -105,7 +105,7 @@ jobs:
           echo "✅ All locked files present"
           echo ""
           echo "🔒 Computing SHA256 hashes for locked CV files..."
-          sha256sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+          sha256sum src/data/cv.json src/data/cv_de.json src/data/cv_fa.json
           echo ""
           echo "Note: Locked files must not be modified. Any changes will fail tests."
           
@@ -124,7 +124,28 @@ jobs:
           echo "📁 Checking build output..."
           test -f dist/index.html || (echo "❌ Missing index.html" && exit 1)
           test -d dist/assets || (echo "❌ Missing assets directory" && exit 1)
+          
           echo "✅ Build artifacts verified"
+          
+          # Verify HTML content
+          if grep -qi "<!DOCTYPE\|<!doctype" dist/index.html && grep -qi "<html" dist/index.html; then
+            echo "✅ dist/index.html contains valid HTML structure"
+          else
+            echo "❌ dist/index.html does not contain valid HTML"
+            echo "First 500 chars:"
+            head -c 500 dist/index.html
+            exit 1
+          fi
+          
+          # Check file size
+          HTML_SIZE=$(stat -f%z dist/index.html 2>/dev/null || stat -c%s dist/index.html 2>/dev/null)
+          echo "📊 index.html size: $HTML_SIZE bytes"
+          if [ "$HTML_SIZE" -lt 500 ]; then
+            echo "❌ index.html too small ($HTML_SIZE < 500 bytes)"
+            exit 1
+          fi
+          
+          echo "📂 Build directory contents:"
           ls -lh dist/
           
       # ========================================
@@ -160,16 +181,27 @@ jobs:
             HTTP_CODE=$(curl -s -o /tmp/response.html -w "%{http_code}" "$BASE_URL")
             
             if [ "$HTTP_CODE" = "200" ]; then
-              # Also verify response contains valid HTML
-              if grep -q "<!DOCTYPE\|<!doctype\|<html" /tmp/response.html 2>/dev/null; then
+              # Verify response contains valid HTML (case-insensitive)
+              if grep -qi "<!DOCTYPE\|<!doctype\|<html" /tmp/response.html 2>/dev/null; then
                 echo "✅ Server is ready! (attempt $ATTEMPT/$MAX_ATTEMPTS)"
                 echo "✅ Valid HTML content verified"
                 echo "ready=true" >> $GITHUB_OUTPUT
+                
+                # Show response preview
+                echo ""
+                echo "📄 Response preview (first 300 chars):"
+                head -c 300 /tmp/response.html
+                echo ""
                 rm -f /tmp/response.html
                 exit 0
               else
                 echo "   HTTP 200 but invalid HTML content, retrying..."
+                echo "   Response preview (first 500 chars):"
+                head -c 500 /tmp/response.html
+                echo ""
               fi
+            else
+              echo "   HTTP $HTTP_CODE - waiting..."
             fi
             
             echo "   Attempt $ATTEMPT/$MAX_ATTEMPTS - waiting 1s..."
@@ -183,6 +215,8 @@ jobs:
           echo ""
           echo "📋 DIAGNOSTICS:"
           echo "==============="
+          echo ""
+          echo "Last HTTP Code: $HTTP_CODE"
           echo ""
           echo "Last response (first 500 chars):"
           head -c 500 /tmp/response.html 2>/dev/null || echo "(no response captured)"

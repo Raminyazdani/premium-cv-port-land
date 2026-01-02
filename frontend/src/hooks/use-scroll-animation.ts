@@ -38,12 +38,12 @@ export function useScrollAnimation(options: UseScrollAnimationOptions = {}) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry && entry.isIntersecting) {
           setIsVisible(true)
           if (triggerOnce) {
             observer.unobserve(element)
           }
-        } else if (!triggerOnce) {
+        } else if (entry && !triggerOnce) {
           setIsVisible(false)
         }
       },
@@ -64,7 +64,7 @@ export function useScrollAnimation(options: UseScrollAnimationOptions = {}) {
 }
 
 export function useStaggeredScrollAnimation(
-  itemCount: number,
+  _itemCount: number,
   options: UseScrollAnimationOptions = {}
 ) {
   const {
@@ -98,12 +98,12 @@ export function useStaggeredScrollAnimation(
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry && entry.isIntersecting) {
           setIsVisible(true)
           if (triggerOnce) {
             observer.unobserve(element)
           }
-        } else if (!triggerOnce) {
+        } else if (entry && !triggerOnce) {
           setIsVisible(false)
         }
       },

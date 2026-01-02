@@ -49,9 +49,11 @@ export function useParallax({ speed = 0.5, disableOnMobile = true }: ParallaxOpt
     // Use IntersectionObserver to only animate when visible
     const observer = new IntersectionObserver(
       ([entry]) => {
-        isIntersecting = entry.isIntersecting
-        if (!isIntersecting) {
-          setOffset(0)
+        if (entry) {
+          isIntersecting = entry.isIntersecting
+          if (!isIntersecting) {
+            setOffset(0)
+          }
         }
       },
       { rootMargin: '100px' }
@@ -149,7 +151,9 @@ export function useParallaxLayers(
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        isIntersecting = entry.isIntersecting
+        if (entry) {
+          isIntersecting = entry.isIntersecting
+        }
       },
       { rootMargin: '100px' }
     )

@@ -106,29 +106,27 @@ function verifyLanguage(lang, filePath, expectedKeys) {
     }
   })
   
-  // Check basics content
+  // Check basics content (all files now use canonical keys)
   if (data.basics && data.basics[0]) {
     log(colors.bright, `\nBasics Content:`)
     const basics = data.basics[0]
-    log(colors.blue, `  First name: ${basics.fname || basics.vorname || basics['نام'] || '(not found)'}`)
-    log(colors.blue, `  Last name: ${basics.lname || basics.nachname || basics['نام خانوادگی'] || '(not found)'}`)
-    log(colors.blue, `  Email: ${basics.email || basics['ایمیل'] || '(not found)'}`)
+    log(colors.blue, `  First name: ${basics.fname || '(not found)'}`)
+    log(colors.blue, `  Last name: ${basics.lname || '(not found)'}`)
+    log(colors.blue, `  Email: ${basics.email || '(not found)'}`)
   }
   
-  // Check education content
+  // Check education content (all files now use canonical keys)
   if (data.education && data.education[0]) {
     log(colors.bright, `\nEducation Content:`)
     const edu = data.education[0]
-    const institution = edu.institution || edu.einrichtung || edu['موسسه'] || '(not found)'
-    log(colors.blue, `  First institution: ${institution}`)
+    log(colors.blue, `  First institution: ${edu.institution || '(not found)'}`)
   }
   
-  // Check projects content
+  // Check projects content (all files now use canonical keys)
   if (data.projects && data.projects.length > 0) {
     log(colors.bright, `\nProjects Content:`)
     const proj = data.projects[0]
-    const title = proj.title || proj.titel || proj['عنوان'] || '(not found)'
-    log(colors.blue, `  First project: ${title}`)
+    log(colors.blue, `  First project: ${proj.title || '(not found)'}`)
   }
   
   log(colors.bright, `\nOverall Status: ${allPassed ? colors.green + '✅ PASSED' : colors.red + '❌ FAILED'}`)
@@ -142,18 +140,17 @@ function main() {
   
   const projectRoot = resolve(__dirname, '..')
   
+  // NOTE: As of Issue 01, all CV files use canonical English keys
+  const canonicalSections = [
+    'basics', 'profiles', 'education', 'languages',
+    'workshop_and_certifications', 'skills', 'experiences',
+    'projects', 'publications', 'references'
+  ]
+  
   const results = {
-    en: verifyLanguage('English', resolve(projectRoot, 'src/data/cv.json')),
-    de: verifyLanguage('German', resolve(projectRoot, 'src/data/ramin_de.json'), [
-      'grunddaten', 'profile', 'ausbildung', 'sprachen',
-      'schulungen_und_zertifikate', 'faehigkeiten', 'erfahrungen',
-      'projekte', 'publikationen', 'referenzen'
-    ]),
-    fa: verifyLanguage('Persian', resolve(projectRoot, 'src/data/ramin_fa.json'), [
-      'اطلاعات_پایه', 'پروفایل‌ها', 'تحصیلات', 'زبان‌ها',
-      'کارگاه‌ها_و_گواهی‌ها', 'مهارت‌ها', 'سوابق',
-      'پروژه‌ها', 'انتشارات', 'معرف‌ها'
-    ])
+    en: verifyLanguage('English', resolve(projectRoot, 'src/data/cv.json'), canonicalSections),
+    de: verifyLanguage('German', resolve(projectRoot, 'src/data/cv_de.json'), canonicalSections),
+    fa: verifyLanguage('Persian', resolve(projectRoot, 'src/data/cv_fa.json'), canonicalSections)
   }
   
   log(colors.bright + colors.cyan, `\n${'='.repeat(60)}`)
