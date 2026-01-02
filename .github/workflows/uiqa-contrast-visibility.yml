@@ -106,9 +106,10 @@ jobs:
       - name: Run contrast and visibility tests
         id: contrast-tests
         run: |
+          set -o pipefail
           echo "🎨 Running contrast and visibility tests..."
           npx playwright test e2e/contrast-visibility.spec.ts 2>&1 | tee contrast-test.log
-          TEST_EXIT_CODE=${PIPESTATUS[0]}
+          TEST_EXIT_CODE=$?
           echo "test-exit-code=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
           
           # Don't fail here - we want to upload artifacts first

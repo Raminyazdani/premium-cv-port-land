@@ -150,12 +150,24 @@ async function hasVisibleFocusIndicator(page: Page): Promise<boolean> {
     const hasOutline = outlineWidth > 0 && outlineStyle !== 'none';
 
     // Check for box-shadow (common for Tailwind focus rings)
+    // Parse shadow values to verify meaningful dimensions
     const boxShadow = styles.boxShadow;
-    const hasBoxShadow = boxShadow && boxShadow !== 'none';
+    let hasBoxShadow = false;
+    if (boxShadow && boxShadow !== 'none') {
+      // Check if shadow has meaningful values (not 0px 0px 0px 0px or fully transparent)
+      // Match patterns like "rgb(x,x,x) 0px 0px 0px 3px" or "0px 0px 0px 3px rgb(...)"
+      const shadowParts = boxShadow.match(/(\d+(?:\.\d+)?px)/g);
+      if (shadowParts) {
+        // If any shadow dimension is > 0, consider it valid
+        hasBoxShadow = shadowParts.some(part => parseFloat(part) > 0);
+      }
+    }
 
     // Check for border changes (some designs use border for focus)
+    // Validate border style and width together
     const borderWidth = parseFloat(styles.borderWidth);
-    const hasBorder = borderWidth > 0;
+    const borderStyle = styles.borderStyle;
+    const hasBorder = borderWidth > 0 && borderStyle !== 'none' && borderStyle !== 'hidden';
 
     // Check for background color change (some designs highlight focused elements)
     // This is harder to detect without a reference, so we'll consider it a pass
