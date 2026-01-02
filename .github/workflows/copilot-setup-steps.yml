@@ -68,8 +68,8 @@ jobs:
         run: |
           echo "Checking locked CV data files exist..."
           test -f src/data/cv.json || (echo "Missing cv.json" && exit 1)
-          test -f src/data/ramin_de.json || (echo "Missing ramin_de.json" && exit 1)
-          test -f src/data/ramin_fa.json || (echo "Missing ramin_fa.json" && exit 1)
+          test -f src/data/cv_de.json || (echo "Missing cv_de.json" && exit 1)
+          test -f src/data/cv_fa.json || (echo "Missing cv_fa.json" && exit 1)
           echo "✅ Locked files verified"
           
       - name: Setup complete

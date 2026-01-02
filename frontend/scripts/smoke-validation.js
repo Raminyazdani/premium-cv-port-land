@@ -33,7 +33,7 @@ function log(color, ...args) {
   console.log(color, ...args, colors.reset)
 }
 
-// Expected sections for each language
+// Expected sections for each language (all files now use canonical English keys)
 const LANGUAGE_SECTIONS = {
   en: [
     'basics', 'profiles', 'education', 'languages',
@@ -41,21 +41,21 @@ const LANGUAGE_SECTIONS = {
     'projects', 'publications', 'references'
   ],
   de: [
-    'grunddaten', 'profile', 'ausbildung', 'sprachen',
-    'schulungen_und_zertifikate', 'faehigkeiten', 'erfahrungen',
-    'projekte', 'publikationen', 'referenzen'
+    'basics', 'profiles', 'education', 'languages',
+    'workshop_and_certifications', 'skills', 'experiences',
+    'projects', 'publications', 'references'
   ],
   fa: [
-    'اطلاعات_پایه', 'پروفایل‌ها', 'تحصیلات', 'زبان‌ها',
-    'کارگاه‌ها_و_گواهی‌ها', 'مهارت‌ها', 'سوابق',
-    'پروژه‌ها', 'انتشارات', 'معرف‌ها'
+    'basics', 'profiles', 'education', 'languages',
+    'workshop_and_certifications', 'skills', 'experiences',
+    'projects', 'publications', 'references'
   ]
 }
 
 const LANGUAGE_FILES = {
   en: 'src/data/cv.json',
-  de: 'src/data/ramin_de.json',
-  fa: 'src/data/ramin_fa.json'
+  de: 'src/data/cv_de.json',
+  fa: 'src/data/cv_fa.json'
 }
 
 function validateLanguage(lang) {
