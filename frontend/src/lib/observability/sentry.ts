@@ -11,6 +11,19 @@
 
 import * as Sentry from '@sentry/react';
 
+// Regex patterns for PII scrubbing
+const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+const PHONE_REGEX = /(\+?\d{1,4}[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9})/g;
+
+/**
+ * Scrub PII from a string
+ */
+function scrubPii(text: string): string {
+  return text
+    .replace(EMAIL_REGEX, '[email]')
+    .replace(PHONE_REGEX, '[phone]');
+}
+
 /**
  * Check if Sentry should be enabled
  */
@@ -42,11 +55,8 @@ export function initSentry(): void {
     return;
   }
 
-  const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
-  
-  if (!sentryDsn) {
-    return;
-  }
+  // Get the DSN (guaranteed to exist after isSentryEnabled check)
+  const sentryDsn = import.meta.env.VITE_SENTRY_DSN as string;
 
   try {
     Sentry.init({
@@ -72,20 +82,27 @@ export function initSentry(): void {
       
       // Privacy: Scrub sensitive data from errors
       beforeSend(event) {
-        // Remove any potential email addresses from messages
+        // Scrub PII from event message
         if (event.message) {
-          event.message = event.message.replace(
-            /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
-            '[email]'
-          );
+          event.message = scrubPii(event.message);
         }
         
-        // Remove phone numbers
-        if (event.message) {
-          event.message = event.message.replace(
-            /(\+?\d{1,4}[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9})/g,
-            '[phone]'
-          );
+        // Scrub PII from exception values
+        if (event.exception?.values) {
+          for (const exception of event.exception.values) {
+            if (exception.value) {
+              exception.value = scrubPii(exception.value);
+            }
+          }
+        }
+        
+        // Scrub PII from breadcrumb messages
+        if (event.breadcrumbs) {
+          for (const breadcrumb of event.breadcrumbs) {
+            if (breadcrumb.message) {
+              breadcrumb.message = scrubPii(breadcrumb.message);
+            }
+          }
         }
         
         return event;

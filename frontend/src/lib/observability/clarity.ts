@@ -9,6 +9,11 @@
  * @see https://clarity.microsoft.com/
  */
 
+// Type definition for window with Clarity
+type WindowWithClarity = Window & {
+  clarity?: (...args: unknown[]) => void;
+};
+
 /**
  * Check if Clarity should be enabled
  */
@@ -30,11 +35,9 @@ export function isClarityEnabled(): boolean {
  * Safely call the clarity function
  */
 function callClarity(...args: unknown[]): void {
-  // Access clarity via indexer to avoid TypeScript issues with dynamic window properties
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const clarityFn = (window as any).clarity;
-  if (typeof clarityFn === 'function') {
-    clarityFn(...args);
+  const win = window as WindowWithClarity;
+  if (typeof win.clarity === 'function') {
+    win.clarity(...args);
   }
 }
 
@@ -42,8 +45,7 @@ function callClarity(...args: unknown[]): void {
  * Check if Clarity is available
  */
 function hasClarityFunction(): boolean {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return typeof (window as any).clarity === 'function';
+  return typeof (window as WindowWithClarity).clarity === 'function';
 }
 
 /**
@@ -60,11 +62,8 @@ export function initClarity(): void {
     return;
   }
 
-  const clarityId = import.meta.env.VITE_CLARITY_ID;
-  
-  if (!clarityId) {
-    return;
-  }
+  // Get the clarity ID (guaranteed to exist after isClarityEnabled check)
+  const clarityId = import.meta.env.VITE_CLARITY_ID as string;
 
   // Check if already initialized
   if (hasClarityFunction()) {
