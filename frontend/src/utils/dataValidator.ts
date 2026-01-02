@@ -419,7 +419,11 @@ export class DataValidator {
     const date = new Date(dateStr)
     if (isNaN(date.getTime())) return false
 
-    const [year, month, day] = dateStr.split('-').map(Number)
+    const parts = dateStr.split('-').map(Number)
+    if (parts.length !== 3) return false
+    
+    const [year, month, day] = parts
+    if (year === undefined || month === undefined || day === undefined) return false
     
     if (month < 1 || month > 12) return false
     if (day < 1 || day > 31) return false
