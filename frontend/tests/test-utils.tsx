@@ -20,14 +20,10 @@
 
 import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions, RenderResult } from '@testing-library/react'
+import { AppProviders } from '@/app/AppProviders'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { CVDataProvider } from '@/context/CVDataContext'
 import { FilterProvider } from '@/context/FilterContext'
-import { KonamiProvider } from '@/context/KonamiContext'
-import { PWAProvider } from '@/context/PWAContext'
-import { AccessibilityProvider } from '@/context/AccessibilityContext'
-import { SoundEffectsProvider } from '@/components/SoundEffects'
-import { MicroFeedbackProvider } from '@/components/MicroFeedback'
 import type { Language } from '@/utils/dataNormalizer'
 
 /**
@@ -43,29 +39,11 @@ interface ProviderOptions {
 }
 
 /**
- * Creates a wrapper component with all application providers.
- * Uses the same provider ordering as AppProviders for consistency.
+ * Wrapper component that reuses AppProviders for full provider coverage.
+ * This ensures test environment matches production exactly.
  */
 function AllProviders({ children }: { children: ReactNode }) {
-  return (
-    <LanguageProvider>
-      <CVDataProvider>
-        <FilterProvider>
-          <KonamiProvider>
-            <PWAProvider>
-              <AccessibilityProvider>
-                <SoundEffectsProvider>
-                  <MicroFeedbackProvider>
-                    {children}
-                  </MicroFeedbackProvider>
-                </SoundEffectsProvider>
-              </AccessibilityProvider>
-            </PWAProvider>
-          </KonamiProvider>
-        </FilterProvider>
-      </CVDataProvider>
-    </LanguageProvider>
-  )
+  return <AppProviders>{children}</AppProviders>
 }
 
 /**
