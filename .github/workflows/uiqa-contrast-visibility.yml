@@ -1,0 +1,260 @@
+# ==============================================================================
+# UI QA Contrast & Visibility CI Workflow
+# ==============================================================================
+#
+# This workflow runs Playwright-based contrast and focus visibility tests
+# against EN/DE/FA language routes.
+#
+# Tests include:
+#   - Axe-core color contrast scans (WCAG 2.1 AA compliance)
+#   - Focus ring visibility checks via keyboard Tab navigation
+#   - RTL layout verification for Persian (FA)
+#   - Theme mode detection (dark mode if supported)
+#
+# Artifacts:
+#   - a11y-contrast-results.json: Structured contrast violation data
+#   - focus-visibility/: Screenshots of focus states and missing indicators
+#   - playwright-report/: HTML report with test results
+#
+# Triggers:
+#   - Pull requests to main/develop
+#   - Manual dispatch
+#
+# ==============================================================================
+
+name: UI QA Contrast & Visibility
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  contrast-visibility:
+    name: Contrast & Focus Visibility Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ========================================
+      # Phase 1: Setup
+      # ========================================
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify locked files integrity
+        run: |
+          echo "🔒 Verifying locked CV files exist..."
+          for file in src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing locked file: $file"
+              exit 1
+            fi
+          done
+          echo "✅ All locked files present"
+          echo ""
+          echo "🔒 Computing SHA256 hashes for locked CV files..."
+          sha256sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+
+      # ========================================
+      # Phase 2: Install Playwright Browsers
+      # ========================================
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # ========================================
+      # Phase 3: Build Application
+      # ========================================
+      - name: Build application
+        run: |
+          echo "🔨 Building application..."
+          npm run build 2>&1 | tee build.log
+
+      - name: Verify build output
+        run: |
+          echo "📁 Checking build output..."
+          test -f dist/index.html || (echo "❌ Missing index.html" && exit 1)
+          test -d dist/assets || (echo "❌ Missing assets directory" && exit 1)
+          echo "✅ Build artifacts verified"
+          ls -lh dist/
+
+      # ========================================
+      # Phase 4: Run Contrast & Visibility Tests
+      # ========================================
+      - name: Create test-results directory
+        run: mkdir -p test-results/focus-visibility
+
+      - name: Run contrast and visibility tests
+        id: contrast-tests
+        run: |
+          echo "🎨 Running contrast and visibility tests..."
+          npx playwright test e2e/contrast-visibility.spec.ts 2>&1 | tee contrast-test.log
+          TEST_EXIT_CODE=${PIPESTATUS[0]}
+          echo "test-exit-code=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          # Don't fail here - we want to upload artifacts first
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            echo "⚠️ Some contrast/visibility tests had issues (exit code: $TEST_EXIT_CODE)"
+          else
+            echo "✅ All contrast/visibility tests passed!"
+          fi
+
+      # ========================================
+      # Phase 5: Generate Summary
+      # ========================================
+      - name: Generate contrast summary
+        if: always()
+        run: |
+          echo "## 🎨 Contrast & Visibility Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check if contrast results exist
+          if [ -f test-results/a11y-contrast-results.json ]; then
+            echo "### Color Contrast Summary" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            node -e "
+              const fs = require('fs');
+              const results = JSON.parse(fs.readFileSync('test-results/a11y-contrast-results.json', 'utf8'));
+              
+              console.log('| Language | Total Violations | Contrast Issues | Passes |');
+              console.log('|----------|-----------------|-----------------|--------|');
+              
+              let totalViolations = 0;
+              let totalContrast = 0;
+              for (const result of results) {
+                const lang = result.language.toUpperCase();
+                totalViolations += result.violations.length;
+                totalContrast += result.totalContrastIssues;
+                console.log(\`| \${lang} | \${result.violations.length} | \${result.totalContrastIssues} | \${result.passes} |\`);
+              }
+              
+              console.log('');
+              if (totalContrast > 0) {
+                console.log(\`⚠️ **Total contrast issues: \${totalContrast}**\`);
+              } else {
+                console.log('✅ **No color contrast issues detected!**');
+              }
+            " >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No a11y-contrast-results.json found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Focus Visibility Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check focus results
+          for lang in en de fa; do
+            if [ -f "test-results/focus-visibility/focus-results-$lang.json" ]; then
+              node -e "
+                const fs = require('fs');
+                const result = JSON.parse(fs.readFileSync('test-results/focus-visibility/focus-results-$lang.json', 'utf8'));
+                const lang = result.language.toUpperCase();
+                const missing = result.missingFocusIndicators.length;
+                const screenshots = result.screenshots.length;
+                
+                if (missing > 0) {
+                  console.log(\`- **\${lang}**: ⚠️ \${missing} elements missing focus indicators (\${screenshots} screenshots)\`);
+                } else {
+                  console.log(\`- **\${lang}**: ✅ All focused elements have visible indicators (\${screenshots} screenshots)\`);
+                }
+              " >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### RTL Verification" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "test-results/focus-visibility/rtl-verification-fa.png" ]; then
+            echo "✅ Persian (FA) RTL layout verified" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ RTL verification screenshot not found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.contrast-tests.outputs.test-exit-code }}" = "0" ]; then
+            echo "✅ All contrast and visibility tests passed!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some tests failed. Check the Playwright report for details." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Download the \`contrast-visibility-report\` artifact for:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`a11y-contrast-results.json\` - Detailed contrast violation data" >> $GITHUB_STEP_SUMMARY
+          echo "- \`focus-visibility/\` - Focus state screenshots" >> $GITHUB_STEP_SUMMARY
+          echo "- \`playwright-report/\` - Full HTML test report" >> $GITHUB_STEP_SUMMARY
+
+      # ========================================
+      # Phase 6: Upload Artifacts
+      # ========================================
+      - name: Upload contrast and focus visibility results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contrast-visibility-report
+          path: |
+            frontend/test-results/a11y-contrast-results.json
+            frontend/test-results/focus-visibility/
+            frontend/test-results/contrast-visibility-summary.json
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contrast-visibility-playwright-report
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/results.json
+            frontend/test-results/junit.xml
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contrast-visibility-build-logs
+          path: |
+            frontend/build.log
+            frontend/contrast-test.log
+          retention-days: 7
+
+      # ========================================
+      # Phase 7: Final Status Check
+      # ========================================
+      - name: Check test results
+        if: always()
+        run: |
+          if [ "${{ steps.contrast-tests.outputs.test-exit-code }}" != "0" ]; then
+            echo "❌ Contrast and visibility tests failed"
+            exit 1
+          fi
+          echo "✅ Contrast and visibility tests completed successfully"
