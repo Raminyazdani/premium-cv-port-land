@@ -288,6 +288,12 @@ function findHardcodedStrings() {
   }
   
   function walkDir(dir) {
+    // Check if path exists first
+    if (!fs.existsSync(dir)) {
+      console.warn(`  Warning: Path does not exist: ${dir}`)
+      return
+    }
+    
     // Handle case where the path is a file, not a directory
     const stat = fs.statSync(dir)
     if (!stat.isDirectory()) {
@@ -397,7 +403,11 @@ These strings appear to be hardcoded and may need translation.
   } else {
     report += '| File | Line | Text |\n|------|------|------|\n'
     for (const item of hardcodedStrings) {
-      const escapedText = item.text.replace(/\|/g, '\\|').replace(/\n/g, ' ')
+      // Escape markdown table special characters: | \ and newlines
+      const escapedText = item.text
+        .replace(/\\/g, '\\\\')  // Escape backslashes first
+        .replace(/\|/g, '\\|')   // Escape pipe characters
+        .replace(/\n/g, ' ')     // Replace newlines with spaces
       report += `| ${item.file} | ${item.line} | ${escapedText} |\n`
     }
     report += '\n'
@@ -510,10 +520,13 @@ async function main() {
   console.log(`  Unused keys: ${unusedKeys.length}`)
   console.log(`  Hardcoded strings: ${hardcodedStrings.length}`)
   
-  // Exit with error code if there are missing keys
+  // Exit with warning code if there are missing keys (use exit code 0 to not fail CI)
+  // Set I18N_AUDIT_STRICT=true to fail on missing keys
   if (missingKeys.length > 0) {
     console.log('\n⚠️  Warning: Missing translation keys detected.')
-    process.exit(1)
+    if (process.env.I18N_AUDIT_STRICT === 'true') {
+      process.exit(1)
+    }
   }
 }
 

@@ -113,10 +113,10 @@ export function pseudoLocalize(
   const placeholders: string[] = []
   let placeholderIndex = 0
   
-  // Extract placeholders
+  // Extract placeholders - use markers with digits only (digits aren't transformed)
   const textWithoutPlaceholders = text.replace(placeholderPattern, (match) => {
     placeholders.push(match)
-    return `__PH${placeholderIndex++}__`
+    return `<<${placeholderIndex++}>>`  // Use << >> as delimiters (not in transform map)
   })
   
   let result = textWithoutPlaceholders
@@ -126,12 +126,10 @@ export function pseudoLocalize(
     result = result.split('').map(char => PSEUDO_CHAR_MAP[char] || char).join('')
   }
   
-  // Restore placeholders
+  // Restore placeholders - << and >> are not in the char map so they remain unchanged
   placeholders.forEach((ph, idx) => {
-    result = result.replace(`__ƤĦ${idx}__`, ph)
+    result = result.replace(`<<${idx}>>`, ph)
   })
-  // Handle the transformed placeholder markers
-  result = result.replace(/__ƤĦ(\d+)__/g, (_, idx) => placeholders[parseInt(idx)] || '')
   
   // Add expansion (simulate longer translated text)
   if (expand) {
