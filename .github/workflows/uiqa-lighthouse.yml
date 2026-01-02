@@ -13,10 +13,10 @@
 #   - HTML and JSON reports are uploaded as artifacts for each PR
 #
 # Thresholds (configurable in frontend/.lighthouserc.cjs):
-#   - Performance: >= 70%
-#   - Accessibility: >= 90%
-#   - Best Practices: >= 80%
-#   - SEO: >= 80%
+#   - Performance: >= 50% (warn)
+#   - Accessibility: >= 90% (error)
+#   - Best Practices: >= 80% (warn)
+#   - SEO: >= 80% (warn)
 #
 # Triggers:
 #   - Pull requests to main/develop
@@ -122,8 +122,8 @@ jobs:
           fi
           
           # Run assertions
-          npx lhci assert --config=.lighthouserc.cjs 2>&1 | tee lhci-assert.log || true
-          ASSERT_EXIT_CODE=$?
+          npx lhci assert --config=.lighthouserc.cjs 2>&1 | tee lhci-assert.log
+          ASSERT_EXIT_CODE=${PIPESTATUS[0]}
           
           echo "assert-exit-code=$ASSERT_EXIT_CODE" >> $GITHUB_OUTPUT
           
@@ -209,10 +209,10 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Category | Minimum Required |" >> $GITHUB_STEP_SUMMARY
           echo "|----------|------------------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Performance | 50% (warn), 70% (error) |" >> $GITHUB_STEP_SUMMARY
-          echo "| Accessibility | 90% |" >> $GITHUB_STEP_SUMMARY
-          echo "| Best Practices | 80% |" >> $GITHUB_STEP_SUMMARY
-          echo "| SEO | 80% |" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance | 50% (warn) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Accessibility | 90% (error) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Best Practices | 80% (warn) |" >> $GITHUB_STEP_SUMMARY
+          echo "| SEO | 80% (warn) |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           # Add assertion result

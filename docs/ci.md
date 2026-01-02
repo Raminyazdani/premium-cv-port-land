@@ -492,7 +492,6 @@ npm run ci:smoke                # Run HTTP smoke tests
 | Category | Minimum Score | Threshold Type |
 |----------|---------------|----------------|
 | Performance | 50% | Warning |
-| Performance | 70% | Error |
 | Accessibility | 90% | Error |
 | Best Practices | 80% | Warning |
 | SEO | 80% | Warning |

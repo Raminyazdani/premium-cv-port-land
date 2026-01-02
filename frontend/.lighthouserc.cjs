@@ -66,13 +66,13 @@ module.exports = {
     assert: {
       // Assertions for score thresholds
       assertions: {
-        // Performance: warn at 50%, error at 70%
+        // Performance: warn at 50% (CI will warn but not fail)
         'categories:performance': ['warn', { minScore: 0.50 }],
-        // Accessibility: warn at 80%, error at 90%
+        // Accessibility: error at 90% (CI will fail if below)
         'categories:accessibility': ['error', { minScore: 0.90 }],
-        // Best Practices: warn at 70%, error at 80%
+        // Best Practices: warn at 80% (CI will warn but not fail)
         'categories:best-practices': ['warn', { minScore: 0.80 }],
-        // SEO: warn at 70%, error at 80%
+        // SEO: warn at 80% (CI will warn but not fail)
         'categories:seo': ['warn', { minScore: 0.80 }],
       },
       // Aggregate method - optimistic helps with flaky scores
