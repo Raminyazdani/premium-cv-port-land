@@ -1,0 +1,245 @@
+# ==============================================================================
+# UI QA Visual Regression CI Workflow
+# ==============================================================================
+#
+# This workflow captures deterministic screenshots of the CV website in all
+# three languages (EN/DE/FA) for visual QA.
+#
+# Purpose:
+#   - Catch visual regressions (overlap, broken layout, RTL issues)
+#   - Provide visual proof for PR reviewers
+#   - Validate RTL support for Persian (FA)
+#
+# Screenshots are captured for:
+#   - Full page views (EN, DE, FA)
+#   - Individual CV sections (basics, education, skills, etc.)
+#   - Multiple viewports (desktop, tablet, mobile)
+#
+# Determinism is ensured via:
+#   - Fixed viewport sizes
+#   - Reduced motion preference
+#   - Network idle waiting
+#   - Chromium browser only
+#
+# Artifacts:
+#   - visual-qa-screenshots/: All captured screenshots organized by language
+#   - playwright-report/: HTML test report
+#
+# Triggers:
+#   - Pull requests to main/develop
+#   - Manual dispatch
+#
+# ==============================================================================
+
+name: UI QA Visual
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  visual-qa:
+    name: Visual QA Screenshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ========================================
+      # Phase 1: Setup
+      # ========================================
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify locked files integrity
+        run: |
+          echo "🔒 Verifying locked CV files exist..."
+          for file in src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing locked file: $file"
+              exit 1
+            fi
+          done
+          echo "✅ All locked files present"
+          echo ""
+          echo "🔒 Computing SHA256 hashes for locked CV files..."
+          sha256sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+
+      # ========================================
+      # Phase 2: Install Playwright Browsers
+      # ========================================
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # ========================================
+      # Phase 3: Build Application
+      # ========================================
+      - name: Build application
+        run: |
+          echo "🔨 Building application..."
+          npm run build 2>&1 | tee build.log
+
+      - name: Verify build output
+        run: |
+          echo "📁 Checking build output..."
+          test -f dist/index.html || (echo "❌ Missing index.html" && exit 1)
+          test -d dist/assets || (echo "❌ Missing assets directory" && exit 1)
+          echo "✅ Build artifacts verified"
+          ls -lh dist/
+
+      # ========================================
+      # Phase 4: Run Visual QA Tests
+      # ========================================
+      - name: Create artifacts directory
+        run: mkdir -p artifacts/visual-qa
+
+      - name: Run Visual QA tests with Playwright
+        id: visual-qa-tests
+        run: |
+          set -o pipefail
+          echo "📸 Running Visual QA tests..."
+          npx playwright test e2e/visual-qa.spec.ts 2>&1 | tee visual-qa-test.log
+          TEST_EXIT_CODE=$?
+          echo "test-exit-code=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          # Don't fail here - we want to upload artifacts first
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            echo "⚠️ Some Visual QA tests had issues (exit code: $TEST_EXIT_CODE)"
+          else
+            echo "✅ All Visual QA tests passed!"
+          fi
+
+      # ========================================
+      # Phase 5: Generate Summary
+      # ========================================
+      - name: Generate Visual QA summary
+        if: always()
+        run: |
+          echo "## 📸 Visual QA Screenshots" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Captured Screenshots" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Language name lookup function
+          get_lang_name() {
+            case "$1" in
+              en) echo "English" ;;
+              de) echo "German" ;;
+              fa) echo "Persian" ;;
+              *) echo "$1" ;;
+            esac
+          }
+          
+          # List all captured screenshots
+          if [ -d "artifacts/visual-qa" ]; then
+            for lang_dir in artifacts/visual-qa/*/; do
+              if [ -d "$lang_dir" ]; then
+                lang=$(basename "$lang_dir")
+                lang_name=$(get_lang_name "$lang")
+                echo "#### ${lang^^} ($lang_name)" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "| Screenshot | Path |" >> $GITHUB_STEP_SUMMARY
+                echo "|------------|------|" >> $GITHUB_STEP_SUMMARY
+                
+                for file in "$lang_dir"*.png; do
+                  if [ -f "$file" ]; then
+                    filename=$(basename "$file")
+                    echo "| $filename | \`$file\` |" >> $GITHUB_STEP_SUMMARY
+                  fi
+                done
+                echo "" >> $GITHUB_STEP_SUMMARY
+              fi
+            done
+            
+            # Count total screenshots
+            total=$(find artifacts/visual-qa -name "*.png" 2>/dev/null | wc -l)
+            echo "**Total screenshots captured:** $total" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No screenshots directory found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.visual-qa-tests.outputs.test-exit-code }}" = "0" ]; then
+            echo "✅ All Visual QA tests passed!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some Visual QA tests failed. Check the Playwright report for details." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### How to Review" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download the \`visual-qa-screenshots\` artifact from this workflow run" >> $GITHUB_STEP_SUMMARY
+          echo "2. Extract and compare screenshots across EN/DE/FA" >> $GITHUB_STEP_SUMMARY
+          echo "3. Check for:" >> $GITHUB_STEP_SUMMARY
+          echo "   - Layout consistency" >> $GITHUB_STEP_SUMMARY
+          echo "   - RTL correctness for Persian (FA)" >> $GITHUB_STEP_SUMMARY
+          echo "   - No overlapping elements" >> $GITHUB_STEP_SUMMARY
+          echo "   - Content is visible and not truncated" >> $GITHUB_STEP_SUMMARY
+
+      # ========================================
+      # Phase 6: Upload Artifacts
+      # ========================================
+      - name: Upload Visual QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-qa-screenshots
+          path: frontend/artifacts/visual-qa/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-qa-playwright-report
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-qa-build-logs
+          path: |
+            frontend/build.log
+            frontend/visual-qa-test.log
+          retention-days: 7
+
+      # ========================================
+      # Phase 7: Final Status Check
+      # ========================================
+      - name: Check test results
+        if: always()
+        run: |
+          if [ "${{ steps.visual-qa-tests.outputs.test-exit-code }}" != "0" ]; then
+            echo "❌ Visual QA tests failed"
+            exit 1
+          fi
+          echo "✅ Visual QA tests completed successfully"
