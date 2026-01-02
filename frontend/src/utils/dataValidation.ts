@@ -81,9 +81,15 @@ export function sanitizeDateString(dateStr: unknown): {
   for (const pattern of datePatterns) {
     const match = trimmed.match(pattern)
     if (match) {
-      const year = parseInt(match[1], 10)
-      let month = match[2] ? parseInt(match[2], 10) : 1
-      let day = match[3] ? parseInt(match[3], 10) : 1
+      const yearStr = match[1]
+      const monthStr = match[2]
+      const dayStr = match[3]
+      
+      if (!yearStr) continue
+      
+      const year = parseInt(yearStr, 10)
+      let month = monthStr ? parseInt(monthStr, 10) : 1
+      let day = dayStr ? parseInt(dayStr, 10) : 1
       let wasModified = false
       
       // Validate year range
@@ -133,6 +139,9 @@ export function sanitizeDateString(dateStr: unknown): {
     const date = new Date(trimmed)
     if (!isNaN(date.getTime())) {
       const isoString = date.toISOString().split('T')[0]
+      if (!isoString) {
+        return { error: 'Date parsing failed', originalValue: trimmed }
+      }
       return {
         isoString,
         date,
@@ -331,9 +340,13 @@ export function getInitials(name: string): string {
   
   const parts = name.trim().split(/\s+/)
   if (parts.length === 0) return DEFAULT_VALUES.FALLBACK_INITIALS
-  if (parts.length === 1) return parts[0].charAt(0).toUpperCase()
+  const firstPart = parts[0]
+  if (!firstPart) return DEFAULT_VALUES.FALLBACK_INITIALS
+  if (parts.length === 1) return firstPart.charAt(0).toUpperCase()
   
-  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()
+  const lastPart = parts[parts.length - 1]
+  if (!lastPart) return firstPart.charAt(0).toUpperCase()
+  return (firstPart.charAt(0) + lastPart.charAt(0)).toUpperCase()
 }
 
 export function truncateText(text: string, maxLength: number): string {

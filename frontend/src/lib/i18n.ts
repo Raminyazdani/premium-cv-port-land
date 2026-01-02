@@ -2021,16 +2021,19 @@ export function formatList(
   type: 'conjunction' | 'disjunction' = 'conjunction'
 ): string {
   if (!items || items.length === 0) return ''
-  if (items.length === 1) return items[0]
+  if (items.length === 1) return items[0] || ''
   
   const locale = localeMap[language]
   
   try {
-    const listFormatter = new Intl.ListFormat(locale, {
-      style: 'long',
-      type
-    })
-    return listFormatter.format(items)
+    // Check if Intl.ListFormat is available
+    if (typeof Intl !== 'undefined' && 'ListFormat' in Intl) {
+      const listFormatter = new (Intl as any).ListFormat(locale, {
+        style: 'long',
+        type
+      })
+      return listFormatter.format(items)
+    }
   } catch {
     // Fallback for unsupported browsers
     if (items.length === 2) {

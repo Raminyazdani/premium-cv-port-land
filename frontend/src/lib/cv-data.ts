@@ -116,14 +116,16 @@ export function getInitials(name?: string | null): string {
   if (parts.length === 0) return DEFAULT_VALUES.FALLBACK_INITIALS
   if (parts.length === 1) {
     const firstWord = parts[0]
+    if (!firstWord) return DEFAULT_VALUES.FALLBACK_INITIALS
     return firstWord.length >= 2 
       ? firstWord.substring(0, 2).toUpperCase()
       : firstWord.charAt(0).toUpperCase()
   }
   
-  const first = parts[0].charAt(0)
-  const last = parts[parts.length - 1].charAt(0)
-  return (first + last).toUpperCase()
+  const first = parts[0]
+  const last = parts[parts.length - 1]
+  if (!first || !last) return DEFAULT_VALUES.FALLBACK_INITIALS
+  return (first.charAt(0) + last.charAt(0)).toUpperCase()
 }
 
 export function formatLocation(location?: Location | Location[] | null): string {

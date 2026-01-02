@@ -222,7 +222,7 @@ export function trackEvent(
 /**
  * Track page view
  */
-export function trackPageView(pagePath?: string, pageTitle?: string): void {
+export function trackPageView(pagePath?: string, _pageTitle?: string): void {
   trackEvent(
     'page_view',
     'view',
