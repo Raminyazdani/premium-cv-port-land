@@ -112,11 +112,17 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null)
-    setTouchStart(e.targetTouches[0].clientX)
+    const touch = e.targetTouches[0]
+    if (touch) {
+      setTouchStart(touch.clientX)
+    }
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX)
+    const touch = e.targetTouches[0]
+    if (touch) {
+      setTouchEnd(touch.clientX)
+    }
   }
 
   const handleTouchEnd = () => {
@@ -136,7 +142,6 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
     return null
   }
 
-  const visibleCards = skillsArray.slice(currentIndex, currentIndex + cardsPerView)
   const canGoPrevious = currentIndex > 0
   const canGoNext = currentIndex < maxIndex
 
@@ -197,7 +202,7 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
             transform: `translateX(-${currentIndex * (100 / cardsPerView + 1.5)}%)`,
           }}
         >
-          {skillsArray.map(({ category, displayCategory, groups, totalCount }, index) => (
+          {skillsArray.map(({ category, displayCategory, groups, totalCount }) => (
             <div
               key={category}
               className={cn(

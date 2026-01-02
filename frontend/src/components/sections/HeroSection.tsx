@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
   EnvelopeSimple,
   MapPin,
@@ -59,7 +58,11 @@ export function HeroSection() {
   const optimizedCover = coverPhoto 
     ? optimizeCloudinaryImage(coverPhoto, { width: 1920, quality: 'auto:good', format: 'auto' })
     : null
-  const location = basics?.location?.[0] ? formatLocation(basics.location[0]) : null
+  const location = (() => {
+    if (!basics?.location) return null
+    const loc = Array.isArray(basics.location) ? basics.location[0] : basics.location
+    return loc ? formatLocation(loc) : null
+  })()
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
   
   // Add parallax effect to cover image

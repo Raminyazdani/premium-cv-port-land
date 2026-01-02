@@ -11,6 +11,16 @@ interface CelebrationAnimationProps {
   onComplete?: () => void
 }
 
+const PARTICLE_COLORS = [
+  'bg-red-500',
+  'bg-blue-500',
+  'bg-green-500',
+  'bg-yellow-500',
+  'bg-purple-500',
+  'bg-pink-500',
+  'bg-orange-500',
+]
+
 export function CelebrationAnimation({ show, onComplete }: CelebrationAnimationProps) {
   const [particles, setParticles] = useState<
     Array<{
@@ -30,15 +40,7 @@ export function CelebrationAnimation({ show, onComplete }: CelebrationAnimationP
         left: Math.random() * 100,
         animationDelay: Math.random() * 0.5,
         duration: 2 + Math.random() * 1,
-        color: [
-          'bg-red-500',
-          'bg-blue-500',
-          'bg-green-500',
-          'bg-yellow-500',
-          'bg-purple-500',
-          'bg-pink-500',
-          'bg-orange-500',
-        ][Math.floor(Math.random() * 7)],
+        color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)] ?? 'bg-blue-500',
       }))
 
       setParticles(newParticles)
@@ -51,6 +53,7 @@ export function CelebrationAnimation({ show, onComplete }: CelebrationAnimationP
 
       return () => clearTimeout(timeout)
     }
+    return undefined
   }, [show, onComplete])
 
   if (!show && particles.length === 0) {

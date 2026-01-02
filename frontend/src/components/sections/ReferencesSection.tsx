@@ -11,7 +11,6 @@ import {
   Buildings,
   Eye,
   EyeSlash,
-  FilePdf,
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'

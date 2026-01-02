@@ -32,7 +32,7 @@ const iconMap: Record<string, typeof LinkedinLogo> = {
 
 function SocialLink({ profile, t }: { profile: Profile; t: ReturnType<typeof useTranslation> }) {
   const network = profile.network?.toLowerCase() ?? 'default'
-  const Icon = iconMap[network] ?? iconMap.default
+  const Icon = iconMap[network] ?? iconMap['default'] ?? Globe
   
   if (!profile.url) return null
   

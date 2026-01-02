@@ -29,7 +29,8 @@ export function CookieConsentBanner({ onAccept, onDecline }: CookieConsentBanner
   
   useEffect(() => {
     // Check if consent has already been given or if DNT is enabled
-    const hasConsent = hasAnalyticsConsent()
+    // hasAnalyticsConsent is called to ensure localStorage is read
+    hasAnalyticsConsent()
     const dnt = isDoNotTrackEnabled()
     
     setDntEnabled(dnt)
@@ -56,6 +57,8 @@ export function CookieConsentBanner({ onAccept, onDecline }: CookieConsentBanner
       
       return () => clearTimeout(timer)
     }
+    
+    return undefined
   }, [])
   
   const handleAccept = () => {

@@ -140,7 +140,7 @@ export function sanitizeDateString(dateStr: unknown): {
     if (!isNaN(date.getTime())) {
       const isoString = date.toISOString().split('T')[0]
       if (!isoString) {
-        return { error: 'Date parsing failed', originalValue: trimmed }
+        return null
       }
       return {
         isoString,
