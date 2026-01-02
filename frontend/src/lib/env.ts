@@ -21,8 +21,10 @@ const sampleRateSchema = z
   .string()
   .optional()
   .transform((val) => {
-    // Handle undefined, empty, or 'undefined' string (Vite quirk in some environments)
-    if (!val || val.trim() === '' || val === 'undefined') return undefined;
+    // Handle undefined or 'undefined' string (Vite quirk in some environments)
+    if (val === undefined || val === 'undefined') return undefined;
+    // Handle empty strings
+    if (val.trim() === '') return undefined;
     const num = parseFloat(val);
     if (isNaN(num)) {
       throw new Error(`Invalid sample rate: "${val}" is not a number`);
@@ -50,8 +52,10 @@ const sentryDsnSchema = z
   .optional()
   .refine(
     (val) => {
-      // Handle undefined, empty, or 'undefined' string (Vite quirk in some environments)
-      if (!val || val.trim() === '' || val === 'undefined') return true;
+      // Handle undefined or 'undefined' string (Vite quirk in some environments)
+      if (val === undefined || val === 'undefined') return true;
+      // Handle empty strings
+      if (val.trim() === '') return true;
       try {
         new URL(val);
         return true;
