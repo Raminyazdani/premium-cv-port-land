@@ -128,6 +128,7 @@ import {
   getUIStrings, 
   type UIStrings, 
   t as translate,
+  tl as translateKeyLabel,
   formatDate,
   formatDateDisplay,
   formatDateRange,
@@ -152,6 +153,21 @@ export function useTranslation(): UIStrings {
 export function useT() {
   const { language } = useLanguage()
   return (key: string) => translate(language, key)
+}
+
+/**
+ * Hook for translating structural key labels from lang.json
+ * 
+ * Use this for CV data field labels (e.g., "basics" → "Grunddaten" in DE)
+ * NOT for UI strings (use `useTranslation()` for that)
+ * 
+ * @example
+ * const tl = useKeyLabelTranslation()
+ * const basicsLabel = tl('basics')  // "Grunddaten" in DE, "اطلاعات پایه" in FA
+ */
+export function useKeyLabelTranslation() {
+  const { language } = useLanguage()
+  return (keyName: string) => translateKeyLabel(keyName, language)
 }
 
 /**

@@ -1650,6 +1650,53 @@ export function interpolate(template: string, vars: Record<string, string | numb
 }
 
 // ============================================================================
+// KEY LABEL TRANSLATIONS (from lang.json)
+// ============================================================================
+
+/**
+ * Load lang.json for structural key label translations
+ */
+import langLabels from '@/data/lang.json'
+
+/**
+ * Translate a structural key label using lang.json
+ * 
+ * This is for CV data field/section labels, NOT UI strings.
+ * For UI strings, use `getUIStrings()` or `t()`.
+ * 
+ * @param keyName - The canonical English key name (e.g., "basics", "education", "fname")
+ * @param lang - Target language (en/de/fa)
+ * @returns Translated label, with fallback chain: lang → en → keyName
+ * 
+ * @example
+ * tl('basics', 'de')  // → "Grunddaten"
+ * tl('fname', 'fa')   // → "نام_کوچک"
+ * tl('email', 'en')   // → "email"
+ */
+export function tl(keyName: string, lang: Language): string {
+  // Type assertion for lang.json structure
+  const labels = langLabels as Record<string, Record<Language, string>>
+  
+  if (!labels[keyName]) {
+    // Key not in lang.json, return as-is
+    return keyName
+  }
+  
+  // Try requested language
+  if (labels[keyName][lang]) {
+    return labels[keyName][lang]
+  }
+  
+  // Fallback to English
+  if (labels[keyName].en) {
+    return labels[keyName].en
+  }
+  
+  // Final fallback: return the key itself
+  return keyName
+}
+
+// ============================================================================
 // LOCALE-AWARE FORMATTING UTILITIES
 // ============================================================================
 
