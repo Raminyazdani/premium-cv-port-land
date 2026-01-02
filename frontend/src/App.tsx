@@ -1,11 +1,10 @@
 import { lazy, Suspense, useEffect, useCallback } from 'react'
 import { Toaster } from 'sonner'
-import { FilterProvider, useFilter } from '@/context/FilterContext'
-import { LanguageProvider, useLanguage, useTranslation } from '@/context/LanguageContext'
-import { CVDataProvider, useCVData } from '@/context/CVDataContext'
-import { KonamiProvider, useKonami } from '@/context/KonamiContext'
-import { PWAProvider } from '@/context/PWAContext'
-import { AccessibilityProvider } from '@/context/AccessibilityContext'
+import { useFilter } from '@/context/FilterContext'
+import { useLanguage, useTranslation } from '@/context/LanguageContext'
+import { useCVData } from '@/context/CVDataContext'
+import { useKonami } from '@/context/KonamiContext'
+import { AppProviders } from '@/app/AppProviders'
 import { Header } from '@/components/sections/Header'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { CursorFollower } from '@/components/CursorFollower'
@@ -13,8 +12,6 @@ import { FloatingActionButton } from '@/components/FloatingActionButton'
 import { ScrollProgressIndicator } from '@/components/ScrollProgressIndicator'
 import { CelebrationAnimation } from '@/components/CelebrationAnimation'
 import { PageCornerCurl } from '@/components/PageCornerCurl'
-import { MicroFeedbackProvider } from '@/components/MicroFeedback'
-import { SoundEffectsProvider } from '@/components/SoundEffects'
 import { CookieConsentBanner } from '@/components/CookieConsentBanner'
 import { OfflineIndicator, UpdateBanner } from '@/components/OfflineIndicator'
 import { extractAllTypeKeys } from '@/utils/dataLoader'
@@ -197,23 +194,9 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
-      <LanguageProvider>
-        <CVDataProvider>
-          <FilterProvider>
-            <KonamiProvider>
-              <PWAProvider>
-                <AccessibilityProvider>
-                  <SoundEffectsProvider>
-                    <MicroFeedbackProvider>
-                      <AppContent />
-                    </MicroFeedbackProvider>
-                  </SoundEffectsProvider>
-                </AccessibilityProvider>
-              </PWAProvider>
-            </KonamiProvider>
-          </FilterProvider>
-        </CVDataProvider>
-      </LanguageProvider>
+      <AppProviders>
+        <AppContent />
+      </AppProviders>
     </ErrorBoundary>
   )
 }
