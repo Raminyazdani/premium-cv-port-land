@@ -510,7 +510,7 @@ if: false
 | `actions/deploy-pages` | v4 | v4 | Current |
 | `actions/github-script` | v7 | v7 | Current |
 
-**Note:** SHA hashes are examples from known stable versions. Always verify against the official action repositories before pinning.
+**⚠️ Important Note:** SHA hashes shown above are **placeholder examples for illustration only**. They may not correspond to actual action versions. Before implementing SHA pinning, always verify the actual commit hashes from the official action repositories (e.g., https://github.com/actions/checkout/releases).
 
 ---
 
