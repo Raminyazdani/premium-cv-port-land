@@ -24,7 +24,11 @@
         "generate-hashes": "node tests/generate-hashes.js",
         "accessibility-audit": "node scripts/accessibility-audit.js",
         "ci:preview": "vite preview --port 4173 --strictPort",
-        "ci:smoke": "node scripts/ci-smoke-test.js"
+        "ci:smoke": "node scripts/ci-smoke-test.js",
+        "lhci:collect": "lhci collect --config=.lighthouserc.cjs",
+        "lhci:assert": "lhci assert --config=.lighthouserc.cjs",
+        "lhci:upload": "lhci upload --config=.lighthouserc.cjs",
+        "lhci": "npm run build && npm run lhci:collect && npm run lhci:assert && npm run lhci:upload"
     },
     "dependencies": {
         "@github/spark": ">=0.43.1 <1",
@@ -91,6 +95,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.21.0",
+        "@lhci/cli": "^0.15.1",
         "@playwright/test": "^1.57.0",
         "@tailwindcss/postcss": "^4.1.8",
         "@testing-library/jest-dom": "^6.9.1",

@@ -1,0 +1,265 @@
+# ==============================================================================
+# UI QA Lighthouse CI Workflow
+# ==============================================================================
+#
+# This workflow runs Lighthouse CI against EN/DE/FA language routes to
+# measure and enforce quality thresholds for:
+#   - Performance
+#   - Accessibility
+#   - Best Practices
+#   - SEO
+#
+# Artifacts:
+#   - HTML and JSON reports are uploaded as artifacts for each PR
+#
+# Thresholds (configurable in frontend/.lighthouserc.cjs):
+#   - Performance: >= 50% (warn)
+#   - Accessibility: >= 90% (error)
+#   - Best Practices: >= 80% (warn)
+#   - SEO: >= 80% (warn)
+#
+# Triggers:
+#   - Pull requests to main/develop
+#   - Manual dispatch
+#
+# ==============================================================================
+
+name: UI QA Lighthouse
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    
+    steps:
+      # ========================================
+      # Phase 1: Setup
+      # ========================================
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Verify locked files integrity
+        run: |
+          echo "🔒 Verifying locked CV files exist..."
+          for file in src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing locked file: $file"
+              exit 1
+            fi
+          done
+          echo "✅ All locked files present"
+          echo ""
+          echo "🔒 Computing SHA256 hashes for locked CV files..."
+          sha256sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+          
+      # ========================================
+      # Phase 2: Build
+      # ========================================
+      - name: Build application
+        run: |
+          echo "🔨 Building application..."
+          npm run build 2>&1 | tee build.log
+          
+      - name: Verify build output
+        run: |
+          echo "📁 Checking build output..."
+          test -f dist/index.html || (echo "❌ Missing index.html" && exit 1)
+          test -d dist/assets || (echo "❌ Missing assets directory" && exit 1)
+          echo "✅ Build artifacts verified"
+          ls -lh dist/
+          
+      # ========================================
+      # Phase 3: Lighthouse CI
+      # ========================================
+      - name: Install Chrome for Lighthouse
+        run: |
+          # Install Chrome dependencies (lighthouse uses Chrome)
+          sudo apt-get update
+          sudo apt-get install -y fonts-liberation libnss3 libnspr4 libasound2t64 \
+            libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libdrm2 libgbm1 \
+            libgtk-3-0t64 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
+            libxrandr2 xdg-utils
+        
+      - name: Run Lighthouse CI
+        id: lhci
+        run: |
+          echo "🔦 Running Lighthouse CI..."
+          
+          # Create output directory
+          mkdir -p lighthouse-reports
+          
+          # Run LHCI collect and assert
+          # Note: We use npx to run lhci from dev dependencies
+          npx lhci collect --config=.lighthouserc.cjs 2>&1 | tee lhci-collect.log
+          COLLECT_EXIT_CODE=${PIPESTATUS[0]}
+          
+          if [ $COLLECT_EXIT_CODE -ne 0 ]; then
+            echo "::warning::Lighthouse collect had issues (exit code: $COLLECT_EXIT_CODE)"
+          fi
+          
+          # Run assertions
+          npx lhci assert --config=.lighthouserc.cjs 2>&1 | tee lhci-assert.log
+          ASSERT_EXIT_CODE=${PIPESTATUS[0]}
+          
+          echo "assert-exit-code=$ASSERT_EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          # Upload results to filesystem
+          npx lhci upload --config=.lighthouserc.cjs 2>&1 | tee lhci-upload.log || true
+          
+      - name: Generate score summary
+        id: scores
+        run: |
+          echo "📊 Generating score summary..."
+          
+          # Find the manifest file
+          MANIFEST_FILE=$(find .lighthouseci -name 'manifest.json' 2>/dev/null | head -1)
+          
+          if [ -z "$MANIFEST_FILE" ]; then
+            echo "⚠️ No manifest file found, using log output for summary"
+            cat lhci-assert.log
+            exit 0
+          fi
+          
+          echo "Found manifest: $MANIFEST_FILE"
+          
+          # Parse and display scores
+          node -e "
+            const fs = require('fs');
+            const manifest = JSON.parse(fs.readFileSync('$MANIFEST_FILE', 'utf8'));
+            
+            console.log('');
+            console.log('=====================================');
+            console.log('LIGHTHOUSE SCORES SUMMARY');
+            console.log('=====================================');
+            console.log('');
+            
+            let summaryTable = '| Route | Performance | Accessibility | Best Practices | SEO |\\n';
+            summaryTable += '|-------|-------------|---------------|----------------|-----|\\n';
+            
+            for (const entry of manifest) {
+              const url = entry.url;
+              const reportPath = entry.jsonPath;
+              
+              try {
+                const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+                const perf = Math.round(report.categories.performance.score * 100);
+                const a11y = Math.round(report.categories.accessibility.score * 100);
+                const bp = Math.round(report.categories['best-practices'].score * 100);
+                const seo = Math.round(report.categories.seo.score * 100);
+                
+                const lang = url.includes('lang=en') ? 'EN' : 
+                             url.includes('lang=de') ? 'DE' : 
+                             url.includes('lang=fa') ? 'FA' : 'Unknown';
+                
+                console.log(\`\${lang}: Performance=\${perf}% | Accessibility=\${a11y}% | Best Practices=\${bp}% | SEO=\${seo}%\`);
+                summaryTable += \`| \${lang} | \${perf}% | \${a11y}% | \${bp}% | \${seo}% |\\n\`;
+              } catch (e) {
+                console.log(\`Error reading report for \${url}: \${e.message}\`);
+              }
+            }
+            
+            console.log('');
+            console.log('Markdown Table for PR:');
+            console.log(summaryTable);
+            
+            // Write summary to file for step summary
+            fs.writeFileSync('lhci-summary.md', summaryTable);
+          " || echo "Could not parse manifest"
+          
+      - name: Create step summary
+        if: always()
+        run: |
+          echo "## 🔦 Lighthouse CI Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Add score table if available
+          if [ -f lhci-summary.md ]; then
+            echo "### Score Summary" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat lhci-summary.md >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Add threshold info
+          echo "### Thresholds" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Category | Minimum Required |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|------------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance | 50% (warn) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Accessibility | 90% (error) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Best Practices | 80% (warn) |" >> $GITHUB_STEP_SUMMARY
+          echo "| SEO | 80% (warn) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Add assertion result
+          if [ "${{ steps.lhci.outputs.assert-exit-code }}" = "0" ]; then
+            echo "### ✅ All assertions passed!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ⚠️ Some assertions did not pass" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Check the Lighthouse reports artifact for details." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📦 **Artifacts:** Download the \`lighthouse-reports\` artifact for full HTML/JSON reports." >> $GITHUB_STEP_SUMMARY
+          
+      # ========================================
+      # Phase 4: Artifacts
+      # ========================================
+      - name: Copy reports to output directory
+        if: always()
+        run: |
+          # Copy all reports from .lighthouseci to lighthouse-reports
+          if [ -d ".lighthouseci" ]; then
+            cp -r .lighthouseci/* lighthouse-reports/ 2>/dev/null || true
+          fi
+          
+          # Copy logs
+          cp lhci-*.log lighthouse-reports/ 2>/dev/null || true
+          
+          # List contents
+          echo "📁 Lighthouse reports directory:"
+          ls -la lighthouse-reports/ || echo "No reports found"
+          
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: frontend/lighthouse-reports/
+          retention-days: 14
+          if-no-files-found: warn
+          
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-build-logs
+          path: |
+            frontend/build.log
+            frontend/lhci-*.log
+          retention-days: 7

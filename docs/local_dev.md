@@ -224,6 +224,34 @@ npm run verify-languages
 - No empty sections
 - No undefined/null values
 
+### Lighthouse CI (Performance Auditing)
+
+```bash
+# Run full Lighthouse CI audit (build + collect + assert + upload)
+npm run lhci
+
+# Or run individual steps:
+npm run build              # Build the app first
+npm run lhci:collect       # Collect Lighthouse reports
+npm run lhci:assert        # Check score thresholds
+npm run lhci:upload        # Save reports to lighthouse-reports/
+```
+
+**What Lighthouse measures**:
+- **Performance** - Load times, Core Web Vitals (threshold: 70%)
+- **Accessibility** - WCAG compliance, keyboard navigation (threshold: 90%)
+- **Best Practices** - Security, modern APIs (threshold: 80%)
+- **SEO** - Search engine optimization (threshold: 80%)
+
+**Routes tested**:
+- `http://localhost:4173/?lang=en` (English)
+- `http://localhost:4173/?lang=de` (German)
+- `http://localhost:4173/?lang=fa` (Persian)
+
+**Reports location**: `frontend/lighthouse-reports/`
+
+**Threshold configuration**: Edit `frontend/.lighthouserc.cjs` to adjust score thresholds.
+
 ---
 
 ## Development Workflow
