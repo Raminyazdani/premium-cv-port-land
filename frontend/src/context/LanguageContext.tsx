@@ -1,7 +1,13 @@
 /**
  * Language Context: Global language state management
  * 
- * Handles language selection, persistence, and RTL support
+ * Handles language selection, persistence, and RTL support.
+ * 
+ * FUTURE-LANGUAGE-READY: To add a new language (e.g., Italian):
+ * 1. Add cv_it.json to src/data/ with canonical English keys
+ * 2. Add language metadata below (language code, display name, direction)
+ * 3. (Optional) Extend lang.json with IT translations for structural keys
+ * That's it! No code changes needed.
  */
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
@@ -16,7 +22,36 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 const STORAGE_KEY = 'cv-language'
-const SUPPORTED_LANGUAGES: Language[] = ['en', 'de', 'fa']
+
+/**
+ * Language metadata for supported languages
+ * 
+ * To add a new language:
+ * - Add entry here with code, displayName, and direction
+ * - Create cv_<code>.json in src/data/
+ * - (Optional) Extend lang.json for key label translations
+ */
+export const LANGUAGE_METADATA: Record<string, { displayName: string; direction: 'ltr' | 'rtl' }> = {
+  en: { displayName: 'English', direction: 'ltr' },
+  de: { displayName: 'Deutsch', direction: 'ltr' },
+  fa: { displayName: 'فارسی', direction: 'rtl' }
+  // To add Italian: it: { displayName: 'Italiano', direction: 'ltr' }
+}
+
+const SUPPORTED_LANGUAGES: Language[] = Object.keys(LANGUAGE_METADATA) as Language[]
+
+/**
+ * Get list of available languages
+ * 
+ * Dynamically based on LANGUAGE_METADATA entries.
+ * To add a new language, just add it to LANGUAGE_METADATA.
+ */
+export function getAvailableLanguages(): Array<{ code: Language; displayName: string; direction: 'ltr' | 'rtl' }> {
+  return SUPPORTED_LANGUAGES.map(code => ({
+    code,
+    ...LANGUAGE_METADATA[code]
+  }))
+}
 
 /**
  * Detects initial language from:
@@ -62,9 +97,9 @@ function applyLanguageToDOM(lang: Language) {
   // Set lang attribute
   html.setAttribute('lang', lang)
   
-  // Set dir attribute
-  const dir = lang === 'fa' ? 'rtl' : 'ltr'
-  html.setAttribute('dir', dir)
+  // Set dir attribute using metadata
+  const metadata = LANGUAGE_METADATA[lang] || LANGUAGE_METADATA.en
+  html.setAttribute('dir', metadata.direction)
   
   // Update URL without reload
   const url = new URL(window.location.href)
@@ -74,7 +109,8 @@ function applyLanguageToDOM(lang: Language) {
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => detectInitialLanguage())
-  const isRTL = language === 'fa'
+  const metadata = LANGUAGE_METADATA[language] || LANGUAGE_METADATA.en
+  const isRTL = metadata.direction === 'rtl'
 
   // Apply language to DOM on mount and when language changes
   useEffect(() => {
