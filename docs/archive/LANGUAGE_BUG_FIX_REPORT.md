@@ -209,7 +209,7 @@ All fixes were in application code only:
 ```typescript
 describe('Data Normalization', () => {
   it('should normalize German JSON to canonical schema', () => {
-    const rawDE = require('@/data/ramin_de.json')
+    const rawDE = require('@/data/cv_de.json')
     const normalized = normalizeCVData(rawDE, 'de')
     
     expect(normalized.education).toHaveLength(5)

@@ -7,8 +7,8 @@
 import { describe, it, expect } from 'vitest'
 import { normalizeCVData } from '@/utils/dataNormalizer'
 import { SECTION_KEYS } from '@/config/keyMappings'
-import cvDataDE from '@/data/ramin_de.json'
-import cvDataFA from '@/data/ramin_fa.json'
+import cvDataDE from '@/data/cv_de.json'
+import cvDataFA from '@/data/cv_fa.json'
 
 describe('Data Normalization', () => {
   describe('German (DE) normalization', () => {

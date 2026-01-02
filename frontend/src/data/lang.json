@@ -1,0 +1,527 @@
+{
+  "CEFR": {
+    "de": "GER (Gemeinsamer Europäischer Referenzrahmen)",
+    "en": "CEFR",
+    "fa": "چارچوب مرجع اروپایی مشترک (CEFR)"
+  },
+  "Pictures": {
+    "de": "Bilder",
+    "en": "Pictures",
+    "fa": "تصاویر"
+  },
+  "URL": {
+    "de": "URL",
+    "en": "URL",
+    "fa": "لینک (URL)"
+  },
+  "access_date": {
+    "de": "Zugriffsdatum",
+    "en": "access_date",
+    "fa": "تاریخ دسترسی"
+  },
+  "address": {
+    "de": "Adresse",
+    "en": "address",
+    "fa": "آدرس"
+  },
+  "area": {
+    "de": "Fachbereich",
+    "en": "area",
+    "fa": "رشته/حوزه"
+  },
+  "article_number": {
+    "de": "Artikelnummer",
+    "en": "article_number",
+    "fa": "شماره مقاله"
+  },
+  "arxiv": {
+    "de": "arXiv",
+    "en": "arxiv",
+    "fa": "آرکایو (arXiv)"
+  },
+  "authors": {
+    "de": "Autor:innen",
+    "en": "authors",
+    "fa": "نویسندگان"
+  },
+  "authors_structured": {
+    "de": "Autor:innen (strukturiert)",
+    "en": "authors_structured",
+    "fa": "نویسندگان (ساختاریافته)"
+  },
+  "basics": {
+    "de": "Grunddaten",
+    "en": "basics",
+    "fa": "اطلاعات پایه"
+  },
+  "birthDate": {
+    "de": "Geburtsdatum",
+    "en": "birthDate",
+    "fa": "تاریخ تولد"
+  },
+  "book_title": {
+    "de": "Buchtitel",
+    "en": "book_title",
+    "fa": "عنوان کتاب"
+  },
+  "certificate": {
+    "de": "Zertifikat",
+    "en": "certificate",
+    "fa": "گواهی"
+  },
+  "certifications": {
+    "de": "Zertifikate",
+    "en": "certifications",
+    "fa": "گواهینامه‌ها"
+  },
+  "chapter_pages": {
+    "de": "Kapitel-Seiten",
+    "en": "chapter_pages",
+    "fa": "صفحات فصل"
+  },
+  "city": {
+    "de": "Stadt",
+    "en": "city",
+    "fa": "شهر"
+  },
+  "conference": {
+    "de": "Konferenz",
+    "en": "conference",
+    "fa": "کنفرانس"
+  },
+  "correspondent": {
+    "de": "Korrespondenzperson",
+    "en": "correspondent",
+    "fa": "مسئول مکاتبه"
+  },
+  "country": {
+    "de": "Land",
+    "en": "country",
+    "fa": "کشور"
+  },
+  "countryCode": {
+    "de": "Ländervorwahl",
+    "en": "countryCode",
+    "fa": "کد کشور"
+  },
+  "date": {
+    "de": "Datum",
+    "en": "date",
+    "fa": "تاریخ"
+  },
+  "day": {
+    "de": "Tag",
+    "en": "day",
+    "fa": "روز"
+  },
+  "degree_type": {
+    "de": "Abschlussart",
+    "en": "degree_type",
+    "fa": "نوع مدرک"
+  },
+  "department": {
+    "de": "Abteilung",
+    "en": "department",
+    "fa": "بخش/دپارتمان"
+  },
+  "description": {
+    "de": "Beschreibung",
+    "en": "description",
+    "fa": "توضیحات"
+  },
+  "doi": {
+    "de": "DOI",
+    "en": "doi",
+    "fa": "شناسه DOI"
+  },
+  "duration": {
+    "de": "Dauer",
+    "en": "duration",
+    "fa": "مدت"
+  },
+  "edition": {
+    "de": "Auflage",
+    "en": "edition",
+    "fa": "ویرایش"
+  },
+  "editors": {
+    "de": "Herausgeber:innen",
+    "en": "editors",
+    "fa": "ویراستاران"
+  },
+  "education": {
+    "de": "Ausbildung",
+    "en": "education",
+    "fa": "تحصیلات"
+  },
+  "email": {
+    "de": "E-Mail",
+    "en": "email",
+    "fa": "ایمیل"
+  },
+  "endDate": {
+    "de": "Enddatum",
+    "en": "endDate",
+    "fa": "تاریخ پایان"
+  },
+  "examDate": {
+    "de": "Prüfungsdatum",
+    "en": "examDate",
+    "fa": "تاریخ آزمون"
+  },
+  "experiences": {
+    "de": "Erfahrungen",
+    "en": "experiences",
+    "fa": "سوابق"
+  },
+  "faculty": {
+    "de": "Fakultät",
+    "en": "faculty",
+    "fa": "دانشکده"
+  },
+  "fname": {
+    "de": "Vorname",
+    "en": "fname",
+    "fa": "نام"
+  },
+  "formatted": {
+    "de": "Formatiert",
+    "en": "formatted",
+    "fa": "فرمت‌شده"
+  },
+  "gpa": {
+    "de": "Notendurchschnitt (GPA)",
+    "en": "gpa",
+    "fa": "معدل"
+  },
+  "identifiers": {
+    "de": "Kennungen",
+    "en": "identifiers",
+    "fa": "شناسه‌ها"
+  },
+  "institution": {
+    "de": "Institution",
+    "en": "institution",
+    "fa": "مؤسسه/دانشگاه"
+  },
+  "isbn": {
+    "de": "ISBN",
+    "en": "isbn",
+    "fa": "شابک (ISBN)"
+  },
+  "issn": {
+    "de": "ISSN",
+    "en": "issn",
+    "fa": "شاپا (ISSN)"
+  },
+  "issue": {
+    "de": "Heft/Ausgabe",
+    "en": "issue",
+    "fa": "شماره/جلد (Issue)"
+  },
+  "issuer": {
+    "de": "Aussteller",
+    "en": "issuer",
+    "fa": "صادرکننده"
+  },
+  "journal": {
+    "de": "Zeitschrift",
+    "en": "journal",
+    "fa": "ژورنال/مجله"
+  },
+  "label": {
+    "de": "Bezeichnung",
+    "en": "label",
+    "fa": "عنوان"
+  },
+  "language": {
+    "de": "Sprache",
+    "en": "language",
+    "fa": "زبان"
+  },
+  "languages": {
+    "de": "Sprachen",
+    "en": "languages",
+    "fa": "زبان‌ها"
+  },
+  "level": {
+    "de": "Niveau",
+    "en": "level",
+    "fa": "سطح"
+  },
+  "listening": {
+    "de": "Hören",
+    "en": "listening",
+    "fa": "شنیداری"
+  },
+  "literal": {
+    "de": "Wortlaut",
+    "en": "literal",
+    "fa": "متن/نام دقیق"
+  },
+  "lname": {
+    "de": "Nachname",
+    "en": "lname",
+    "fa": "نام خانوادگی"
+  },
+  "location": {
+    "de": "Ort",
+    "en": "location",
+    "fa": "موقعیت"
+  },
+  "logo_url": {
+    "de": "Logo-URL",
+    "en": "logo_url",
+    "fa": "لینک لوگو"
+  },
+  "long_name": {
+    "de": "Langer Name",
+    "en": "long_name",
+    "fa": "نام کامل"
+  },
+  "maxScore": {
+    "de": "Maximalpunktzahl",
+    "en": "maxScore",
+    "fa": "حداکثر نمره"
+  },
+  "minScore": {
+    "de": "Minimalpunktzahl",
+    "en": "minScore",
+    "fa": "حداقل نمره"
+  },
+  "month": {
+    "de": "Monat",
+    "en": "month",
+    "fa": "ماه"
+  },
+  "name": {
+    "de": "Name",
+    "en": "name",
+    "fa": "نام"
+  },
+  "network": {
+    "de": "Netzwerk",
+    "en": "network",
+    "fa": "شبکه"
+  },
+  "notes": {
+    "de": "Notizen",
+    "en": "notes",
+    "fa": "یادداشت‌ها"
+  },
+  "number": {
+    "de": "Nummer",
+    "en": "number",
+    "fa": "شماره"
+  },
+  "organization": {
+    "de": "Organisation",
+    "en": "organization",
+    "fa": "سازمان"
+  },
+  "overall": {
+    "de": "Gesamt",
+    "en": "overall",
+    "fa": "کل"
+  },
+  "pages": {
+    "de": "Seiten",
+    "en": "pages",
+    "fa": "صفحات"
+  },
+  "phone": {
+    "de": "Telefon",
+    "en": "phone",
+    "fa": "تلفن"
+  },
+  "place": {
+    "de": "Ort/Platz",
+    "en": "place",
+    "fa": "محل"
+  },
+  "pmcid": {
+    "de": "PMCID",
+    "en": "pmcid",
+    "fa": "PMCID"
+  },
+  "pmid": {
+    "de": "PMID",
+    "en": "pmid",
+    "fa": "PMID"
+  },
+  "position": {
+    "de": "Position",
+    "en": "position",
+    "fa": "سمت"
+  },
+  "postalCode": {
+    "de": "Postleitzahl",
+    "en": "postalCode",
+    "fa": "کدپستی"
+  },
+  "primaryFocus": {
+    "de": "Hauptfokus",
+    "en": "primaryFocus",
+    "fa": "تمرکز اصلی"
+  },
+  "proficiency": {
+    "de": "Kompetenz",
+    "en": "proficiency",
+    "fa": "میزان تسلط"
+  },
+  "profiles": {
+    "de": "Profile",
+    "en": "profiles",
+    "fa": "پروفایل‌ها"
+  },
+  "projects": {
+    "de": "Projekte",
+    "en": "projects",
+    "fa": "پروژه‌ها"
+  },
+  "publications": {
+    "de": "Publikationen",
+    "en": "publications",
+    "fa": "انتشارات"
+  },
+  "publisher": {
+    "de": "Verlag",
+    "en": "publisher",
+    "fa": "ناشر"
+  },
+  "reading": {
+    "de": "Lesen",
+    "en": "reading",
+    "fa": "خواندن"
+  },
+  "references": {
+    "de": "Referenzen",
+    "en": "references",
+    "fa": "معرف‌ها"
+  },
+  "region": {
+    "de": "Region/Bundesland",
+    "en": "region",
+    "fa": "استان/منطقه"
+  },
+  "repository_url": {
+    "de": "Repository-URL",
+    "en": "repository_url",
+    "fa": "لینک مخزن (Repository)"
+  },
+  "role": {
+    "de": "Rolle",
+    "en": "role",
+    "fa": "نقش"
+  },
+  "school": {
+    "de": "Schule",
+    "en": "school",
+    "fa": "مدرسه"
+  },
+  "short_name": {
+    "de": "Kurzer Name",
+    "en": "short_name",
+    "fa": "نام کوتاه"
+  },
+  "skills": {
+    "de": "Fähigkeiten",
+    "en": "skills",
+    "fa": "مهارت‌ها"
+  },
+  "speaking": {
+    "de": "Sprechen",
+    "en": "speaking",
+    "fa": "گفتاری"
+  },
+  "startDate": {
+    "de": "Startdatum",
+    "en": "startDate",
+    "fa": "تاریخ شروع"
+  },
+  "status": {
+    "de": "Status",
+    "en": "status",
+    "fa": "وضعیت"
+  },
+  "studyType": {
+    "de": "Studienart",
+    "en": "studyType",
+    "fa": "مقطع/نوع تحصیل"
+  },
+  "submissionDate": {
+    "de": "Einreichungsdatum",
+    "en": "submissionDate",
+    "fa": "تاریخ ارسال"
+  },
+  "summary": {
+    "de": "Zusammenfassung",
+    "en": "summary",
+    "fa": "خلاصه"
+  },
+  "supervisors": {
+    "de": "Betreuer:innen",
+    "en": "supervisors",
+    "fa": "اساتید راهنما"
+  },
+  "test": {
+    "de": "Test",
+    "en": "test",
+    "fa": "آزمون"
+  },
+  "title": {
+    "de": "Titel",
+    "en": "title",
+    "fa": "عنوان"
+  },
+  "type": {
+    "de": "Typ",
+    "en": "type",
+    "fa": "نوع"
+  },
+  "type_key": {
+    "de": "Typ-Schlüssel",
+    "en": "type_key",
+    "fa": "کلید نوع"
+  },
+  "type_of": {
+    "de": "Art von",
+    "en": "type_of",
+    "fa": "نوعِ"
+  },
+  "url": {
+    "de": "URL",
+    "en": "url",
+    "fa": "لینک"
+  },
+  "username": {
+    "de": "Benutzername",
+    "en": "username",
+    "fa": "نام کاربری"
+  },
+  "uuid": {
+    "de": "UUID",
+    "en": "uuid",
+    "fa": "شناسه یکتا (UUID)"
+  },
+  "volume": {
+    "de": "Band",
+    "en": "volume",
+    "fa": "جلد"
+  },
+  "workshop_and_certifications": {
+    "de": "Workshops & Zertifizierungen",
+    "en": "workshop_and_certifications",
+    "fa": "کارگاه‌ها و گواهینامه‌ها"
+  },
+  "writing": {
+    "de": "Schreiben",
+    "en": "writing",
+    "fa": "نوشتاری"
+  },
+  "year": {
+    "de": "Jahr",
+    "en": "year",
+    "fa": "سال"
+  }
+}

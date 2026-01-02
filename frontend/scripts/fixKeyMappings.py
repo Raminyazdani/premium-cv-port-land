@@ -19,10 +19,10 @@ data_dir = project_root / 'src' / 'data'
 with open(data_dir / 'cv.json', 'r', encoding='utf-8') as f:
     cv_en = json.load(f)
 
-with open(data_dir / 'ramin_de.json', 'r', encoding='utf-8') as f:
+with open(data_dir / 'cv_de.json', 'r', encoding='utf-8') as f:
     cv_de = json.load(f)
 
-with open(data_dir / 'ramin_fa.json', 'r', encoding='utf-8') as f:
+with open(data_dir / 'cv_fa.json', 'r', encoding='utf-8') as f:
     cv_fa = json.load(f)
 
 print("🔍 Analyzing locked JSON files for key mismatches...\n")

@@ -133,8 +133,8 @@
 
 ✅ tests/locked-files-integrity.test.ts
    ├─ cv.json hash matches
-   ├─ ramin_de.json hash matches
-   └─ ramin_fa.json hash matches
+   ├─ cv_de.json hash matches
+   └─ cv_fa.json hash matches
 ```
 
 ### Smoke Tests

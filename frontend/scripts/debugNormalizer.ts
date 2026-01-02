@@ -8,8 +8,8 @@
 
 import { normalizeCVData, type Language } from '../src/utils/dataNormalizer'
 import cvDataEN from '../src/data/cv.json'
-import cvDataDE from '../src/data/ramin_de.json'
-import cvDataFA from '../src/data/ramin_fa.json'
+import cvDataDE from '../src/data/cv_de.json'
+import cvDataFA from '../src/data/cv_fa.json'
 import { logger } from '../src/lib/logger'
 
 export function diagnoseNormalization(lang: Language = 'en') {

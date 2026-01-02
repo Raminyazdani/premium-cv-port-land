@@ -68,7 +68,7 @@ npm run verify-languages
 ### Verification Command:
 ```bash
 # Check if locked files were modified
-git diff src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+git diff src/data/cv.json src/data/cv_de.json src/data/cv_fa.json
 
 # Should show no changes!
 ```
@@ -171,7 +171,7 @@ npm run test -- tests/path/to/test.test.ts
 npm run test -- tests/locked-files-integrity.test.ts
 
 # 3. If locked files were modified (DON'T DO THIS!):
-git checkout src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+git checkout src/data/cv.json src/data/cv_de.json src/data/cv_fa.json
 
 # 4. Regenerate hashes if needed (ONLY with user approval)
 npm run generate-hashes

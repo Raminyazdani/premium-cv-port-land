@@ -416,8 +416,8 @@ If you want to use this template for your own CV:
    ```bash
    # Edit these files with your data
    frontend/src/data/cv.json
-   frontend/src/data/ramin_de.json  # or remove if not needed
-   frontend/src/data/ramin_fa.json  # or remove if not needed
+   frontend/src/data/cv_de.json  # or remove if not needed
+   frontend/src/data/cv_fa.json  # or remove if not needed
    ```
 3. **Regenerate integrity hashes**:
    ```bash
@@ -570,7 +570,7 @@ npm run test -- --clearCache
 git status
 
 # 2. Revert the locked files
-git checkout HEAD -- frontend/src/data/cv.json frontend/src/data/ramin_de.json frontend/src/data/ramin_fa.json
+git checkout HEAD -- frontend/src/data/cv.json frontend/src/data/cv_de.json frontend/src/data/cv_fa.json
 
 # 3. If you intentionally modified them, regenerate hashes
 cd frontend

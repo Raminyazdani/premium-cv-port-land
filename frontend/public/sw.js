@@ -14,8 +14,8 @@ const STATIC_ASSETS = [
 // Data files to cache
 const DATA_FILES = [
   '/src/data/cv.json',
-  '/src/data/ramin_de.json', 
-  '/src/data/ramin_fa.json',
+  '/src/data/cv_de.json',
+  '/src/data/cv_fa.json',
 ];
 
 // Install event - cache static assets

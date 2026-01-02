@@ -572,14 +572,14 @@ def main():
     parser.add_argument(
         '--fa-file',
         type=Path,
-        help='Path to Persian translation JSON (default: ramin_fa.json)'
+        help='Path to Persian translation JSON (default: cv_fa.json)'
     )
     args = parser.parse_args()
 
     # Determine file paths
     repo_root = Path(__file__).parent.parent
     en_file = args.en_file or (repo_root / 'frontend' / 'src' / 'data' / 'cv.json')
-    fa_file = args.fa_file or (repo_root / 'ramin_fa.json')
+    fa_file = args.fa_file or (repo_root / 'cv_fa.json')
 
     if not en_file.exists():
         print(f"Error: English source not found at {en_file}")
@@ -603,7 +603,7 @@ if __name__ == '__main__':
     repo_root = Path(__file__).parent.parent
     
     en_path = repo_root / "frontend" / "src" / "data" / "cv.json"
-    de_path = repo_root / "ramin_de.json"
+    de_path = repo_root / "cv_de.json"
     
     print("=" * 60)
     print("German CV Translation Validation")

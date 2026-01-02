@@ -279,8 +279,8 @@ Before declaring "debugging complete":
 ```bash
 cd /workspaces/spark-template
 git diff src/data/cv.json
-git diff src/data/ramin_de.json  
-git diff src/data/ramin_fa.json
+git diff src/data/cv_de.json  
+git diff src/data/cv_fa.json
 ```
 
 **Expected output**: Empty (no changes)

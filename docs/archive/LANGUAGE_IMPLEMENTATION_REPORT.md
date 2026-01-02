@@ -135,7 +135,7 @@ User clicks language → LanguageSelector
 
 **Problem:** DE/FA files have translated keys
 ```json
-// German (ramin_de.json)
+// German (cv_de.json)
 {
   "grunddaten": [{
     "vorname": "Ramin",
@@ -143,7 +143,7 @@ User clicks language → LanguageSelector
   }]
 }
 
-// Persian (ramin_fa.json)
+// Persian (cv_fa.json)
 {
   "اطلاعات_پایه": [{
     "نام_کوچک": "Ramin",

@@ -15,8 +15,8 @@ import {
   SKILL_SUB_CATEGORY_MAPPINGS
 } from '@/config/skillCategoryMappings'
 import cvDataEN from '@/data/cv.json'
-import cvDataDE from '@/data/ramin_de.json'
-import cvDataFA from '@/data/ramin_fa.json'
+import cvDataDE from '@/data/cv_de.json'
+import cvDataFA from '@/data/cv_fa.json'
 
 describe('Skills Category Normalization (F-02)', () => {
   describe('Canonical key mapping', () => {

@@ -134,7 +134,7 @@ Protects critical CV data files from accidental modification:
 **File**: `.github/workflows/ci.yml`, step "Verify locked files integrity"
 
 ```bash
-md5sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+md5sum src/data/cv.json src/data/cv_de.json src/data/cv_fa.json
 ```
 
 **Output Example**:
@@ -411,8 +411,8 @@ git status
 
 # Revert locked files (if accidental)
 git checkout HEAD -- src/data/cv.json
-git checkout HEAD -- src/data/ramin_de.json
-git checkout HEAD -- src/data/ramin_fa.json
+git checkout HEAD -- src/data/cv_de.json
+git checkout HEAD -- src/data/cv_fa.json
 
 # Or regenerate hashes (if intentional)
 npm run generate-hashes

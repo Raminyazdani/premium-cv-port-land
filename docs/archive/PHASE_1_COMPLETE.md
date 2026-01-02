@@ -219,8 +219,8 @@ Compare console output for each. If one works and others don't, it's a normaliza
 **Verification**:
 ```bash
 git diff src/data/cv.json        # Should show: (no output)
-git diff src/data/ramin_de.json  # Should show: (no output)
-git diff src/data/ramin_fa.json  # Should show: (no output)
+git diff src/data/cv_de.json  # Should show: (no output)
+git diff src/data/cv_fa.json  # Should show: (no output)
 ```
 
 ## EXPECTED OUTCOMES

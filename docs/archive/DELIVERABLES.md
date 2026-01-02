@@ -188,8 +188,8 @@ npx tsx src/utils/testNormalization.ts
 ```bash
 # Verify with:
 git diff src/data/cv.json        # Should show NO changes
-git diff src/data/ramin_de.json  # Should show NO changes
-git diff src/data/ramin_fa.json  # Should show NO changes
+git diff src/data/cv_de.json  # Should show NO changes
+git diff src/data/cv_fa.json  # Should show NO changes
 ```
 
 **No modifications** were made to any of the locked data files. All fixes were implemented by correcting the key mapping configuration to match the existing data files.

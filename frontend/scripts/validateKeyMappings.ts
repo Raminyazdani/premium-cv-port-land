@@ -10,8 +10,8 @@
 import { SECTION_KEYS, EDUCATION_KEYS, EXPERIENCE_KEYS, PROJECT_KEYS, 
          PUBLICATION_KEYS, REFERENCE_KEYS, WORKSHOP_ISSUER_KEYS, WORKSHOP_CERT_KEYS } from '../src/config/keyMappings'
 import cvDataEN from '../src/data/cv.json'
-import cvDataDE from '../src/data/ramin_de.json'
-import cvDataFA from '../src/data/ramin_fa.json'
+import cvDataDE from '../src/data/cv_de.json'
+import cvDataFA from '../src/data/cv_fa.json'
 
 console.log('🧪 KEY MAPPING VALIDATION TEST\n')
 console.log('=' .repeat(80))

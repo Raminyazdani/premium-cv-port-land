@@ -75,8 +75,8 @@ The CV data files are **read-only** (locked files policy). To fix image display:
 # Upload images to your Cloudinary account
 # Update URLs in:
 - frontend/src/data/cv.json
-- frontend/src/data/ramin_de.json
-- frontend/src/data/ramin_fa.json
+- frontend/src/data/cv_de.json
+- frontend/src/data/cv_fa.json
 ```
 
 **Option 2: Use Alternative Image Hosting**

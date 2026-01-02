@@ -1,7 +1,7 @@
 /**
  * Locked Files Integrity Test
  * 
- * This test ensures that the locked data files (cv.json, ramin_de.json, ramin_fa.json)
+ * This test ensures that the locked data files (cv.json, cv_de.json, cv_fa.json)
  * have not been modified. Any changes to these files will cause this test to fail.
  */
 
@@ -34,26 +34,26 @@ describe('Locked Files Integrity', () => {
     expect(currentHash).toBe(expectedHash)
   })
   
-  it('ramin_de.json has not been modified', () => {
-    const filePath = path.join(projectRoot, 'src', 'data', 'ramin_de.json')
+  it('cv_de.json has not been modified', () => {
+    const filePath = path.join(projectRoot, 'src', 'data', 'cv_de.json')
     const currentHash = computeSHA256(filePath)
-    const expectedHash = lockedHashes.locked_files['src/data/ramin_de.json'].hash
+    const expectedHash = lockedHashes.locked_files['src/data/cv_de.json'].hash
     
     if (expectedHash === 'PLACEHOLDER_HASH_TO_BE_GENERATED') {
-      console.warn('⚠️  Hash not yet generated for ramin_de.json. Run: npm run generate-hashes')
+      console.warn('⚠️  Hash not yet generated for cv_de.json. Run: npm run generate-hashes')
       return
     }
     
     expect(currentHash).toBe(expectedHash)
   })
   
-  it('ramin_fa.json has not been modified', () => {
-    const filePath = path.join(projectRoot, 'src', 'data', 'ramin_fa.json')
+  it('cv_fa.json has not been modified', () => {
+    const filePath = path.join(projectRoot, 'src', 'data', 'cv_fa.json')
     const currentHash = computeSHA256(filePath)
-    const expectedHash = lockedHashes.locked_files['src/data/ramin_fa.json'].hash
+    const expectedHash = lockedHashes.locked_files['src/data/cv_fa.json'].hash
     
     if (expectedHash === 'PLACEHOLDER_HASH_TO_BE_GENERATED') {
-      console.warn('⚠️  Hash not yet generated for ramin_fa.json. Run: npm run generate-hashes')
+      console.warn('⚠️  Hash not yet generated for cv_fa.json. Run: npm run generate-hashes')
       return
     }
     

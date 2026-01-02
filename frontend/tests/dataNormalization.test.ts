@@ -7,8 +7,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { normalizeCVData, validateNormalizedData } from '../src/utils/dataNormalizer'
 import cvDataEN from '../src/data/cv.json'
-import cvDataDE from '../src/data/ramin_de.json'
-import cvDataFA from '../src/data/ramin_fa.json'
+import cvDataDE from '../src/data/cv_de.json'
+import cvDataFA from '../src/data/cv_fa.json'
 
 describe('Data Normalization', () => {
   describe('Zero unmapped key warnings (F-01)', () => {
