@@ -21,7 +21,7 @@ import * as path from 'path';
  */
 
 // ============================================================================
-// PHASE A: Define Viewports
+// PHASE A: Define Viewports and Constants
 // ============================================================================
 
 const viewports = [
@@ -36,6 +36,20 @@ const languages = [
   { code: 'de', name: 'German', isRTL: false },
   { code: 'fa', name: 'Persian', isRTL: true },
 ];
+
+// Layout check thresholds
+const MIN_VISIBLE_AREA_RATIO = 0.5; // Element must be at least 50% visible to be considered in viewport
+const MAX_HEADER_HEIGHT_RATIO = 0.25; // Header shouldn't be more than 25% of viewport height
+const HEADER_Y_TOLERANCE = 5; // Pixels tolerance for header position at y=0
+
+// Localized UI text for button interactions
+const LOCALIZED_TEXT = {
+  expandAll: {
+    en: 'Expand',
+    de: 'Erweitern',
+    fa: 'گسترش',
+  },
+};
 
 // ============================================================================
 // PHASE B: Define UI States
@@ -134,8 +148,9 @@ function isWithinViewport(
   viewportHeight: number
 ): boolean {
   if (!box) return false;
+  if (viewportWidth <= 0 || viewportHeight <= 0) return false;
 
-  // Element is considered visible if at least 50% is within viewport
+  // Element is considered visible if at least MIN_VISIBLE_AREA_RATIO is within viewport
   const visibleWidth = Math.min(box.x + box.width, viewportWidth) - Math.max(box.x, 0);
   const visibleHeight =
     Math.min(box.y + box.height, viewportHeight) - Math.max(box.y, 0);
@@ -143,7 +158,7 @@ function isWithinViewport(
   const visibleArea = Math.max(0, visibleWidth) * Math.max(0, visibleHeight);
   const totalArea = box.width * box.height;
 
-  return visibleArea >= totalArea * 0.5;
+  return visibleArea >= totalArea * MIN_VISIBLE_AREA_RATIO;
 }
 
 /**
@@ -269,8 +284,8 @@ async function performLayoutChecks(
     // We check for actual problems:
     // - Header height should be reasonable (not covering too much viewport)
     // - Header should be at y=0 or close to it (within viewport)
-    const headerHeightOk = headerBox.height < viewport.height * 0.25; // Header shouldn't be more than 25% of viewport
-    const headerInViewport = headerBox.y >= -5 && headerBox.y < viewport.height / 2;
+    const headerHeightOk = headerBox.height < viewport.height * MAX_HEADER_HEIGHT_RATIO;
+    const headerInViewport = headerBox.y >= -HEADER_Y_TOLERANCE && headerBox.y < viewport.height / 2;
     const passed = headerHeightOk && headerInViewport;
     
     recordAssertion(
@@ -443,7 +458,9 @@ test.describe('UI State Visual QA', () => {
           console.log(`📸 Captured: ${initialScreenshot}`);
 
           // Find and click "Expand All" button if available (list view)
-          const expandAllBtn = page.locator('button:has-text("Expand"), button:has-text("Erweitern"), button:has-text("گسترش")').first();
+          const expandTexts = Object.values(LOCALIZED_TEXT.expandAll);
+          const expandAllSelector = expandTexts.map(text => `button:has-text("${text}")`).join(', ');
+          const expandAllBtn = page.locator(expandAllSelector).first();
           if ((await expandAllBtn.count()) > 0 && (await expandAllBtn.isVisible())) {
             await expandAllBtn.click();
             await page.waitForTimeout(300);
