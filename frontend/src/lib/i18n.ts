@@ -1615,8 +1615,18 @@ const translations: Record<Language, UIStrings> = {
   }
 }
 
+// Pseudo-localization support for QA
+import { isPseudoLocEnabled, pseudoLocalizeObject } from '@/utils/pseudoLocalization'
+
 export function getUIStrings(lang: Language): UIStrings {
-  return translations[lang] || translations.en
+  const strings = translations[lang] || translations.en
+  
+  // Apply pseudo-localization if enabled
+  if (isPseudoLocEnabled()) {
+    return pseudoLocalizeObject(strings)
+  }
+  
+  return strings
 }
 
 export function t(lang: Language, key: string): string {

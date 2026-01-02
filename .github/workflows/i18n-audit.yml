@@ -1,0 +1,133 @@
+name: i18n Audit
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'frontend/src/**'
+      - 'frontend/package.json'
+  workflow_dispatch: # Allow manual runs
+
+permissions:
+  contents: read
+  pull-requests: write
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  i18n-audit:
+    name: i18n Coverage Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run i18n audit script
+        run: npm run i18n-audit
+        continue-on-error: true # Don't fail the job, just report findings
+        
+      - name: Upload i18n audit report (Markdown)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: i18n-audit-report
+          path: frontend/i18n-audit-report.md
+          retention-days: 30
+          
+      - name: Upload i18n audit report (JSON)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: i18n-audit-json
+          path: frontend/i18n-audit-report.json
+          retention-days: 30
+          
+      - name: Run ESLint for i18n warnings
+        run: npm run lint 2>&1 | grep -E "(jsx-no-literals|hardcoded)" || echo "No i18n-related lint warnings"
+        continue-on-error: true
+        
+      - name: Run i18n completeness tests
+        run: npm run test -- tests/i18n-completeness.test.ts tests/i18n-formatting.test.ts
+        
+      - name: Summary
+        if: always()
+        run: |
+          echo "## i18n Audit Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "i18n-audit-report.json" ]; then
+            echo "### Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            MISSING=$(cat i18n-audit-report.json | jq '.summary.missingKeysCount')
+            UNUSED=$(cat i18n-audit-report.json | jq '.summary.unusedKeysCount')
+            HARDCODED=$(cat i18n-audit-report.json | jq '.summary.hardcodedStringsCount')
+            
+            echo "| Category | Count |" >> $GITHUB_STEP_SUMMARY
+            echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Missing Keys | $MISSING |" >> $GITHUB_STEP_SUMMARY
+            echo "| Unused Keys | $UNUSED |" >> $GITHUB_STEP_SUMMARY
+            echo "| Hardcoded Strings | $HARDCODED |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See artifacts for full report." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Could not generate i18n audit report" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+  language-switch-test:
+    name: Language Switch E2E Tests
+    runs-on: ubuntu-latest
+    needs: i18n-audit
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Run i18n language switch tests
+        run: npm run test:e2e:i18n
+        continue-on-error: true
+        
+      - name: Upload language switch screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: i18n-screenshots
+          path: frontend/test-results/i18n-*.png
+          retention-days: 14
+          
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: i18n-playwright-report
+          path: frontend/playwright-report/
+          retention-days: 14
