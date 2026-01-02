@@ -1,0 +1,38 @@
+name: Dependency Review
+
+# This workflow checks for security vulnerabilities in dependency changes.
+# It runs on pull requests and blocks merging if vulnerable dependencies are introduced.
+#
+# Documentation: https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/package.json'
+      - 'frontend/package-lock.json'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    name: Review Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Fail on high and critical severity vulnerabilities
+          fail-on-severity: high
+          # Deny specific licenses if needed (optional)
+          # deny-licenses: GPL-3.0, AGPL-3.0
+          # Allow specific advisories to be ignored (optional)
+          # allow-ghsas: GHSA-xxxx-xxxx-xxxx
+          comment-summary-in-pr: always

@@ -1,21 +1,35 @@
 name: Deploy to GitHub Pages
 
+# =========================================================================
+# INTENTIONALLY DISABLED WORKFLOW
+# =========================================================================
 # This workflow is OPTIONAL and provides GitHub Pages deployment as a fallback.
 # For better experience, use Vercel, Netlify, or Cloudflare Pages instead.
-# 
-# To enable this workflow:
-# 1. Go to repository Settings → Pages
-# 2. Under "Source", select "GitHub Actions"
-# 3. Uncomment the workflow below (remove the "if: false" condition)
+#
+# STATUS: Disabled by design - not needed for current deployment strategy.
+#
+# WHY DISABLED:
+# - The project uses alternative deployment methods (e.g., Vercel)
+# - GitHub Pages requires additional repository settings configuration
+# - This workflow is kept for reference and can be enabled if needed
+#
+# TO ENABLE THIS WORKFLOW:
+# 1. Remove the global `if: false` condition below
+# 2. Go to repository Settings → Pages
+# 3. Under "Source", select "GitHub Actions"
 # 4. Push to main branch or trigger manually
+#
+# LOCAL TESTING:
+# - Run `npm run build` in the frontend directory
+# - Serve the dist folder locally: `npx serve frontend/dist`
+# =========================================================================
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
 
-# Disable by default - uncomment to enable
-# Remove the line below to activate this workflow
+# DISABLED: Remove this line to activate the workflow (see header comments)
 if: false
 
 permissions:
