@@ -37,7 +37,7 @@ const PublicationsSection = lazy(() => import('@/components/sections/Publication
 const ReferencesSection = lazy(() => import('@/components/sections/ReferencesSection').then(m => ({ default: m.ReferencesSection })))
 const ContactSection = lazy(() => import('@/components/sections/ContactSection').then(m => ({ default: m.ContactSection })))
 const Footer = lazy(() => import('@/components/sections/Footer').then(m => ({ default: m.Footer })))
-const SkillsVisualizationDashboard = lazy(() => import('@/components/SkillsVisualizationDashboard').then(m => ({ default: m.SkillsVisualizationDashboard })))
+
 const TestimonialsSection = lazy(() => import('@/components/TestimonialsSection').then(m => ({ default: m.TestimonialsSection })))
 const ArticlesSection = lazy(() => import('@/components/ArticlesSection').then(m => ({ default: m.ArticlesSection })))
 
@@ -168,12 +168,7 @@ function AppContent() {
         <Suspense fallback={<SectionSkeleton />}>
           <SkillsSection />
         </Suspense>
-        
-        {/* Skills Visualization Dashboard */}
-        <Suspense fallback={<SectionSkeleton />}>
-          <SkillsVisualizationDashboard />
-        </Suspense>
-        
+
         {/* Testimonials Section */}
         <Suspense fallback={<SectionSkeleton />}>
           <TestimonialsSection />
