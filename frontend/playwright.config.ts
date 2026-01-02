@@ -1,10 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Playwright configuration for visual proof (screenshot) tests
+ * Playwright configuration for visual proof (screenshot) and accessibility tests
  * 
  * This configuration captures screenshots of the CV website in EN/DE/FA
- * to provide visual proof that rendering is working correctly.
+ * and runs axe-core accessibility scans to provide quality assurance.
+ * 
+ * Tests:
+ *   - Visual proof (e2e/visual-proof.spec.ts)
+ *   - Accessibility (e2e/accessibility.spec.ts)
  */
 export default defineConfig({
   testDir: './e2e',
@@ -21,10 +25,19 @@ export default defineConfig({
   // Opt out of parallel tests on CI
   workers: process.env.CI ? 1 : undefined,
   
+  // Timeout for each test (30 seconds)
+  timeout: 30 * 1000,
+  
+  // Timeout for expect assertions (10 seconds)
+  expect: {
+    timeout: 10 * 1000,
+  },
+  
   // Reporter to use
   reporter: process.env.CI ? [
     ['html'],
-    ['junit', { outputFile: 'test-results/junit.xml' }]
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['json', { outputFile: 'test-results/results.json' }],
   ] : 'list',
   
   // Shared settings for all projects
@@ -40,6 +53,19 @@ export default defineConfig({
     
     // Video on failure
     video: 'retain-on-failure',
+    
+    // Deterministic settings for CI
+    // Fixed viewport for consistent rendering
+    viewport: { width: 1280, height: 720 },
+    
+    // Disable animations for deterministic tests
+    reducedMotion: 'reduce',
+    
+    // Locale for consistent date/number formatting
+    locale: 'en-US',
+    
+    // Timezone for consistent date handling
+    timezoneId: 'UTC',
   },
 
   // Configure projects for major browsers

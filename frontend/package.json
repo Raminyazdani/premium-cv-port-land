@@ -19,6 +19,9 @@
         "test:ui": "vitest --ui",
         "test:coverage": "vitest run --coverage",
         "test:language": "vitest run tests/language-content-verification.test.tsx",
+        "test:e2e": "playwright test",
+        "test:e2e:a11y": "playwright test e2e/accessibility.spec.ts",
+        "test:e2e:visual": "playwright test e2e/visual-proof.spec.ts",
         "verify-languages": "node scripts/verify-languages.js",
         "smoke-validation": "node scripts/smoke-validation.js",
         "generate-hashes": "node tests/generate-hashes.js",
@@ -94,6 +97,7 @@
         "zod": "^3.25.76"
     },
     "devDependencies": {
+        "@axe-core/playwright": "^4.10.2",
         "@eslint/js": "^9.21.0",
         "@lhci/cli": "^0.15.1",
         "@playwright/test": "^1.57.0",

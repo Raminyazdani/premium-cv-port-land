@@ -1,0 +1,222 @@
+# ==============================================================================
+# UI QA Accessibility CI Workflow
+# ==============================================================================
+#
+# This workflow runs Playwright-based accessibility tests using axe-core
+# against EN/DE/FA language routes.
+#
+# Tests include:
+#   - WCAG 2.1 Level A and AA compliance (axe-core)
+#   - RTL layout verification for Persian (FA)
+#   - Content checks (no undefined/null strings)
+#   - Keyboard accessibility validation
+#
+# Artifacts:
+#   - playwright-report/: HTML report with test results
+#   - a11y-results.json: Structured JSON with violations
+#   - Screenshots of each language
+#
+# Triggers:
+#   - Pull requests to main/develop
+#   - Manual dispatch
+#
+# ==============================================================================
+
+name: UI QA Accessibility
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  accessibility:
+    name: Accessibility Tests (axe-core)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ========================================
+      # Phase 1: Setup
+      # ========================================
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify locked files integrity
+        run: |
+          echo "🔒 Verifying locked CV files exist..."
+          for file in src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing locked file: $file"
+              exit 1
+            fi
+          done
+          echo "✅ All locked files present"
+          echo ""
+          echo "🔒 Computing SHA256 hashes for locked CV files..."
+          sha256sum src/data/cv.json src/data/ramin_de.json src/data/ramin_fa.json
+
+      # ========================================
+      # Phase 2: Install Playwright Browsers
+      # ========================================
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # ========================================
+      # Phase 3: Build Application
+      # ========================================
+      - name: Build application
+        run: |
+          echo "🔨 Building application..."
+          npm run build 2>&1 | tee build.log
+
+      - name: Verify build output
+        run: |
+          echo "📁 Checking build output..."
+          test -f dist/index.html || (echo "❌ Missing index.html" && exit 1)
+          test -d dist/assets || (echo "❌ Missing assets directory" && exit 1)
+          echo "✅ Build artifacts verified"
+          ls -lh dist/
+
+      # ========================================
+      # Phase 4: Run Accessibility Tests
+      # ========================================
+      - name: Create test-results directory
+        run: mkdir -p test-results
+
+      - name: Run a11y tests with Playwright
+        id: a11y-tests
+        run: |
+          echo "♿ Running accessibility tests..."
+          npx playwright test e2e/accessibility.spec.ts 2>&1 | tee a11y-test.log
+          TEST_EXIT_CODE=${PIPESTATUS[0]}
+          echo "test-exit-code=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          # Don't fail here - we want to upload artifacts first
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            echo "⚠️ Some accessibility tests had issues (exit code: $TEST_EXIT_CODE)"
+          else
+            echo "✅ All accessibility tests passed!"
+          fi
+
+      # ========================================
+      # Phase 5: Generate Summary
+      # ========================================
+      - name: Generate a11y summary
+        if: always()
+        run: |
+          echo "## ♿ Accessibility Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check if a11y-results.json exists
+          if [ -f test-results/a11y-results.json ]; then
+            echo "### Summary by Language" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Parse JSON and create summary table
+            node -e "
+              const fs = require('fs');
+              const results = JSON.parse(fs.readFileSync('test-results/a11y-results.json', 'utf8'));
+              
+              console.log('| Language | Violations | Passes | Incomplete |');
+              console.log('|----------|------------|--------|------------|');
+              
+              let totalViolations = 0;
+              for (const result of results) {
+                const lang = result.language.toUpperCase();
+                const violations = result.violations.length;
+                totalViolations += violations;
+                console.log(\`| \${lang} | \${violations} | \${result.passes} | \${result.incomplete} |\`);
+              }
+              
+              console.log('');
+              if (totalViolations > 0) {
+                console.log(\`⚠️ Total violations across all languages: \${totalViolations}\`);
+                console.log('');
+                console.log('### Violation Details');
+                console.log('');
+                for (const result of results) {
+                  if (result.violations.length > 0) {
+                    console.log(\`#### \${result.language.toUpperCase()}\`);
+                    console.log('');
+                    for (const v of result.violations) {
+                      console.log(\`- **[\${v.impact}]** \${v.id}: \${v.help}\`);
+                    }
+                    console.log('');
+                  }
+                }
+              } else {
+                console.log('✅ No violations found!');
+              }
+            " >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No a11y-results.json found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.a11y-tests.outputs.test-exit-code }}" = "0" ]; then
+            echo "✅ All accessibility tests passed!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some accessibility tests failed. Check the Playwright report for details." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📦 **Artifacts:** Download the \`a11y-report\` artifact for full HTML report and JSON results." >> $GITHUB_STEP_SUMMARY
+
+      # ========================================
+      # Phase 6: Upload Artifacts
+      # ========================================
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-build-logs
+          path: |
+            frontend/build.log
+            frontend/a11y-test.log
+          retention-days: 7
+
+      # ========================================
+      # Phase 7: Final Status Check
+      # ========================================
+      - name: Check test results
+        if: always()
+        run: |
+          if [ "${{ steps.a11y-tests.outputs.test-exit-code }}" != "0" ]; then
+            echo "❌ Accessibility tests failed"
+            exit 1
+          fi
+          echo "✅ Accessibility tests completed successfully"
