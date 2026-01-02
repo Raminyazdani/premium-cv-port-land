@@ -19,6 +19,11 @@ name: Deploy to GitHub Pages
 # 3. Under "Source", select "GitHub Actions"
 # 4. Push to main branch or trigger manually
 #
+# BASE PATH HANDLING:
+# - The build automatically sets the base path from GITHUB_REPOSITORY
+# - This ensures assets resolve correctly for /repo-name/ deployments
+# - You can override with VITE_BASE_PATH env var if needed
+#
 # LOCAL TESTING:
 # - Run `npm run build` in the frontend directory
 # - Serve the dist folder locally: `npx serve frontend/dist`
@@ -65,8 +70,13 @@ jobs:
       - name: Run tests
         run: npm run test
       
-      - name: Build
+      - name: Build for GitHub Pages
         run: npm run build
+        env:
+          # Enable GitHub Pages base path detection
+          GITHUB_PAGES: 'true'
+          # GITHUB_REPOSITORY is automatically set by GitHub Actions
+          # Format: "owner/repo" - vite.config.ts extracts repo name for base path
       
       - name: Setup Pages
         uses: actions/configure-pages@v4

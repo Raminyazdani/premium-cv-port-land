@@ -9,6 +9,8 @@
  * @see https://clarity.microsoft.com/
  */
 
+import { env, isDev, isProd } from '@/lib/env';
+
 // Type definition for window with Clarity
 type WindowWithClarity = Window & {
   clarity?: (...args: unknown[]) => void;
@@ -18,17 +20,13 @@ type WindowWithClarity = Window & {
  * Check if Clarity should be enabled
  */
 export function isClarityEnabled(): boolean {
-  const clarityId = import.meta.env.VITE_CLARITY_ID;
-  const forceEnable = import.meta.env.VITE_CLARITY_FORCE_ENABLE === 'true';
-  const isProd = import.meta.env.PROD;
-  
   // Require Clarity ID to be set
-  if (!clarityId) {
+  if (!env.VITE_CLARITY_ID) {
     return false;
   }
   
   // Enable in production, or if force enabled for testing
-  return isProd || forceEnable;
+  return isProd() || env.VITE_CLARITY_FORCE_ENABLE === true;
 }
 
 /**
@@ -56,14 +54,14 @@ function hasClarityFunction(): boolean {
  */
 export function initClarity(): void {
   if (!isClarityEnabled()) {
-    if (import.meta.env.DEV) {
+    if (isDev()) {
       console.debug('[Observability] Clarity disabled (missing VITE_CLARITY_ID or not in production)');
     }
     return;
   }
 
   // Get the clarity ID (guaranteed to exist after isClarityEnabled check)
-  const clarityId = import.meta.env.VITE_CLARITY_ID as string;
+  const clarityId = env.VITE_CLARITY_ID as string;
 
   // Check if already initialized
   if (hasClarityFunction()) {
@@ -93,7 +91,7 @@ export function initClarity(): void {
     // Commands are queued until the script loads
     callClarity('set', 'mask', 'balanced');
 
-    if (import.meta.env.DEV) {
+    if (isDev()) {
       console.debug('[Observability] Clarity initialized with ID:', clarityId);
     }
   } catch (error) {

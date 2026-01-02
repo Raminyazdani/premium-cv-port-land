@@ -7,8 +7,42 @@ import { resolve } from 'path'
 
 const projectRoot = process.env.PROJECT_ROOT || import.meta.dirname
 
+/**
+ * Get the base path for deployment
+ * 
+ * Priority:
+ * 1. VITE_BASE_PATH env var (explicit override)
+ * 2. Auto-detect from GITHUB_REPOSITORY for GitHub Pages CI builds
+ * 3. Default to '/' for root deployments
+ * 
+ * @see .env.example for VITE_BASE_PATH documentation
+ */
+function getBasePath(): string {
+  // Explicit base path takes priority
+  if (process.env.VITE_BASE_PATH) {
+    return process.env.VITE_BASE_PATH
+  }
+  
+  // Auto-detect for GitHub Pages from GITHUB_REPOSITORY (format: "owner/repo")
+  // Only in CI (GitHub Actions), not for local development
+  const ghRepo = process.env.GITHUB_REPOSITORY
+  const ghPages = process.env.GITHUB_PAGES === 'true'
+  
+  if (ghPages && ghRepo) {
+    const repoName = ghRepo.split('/')[1]
+    if (repoName) {
+      return `/${repoName}/`
+    }
+  }
+  
+  // Default: root deployment (Vercel, Netlify, custom domains)
+  return '/'
+}
+
 // https://vite.dev/config/
 export default defineConfig({
+  // Base path for deployment portability (GitHub Pages, subdirectory deployments)
+  base: getBasePath(),
   plugins: [
     react(),
     tailwindcss(),

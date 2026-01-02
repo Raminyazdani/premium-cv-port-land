@@ -10,6 +10,14 @@
  */
 
 import * as Sentry from '@sentry/react';
+import { 
+  env, 
+  isDev, 
+  isProd, 
+  getSentryTracesSampleRate, 
+  getSentryReplaysSessionRate, 
+  getSentryReplaysErrorRate 
+} from '@/lib/env';
 
 // Regex patterns for PII scrubbing
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
@@ -28,17 +36,13 @@ function scrubPii(text: string): string {
  * Check if Sentry should be enabled
  */
 export function isSentryEnabled(): boolean {
-  const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
-  const forceEnable = import.meta.env.VITE_SENTRY_FORCE_ENABLE === 'true';
-  const isProd = import.meta.env.PROD;
-  
   // Require Sentry DSN to be set
-  if (!sentryDsn) {
+  if (!env.VITE_SENTRY_DSN) {
     return false;
   }
   
   // Enable in production, or if force enabled for testing
-  return isProd || forceEnable;
+  return isProd() || env.VITE_SENTRY_FORCE_ENABLE === true;
 }
 
 /**
@@ -49,33 +53,33 @@ export function isSentryEnabled(): boolean {
  */
 export function initSentry(): void {
   if (!isSentryEnabled()) {
-    if (import.meta.env.DEV) {
+    if (isDev()) {
       console.debug('[Observability] Sentry disabled (missing VITE_SENTRY_DSN or not in production)');
     }
     return;
   }
 
   // Get the DSN (guaranteed to exist after isSentryEnabled check)
-  const sentryDsn = import.meta.env.VITE_SENTRY_DSN as string;
+  const sentryDsn = env.VITE_SENTRY_DSN as string;
 
   try {
     Sentry.init({
       dsn: sentryDsn,
       
       // Environment configuration
-      environment: import.meta.env.MODE || 'production',
+      environment: env.MODE || 'production',
       
       // Release tracking (set via CI/CD if needed)
-      release: import.meta.env.VITE_SENTRY_RELEASE || undefined,
+      release: env.VITE_SENTRY_RELEASE || undefined,
       
       // Performance monitoring - sample rate (adjust based on traffic)
       // Set to 0 to disable performance monitoring, 1.0 for 100%
-      tracesSampleRate: parseFloat(import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE || '0.1'),
+      tracesSampleRate: getSentryTracesSampleRate(),
       
       // Session replay - disabled by default for privacy
       // Can be enabled via env var
-      replaysSessionSampleRate: parseFloat(import.meta.env.VITE_SENTRY_REPLAYS_SESSION_RATE || '0'),
-      replaysOnErrorSampleRate: parseFloat(import.meta.env.VITE_SENTRY_REPLAYS_ERROR_RATE || '0'),
+      replaysSessionSampleRate: getSentryReplaysSessionRate(),
+      replaysOnErrorSampleRate: getSentryReplaysErrorRate(),
       
       // Privacy: Don't send PII by default
       sendDefaultPii: false,
@@ -130,7 +134,7 @@ export function initSentry(): void {
       ],
     });
 
-    if (import.meta.env.DEV) {
+    if (isDev()) {
       console.debug('[Observability] Sentry initialized');
     }
   } catch (error) {
