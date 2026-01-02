@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -25,26 +25,26 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ project, onOpenMedia }: ProjectCardProps) {
-  const title = safeString(project.title || project.name, 'Untitled Project')
+  const t = useTranslation()
+  const title = safeString(project.title || project.name, t.fallbacks.untitled_project)
   const description = safeString(project.description)
   const url = project.url ? safeUrl(project.url) : null
   const typeKeys = safeArray<string>(project.type_key)
-  const t = useTranslation()
 
   const uniqueDomains = useMemo(() => {
     const domains = new Set<string>()
     typeKeys.forEach(key => {
       const normalized = key.toLowerCase()
-      if (normalized === 'programming') domains.add('Programming')
-      else if (normalized === 'bioinformatics') domains.add('Bioinformatics')
-      else if (normalized === 'biotechnology') domains.add('Biotechnology')
-      else if (normalized === 'academic') domains.add('Academic')
-      else if (normalized === 'student projects') domains.add('Student Projects')
-      else if (normalized === 'robotics') domains.add('Robotics')
-      else if (normalized === 'embedded systems') domains.add('Embedded Systems')
+      if (normalized === 'programming') domains.add(t.domains.programming)
+      else if (normalized === 'bioinformatics') domains.add(t.domains.bioinformatics)
+      else if (normalized === 'biotechnology') domains.add(t.domains.biotechnology)
+      else if (normalized === 'academic') domains.add(t.domains.academic)
+      else if (normalized === 'student projects') domains.add(t.domains.student_projects)
+      else if (normalized === 'robotics') domains.add(t.domains.robotics)
+      else if (normalized === 'embedded systems') domains.add(t.domains.embedded_systems)
     })
     return Array.from(domains)
-  }, [typeKeys])
+  }, [typeKeys, t.domains])
 
   const detectImageUrl = useMemo(() => {
     if (!description) return null
@@ -161,22 +161,30 @@ export function ProjectsSection() {
   }
   logger.groupEnd()
 
+  // Helper to map type_key values to translated domain labels
+  const mapKeyToDomain = useCallback((key: string): string | null => {
+    const normalized = key.toLowerCase()
+    if (normalized === 'programming') return t.domains.programming
+    if (normalized === 'bioinformatics') return t.domains.bioinformatics
+    if (normalized === 'biotechnology') return t.domains.biotechnology
+    if (normalized === 'academic') return t.domains.academic
+    if (normalized === 'student projects') return t.domains.student_projects
+    if (normalized === 'robotics') return t.domains.robotics
+    if (normalized === 'embedded systems') return t.domains.embedded_systems
+    return null
+  }, [t.domains])
+
   const allDomains = useMemo(() => {
     const domains = new Set<string>()
     projects.forEach(project => {
       const typeKeys = project.type_key || []
       typeKeys.forEach(key => {
-        if (key.toLowerCase() === 'programming') domains.add('Programming')
-        else if (key.toLowerCase() === 'bioinformatics') domains.add('Bioinformatics')
-        else if (key.toLowerCase() === 'biotechnology') domains.add('Biotechnology')
-        else if (key.toLowerCase() === 'academic') domains.add('Academic')
-        else if (key.toLowerCase() === 'student projects') domains.add('Student Projects')
-        else if (key.toLowerCase() === 'robotics') domains.add('Robotics')
-        else if (key.toLowerCase() === 'embedded systems') domains.add('Embedded Systems')
+        const domain = mapKeyToDomain(key)
+        if (domain) domains.add(domain)
       })
     })
     return Array.from(domains).sort()
-  }, [projects])
+  }, [projects, mapKeyToDomain])
 
   const uniqueProjects = useMemo(() => {
     const seen = new Map<string, Project>()
@@ -202,13 +210,8 @@ export function ProjectsSection() {
         const projectDomains = new Set<string>()
         const typeKeys = project.type_key || []
         typeKeys.forEach(key => {
-          if (key.toLowerCase() === 'programming') projectDomains.add('Programming')
-          else if (key.toLowerCase() === 'bioinformatics') projectDomains.add('Bioinformatics')
-          else if (key.toLowerCase() === 'biotechnology') projectDomains.add('Biotechnology')
-          else if (key.toLowerCase() === 'academic') projectDomains.add('Academic')
-          else if (key.toLowerCase() === 'student projects') projectDomains.add('Student Projects')
-          else if (key.toLowerCase() === 'robotics') projectDomains.add('Robotics')
-          else if (key.toLowerCase() === 'embedded systems') projectDomains.add('Embedded Systems')
+          const domain = mapKeyToDomain(key)
+          if (domain) projectDomains.add(domain)
         })
         
         const hasSelectedDomain = Array.from(selectedDomains).some(domain => 
@@ -224,7 +227,7 @@ export function ProjectsSection() {
 
       return true
     })
-  }, [uniqueProjects, searchQuery, selectedDomains, hasLinkFilter])
+  }, [uniqueProjects, searchQuery, selectedDomains, hasLinkFilter, mapKeyToDomain])
 
   const { containerRef, getItemStyle } = useStaggeredScrollAnimation(filteredProjects.length, {
     threshold: 0.05,
@@ -281,7 +284,7 @@ export function ProjectsSection() {
               {t.sections.projects}
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground">
-              A collection of programming, bioinformatics, and research projects
+              {t.sectionSubtitles.projects}
             </p>
           </div>
           <Separator />
@@ -319,7 +322,7 @@ export function ProjectsSection() {
               className="cursor-pointer hover:border-primary transition-colors text-xs sm:text-sm py-1 px-2 touch-manipulation"
               onClick={() => setHasLinkFilter(curr => curr === true ? null : true)}
             >
-              Has Link
+              {t.actions.has_link}
             </Badge>
             
             {hasActiveFilters && (
@@ -342,7 +345,9 @@ export function ProjectsSection() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Showing {filteredProjects.length} of {uniqueProjects.length} projects
+              {t.counts.showing_x_of_y_projects
+                .replace('{current}', String(filteredProjects.length))
+                .replace('{total}', String(uniqueProjects.length))}
             </p>
           </div>
 

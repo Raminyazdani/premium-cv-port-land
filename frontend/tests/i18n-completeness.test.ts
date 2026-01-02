@@ -192,4 +192,173 @@ describe('I18N Completeness Tests', () => {
       expect(fa.actions.collapse_all).not.toBe('Collapse All')
     })
   })
+
+  describe('New i18n keys from Issue 06', () => {
+    describe('Fallback strings', () => {
+      it('should have fallbacks translated in all languages', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        // English
+        expect(en.fallbacks.untitled_role).toBe('Untitled Role')
+        expect(en.fallbacks.untitled_project).toBe('Untitled Project')
+        expect(en.fallbacks.untitled_publication).toBe('Untitled Publication')
+        expect(en.fallbacks.unknown_institution).toBe('Unknown Institution')
+        
+        // German
+        expect(de.fallbacks.untitled_role).toBe('Unbenannte Rolle')
+        expect(de.fallbacks.untitled_project).toBe('Unbenanntes Projekt')
+        expect(de.fallbacks.untitled_publication).toBe('Unbenannte Veröffentlichung')
+        expect(de.fallbacks.unknown_institution).toBe('Unbekannte Institution')
+        
+        // Persian
+        expect(fa.fallbacks.untitled_role).toBe('نقش بدون عنوان')
+        expect(fa.fallbacks.untitled_project).toBe('پروژه بدون عنوان')
+        expect(fa.fallbacks.untitled_publication).toBe('انتشار بدون عنوان')
+        expect(fa.fallbacks.unknown_institution).toBe('موسسه ناشناخته')
+      })
+    })
+
+    describe('Section subtitles', () => {
+      it('should have section subtitles translated', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        expect(en.sectionSubtitles.education).toBeDefined()
+        expect(de.sectionSubtitles.education).toBeDefined()
+        expect(fa.sectionSubtitles.education).toBeDefined()
+        
+        expect(en.sectionSubtitles.experiences).toBeDefined()
+        expect(de.sectionSubtitles.experiences).toBeDefined()
+        expect(fa.sectionSubtitles.experiences).toBeDefined()
+        
+        expect(en.sectionSubtitles.projects).toBeDefined()
+        expect(de.sectionSubtitles.projects).toBeDefined()
+        expect(fa.sectionSubtitles.projects).toBeDefined()
+        
+        expect(en.sectionSubtitles.references).toBeDefined()
+        expect(de.sectionSubtitles.references).toBeDefined()
+        expect(fa.sectionSubtitles.references).toBeDefined()
+      })
+    })
+
+    describe('Domain labels', () => {
+      it('should have domain labels translated', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        // Programming
+        expect(en.domains.programming).toBe('Programming')
+        expect(de.domains.programming).toBe('Programmierung')
+        expect(fa.domains.programming).toBe('برنامه‌نویسی')
+        
+        // Bioinformatics
+        expect(en.domains.bioinformatics).toBe('Bioinformatics')
+        expect(de.domains.bioinformatics).toBe('Bioinformatik')
+        expect(fa.domains.bioinformatics).toBe('بیوانفورماتیک')
+        
+        // Industry/Academic
+        expect(en.domains.industry).toBe('Industry')
+        expect(de.domains.industry).toBe('Industrie')
+        expect(fa.domains.industry).toBe('صنعت')
+        
+        expect(en.domains.academic).toBe('Academic')
+        expect(de.domains.academic).toBe('Akademisch')
+        expect(fa.domains.academic).toBe('آکادمیک')
+      })
+    })
+
+    describe('UI action strings', () => {
+      it('should have Show/Hide Contact translated', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        expect(en.actions.show_contact).toBe('Show Contact')
+        expect(de.actions.show_contact).toBe('Kontakt anzeigen')
+        expect(fa.actions.show_contact).toBe('نمایش اطلاعات تماس')
+        
+        expect(en.actions.hide_contact).toBe('Hide Contact')
+        expect(de.actions.hide_contact).toBe('Kontakt ausblenden')
+        expect(fa.actions.hide_contact).toBe('مخفی کردن اطلاعات تماس')
+      })
+
+      it('should have Timeline/By Category translated', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        expect(en.actions.timeline).toBe('Timeline')
+        expect(de.actions.timeline).toBe('Zeitleiste')
+        expect(fa.actions.timeline).toBe('جدول زمانی')
+        
+        expect(en.actions.by_category).toBe('By Category')
+        expect(de.actions.by_category).toBe('Nach Kategorie')
+        expect(fa.actions.by_category).toBe('بر اساس دسته‌بندی')
+      })
+
+      it('should have Has Link translated', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        expect(en.actions.has_link).toBe('Has Link')
+        expect(de.actions.has_link).toBe('Mit Link')
+        expect(fa.actions.has_link).toBe('دارای لینک')
+      })
+    })
+
+    describe('Toast messages', () => {
+      it('should have toast messages with interpolation', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        expect(en.toasts.copied_to_clipboard).toContain('{label}')
+        expect(de.toasts.copied_to_clipboard).toContain('{label}')
+        expect(fa.toasts.copied_to_clipboard).toContain('{label}')
+        
+        expect(en.toasts.link_copied).toContain('{network}')
+        expect(de.toasts.link_copied).toContain('{network}')
+        expect(fa.toasts.link_copied).toContain('{network}')
+      })
+    })
+
+    describe('Count displays', () => {
+      it('should have count display strings with interpolation', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        expect(en.counts.showing_x_of_y_projects).toContain('{current}')
+        expect(en.counts.showing_x_of_y_projects).toContain('{total}')
+        
+        expect(de.counts.showing_x_of_y_projects).toContain('{current}')
+        expect(de.counts.showing_x_of_y_projects).toContain('{total}')
+        
+        expect(fa.counts.showing_x_of_y_projects).toContain('{current}')
+        expect(fa.counts.showing_x_of_y_projects).toContain('{total}')
+      })
+    })
+
+    describe('References section', () => {
+      it('should have privacy notice translated', () => {
+        const en = getUIStrings('en')
+        const de = getUIStrings('de')
+        const fa = getUIStrings('fa')
+        
+        expect(en.references.privacy_notice).toBeDefined()
+        expect(en.references.privacy_notice.length).toBeGreaterThan(20)
+        
+        expect(de.references.privacy_notice).toBeDefined()
+        expect(de.references.privacy_notice.length).toBeGreaterThan(20)
+        
+        expect(fa.references.privacy_notice).toBeDefined()
+        expect(fa.references.privacy_notice.length).toBeGreaterThan(20)
+      })
+    })
+  })
 })

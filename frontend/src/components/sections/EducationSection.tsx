@@ -32,9 +32,10 @@ interface EducationCardProps {
 const MotionCard = motion.create(Card)
 
 function EducationCard({ education, index }: EducationCardProps) {
+  const t = useTranslation()
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   
-  const institution = safeString(education.institution, 'Unknown Institution')
+  const institution = safeString(education.institution, t.fallbacks.unknown_institution)
   const studyType = safeString(education.studyType)
   const area = safeString(education.area)
   const location = safeString(education.location)
@@ -215,7 +216,7 @@ export function EducationSection() {
       icon={<GraduationCap size={32} weight="duotone" />}
       isEmpty={education.length === 0}
       emptyMessage={t.empty.no_education}
-      subtitle="My academic journey and continuous learning path"
+      subtitle={t.sectionSubtitles.education}
     >
       {/* Secondary filter (tag-based) */}
       {allTags.length > 1 && (

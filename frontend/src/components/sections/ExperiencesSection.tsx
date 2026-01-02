@@ -82,12 +82,14 @@ interface ProcessedExperience extends Omit<Experience, 'startDate' | 'endDate'> 
 interface ExperienceCardProps {
   experience: ProcessedExperience
   presentLabel: string
+  t: ReturnType<typeof useTranslation>
 }
 
-function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
+function ExperienceCard({ experience, presentLabel, t }: ExperienceCardProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const { displayDuration } = parseDuration(experience.duration, presentLabel)
   const category = experience.category
+  const categoryLabel = category === 'Academic' ? t.domains.academic : t.domains.industry
 
   const hasExpandableContent = experience.description && experience.description.length > 150
 
@@ -99,7 +101,7 @@ function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
         <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
           <div className="flex-1 space-y-1">
             <CardTitle className="text-lg md:text-xl font-semibold leading-tight">
-              {experience.role || 'Untitled Role'}
+              {experience.role || t.fallbacks.untitled_role}
             </CardTitle>
             {experience.institution && (
               <div className="flex items-center gap-2 text-muted-foreground">
@@ -121,7 +123,7 @@ function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
               <span className="text-sm whitespace-nowrap">{displayDuration}</span>
             </div>
             <Badge variant="secondary" className="w-fit">
-              {category}
+              {categoryLabel}
             </Badge>
           </div>
         </div>
@@ -132,7 +134,7 @@ function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
           <ul className="space-y-2">
             <li className="text-sm leading-relaxed flex items-start gap-2">
               <span className="text-primary font-bold mt-1">•</span>
-              <span><strong>Focus:</strong> {experience.primaryFocus}</span>
+              <span><strong>{t.experience.focus}:</strong> {experience.primaryFocus}</span>
             </li>
           </ul>
         )}
@@ -151,7 +153,7 @@ function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
                       className="ml-1 p-0 h-auto font-semibold"
                       onClick={() => setIsExpanded(true)}
                     >
-                      Show more <CaretDown className="ml-1 h-3 w-3" />
+                      {t.actions.show_more} <CaretDown className="ml-1 h-3 w-3" />
                     </Button>
                   </>
                 ) : (
@@ -164,7 +166,7 @@ function ExperienceCard({ experience, presentLabel }: ExperienceCardProps) {
                         className="ml-1 p-0 h-auto font-semibold"
                         onClick={() => setIsExpanded(false)}
                       >
-                        Show less <CaretUp className="ml-1 h-3 w-3" />
+                        {t.actions.show_less} <CaretUp className="ml-1 h-3 w-3" />
                       </Button>
                     )}
                   </>
@@ -215,6 +217,10 @@ export function ExperiencesSection() {
     })
   }, [processedExperiences])
 
+  // Extract domain labels for stable useMemo dependencies
+  const academicLabel = t.domains.academic
+  const industryLabel = t.domains.industry
+  
   const grouped = useMemo((): Record<string, typeof sortedExperiences> => {
     if (groupBy === 'none') {
       return { All: sortedExperiences }
@@ -224,11 +230,11 @@ export function ExperiencesSection() {
     const industry = sortedExperiences.filter(exp => exp.category === 'Industry')
     
     const result: Record<string, typeof sortedExperiences> = {}
-    if (academic.length > 0) result['Academic'] = academic
-    if (industry.length > 0) result['Industry'] = industry
+    if (academic.length > 0) result[academicLabel] = academic
+    if (industry.length > 0) result[industryLabel] = industry
     
     return result
-  }, [sortedExperiences, groupBy])
+  }, [sortedExperiences, groupBy, academicLabel, industryLabel])
 
   if (experiences.length === 0) {
     return (
@@ -237,12 +243,12 @@ export function ExperiencesSection() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Briefcase className="h-5 w-5" />
-              No Experiences
+              {t.empty.no_experience}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              No professional experiences have been added yet.
+              {t.empty.no_experiences_added}
             </p>
           </CardContent>
         </Card>
@@ -258,10 +264,10 @@ export function ExperiencesSection() {
             <div className="space-y-2">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-3">
                 <Briefcase className="h-8 w-8 text-primary" />
-                Professional Experience
+                {t.sections.experiences}
               </h2>
               <p className="text-muted-foreground">
-                A timeline of roles, research, and contributions
+                {t.sectionSubtitles.experiences}
               </p>
             </div>
             <Separator />
@@ -269,7 +275,7 @@ export function ExperiencesSection() {
           <Card>
             <CardContent className="pt-6">
               <p className="text-sm text-muted-foreground text-center">
-                No experiences match the current focus filter. Try selecting "Full CV" to see all experiences.
+                {t.empty.no_experiences_filter}
               </p>
             </CardContent>
           </Card>
@@ -286,10 +292,10 @@ export function ExperiencesSection() {
             <div className="space-y-2">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-3">
                 <Briefcase className="h-8 w-8 text-primary" />
-                Professional Experience
+                {t.sections.experiences}
               </h2>
               <p className="text-muted-foreground">
-                A timeline of roles, research, and contributions
+                {t.sectionSubtitles.experiences}
               </p>
             </div>
             
@@ -299,14 +305,14 @@ export function ExperiencesSection() {
                 size="sm"
                 onClick={() => setGroupBy('none')}
               >
-                Timeline
+                {t.actions.timeline}
               </Button>
               <Button
                 variant={groupBy === 'category' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setGroupBy('category')}
               >
-                By Category
+                {t.actions.by_category}
               </Button>
             </div>
           </div>
@@ -333,7 +339,7 @@ export function ExperiencesSection() {
                       <div className="absolute left-0 top-6 w-4 h-4 rounded-full bg-primary border-4 border-background hidden md:block" />
                     )}
                     <div className={groupBy === 'none' ? 'md:ml-10' : ''}>
-                      <ExperienceCard experience={exp} presentLabel={presentLabel} />
+                      <ExperienceCard experience={exp} presentLabel={presentLabel} t={t} />
                     </div>
                   </div>
                 ))}
