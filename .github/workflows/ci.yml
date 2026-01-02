@@ -18,8 +18,9 @@ defaults:
 
 jobs:
   lint-and-test:
-    name: Lint, Test & Build
+    name: Lint, Typecheck, Test & Build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     
     steps:
       - name: Checkout code
@@ -45,7 +46,15 @@ jobs:
         
       - name: Run linter
         run: npm run lint
-        continue-on-error: true # Don't fail CI on lint warnings
+        
+      - name: Run TypeScript typecheck
+        run: npm run typecheck
+        
+      # TODO: Enable format:check as blocking once codebase formatting is fixed
+      # Currently 149 files have formatting issues. Run `npm run format` to fix.
+      - name: Check code formatting (Prettier)
+        run: npm run format:check
+        continue-on-error: true
         
       - name: Run unit tests
         run: npm run test
@@ -76,6 +85,7 @@ jobs:
     name: Visual Proof (Screenshots)
     runs-on: ubuntu-latest
     needs: lint-and-test
+    timeout-minutes: 15
     
     steps:
       - name: Checkout code
@@ -121,6 +131,7 @@ jobs:
     name: Smoke Validation (EN/DE/FA)
     runs-on: ubuntu-latest
     needs: lint-and-test
+    timeout-minutes: 10
     
     steps:
       - name: Checkout code

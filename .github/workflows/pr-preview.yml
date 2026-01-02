@@ -1,22 +1,37 @@
 name: PR Preview (GitHub Actions)
 
+# =========================================================================
+# INTENTIONALLY DISABLED WORKFLOW
+# =========================================================================
 # This workflow is OPTIONAL and provides PR previews using GitHub artifacts.
 # For better experience, use Vercel, Netlify, or Cloudflare Pages instead.
 #
-# This workflow builds PR changes and uploads as artifact.
-# Users must download artifact manually to test.
+# STATUS: Disabled by design - artifact-based previews require manual download.
 #
-# To enable this workflow:
-# 1. Uncomment the workflow below (remove the "if: false" condition)
+# WHY DISABLED:
+# - GitHub Actions artifacts require manual download to test
+# - Vercel/Netlify provide instant live preview URLs automatically
+# - This workflow is kept for reference and can be enabled as a fallback
+#
+# TO ENABLE THIS WORKFLOW:
+# 1. Remove the global `if: false` condition below
 # 2. Push to trigger on next PR
+#
+# HOW IT WORKS:
+# - Builds PR changes and uploads as artifact
+# - Users must download artifact manually to test:
+#   1. Download the `pr-preview-{number}` artifact from the workflow run
+#   2. Extract the ZIP file
+#   3. Serve with: `npx serve dist`
+#   4. Open http://localhost:3000
+# =========================================================================
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [ main, develop ]
 
-# Disable by default - uncomment to enable
-# Remove the line below to activate this workflow
+# DISABLED: Remove this line to activate the workflow (see header comments)
 if: false
 
 permissions:
