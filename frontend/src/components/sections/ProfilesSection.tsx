@@ -11,6 +11,8 @@ import { toast } from 'sonner'
 import type { Profile } from '@/types/cv'
 import { useTranslation } from '@/context/LanguageContext'
 import { interpolate } from '@/lib/i18n'
+import { SectionWrapper } from '@/components/composites/SectionWrapper'
+import { Globe } from '@phosphor-icons/react'
 
 function normalizeNetwork(network?: string | null): string {
   if (!network) return 'unknown'
@@ -120,19 +122,6 @@ export function ProfilesSection() {
   const profiles = cvData.profiles ?? []
   const t = useTranslation()
 
-  if (profiles.length === 0) {
-    return (
-      <section className="py-8" aria-labelledby="profiles-heading" id="profiles">
-        <div className="container max-w-6xl px-4">
-          <h2 id="profiles-heading" className="text-2xl font-bold mb-4">
-            {t.sections.profiles}
-          </h2>
-          <p className="text-muted-foreground">{t.profiles?.no_profiles}</p>
-        </div>
-      </section>
-    )
-  }
-
   const priorityOrder = ['linkedin', 'github', 'google scholar', 'scholar', 'orcid']
   
   const sortedProfiles = [...profiles].sort((a, b) => {
@@ -149,26 +138,27 @@ export function ProfilesSection() {
   })
 
   return (
-    <TooltipProvider delayDuration={300}>
-      <section className="py-12 bg-muted/30" aria-labelledby="profiles-heading" id="profiles">
-        <div className="container max-w-6xl px-4">
-          <h2 id="profiles-heading" className="text-3xl font-bold mb-6 text-center">
-            {t.sections.profiles}
-          </h2>
-          
-          <div 
-            className="flex flex-wrap items-center justify-center gap-3"
-            role="list"
-            aria-label={t.a11y?.social_profiles}
-          >
-            {sortedProfiles.map((profile, idx) => (
-              <div key={idx} role="listitem">
-                <ProfileLink profile={profile} t={t} />
-              </div>
-            ))}
-          </div>
+    <SectionWrapper
+      id="profiles"
+      title={t.sections.profiles}
+      icon={<Globe size={32} weight="duotone" />}
+      isEmpty={profiles.length === 0}
+      emptyMessage={t.profiles?.no_profiles}
+      className="bg-muted/30"
+    >
+      <TooltipProvider delayDuration={300}>
+        <div 
+          className="flex flex-wrap items-center justify-center gap-3"
+          role="list"
+          aria-label={t.a11y?.social_profiles}
+        >
+          {sortedProfiles.map((profile, idx) => (
+            <div key={idx} role="listitem">
+              <ProfileLink profile={profile} t={t} />
+            </div>
+          ))}
         </div>
-      </section>
-    </TooltipProvider>
+      </TooltipProvider>
+    </SectionWrapper>
   )
 }

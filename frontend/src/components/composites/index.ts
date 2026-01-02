@@ -1,2 +1,2 @@
 // Composite components: Higher-level components built from UI primitives
-export { SectionWrapper, type SectionWrapperProps } from './SectionWrapper'
+export { SectionWrapper, EmptyState, type SectionWrapperProps, type EmptyStateProps } from './SectionWrapper'

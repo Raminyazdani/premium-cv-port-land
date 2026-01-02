@@ -18,23 +18,27 @@
  *    - Depends on CV data being available for focus area extraction
  *    - Used by many UI components for filtering displayed entries
  *
- * 4. **KonamiProvider**
+ * 4. **EmptySectionsProvider**
+ *    - Controls whether empty sections are hidden or show empty states
+ *    - Used by SectionWrapper for consistent empty state behavior
+ *
+ * 5. **KonamiProvider**
  *    - Easter egg feature, no strict dependencies
  *    - Provides Konami code unlock state for UI effects
  *
- * 5. **PWAProvider**
+ * 6. **PWAProvider**
  *    - Progressive Web App features (install prompt, offline status)
  *    - Independent of other providers
  *
- * 6. **AccessibilityProvider**
+ * 7. **AccessibilityProvider**
  *    - Manages a11y preferences (font size, high contrast, reduced motion)
  *    - Contains ARIA live regions for announcements
  *
- * 7. **SoundEffectsProvider**
+ * 8. **SoundEffectsProvider**
  *    - Optional sound feedback system
  *    - Independent, but should be near the end as it's an enhancement
  *
- * 8. **MicroFeedbackProvider** (innermost)
+ * 9. **MicroFeedbackProvider** (innermost)
  *    - Visual feedback animations for user interactions
  *    - Should be last as it renders overlay elements
  *
@@ -55,6 +59,7 @@ import { ReactNode } from 'react'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { CVDataProvider } from '@/context/CVDataContext'
 import { FilterProvider } from '@/context/FilterContext'
+import { EmptySectionsProvider } from '@/context/EmptySectionsContext'
 import { KonamiProvider } from '@/context/KonamiContext'
 import { PWAProvider } from '@/context/PWAContext'
 import { AccessibilityProvider } from '@/context/AccessibilityContext'
@@ -74,17 +79,19 @@ export function AppProviders({ children }: AppProvidersProps) {
     <LanguageProvider>
       <CVDataProvider>
         <FilterProvider>
-          <KonamiProvider>
-            <PWAProvider>
-              <AccessibilityProvider>
-                <SoundEffectsProvider>
-                  <MicroFeedbackProvider>
-                    {children}
-                  </MicroFeedbackProvider>
-                </SoundEffectsProvider>
-              </AccessibilityProvider>
-            </PWAProvider>
-          </KonamiProvider>
+          <EmptySectionsProvider>
+            <KonamiProvider>
+              <PWAProvider>
+                <AccessibilityProvider>
+                  <SoundEffectsProvider>
+                    <MicroFeedbackProvider>
+                      {children}
+                    </MicroFeedbackProvider>
+                  </SoundEffectsProvider>
+                </AccessibilityProvider>
+              </PWAProvider>
+            </KonamiProvider>
+          </EmptySectionsProvider>
         </FilterProvider>
       </CVDataProvider>
     </LanguageProvider>
