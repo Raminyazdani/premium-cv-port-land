@@ -42,3 +42,7 @@ e2e-screenshots/
 
 # Playwright cache
 /playwright/.cache/
+
+# Lighthouse CI reports (generated locally and in CI)
+.lighthouseci/
+lighthouse-reports/

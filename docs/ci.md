@@ -474,6 +474,60 @@ npm run ci:preview &            # Start preview server (background)
 npm run ci:smoke                # Run HTTP smoke tests
 ```
 
+### UI QA Lighthouse Workflow (NEW)
+
+**File**: `.github/workflows/uiqa-lighthouse.yml`
+
+**Purpose**: Runs Lighthouse CI against EN/DE/FA language routes to measure and enforce quality thresholds
+
+**Features**:
+- Runs Lighthouse audits on all three language routes
+- Enforces minimum score thresholds for Performance, Accessibility, Best Practices, and SEO
+- Uploads HTML and JSON reports as artifacts
+- Generates step summary with route scores
+
+**Configuration**: `frontend/.lighthouserc.cjs`
+
+**Thresholds**:
+| Category | Minimum Score | Threshold Type |
+|----------|---------------|----------------|
+| Performance | 50% | Warning |
+| Performance | 70% | Error |
+| Accessibility | 90% | Error |
+| Best Practices | 80% | Warning |
+| SEO | 80% | Warning |
+
+**Routes Tested**:
+- `http://localhost:4173/?lang=en` (English)
+- `http://localhost:4173/?lang=de` (German)
+- `http://localhost:4173/?lang=fa` (Persian)
+
+**Artifacts**:
+- `lighthouse-reports/` - HTML and JSON reports for each route (14-day retention)
+
+**Local Equivalent**:
+```bash
+cd frontend
+npm run lhci                    # Full Lighthouse CI run (build + collect + assert + upload)
+
+# Or individual steps:
+npm run build                   # Build application
+npm run lhci:collect            # Collect Lighthouse reports
+npm run lhci:assert             # Check score thresholds
+npm run lhci:upload             # Save reports to lighthouse-reports/
+```
+
+**Adjusting Thresholds**:
+Edit `frontend/.lighthouserc.cjs` and modify the `assert.assertions` section:
+```javascript
+assertions: {
+  'categories:performance': ['warn', { minScore: 0.50 }],
+  'categories:accessibility': ['error', { minScore: 0.90 }],
+  'categories:best-practices': ['warn', { minScore: 0.80 }],
+  'categories:seo': ['warn', { minScore: 0.80 }],
+}
+```
+
 ### Locked File Validation Workflow
 
 **Proposed**: Add automated SHA256 validation
