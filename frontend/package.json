@@ -34,7 +34,10 @@
         "lhci:collect": "lhci collect --config=.lighthouserc.cjs",
         "lhci:assert": "lhci assert --config=.lighthouserc.cjs",
         "lhci:upload": "lhci upload --config=.lighthouserc.cjs",
-        "lhci": "npm run build && npm run lhci:collect && npm run lhci:assert && npm run lhci:upload"
+        "lhci": "npm run build && npm run lhci:collect && npm run lhci:assert && npm run lhci:upload",
+        "i18n-audit": "node scripts/i18n-audit.js",
+        "test:e2e:i18n": "playwright test e2e/i18n-language-switch.spec.ts",
+        "test:e2e:pseudo": "playwright test e2e/pseudo-localization.spec.ts"
     },
     "dependencies": {
         "@github/spark": ">=0.43.1 <1",
