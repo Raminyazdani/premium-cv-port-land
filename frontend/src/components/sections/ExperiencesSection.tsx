@@ -217,6 +217,10 @@ export function ExperiencesSection() {
     })
   }, [processedExperiences])
 
+  // Extract domain labels for stable useMemo dependencies
+  const academicLabel = t.domains.academic
+  const industryLabel = t.domains.industry
+  
   const grouped = useMemo((): Record<string, typeof sortedExperiences> => {
     if (groupBy === 'none') {
       return { All: sortedExperiences }
@@ -226,11 +230,11 @@ export function ExperiencesSection() {
     const industry = sortedExperiences.filter(exp => exp.category === 'Industry')
     
     const result: Record<string, typeof sortedExperiences> = {}
-    if (academic.length > 0) result[t.domains.academic] = academic
-    if (industry.length > 0) result[t.domains.industry] = industry
+    if (academic.length > 0) result[academicLabel] = academic
+    if (industry.length > 0) result[industryLabel] = industry
     
     return result
-  }, [sortedExperiences, groupBy, t.domains.academic, t.domains.industry])
+  }, [sortedExperiences, groupBy, academicLabel, industryLabel])
 
   if (experiences.length === 0) {
     return (
