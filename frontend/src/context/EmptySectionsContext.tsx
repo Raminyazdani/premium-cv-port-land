@@ -6,7 +6,7 @@
  * empty sections with localized empty state messages.
  */
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode } from 'react'
 import { STORAGE_KEYS } from '@/constants/app'
 
 interface EmptySectionsContextType {
@@ -51,16 +51,6 @@ export function EmptySectionsProvider({
       localStorage.setItem(STORAGE_KEYS.SHOW_EMPTY_SECTIONS, String(show))
     }
   }
-
-  // Sync with localStorage on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem(STORAGE_KEYS.SHOW_EMPTY_SECTIONS)
-      if (stored !== null && (stored === 'true') !== showEmptySections) {
-        setShowEmptySectionsState(stored === 'true')
-      }
-    }
-  }, [])
 
   return (
     <EmptySectionsContext.Provider
