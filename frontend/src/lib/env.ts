@@ -202,7 +202,7 @@ export function getSentryReplaysErrorRate(): number {
 
 /**
  * Get the GA4 measurement ID (returns undefined if not set)
- * Only returns a value in production mode unless explicitly configured
+ * Note: Production mode check is performed in analytics.ts when sending events
  */
 export function getGA4MeasurementId(): string | undefined {
   const id = env.VITE_GA4_MEASUREMENT_ID;
