@@ -266,7 +266,10 @@ export const fa: UIStrings = {
     go_to_slide: 'رفتن به اسلاید {number}',
     close_quick_actions: 'بستن اقدامات سریع',
     open_quick_actions: 'باز کردن اقدامات سریع',
-    social_profiles: 'پروفایل‌های شبکه‌های اجتماعی'
+    social_profiles: 'پروفایل‌های شبکه‌های اجتماعی',
+    previous_slide: 'اسلاید قبلی',
+    next_slide: 'اسلاید بعدی',
+    close: 'بستن'
   },
   media: {
     failed_to_load: 'بارگذاری تصویر ناموفق بود',

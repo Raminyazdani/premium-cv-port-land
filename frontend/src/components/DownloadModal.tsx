@@ -305,7 +305,7 @@ export function DownloadModal({ open, onOpenChange }: DownloadModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto" closeLabel={t.a11y?.close_modal || t.actions.close}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <DownloadSimple size={24} weight="bold" />

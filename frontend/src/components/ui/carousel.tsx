@@ -175,6 +175,7 @@ function CarouselPrevious({
   className,
   variant = "outline",
   size = "icon",
+  "aria-label": ariaLabel,
   ...props
 }: ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
@@ -193,10 +194,11 @@ function CarouselPrevious({
       )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
+      aria-label={ariaLabel}
       {...props}
     >
       <ArrowLeft />
-      <span className="sr-only">Previous slide</span>
+      {!ariaLabel && <span className="sr-only">Previous slide</span>}
     </Button>
   )
 }
@@ -205,6 +207,7 @@ function CarouselNext({
   className,
   variant = "outline",
   size = "icon",
+  "aria-label": ariaLabel,
   ...props
 }: ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
@@ -223,10 +226,11 @@ function CarouselNext({
       )}
       disabled={!canScrollNext}
       onClick={scrollNext}
+      aria-label={ariaLabel}
       {...props}
     >
       <ArrowRight />
-      <span className="sr-only">Next slide</span>
+      {!ariaLabel && <span className="sr-only">Next slide</span>}
     </Button>
   )
 }

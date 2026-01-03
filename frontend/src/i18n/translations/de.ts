@@ -266,7 +266,10 @@ export const de: UIStrings = {
     go_to_slide: 'Zu Folie {number} gehen',
     close_quick_actions: 'Schnellaktionen schließen',
     open_quick_actions: 'Schnellaktionen öffnen',
-    social_profiles: 'Social-Media-Profile'
+    social_profiles: 'Social-Media-Profile',
+    previous_slide: 'Vorherige Folie',
+    next_slide: 'Nächste Folie',
+    close: 'Schließen'
   },
   media: {
     failed_to_load: 'Bild konnte nicht geladen werden',

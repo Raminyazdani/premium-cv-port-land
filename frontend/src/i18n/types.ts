@@ -317,6 +317,9 @@ export interface UIStrings {
     close_quick_actions: string
     open_quick_actions: string
     social_profiles: string
+    previous_slide: string
+    next_slide: string
+    close: string
   }
 
   // Media
