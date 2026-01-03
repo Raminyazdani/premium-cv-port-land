@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
 import { MediaModal } from '@/components/MediaModal'
 import { renderWithMinimalProviders } from './test-utils'
 
