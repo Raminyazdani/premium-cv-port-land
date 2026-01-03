@@ -97,6 +97,7 @@ All platforms provide:
 - [JSON Schema](#-json-schema)
 - [Customization Guide](#-customization-guide)
 - [Deployment](#-deployment)
+- [CI/CD & Workflow Status](#-cicd--workflow-status)
 - [Performance](#-performance)
 - [Accessibility](#-accessibility)
 - [Future Enhancements](#-future-enhancements)
@@ -919,6 +920,60 @@ Topics covered:
 - Troubleshooting common deployment issues
 - Performance verification
 - Monitoring and maintenance
+
+---
+
+## 🔧 CI/CD & Workflow Status
+
+This repository uses GitHub Actions for CI/CD. Here's the status of available workflows:
+
+### Active Workflows
+
+| Workflow | Purpose | Status |
+|----------|---------|--------|
+| **CI** (`.github/workflows/ci.yml`) | Lint, test, build, and validate | ✅ Active |
+| **CodeQL** | Security scanning | ✅ Active |
+| **Dependency Review** | Vulnerability scanning | ✅ Active |
+
+### Intentionally Disabled Workflows
+
+The following workflows are **disabled by design** because this project uses third-party deployment platforms (Vercel, Netlify, Cloudflare Pages) which provide superior features:
+
+| Workflow | Purpose | Why Disabled |
+|----------|---------|--------------|
+| **GitHub Pages** | Production deployment | Vercel/Netlify provide zero-config deployment, automatic PR previews, and better CDN performance |
+| **PR Preview** | Artifact-based previews | Vercel/Netlify automatically create live preview URLs for PRs—no manual artifact download needed |
+
+### Recommended Deployment Strategy
+
+**For Production & PR Previews**: Use **Vercel**, **Netlify**, or **Cloudflare Pages**.
+
+These platforms provide:
+- ✅ Zero-config deployment (auto-detects Vite)
+- ✅ **Automatic live PR preview URLs** (click to test before merge)
+- ✅ Free HTTPS/SSL and global CDN
+- ✅ No additional configuration needed
+
+👉 See [Production Deployment](./docs/deploy_production.md) and [PR Preview Guide](./docs/deploy_preview_pr.md) for setup instructions.
+
+### Enabling Disabled Workflows (Optional)
+
+If you prefer GitHub-native deployment, the disabled workflows can be enabled:
+
+**GitHub Pages Deployment**:
+1. Edit `.github/workflows/deploy-github-pages.yml`
+2. Remove the `if: false` line
+3. Go to repository Settings → Pages → Set Source to "GitHub Actions"
+4. Push to main branch
+
+**PR Preview (Artifact-based)**:
+1. Edit `.github/workflows/pr-preview.yml`
+2. Remove the `if: false` line
+3. PRs will build artifacts that can be downloaded and tested locally
+
+> 💡 **Note**: Each disabled workflow file contains detailed header comments explaining the setup process and configuration options.
+
+**Full CI/CD documentation**: [docs/ci.md](./docs/ci.md)
 
 ---
 
