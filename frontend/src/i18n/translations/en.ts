@@ -266,7 +266,10 @@ export const en: UIStrings = {
     go_to_slide: 'Go to slide {number}',
     close_quick_actions: 'Close quick actions',
     open_quick_actions: 'Open quick actions',
-    social_profiles: 'Social media profiles'
+    social_profiles: 'Social media profiles',
+    previous_slide: 'Previous slide',
+    next_slide: 'Next slide',
+    close: 'Close'
   },
   media: {
     failed_to_load: 'Failed to load image',

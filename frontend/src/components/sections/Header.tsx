@@ -164,7 +164,7 @@ export function Header() {
                   <List size={20} weight="bold" className="sm:w-6 sm:h-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+              <SheetContent side="right" className="w-[280px] sm:w-[320px]" closeLabel={t.a11y.close}>
                 <div className="flex flex-col gap-4 mt-8">
                   <div className="flex sm:hidden flex-col gap-3 pb-4 border-b border-border">
                     <FocusFilterSelector />

@@ -94,7 +94,7 @@ function ImageGallery({ images, title }: ImageGalleryProps) {
 
       {/* Modal Gallery */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden">
+        <DialogContent className="max-w-4xl p-0 overflow-hidden" closeLabel={t.caseStudy?.close}>
           <DialogHeader className="sr-only">
             <DialogTitle>{title} - {t.caseStudy?.gallery}</DialogTitle>
             <DialogDescription>Image {currentIndex + 1} of {images.length}</DialogDescription>
