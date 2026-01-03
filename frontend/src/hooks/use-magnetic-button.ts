@@ -1,21 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 export function useMagneticButton(strength = 0.3, maxDistance = 50) {
   const ref = useRef<HTMLElement>(null)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
     const element = ref.current
