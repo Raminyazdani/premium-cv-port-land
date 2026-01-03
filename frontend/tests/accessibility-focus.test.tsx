@@ -160,19 +160,22 @@ describe('Icon-only controls accessibility', () => {
 
 // Required field indicator tests
 describe('Required field indicators', () => {
-  it('should have screen-reader text for required fields', async () => {
+  it('ContactForm should have demo notice explaining form behavior', async () => {
     // Import ContactForm component
     const { ContactForm } = await import('@/components/ContactForm')
     
     renderWithMinimalProviders(<ContactForm />)
 
-    // Check for required field indicators
-    const requiredIndicators = screen.getAllByText('*')
-    expect(requiredIndicators.length).toBeGreaterThan(0)
-
-    // Each required indicator should have aria-label
-    for (const indicator of requiredIndicators) {
-      expect(indicator).toHaveAttribute('aria-label', 'required')
-    }
+    // ContactForm is now a demo form with mock productization
+    // It should display a demo notice explaining how to contact
+    const demoNotice = screen.getByText(/demo form/i)
+    expect(demoNotice).toBeInTheDocument()
+    
+    // Should have email-related action buttons
+    const emailClientButton = screen.getByRole('button', { name: /open email client/i })
+    expect(emailClientButton).toBeInTheDocument()
+    
+    const copyEmailButton = screen.getByRole('button', { name: /copy email/i })
+    expect(copyEmailButton).toBeInTheDocument()
   })
 })

@@ -85,7 +85,12 @@ export const fa: UIStrings = {
     error: 'خطایی رخ داد',
     success_message: 'از تماس شما متشکرم. در اسرع وقت پاسخ خواهم داد.',
     error_message: 'مشکلی در ارسال پیام شما به وجود آمد. لطفاً بعداً دوباره تلاش کنید یا مستقیماً ایمیل بزنید.',
-    contact_description: 'پیام خود را برای من بفرستید و من در اسرع وقت پاسخ خواهم داد'
+    contact_description: 'پیام خود را برای من بفرستید و من در اسرع وقت پاسخ خواهم داد',
+    demo_notice: 'این یک فرم نمایشی است. برای تماس با من، لطفاً از گزینه‌های ایمیل زیر استفاده کنید.',
+    copy_email: 'کپی ایمیل',
+    email_copied: 'آدرس ایمیل در کلیپ‌بورد کپی شد!',
+    open_email_client: 'باز کردن برنامه ایمیل',
+    or: 'یا'
   },
   education: {
     institution: 'موسسه',
@@ -303,7 +308,11 @@ export const fa: UIStrings = {
     error_description: 'مشکلی در رزرو تماس شما به وجود آمد. لطفاً بعداً دوباره تلاش کنید.',
     select_date_time: 'لطفاً یک تاریخ و زمان انتخاب کنید',
     selection_cleared: 'انتخاب پاک شد',
-    unavailable: 'غیر قابل دسترس'
+    unavailable: 'غیر قابل دسترس',
+    demo_notice: 'این یک رابط رزرو نمایشی است. برای رزرو جلسه واقعی، لطفاً از لینک زیر استفاده کنید.',
+    schedule_external: 'رزرو از طریق Calendly',
+    calendly_cta: 'باز کردن صفحه رزرو',
+    external_link_notice: 'شما به یک سرویس رزرو خارجی هدایت خواهید شد.'
   },
   validation: {
     required: '{field} الزامی است',
