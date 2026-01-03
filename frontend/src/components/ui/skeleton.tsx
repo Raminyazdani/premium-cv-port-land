@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
-import { ComponentProps, useEffect, useState } from "react"
+import { ComponentProps } from "react"
+import { useReducedMotion } from "@/shared/hooks/use-reduced-motion"
 
 /**
  * Skeleton Loading System
@@ -11,19 +12,7 @@ interface SkeletonProps extends ComponentProps<"div"> {
 }
 
 function Skeleton({ className, shimmer = true, ...props }: SkeletonProps) {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-  
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-    
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const prefersReducedMotion = useReducedMotion()
 
   return (
     <div

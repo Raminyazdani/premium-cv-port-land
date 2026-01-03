@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { cn } from '@/lib/utils'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 export interface TimelineEntry {
   id: string
@@ -24,22 +25,9 @@ export function Timeline({ entries, className }: TimelineProps) {
   const [progress, setProgress] = useState(0)
   const [activeIndex, setActiveIndex] = useState(-1)
   const [visibleEntries, setVisibleEntries] = useState<Set<number>>(new Set())
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const timelineRef = useRef<HTMLDivElement>(null)
   const entryRefs = useRef<(HTMLDivElement | null)[]>([])
-
-  // Check for reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   // If reduced motion, show all entries immediately
   useEffect(() => {

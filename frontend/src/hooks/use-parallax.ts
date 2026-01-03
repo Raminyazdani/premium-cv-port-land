@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 interface ParallaxOptions {
   speed?: number // Speed factor (0.3 = 30% of scroll speed)
@@ -8,21 +9,8 @@ interface ParallaxOptions {
 export function useParallax({ speed = 0.5, disableOnMobile = true }: ParallaxOptions = {}) {
   const ref = useRef<HTMLElement>(null)
   const [offset, setOffset] = useState(0)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const [isMobile, setIsMobile] = useState(false)
-
-  // Check for reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   // Check for mobile device
   useEffect(() => {
@@ -111,22 +99,10 @@ export function useParallaxLayers(
     { speed: 1.0 }, // Foreground
   ]
 ) {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const [isMobile, setIsMobile] = useState(false)
   const [offsets, setOffsets] = useState<number[]>(layers.map(() => 0))
   const containerRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   useEffect(() => {
     const checkMobile = () => {

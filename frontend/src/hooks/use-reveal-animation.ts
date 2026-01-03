@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 export type AnimationStyle =
   | 'fade-in'
@@ -31,22 +32,9 @@ export function useRevealAnimation({
   once = true,
 }: UseRevealAnimationOptions = {}) {
   const [isVisible, setIsVisible] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const elementRef = useRef<HTMLElement>(null)
   const hasAnimated = useRef(false)
-
-  // Check for reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   useEffect(() => {
     const element = elementRef.current

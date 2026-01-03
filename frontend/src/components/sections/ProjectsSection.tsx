@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -14,11 +14,12 @@ import { useCV } from '@/context/CVDataContext'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
-import { useTranslation } from '@/context/LanguageContext'
+import { useTranslation, useLanguage } from '@/context/LanguageContext'
 import { SectionWrapper } from '@/components/composites/SectionWrapper'
 import type { Project } from '@/types/cv'
 import { safeString, safeUrl, safeArray, isImageUrl } from '@/utils/dataValidation'
 import { logger } from '@/lib/logger'
+import { getUniqueDomainLabels, collectAllDomainLabels, matchesDomainFilter } from '@/shared/utils/domain-utils'
 
 interface ProjectCardProps {
   project: Project
@@ -27,25 +28,15 @@ interface ProjectCardProps {
 
 function ProjectCard({ project, onOpenMedia }: ProjectCardProps) {
   const t = useTranslation()
+  const { language } = useLanguage()
   const title = safeString(project.title || project.name, t.fallbacks.untitled_project)
   const description = safeString(project.description)
   const url = project.url ? safeUrl(project.url) : null
   const typeKeys = safeArray<string>(project.type_key)
 
   const uniqueDomains = useMemo(() => {
-    const domains = new Set<string>()
-    typeKeys.forEach(key => {
-      const normalized = key.toLowerCase()
-      if (normalized === 'programming') domains.add(t.domains.programming)
-      else if (normalized === 'bioinformatics') domains.add(t.domains.bioinformatics)
-      else if (normalized === 'biotechnology') domains.add(t.domains.biotechnology)
-      else if (normalized === 'academic') domains.add(t.domains.academic)
-      else if (normalized === 'student projects') domains.add(t.domains.student_projects)
-      else if (normalized === 'robotics') domains.add(t.domains.robotics)
-      else if (normalized === 'embedded systems') domains.add(t.domains.embedded_systems)
-    })
-    return Array.from(domains)
-  }, [typeKeys, t.domains])
+    return getUniqueDomainLabels(typeKeys, language)
+  }, [typeKeys, language])
 
   const detectImageUrl = useMemo(() => {
     if (!description) return null
@@ -145,6 +136,7 @@ export function ProjectsSection() {
   const [selectedDomains, setSelectedDomains] = useState<Set<string>>(new Set())
   const [hasLinkFilter, setHasLinkFilter] = useState<boolean | null>(null)
   const t = useTranslation()
+  const { language } = useLanguage()
   
   const { isOpen, currentUrl, currentAlt, openModal, closeModal } = useMediaModal()
   
@@ -162,30 +154,9 @@ export function ProjectsSection() {
   }
   logger.groupEnd()
 
-  // Helper to map type_key values to translated domain labels
-  const mapKeyToDomain = useCallback((key: string): string | null => {
-    const normalized = key.toLowerCase()
-    if (normalized === 'programming') return t.domains.programming
-    if (normalized === 'bioinformatics') return t.domains.bioinformatics
-    if (normalized === 'biotechnology') return t.domains.biotechnology
-    if (normalized === 'academic') return t.domains.academic
-    if (normalized === 'student projects') return t.domains.student_projects
-    if (normalized === 'robotics') return t.domains.robotics
-    if (normalized === 'embedded systems') return t.domains.embedded_systems
-    return null
-  }, [t.domains])
-
   const allDomains = useMemo(() => {
-    const domains = new Set<string>()
-    projects.forEach(project => {
-      const typeKeys = project.type_key || []
-      typeKeys.forEach(key => {
-        const domain = mapKeyToDomain(key)
-        if (domain) domains.add(domain)
-      })
-    })
-    return Array.from(domains).sort()
-  }, [projects, mapKeyToDomain])
+    return collectAllDomainLabels(projects, language)
+  }, [projects, language])
 
   const uniqueProjects = useMemo(() => {
     const seen = new Map<string, Project>()
@@ -208,17 +179,9 @@ export function ProjectsSection() {
       if (!matchesSearch) return false
 
       if (selectedDomains.size > 0) {
-        const projectDomains = new Set<string>()
-        const typeKeys = project.type_key || []
-        typeKeys.forEach(key => {
-          const domain = mapKeyToDomain(key)
-          if (domain) projectDomains.add(domain)
-        })
-        
-        const hasSelectedDomain = Array.from(selectedDomains).some(domain => 
-          projectDomains.has(domain)
-        )
-        if (!hasSelectedDomain) return false
+        if (!matchesDomainFilter(project.type_key, selectedDomains, language)) {
+          return false
+        }
       }
 
       if (hasLinkFilter !== null) {
@@ -228,7 +191,7 @@ export function ProjectsSection() {
 
       return true
     })
-  }, [uniqueProjects, searchQuery, selectedDomains, hasLinkFilter, mapKeyToDomain])
+  }, [uniqueProjects, searchQuery, selectedDomains, hasLinkFilter, language])
 
   const { containerRef, getItemStyle } = useStaggeredScrollAnimation(filteredProjects.length, {
     threshold: 0.05,

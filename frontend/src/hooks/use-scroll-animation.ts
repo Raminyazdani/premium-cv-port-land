@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 interface UseScrollAnimationOptions {
   threshold?: number
@@ -15,19 +16,7 @@ export function useScrollAnimation(options: UseScrollAnimationOptions = {}) {
 
   const ref = useRef<HTMLElement>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
     const element = ref.current
@@ -75,19 +64,7 @@ export function useStaggeredScrollAnimation(
 
   const containerRef = useRef<HTMLElement>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
     const element = containerRef.current
