@@ -82,9 +82,8 @@ describe('BasicsSection', () => {
       const { container } = renderWithProviders(<BasicsSection />, { language: 'en' })
 
       await waitFor(() => {
-        // Look for the avatar element
-        const avatar = container.querySelector('[data-slot="avatar-root"]') || 
-                       container.querySelector('.rounded-full')
+        // Look for the avatar element using data-slot attribute (stable attribute from UI library)
+        const avatar = container.querySelector('[data-slot="avatar"]')
         expect(avatar).toBeInTheDocument()
       })
     })

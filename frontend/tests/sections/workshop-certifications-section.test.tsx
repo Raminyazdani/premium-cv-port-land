@@ -109,7 +109,8 @@ describe('WorkshopAndCertificationsSection', () => {
       renderWithProviders(<WorkshopAndCertificationsSection />, { language: 'en' })
 
       await waitFor(() => {
-        const searchInput = screen.getByRole('searchbox') || screen.getByRole('textbox')
+        // Search for certifications input - it should be the search input
+        const searchInput = screen.getByPlaceholderText(/search/i)
         expect(searchInput).toBeInTheDocument()
       })
     })

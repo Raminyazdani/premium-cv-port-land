@@ -98,9 +98,9 @@ describe('ContactSection', () => {
       const tabs = screen.getAllByRole('tab')
       if (tabs.length > 1 && tabs[1]) {
         await user.click(tabs[1])
-        // Tab should now be selected
+        // Tab should now be selected - verify it has aria-selected="true"
         await waitFor(() => {
-          expect(tabs[1].getAttribute('data-state')).toBe('active')
+          expect(tabs[1]).toHaveAttribute('aria-selected', 'true')
         })
       }
     })
