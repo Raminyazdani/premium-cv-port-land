@@ -8,6 +8,52 @@ export interface ValidationResult {
   warnings: string[]
 }
 
+/**
+ * Type guard for checking if a value is a non-null object
+ */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+}
+
+/**
+ * Type guard for checking if a value is an array
+ * @internal Exported for potential use in other validators
+ */
+export function isArrayOf<T>(
+  value: unknown,
+  itemCheck?: (item: unknown) => item is T
+): value is T[] {
+  if (!Array.isArray(value)) return false
+  if (itemCheck) {
+    return value.every(itemCheck)
+  }
+  return true
+}
+
+/**
+ * Safe property accessor for unknown objects
+ */
+function getStringProp(obj: Record<string, unknown>, key: string): string | undefined {
+  const value = obj[key]
+  return typeof value === 'string' ? value : undefined
+}
+
+/**
+ * Safe property accessor for number properties
+ */
+function getNumberProp(obj: Record<string, unknown>, key: string): number | undefined {
+  const value = obj[key]
+  return typeof value === 'number' ? value : undefined
+}
+
+/**
+ * Safe property accessor for array properties
+ */
+function getArrayProp(obj: Record<string, unknown>, key: string): unknown[] | undefined {
+  const value = obj[key]
+  return Array.isArray(value) ? value : undefined
+}
+
 export class DataValidator {
   private errors: string[] = []
   private warnings: string[] = []
@@ -16,7 +62,7 @@ export class DataValidator {
     this.errors = []
     this.warnings = []
 
-    if (!data || typeof data !== 'object') {
+    if (!isRecord(data)) {
       this.errors.push('Data must be a valid object')
       return this.getResult()
     }
@@ -53,27 +99,24 @@ export class DataValidator {
     }
 
     basics.forEach((item, index) => {
-      if (!item || typeof item !== 'object') {
+      if (!isRecord(item)) {
         this.errors.push(`Basics item ${index} is not a valid object`)
         return
       }
 
-      const basic = item as Record<string, unknown>
-
-      if (basic.birthDate && typeof basic.birthDate === 'string') {
-        if (!this.isValidDate(basic.birthDate)) {
-          this.warnings.push(`Basics item ${index}: Invalid birthDate format "${basic.birthDate}"`)
-        }
+      const birthDate = getStringProp(item, 'birthDate')
+      if (birthDate && !this.isValidDate(birthDate)) {
+        this.warnings.push(`Basics item ${index}: Invalid birthDate format "${birthDate}"`)
       }
 
-      if (basic.Pictures && Array.isArray(basic.Pictures)) {
-        basic.Pictures.forEach((pic: unknown, picIndex: number) => {
-          if (!pic || typeof pic !== 'object') {
+      const pictures = getArrayProp(item, 'Pictures')
+      if (pictures) {
+        pictures.forEach((pic: unknown, picIndex: number) => {
+          if (!isRecord(pic)) {
             this.warnings.push(`Basics item ${index}, Picture ${picIndex} is invalid`)
             return
           }
-          const picture = pic as Record<string, unknown>
-          if (!picture.type_of || !picture.URL) {
+          if (!pic['type_of'] || !pic['URL']) {
             this.warnings.push(`Basics item ${index}, Picture ${picIndex} missing type_of or URL`)
           }
         })
@@ -93,13 +136,12 @@ export class DataValidator {
     }
 
     profiles.forEach((profile, index) => {
-      if (!profile || typeof profile !== 'object') {
+      if (!isRecord(profile)) {
         this.errors.push(`Profile item ${index} is not a valid object`)
         return
       }
 
-      const prof = profile as Record<string, unknown>
-      if (!prof.network && !prof.username && !prof.url) {
+      if (!profile['network'] && !profile['username'] && !profile['url']) {
         this.warnings.push(`Profile item ${index} has no network, username, or url`)
       }
     })
@@ -119,17 +161,15 @@ export class DataValidator {
     const seen = new Set<string>()
 
     education.forEach((item, index) => {
-      if (!item || typeof item !== 'object') {
+      if (!isRecord(item)) {
         this.errors.push(`Education item ${index} is not a valid object`)
         return
       }
 
-      const edu = item as Record<string, unknown>
-
       const key = JSON.stringify({
-        institution: edu.institution,
-        studyType: edu.studyType,
-        startDate: edu.startDate
+        institution: item['institution'],
+        studyType: item['studyType'],
+        startDate: item['startDate']
       })
 
       if (seen.has(key)) {
@@ -137,19 +177,17 @@ export class DataValidator {
       }
       seen.add(key)
 
-      if (edu.startDate && typeof edu.startDate === 'string') {
-        if (edu.startDate !== 'present' && !this.isValidDate(edu.startDate)) {
-          this.warnings.push(`Education item ${index}: Invalid startDate format "${edu.startDate}"`)
-        }
+      const startDate = getStringProp(item, 'startDate')
+      if (startDate && startDate !== 'present' && !this.isValidDate(startDate)) {
+        this.warnings.push(`Education item ${index}: Invalid startDate format "${startDate}"`)
       }
 
-      if (edu.endDate && typeof edu.endDate === 'string') {
-        if (edu.endDate !== 'present' && !this.isValidDate(edu.endDate)) {
-          this.warnings.push(`Education item ${index}: Invalid endDate format "${edu.endDate}"`)
-        }
+      const endDate = getStringProp(item, 'endDate')
+      if (endDate && endDate !== 'present' && !this.isValidDate(endDate)) {
+        this.warnings.push(`Education item ${index}: Invalid endDate format "${endDate}"`)
       }
 
-      this.validateTypeKey(edu.type_key, `Education item ${index}`)
+      this.validateTypeKey(item['type_key'], `Education item ${index}`)
     })
   }
 
@@ -165,7 +203,7 @@ export class DataValidator {
     }
 
     languages.forEach((item, index) => {
-      if (!item || typeof item !== 'object') {
+      if (!isRecord(item)) {
         this.errors.push(`Language item ${index} is not a valid object`)
       }
     })
@@ -183,29 +221,25 @@ export class DataValidator {
     }
 
     certifications.forEach((issuerGroup, issuerIndex) => {
-      if (!issuerGroup || typeof issuerGroup !== 'object') {
+      if (!isRecord(issuerGroup)) {
         this.errors.push(`Certification group ${issuerIndex} is not a valid object`)
         return
       }
 
-      const group = issuerGroup as Record<string, unknown>
-
-      if (group.certifications && Array.isArray(group.certifications)) {
-        group.certifications.forEach((cert: unknown, certIndex: number) => {
-          if (!cert || typeof cert !== 'object') {
+      const certs = getArrayProp(issuerGroup, 'certifications')
+      if (certs) {
+        certs.forEach((cert: unknown, certIndex: number) => {
+          if (!isRecord(cert)) {
             this.errors.push(`Certification ${issuerIndex}.${certIndex} is not a valid object`)
             return
           }
 
-          const c = cert as Record<string, unknown>
-
-          if (c.date && typeof c.date === 'string') {
-            if (!this.isValidDate(c.date)) {
-              this.warnings.push(`Certification ${issuerIndex}.${certIndex}: Invalid date format "${c.date}"`)
-            }
+          const date = getStringProp(cert, 'date')
+          if (date && !this.isValidDate(date)) {
+            this.warnings.push(`Certification ${issuerIndex}.${certIndex}: Invalid date format "${date}"`)
           }
 
-          this.validateTypeKey(c.type_key, `Certification ${issuerIndex}.${certIndex}`)
+          this.validateTypeKey(cert['type_key'], `Certification ${issuerIndex}.${certIndex}`)
         })
       }
     })
@@ -217,40 +251,34 @@ export class DataValidator {
       return
     }
 
-    if (typeof skills !== 'object' || Array.isArray(skills)) {
+    if (!isRecord(skills)) {
       this.errors.push('Skills must be an object (not an array)')
       return
     }
 
-    const skillsObj = skills as Record<string, unknown>
-
-    Object.entries(skillsObj).forEach(([topCategory, categories]) => {
-      if (!categories || typeof categories !== 'object' || Array.isArray(categories)) {
+    Object.entries(skills).forEach(([topCategory, categories]) => {
+      if (!isRecord(categories)) {
         this.errors.push(`Skills category "${topCategory}" must be an object`)
         return
       }
 
-      const categoriesObj = categories as Record<string, unknown>
-
-      Object.entries(categoriesObj).forEach(([subCategory, items]) => {
+      Object.entries(categories).forEach(([subCategory, items]) => {
         if (!Array.isArray(items)) {
           this.errors.push(`Skills category "${topCategory}.${subCategory}" must be an array`)
           return
         }
 
         items.forEach((item: unknown, itemIndex: number) => {
-          if (!item || typeof item !== 'object') {
+          if (!isRecord(item)) {
             this.errors.push(`Skill item "${topCategory}.${subCategory}[${itemIndex}]" is not a valid object`)
             return
           }
 
-          const skill = item as Record<string, unknown>
-
-          if (!skill.long_name || !skill.short_name) {
+          if (!item['long_name'] || !item['short_name']) {
             this.warnings.push(`Skill item "${topCategory}.${subCategory}[${itemIndex}]" missing long_name or short_name`)
           }
 
-          this.validateTypeKey(skill.type_key, `Skill "${topCategory}.${subCategory}[${itemIndex}]"`)
+          this.validateTypeKey(item['type_key'], `Skill "${topCategory}.${subCategory}[${itemIndex}]"`)
         })
       })
     })
@@ -270,17 +298,15 @@ export class DataValidator {
     const seen = new Set<string>()
 
     experiences.forEach((item, index) => {
-      if (!item || typeof item !== 'object') {
+      if (!isRecord(item)) {
         this.errors.push(`Experience item ${index} is not a valid object`)
         return
       }
 
-      const exp = item as Record<string, unknown>
-
       const key = JSON.stringify({
-        role: exp.role,
-        institution: exp.institution,
-        duration: exp.duration
+        role: item['role'],
+        institution: item['institution'],
+        duration: item['duration']
       })
 
       if (seen.has(key)) {
@@ -288,7 +314,7 @@ export class DataValidator {
       }
       seen.add(key)
 
-      this.validateTypeKey(exp.type_key, `Experience item ${index}`)
+      this.validateTypeKey(item['type_key'], `Experience item ${index}`)
     })
   }
 
@@ -306,24 +332,22 @@ export class DataValidator {
     const seen = new Set<string>()
 
     projects.forEach((item, index) => {
-      if (!item || typeof item !== 'object') {
+      if (!isRecord(item)) {
         this.errors.push(`Project item ${index} is not a valid object`)
         return
       }
 
-      const proj = item as Record<string, unknown>
-
       const key = JSON.stringify({
-        title: proj.title,
-        url: proj.url
+        title: item['title'],
+        url: item['url']
       })
 
       if (seen.has(key)) {
-        this.warnings.push(`Duplicate project entry found at index ${index}: "${proj.title}"`)
+        this.warnings.push(`Duplicate project entry found at index ${index}: "${String(item['title'] ?? '')}"`)
       }
       seen.add(key)
 
-      this.validateTypeKey(proj.type_key, `Project item ${index}`)
+      this.validateTypeKey(item['type_key'], `Project item ${index}`)
     })
   }
 
@@ -339,26 +363,22 @@ export class DataValidator {
     }
 
     publications.forEach((item, index) => {
-      if (!item || typeof item !== 'object') {
+      if (!isRecord(item)) {
         this.errors.push(`Publication item ${index} is not a valid object`)
         return
       }
 
-      const pub = item as Record<string, unknown>
-
-      if (pub.date && typeof pub.date === 'string') {
-        if (!this.isValidDate(pub.date)) {
-          this.warnings.push(`Publication item ${index}: Invalid date format "${pub.date}"`)
-        }
+      const date = getStringProp(item, 'date')
+      if (date && !this.isValidDate(date)) {
+        this.warnings.push(`Publication item ${index}: Invalid date format "${date}"`)
       }
 
-      if (pub.year && typeof pub.year === 'number') {
-        if (pub.year < 1900 || pub.year > 2100) {
-          this.warnings.push(`Publication item ${index}: Year ${pub.year} seems invalid`)
-        }
+      const year = getNumberProp(item, 'year')
+      if (year !== undefined && (year < 1900 || year > 2100)) {
+        this.warnings.push(`Publication item ${index}: Year ${year} seems invalid`)
       }
 
-      this.validateTypeKey(pub.type_key, `Publication item ${index}`)
+      this.validateTypeKey(item['type_key'], `Publication item ${index}`)
     })
   }
 
@@ -374,18 +394,16 @@ export class DataValidator {
     }
 
     references.forEach((item, index) => {
-      if (!item || typeof item !== 'object') {
+      if (!isRecord(item)) {
         this.errors.push(`Reference item ${index} is not a valid object`)
         return
       }
 
-      const ref = item as Record<string, unknown>
-
-      if (!ref.name && !ref.email) {
+      if (!item['name'] && !item['email']) {
         this.warnings.push(`Reference item ${index} has no name or email`)
       }
 
-      this.validateTypeKey(ref.type_key, `Reference item ${index}`)
+      this.validateTypeKey(item['type_key'], `Reference item ${index}`)
     })
   }
 
