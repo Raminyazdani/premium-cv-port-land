@@ -95,6 +95,10 @@ const envSchema = z.object({
   /** Error replay sample rate (0.0 to 1.0) */
   VITE_SENTRY_REPLAYS_ERROR_RATE: sampleRateSchema,
 
+  // === Google Analytics 4 ===
+  /** GA4 Measurement ID (format: G-XXXXXXXXXX) */
+  VITE_GA4_MEASUREMENT_ID: z.string().optional(),
+
   // === Debug & Development ===
   /** Enable debug logging for CV data loading */
   VITE_DEBUG_CV: booleanFlagSchema,
@@ -128,6 +132,7 @@ function parseEnv(): Env {
     VITE_SENTRY_TRACES_SAMPLE_RATE: import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE,
     VITE_SENTRY_REPLAYS_SESSION_RATE: import.meta.env.VITE_SENTRY_REPLAYS_SESSION_RATE,
     VITE_SENTRY_REPLAYS_ERROR_RATE: import.meta.env.VITE_SENTRY_REPLAYS_ERROR_RATE,
+    VITE_GA4_MEASUREMENT_ID: import.meta.env.VITE_GA4_MEASUREMENT_ID,
     VITE_DEBUG_CV: import.meta.env.VITE_DEBUG_CV,
     VITE_PSEUDO_LOC: import.meta.env.VITE_PSEUDO_LOC,
     VITE_BASE_PATH: import.meta.env.VITE_BASE_PATH,
@@ -193,6 +198,19 @@ export function getSentryReplaysSessionRate(): number {
  */
 export function getSentryReplaysErrorRate(): number {
   return env.VITE_SENTRY_REPLAYS_ERROR_RATE ?? 0;
+}
+
+/**
+ * Get the GA4 measurement ID (returns undefined if not set)
+ * Note: Production mode check is performed in analytics.ts when sending events
+ */
+export function getGA4MeasurementId(): string | undefined {
+  const id = env.VITE_GA4_MEASUREMENT_ID;
+  // Treat 'undefined' string (Vite quirk) and empty strings as not set
+  if (!id || id === 'undefined' || id.trim() === '') {
+    return undefined;
+  }
+  return id;
 }
 
 export default env;

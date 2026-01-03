@@ -16,6 +16,7 @@ function resetEnvToDefaults() {
   import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE = undefined;
   import.meta.env.VITE_SENTRY_REPLAYS_SESSION_RATE = undefined;
   import.meta.env.VITE_SENTRY_REPLAYS_ERROR_RATE = undefined;
+  import.meta.env.VITE_GA4_MEASUREMENT_ID = undefined;
   import.meta.env.VITE_DEBUG_CV = undefined;
   import.meta.env.VITE_PSEUDO_LOC = undefined;
   import.meta.env.VITE_BASE_PATH = undefined;
@@ -169,6 +170,24 @@ describe('Environment Variable Validation', () => {
       import.meta.env.VITE_SENTRY_REPLAYS_ERROR_RATE = undefined;
       const { getSentryReplaysErrorRate } = await import('@/lib/env');
       expect(getSentryReplaysErrorRate()).toBe(0);
+    });
+
+    it('getGA4MeasurementId should return undefined when not set', async () => {
+      import.meta.env.VITE_GA4_MEASUREMENT_ID = undefined;
+      const { getGA4MeasurementId } = await import('@/lib/env');
+      expect(getGA4MeasurementId()).toBeUndefined();
+    });
+
+    it('getGA4MeasurementId should return undefined for empty string', async () => {
+      import.meta.env.VITE_GA4_MEASUREMENT_ID = '';
+      const { getGA4MeasurementId } = await import('@/lib/env');
+      expect(getGA4MeasurementId()).toBeUndefined();
+    });
+
+    it('getGA4MeasurementId should return the ID when set', async () => {
+      import.meta.env.VITE_GA4_MEASUREMENT_ID = 'G-XXXXXXXXXX';
+      const { getGA4MeasurementId } = await import('@/lib/env');
+      expect(getGA4MeasurementId()).toBe('G-XXXXXXXXXX');
     });
   });
 });
