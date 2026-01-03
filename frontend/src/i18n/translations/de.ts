@@ -85,7 +85,12 @@ export const de: UIStrings = {
     error: 'Ein Fehler ist aufgetreten',
     success_message: 'Vielen Dank für Ihre Nachricht. Ich werde mich so schnell wie möglich bei Ihnen melden.',
     error_message: 'Beim Senden Ihrer Nachricht ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut oder senden Sie eine direkte E-Mail.',
-    contact_description: 'Senden Sie mir eine Nachricht und ich werde mich so schnell wie möglich bei Ihnen melden'
+    contact_description: 'Senden Sie mir eine Nachricht und ich werde mich so schnell wie möglich bei Ihnen melden',
+    demo_notice: 'Dies ist ein Demo-Formular. Um mich zu kontaktieren, nutzen Sie bitte die E-Mail-Optionen unten.',
+    copy_email: 'E-Mail kopieren',
+    email_copied: 'E-Mail-Adresse in die Zwischenablage kopiert!',
+    open_email_client: 'E-Mail-Programm öffnen',
+    or: 'oder'
   },
   education: {
     institution: 'Institution',
@@ -303,7 +308,11 @@ export const de: UIStrings = {
     error_description: 'Bei der Buchung Ihres Anrufs ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut.',
     select_date_time: 'Bitte wählen Sie ein Datum und eine Uhrzeit',
     selection_cleared: 'Auswahl gelöscht',
-    unavailable: 'nicht verfügbar'
+    unavailable: 'nicht verfügbar',
+    demo_notice: 'Dies ist eine Demo-Buchungsoberfläche. Um ein echtes Meeting zu planen, nutzen Sie bitte den Link unten.',
+    schedule_external: 'Über Calendly planen',
+    calendly_cta: 'Terminseite öffnen',
+    external_link_notice: 'Sie werden zu einem externen Terminplanungsdienst weitergeleitet.'
   },
   validation: {
     required: '{field} ist erforderlich',

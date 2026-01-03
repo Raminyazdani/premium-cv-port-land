@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { PaperPlaneRight } from '@phosphor-icons/react'
-import { Spinner } from '@/components/ui/spinner'
+import { EnvelopeSimple, Copy, Check, ArrowSquareOut, Info } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { useTranslation } from '@/context/LanguageContext'
-import { interpolate } from '@/lib/i18n'
+import { useCVData } from '@/context/CVDataContext'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import type { Basics } from '@/types/cv'
 
 interface FormData {
   name: string
@@ -17,154 +18,77 @@ interface FormData {
   message: string
 }
 
-interface FormErrors {
-  name?: string
-  email?: string
-  subject?: string
-  message?: string
+/**
+ * Extract contact email from CV basics data
+ * Handles both array and single object formats
+ */
+function extractContactEmail(basics: Basics[] | Basics | null | undefined): string {
+  if (!basics) return ''
+  const basicsData = Array.isArray(basics) ? basics[0] : basics
+  return basicsData?.email || ''
 }
 
+/**
+ * ContactForm - Demo/Mock Productized Contact Form
+ * 
+ * This component displays a contact form UI for demonstration purposes.
+ * Instead of simulating a backend submission, it provides actionable
+ * alternatives: copying the email address or opening an email client
+ * with pre-filled content.
+ */
 export function ContactForm() {
   const t = useTranslation()
+  const { data } = useCVData()
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     subject: '',
     message: '',
   })
-
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const [copied, setCopied] = useState(false)
   const [statusMessage, setStatusMessage] = useState<string>('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-  }
-
-  const validateField = (name: keyof FormData, value: string): string | undefined => {
-    const fieldNames: Record<keyof FormData, string> = {
-      name: t.forms.name,
-      email: t.forms.email,
-      subject: t.forms.subject,
-      message: t.forms.message
-    }
-    
-    switch (name) {
-      case 'name':
-        if (!value.trim()) return interpolate(t.validation.required, { field: fieldNames[name] })
-        if (value.trim().length < 2) return interpolate(t.validation.min_length_2, { field: fieldNames[name] })
-        break
-      case 'email':
-        if (!value.trim()) return interpolate(t.validation.required, { field: fieldNames[name] })
-        if (!validateEmail(value)) return t.validation.invalid_email
-        break
-      case 'subject':
-        if (!value.trim()) return interpolate(t.validation.required, { field: fieldNames[name] })
-        if (value.trim().length < 3) return interpolate(t.validation.min_length_3, { field: fieldNames[name] })
-        break
-      case 'message':
-        if (!value.trim()) return interpolate(t.validation.required, { field: fieldNames[name] })
-        if (value.trim().length < 10) return interpolate(t.validation.min_length_10, { field: fieldNames[name] })
-        break
-    }
-    return undefined
-  }
+  // Memoize contact email extraction to avoid recalculation on every render
+  const contactEmail = useMemo(() => extractContactEmail(data?.basics), [data?.basics])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
-
-    if (touched[name]) {
-      const error = validateField(name as keyof FormData, value)
-      setErrors((prev) => ({ ...prev, [name]: error }))
-    }
   }
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setTouched((prev) => ({ ...prev, [name]: true }))
-    const error = validateField(name as keyof FormData, value)
-    setErrors((prev) => ({ ...prev, [name]: error }))
-  }
-
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
-    let isValid = true
-
-    Object.keys(formData).forEach((key) => {
-      const error = validateField(key as keyof FormData, formData[key as keyof FormData])
-      if (error) {
-        newErrors[key as keyof FormErrors] = error
-        isValid = false
-      }
-    })
-
-    setErrors(newErrors)
-    setTouched({
-      name: true,
-      email: true,
-      subject: true,
-      message: true,
-    })
-
-    return isValid
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!validateForm()) {
-      setStatusMessage(t.forms.error)
-      toast.error(t.forms.error)
-      return
-    }
-
-    setIsSubmitting(true)
-    setStatusMessage(t.forms.sending)
-
+  const handleCopyEmail = async () => {
+    if (!contactEmail) return
+    
     try {
-      // TODO: Replace with backend API call
-      // POST to /api/contact endpoint with formData
-      // Example:
-      // const response = await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // })
-      // if (!response.ok) throw new Error('Failed to send message')
-      
-      // Simulating backend call for now
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      setStatusMessage(t.forms.sent)
-      toast.success(t.forms.sent, {
-        description: t.forms.success_message,
-      })
-      
-      setFormData({ name: '', email: '', subject: '', message: '' })
-      setTouched({})
-      setErrors({})
-      
-      setTimeout(() => {
-        document.getElementById('name')?.focus()
-      }, 100)
-    } catch (_error) {
-      setStatusMessage(t.forms.error)
-      toast.error(t.forms.error, {
-        description: t.forms.error_message,
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-
-    if (import.meta.env.DEV) {
-      console.log('Form data (would be sent to backend):', formData)
+      await navigator.clipboard.writeText(contactEmail)
+      setCopied(true)
+      setStatusMessage(t.forms.email_copied)
+      toast.success(t.forms.email_copied)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Fallback for browsers that don't support clipboard API
+      toast.error(t.forms.error)
     }
   }
+
+  // Memoize mailto URL builder to avoid recreation on every render
+  const buildMailtoUrl = useCallback((): string => {
+    const subject = encodeURIComponent(formData.subject || '')
+    const body = encodeURIComponent(
+      formData.message 
+        ? `${formData.message}\n\n---\nFrom: ${formData.name || ''}\nEmail: ${formData.email || ''}`
+        : ''
+    )
+    return `mailto:${contactEmail}?subject=${subject}&body=${body}`
+  }, [formData, contactEmail])
+
+  const handleOpenEmailClient = useCallback(() => {
+    const mailtoUrl = buildMailtoUrl()
+    window.open(mailtoUrl, '_blank')
+    setStatusMessage(t.forms.open_email_client)
+  }, [buildMailtoUrl, t.forms.open_email_client])
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -183,114 +107,106 @@ export function ContactForm() {
         >
           {statusMessage}
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
+        
+        {/* Demo Notice Alert */}
+        <Alert className="mb-6 border-primary/20 bg-primary/5">
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            {t.forms.demo_notice}
+          </AlertDescription>
+        </Alert>
+
+        {/* Form fields for composing message (preview only) */}
+        <div className="flex flex-col gap-6 mb-6">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="name">
-              {t.forms.name} <span className="text-destructive" aria-label="required">*</span>
-            </Label>
+            <Label htmlFor="name">{t.forms.name}</Label>
             <Input
               id="name"
               name="name"
               type="text"
               value={formData.name}
               onChange={handleChange}
-              onBlur={handleBlur}
-              aria-required="true"
-              aria-invalid={!!errors.name}
-              aria-describedby={errors.name ? 'name-error' : undefined}
               placeholder={t.forms.name}
             />
-            {errors.name && (
-              <span id="name-error" className="text-sm text-destructive" role="alert">
-                {errors.name}
-              </span>
-            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="email">
-              {t.forms.email} <span className="text-destructive" aria-label="required">*</span>
-            </Label>
+            <Label htmlFor="email">{t.forms.email}</Label>
             <Input
               id="email"
               name="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
-              onBlur={handleBlur}
-              aria-required="true"
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? 'email-error' : undefined}
               placeholder={t.forms.email}
             />
-            {errors.email && (
-              <span id="email-error" className="text-sm text-destructive" role="alert">
-                {errors.email}
-              </span>
-            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="subject">
-              {t.forms.subject} <span className="text-destructive" aria-label="required">*</span>
-            </Label>
+            <Label htmlFor="subject">{t.forms.subject}</Label>
             <Input
               id="subject"
               name="subject"
               type="text"
               value={formData.subject}
               onChange={handleChange}
-              onBlur={handleBlur}
-              aria-required="true"
-              aria-invalid={!!errors.subject}
-              aria-describedby={errors.subject ? 'subject-error' : undefined}
               placeholder={t.forms.subject}
             />
-            {errors.subject && (
-              <span id="subject-error" className="text-sm text-destructive" role="alert">
-                {errors.subject}
-              </span>
-            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="message">
-              {t.forms.message} <span className="text-destructive" aria-label="required">*</span>
-            </Label>
+            <Label htmlFor="message">{t.forms.message}</Label>
             <Textarea
               id="message"
               name="message"
               value={formData.message}
               onChange={handleChange}
-              onBlur={handleBlur}
-              aria-required="true"
-              aria-invalid={!!errors.message}
-              aria-describedby={errors.message ? 'message-error' : undefined}
               placeholder={t.forms.message}
-              rows={6}
+              rows={4}
               className="resize-none"
             />
-            {errors.message && (
-              <span id="message-error" className="text-sm text-destructive" role="alert">
-                {errors.message}
-              </span>
-            )}
           </div>
+        </div>
 
-          <Button type="submit" className="w-full sm:w-auto sm:self-end" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Spinner size={16} className="mr-2" label={t.forms.sending} />
-                {t.forms.sending}
-              </>
-            ) : (
-              <>
-                <PaperPlaneRight className="mr-2" />
-                {t.forms.send}
-              </>
-            )}
-          </Button>
-        </form>
+        {/* Action Buttons - Real functionality */}
+        {contactEmail && (
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                type="button"
+                onClick={handleOpenEmailClient}
+                className="flex-1"
+              >
+                <EnvelopeSimple className="mr-2 h-4 w-4" />
+                {t.forms.open_email_client}
+                <ArrowSquareOut className="ml-2 h-3 w-3" />
+              </Button>
+              
+              <span className="text-center text-sm text-muted-foreground self-center">
+                {t.forms.or}
+              </span>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCopyEmail}
+                className="flex-1"
+              >
+                {copied ? (
+                  <Check className="mr-2 h-4 w-4 text-green-600" />
+                ) : (
+                  <Copy className="mr-2 h-4 w-4" />
+                )}
+                {t.forms.copy_email}
+              </Button>
+            </div>
+            
+            {/* Display email address */}
+            <p className="text-center text-sm text-muted-foreground">
+              <span className="font-medium">{contactEmail}</span>
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   )

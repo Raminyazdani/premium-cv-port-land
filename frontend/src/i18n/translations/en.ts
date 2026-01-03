@@ -85,7 +85,12 @@ export const en: UIStrings = {
     error: 'An error occurred',
     success_message: 'Thank you for reaching out. I\'ll get back to you as soon as possible.',
     error_message: 'There was a problem sending your message. Please try again later or email directly.',
-    contact_description: 'Send me a message and I\'ll get back to you as soon as possible'
+    contact_description: 'Send me a message and I\'ll get back to you as soon as possible',
+    demo_notice: 'This is a demo form. To contact me, please use the email options below.',
+    copy_email: 'Copy Email',
+    email_copied: 'Email address copied to clipboard!',
+    open_email_client: 'Open Email Client',
+    or: 'or'
   },
   education: {
     institution: 'Institution',
@@ -303,7 +308,11 @@ export const en: UIStrings = {
     error_description: 'There was a problem booking your call. Please try again later.',
     select_date_time: 'Please select a date and time',
     selection_cleared: 'Selection cleared',
-    unavailable: 'unavailable'
+    unavailable: 'unavailable',
+    demo_notice: 'This is a demo booking interface. To schedule a real meeting, please use the link below.',
+    schedule_external: 'Schedule via Calendly',
+    calendly_cta: 'Open Scheduling Page',
+    external_link_notice: 'You will be redirected to an external scheduling service.'
   },
   validation: {
     required: '{field} is required',

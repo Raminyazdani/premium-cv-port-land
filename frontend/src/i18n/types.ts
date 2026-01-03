@@ -102,6 +102,11 @@ export interface UIStrings {
     success_message: string
     error_message: string
     contact_description: string
+    demo_notice: string
+    copy_email: string
+    email_copied: string
+    open_email_client: string
+    or: string
   }
 
   // Education
@@ -360,6 +365,10 @@ export interface UIStrings {
     select_date_time: string
     selection_cleared: string
     unavailable: string
+    demo_notice: string
+    schedule_external: string
+    calendly_cta: string
+    external_link_notice: string
   }
 
   // Validation Messages
