@@ -40,6 +40,10 @@ interface ImportMetaEnv {
   /** Sentry error replay sample rate (0.0 to 1.0) */
   readonly VITE_SENTRY_REPLAYS_ERROR_RATE?: string;
 
+  // === Google Analytics 4 ===
+  /** Google Analytics 4 Measurement ID (format: G-XXXXXXXXXX) */
+  readonly VITE_GA4_MEASUREMENT_ID?: string;
+
   // === Debugging & Development ===
   /** Enable debug logging for CV data loading */
   readonly VITE_DEBUG_CV?: string;

@@ -3,9 +3,13 @@
  * 
  * Provides privacy-respecting analytics tracking with user consent.
  * Supports development mode logging and Do Not Track header respect.
+ * 
+ * GA4 integration is optional and controlled via VITE_GA4_MEASUREMENT_ID.
+ * When not configured, events are only logged in debug mode.
  */
 
 import { logger } from '@/lib/logger'
+import { getGA4MeasurementId } from '@/lib/env'
 
 type EventCategory =
   | 'page_view'
@@ -34,12 +38,12 @@ interface AnalyticsConfig {
   ga4MeasurementId?: string
 }
 
-// Default configuration
+// Default configuration - uses env var for GA4 measurement ID
 const DEFAULT_CONFIG: AnalyticsConfig = {
   enabled: true,
   debug: import.meta.env.DEV,
   respectDoNotTrack: true,
-  ga4MeasurementId: undefined
+  ga4MeasurementId: getGA4MeasurementId()
 }
 
 // State
@@ -64,6 +68,14 @@ export function isDoNotTrackEnabled(): boolean {
     (navigator as Navigator & { msDoNotTrack?: string }).msDoNotTrack
   
   return dnt === '1' || dnt === 'yes'
+}
+
+/**
+ * Check if GA4 is configured
+ * Returns true only if a valid measurement ID is set via env var
+ */
+export function isGA4Configured(): boolean {
+  return !!config.ga4MeasurementId
 }
 
 /**
