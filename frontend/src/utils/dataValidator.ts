@@ -343,7 +343,7 @@ export class DataValidator {
       })
 
       if (seen.has(key)) {
-        this.warnings.push(`Duplicate project entry found at index ${index}: "${String(item['title'] ?? '')}"`)
+        this.warnings.push(`Duplicate project entry found at index ${index}: "${getStringProp(item, 'title') ?? ''}"`)
       }
       seen.add(key)
 

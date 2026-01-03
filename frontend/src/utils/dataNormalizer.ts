@@ -88,7 +88,8 @@ export function normalizeCVData(rawData: unknown, sourceLang: Language): CVData 
   const parseResult = CVDataSchema.safeParse(rawData)
   
   if (!parseResult.success) {
-    // Log validation errors but don't fail - CV data may have extra fields
+    // Log validation errors but don't fail - schema may be stricter than actual data
+    // (e.g., nested objects with unexpected shapes)
     logger.warn(`[normalizeCVData] Schema validation issues:`, parseResult.error.errors)
   }
   
