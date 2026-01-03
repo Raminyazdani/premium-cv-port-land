@@ -17,6 +17,23 @@ This repository uses **GitHub Actions** for continuous integration (CI) and cont
 
 ## Workflow Files
 
+### Active Workflows
+
+| Workflow | File | Purpose | Status |
+|----------|------|---------|--------|
+| **CI** | `ci.yml` | Lint, test, build, validate | ✅ Active |
+| **CodeQL** | `codeql.yml` | Security scanning (SAST) | ✅ Active |
+| **Dependency Review** | `dependency-review.yml` | Vulnerability scanning | ✅ Active |
+
+### Optional Workflows (Disabled by Default)
+
+| Workflow | File | Purpose | Why Disabled |
+|----------|------|---------|--------------|
+| **GitHub Pages** | `deploy-github-pages.yml` | Production deployment | Vercel/Netlify recommended instead |
+| **PR Preview** | `pr-preview.yml` | Artifact-based previews | Vercel/Netlify provide live preview URLs |
+
+> 💡 **Note**: These workflows are disabled with `if: false`. Each file contains detailed header comments on how to enable them.
+
 ### Main CI Workflow
 
 **File**: `.github/workflows/ci.yml`
@@ -539,25 +556,36 @@ assertions: {
 
 **Implementation**: See [Locked File Validation](#locked-file-integrity) section
 
-### Deployment Workflow
+### Deployment Workflow (Optional)
 
-**Proposed**: Add automatic deployment to GitHub Pages or other platform
+**File**: `.github/workflows/deploy-github-pages.yml`
 
-**Benefits**:
-- Automatic production deployment
-- No manual steps
-- Faster time to production
+**Status**: Disabled by default (`if: false`)
+
+This workflow provides GitHub Pages deployment as a fallback option. It is disabled because this project recommends using Vercel, Netlify, or Cloudflare Pages for deployment—platforms that provide:
+- Zero-config deployment
+- Automatic PR preview URLs
+- Better CDN performance
+
+**To Enable**:
+1. Remove `if: false` from the workflow file
+2. Go to Settings → Pages → Set Source to "GitHub Actions"
+3. Push to main branch
 
 **Implementation**: See [Production Deployment Guide](./deploy_production.md)
 
-### PR Preview Workflow
+### PR Preview Workflow (Optional)
 
-**Proposed**: Add PR preview deployment workflow
+**File**: `.github/workflows/pr-preview.yml`
 
-**Benefits**:
-- Unique preview URL per PR
-- Test before merging
-- Share with stakeholders
+**Status**: Disabled by default (`if: false`)
+
+This workflow provides artifact-based PR previews. It is disabled because Vercel/Netlify automatically provide live preview URLs—no manual download required.
+
+**To Enable**:
+1. Remove `if: false` from the workflow file
+2. PRs will trigger builds and upload artifacts
+3. Download artifacts manually to test locally
 
 **Implementation**: See [PR Preview Deployment Guide](./deploy_preview_pr.md)
 
