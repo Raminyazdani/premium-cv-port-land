@@ -1,7 +1,8 @@
-import { ComponentProps, useState, useEffect } from "react"
+import { ComponentProps } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { useReducedMotion } from "@/shared/hooks/use-reduced-motion"
 
 /**
  * Card Design System
@@ -48,19 +49,7 @@ interface CardProps extends ComponentProps<"div">, VariantProps<typeof cardVaria
 }
 
 function Card({ className, variant, size, state, loading, ...props }: CardProps) {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-  
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-    
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const prefersReducedMotion = useReducedMotion()
 
   return (
     <div

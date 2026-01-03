@@ -3,9 +3,10 @@
  * Provides success, error, and feedback animations for user interactions
  */
 
-import { useState, useEffect, createContext, useContext, useCallback } from 'react'
+import { useState, useCallback, createContext, useContext } from 'react'
 import { cn } from '@/lib/utils'
 import { Check, X, Copy, Heart, Star, Spinner } from '@phosphor-icons/react'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 type FeedbackType = 'success' | 'error' | 'copied' | 'liked' | 'starred' | 'loading'
 
@@ -39,19 +40,7 @@ interface MicroFeedbackProviderProps {
 
 export function MicroFeedbackProvider({ children }: MicroFeedbackProviderProps) {
   const [feedbacks, setFeedbacks] = useState<FeedbackState[]>([])
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-    
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const prefersReducedMotion = useReducedMotion()
 
   const showFeedback = useCallback((type: FeedbackType, x?: number, y?: number) => {
     const id = `feedback-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`

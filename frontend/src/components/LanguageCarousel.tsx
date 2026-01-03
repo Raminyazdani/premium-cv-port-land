@@ -8,6 +8,7 @@ import { Globe } from '@phosphor-icons/react'
 import { useLanguage } from '@/context/LanguageContext'
 import type { Language } from '@/utils/dataNormalizer'
 import { cn } from '@/lib/utils'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 interface LanguageOption {
   code: Language
@@ -27,23 +28,10 @@ export function LanguageCarousel() {
   const [selectedIndex, setSelectedIndex] = useState(
     LANGUAGES.findIndex(lang => lang.code === language)
   )
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const carouselRef = useRef<HTMLDivElement>(null)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
-
-  // Check for reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   // Sync selected index with language context
   useEffect(() => {

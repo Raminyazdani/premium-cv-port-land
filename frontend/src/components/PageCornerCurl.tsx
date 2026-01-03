@@ -6,6 +6,7 @@
 
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 interface PageCornerCurlProps {
   onClick?: () => void
@@ -13,20 +14,10 @@ interface PageCornerCurlProps {
 
 export function PageCornerCurl({ onClick }: PageCornerCurlProps) {
   const [isHovered, setIsHovered] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    // Check for reduced motion preference
-    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(motionQuery.matches)
-    
-    const handleMotionChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-    
-    motionQuery.addEventListener('change', handleMotionChange)
-    
     // Check for mobile viewport
     const mobileQuery = window.matchMedia('(max-width: 768px)')
     setIsMobile(mobileQuery.matches)
@@ -38,7 +29,6 @@ export function PageCornerCurl({ onClick }: PageCornerCurlProps) {
     mobileQuery.addEventListener('change', handleMobileChange)
     
     return () => {
-      motionQuery.removeEventListener('change', handleMotionChange)
       mobileQuery.removeEventListener('change', handleMobileChange)
     }
   }, [])

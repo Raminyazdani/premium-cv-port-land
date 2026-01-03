@@ -13,6 +13,7 @@ import { PWAInstallButton } from '@/components/PWAInstallButton'
 import { LAYOUT_CONSTANTS } from '@/constants/app'
 import { useTranslation } from '@/context/LanguageContext'
 import { cn } from '@/lib/utils'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 const DownloadModal = lazy(() => import('@/components/DownloadModal').then(m => ({ default: m.DownloadModal })))
 
@@ -20,7 +21,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [downloadModalOpen, setDownloadModalOpen] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const { data } = useCVData()
   const { isUnlocked } = useKonami()
   const basics = extractBasics(data)
@@ -36,19 +37,6 @@ export function Header() {
     { label: t.nav.skills, href: '#skills' },
     { label: t.nav.contact, href: '#contact' },
   ]
-
-  // Check for reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-    
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   useEffect(() => {
     const handleScroll = () => {

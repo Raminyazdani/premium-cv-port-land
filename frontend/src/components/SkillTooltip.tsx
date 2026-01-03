@@ -6,6 +6,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 interface SkillTooltipProps {
   shortName: string
@@ -40,22 +41,10 @@ export function SkillTooltip({
 }: SkillTooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [position, setPosition] = useState<'top' | 'bottom'>('top')
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const triggerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-    
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   // Calculate tooltip position based on available space
   useEffect(() => {

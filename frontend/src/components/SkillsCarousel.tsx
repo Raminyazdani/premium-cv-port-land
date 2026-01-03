@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import type { Skills } from '@/types/cv'
 import { useTranslation, useSkillCategoryLabel } from '@/context/LanguageContext'
 import { interpolate } from '@/lib/i18n'
+import { useReducedMotion } from '@/shared/hooks/use-reduced-motion'
 
 interface SkillsCarouselProps {
   skills: Skills
@@ -22,22 +23,9 @@ export function SkillsCarousel({ skills, className }: SkillsCarouselProps) {
   const getSkillLabel = useSkillCategoryLabel()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cardsPerView, setCardsPerView] = useState(1)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
-
-  // Check for reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   // Update cards per view based on screen size
   useEffect(() => {
