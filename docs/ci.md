@@ -607,6 +607,21 @@ Displays:
 
 ## CI Security
 
+> **For comprehensive security workflow documentation, see [SECURITY_WORKFLOWS.md](./SECURITY_WORKFLOWS.md)**
+
+### Security Workflows
+
+| Workflow | File | Purpose |
+|----------|------|---------|
+| **CodeQL** | `.github/workflows/codeql.yml` | Static security analysis (SAST) |
+| **Dependency Review** | `.github/workflows/dependency-review.yml` | Vulnerability scanning for dependency changes |
+
+These workflows run automatically on PRs and pushes, providing:
+- ✅ Automated vulnerability detection
+- ✅ Security alerts in GitHub Security tab
+- ✅ PR comments for dependency issues
+- ✅ Weekly scheduled scans
+
 ### Secrets Management
 
 **Current**: No secrets required for CI
@@ -628,6 +643,11 @@ Displays:
 - Automatic security updates
 - PR created for vulnerable dependencies
 - Configure: `.github/dependabot.yml`
+
+**Dependency Review** (enabled):
+- Scans PRs for vulnerable dependencies
+- Blocks high/critical severity issues
+- See [SECURITY_WORKFLOWS.md](./SECURITY_WORKFLOWS.md) for details
 
 **npm audit** in CI:
 - Runs during `npm ci`

@@ -119,7 +119,8 @@
 
 ## 🔐 SECURITY & LEGAL
 
-- **[SECURITY.md](./SECURITY.md)** - Security considerations
+- **[SECURITY.md](./SECURITY.md)** - Security vulnerability reporting policy
+- **[SECURITY_WORKFLOWS.md](./SECURITY_WORKFLOWS.md)** ⭐ **Security automation (CodeQL, Dependency Review)**
 - **[LICENSE](./LICENSE)** - Project license
 
 ---
