@@ -62,7 +62,7 @@ queries: security-extended  # Includes additional security queries
 - ✅ Review all high/critical findings promptly
 - ✅ Dismiss false positives with a comment explaining why
 - ✅ Use `.github/codeql/codeql-config.yml` to customize queries if needed
-- ✅ Schedule weekly scans catch issues in unchanged code
+- ✅ Scheduled weekly scans catch issues in unchanged code
 
 ---
 
