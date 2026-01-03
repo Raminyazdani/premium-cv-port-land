@@ -39,13 +39,14 @@ describe('CV Loader - File Selection', () => {
       const data = loadCVDataForLanguage('de') as Record<string, unknown>
       
       expect(data).toBeDefined()
-      // German data has German keys before normalization
-      expect(data.grunddaten || data.basics).toBeDefined()
+      // German CV file uses canonical English keys with German content
+      expect(data.basics).toBeDefined()
+      expect(Array.isArray(data.basics)).toBe(true)
       
-      // Check for German-specific section keys
-      const hasGermanKeys = 'grunddaten' in data || 'ausbildung' in data || 'erfahrungen' in data
-      const hasNormalizedKeys = 'basics' in data
-      expect(hasGermanKeys || hasNormalizedKeys).toBe(true)
+      // Verify it's the German file by checking for German-specific content
+      const basics = data.basics as Array<Record<string, unknown>>
+      expect(basics.length).toBeGreaterThan(0)
+      expect(basics[0]).toHaveProperty('fname')
     })
 
     it('selects cv_fa.json (Persian data) when lang is "fa"', () => {
