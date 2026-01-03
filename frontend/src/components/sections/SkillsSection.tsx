@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { MagnifyingGlass, X, CaretDown, SquaresFour, ListBullets } from '@phosphor-icons/react'
+import { MagnifyingGlass, X, CaretDown, SquaresFour, ListBullets, Lightning } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
 import type { Skills } from '@/types/cv'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 import { SkillsCarousel } from '@/components/SkillsCarousel'
 import { useTranslation, useSkillCategoryLabel } from '@/context/LanguageContext'
 import { interpolate } from '@/lib/i18n'
+import { SectionWrapper } from '@/components/composites/SectionWrapper'
 
 type ViewMode = 'list' | 'carousel'
 
@@ -115,8 +116,21 @@ export function SkillsSection() {
     setExpandedCategories(new Set())
   }
 
+  // Use SectionWrapper for standardized empty state handling
   if (!skills || Object.keys(skills).length === 0) {
-    return null
+    return (
+      <SectionWrapper
+        id="skills"
+        title={t.sections.skills}
+        icon={<Lightning size={32} weight="duotone" />}
+        isEmpty={true}
+        emptyMessage={t.empty.no_skills}
+        className="bg-muted/30"
+      >
+        {/* Children required by SectionWrapper but not rendered when isEmpty */}
+        <div />
+      </SectionWrapper>
+    )
   }
 
   const totalSkills = skillsArray.reduce((sum, cat) => sum + cat.totalCount, 0)

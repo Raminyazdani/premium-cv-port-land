@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import {
   Briefcase,
   Calendar,
@@ -14,6 +13,7 @@ import {
 import { useCV } from '@/context/CVDataContext'
 import { useTranslation } from '@/context/LanguageContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
+import { SectionWrapper } from '@/components/composites/SectionWrapper'
 import type { Experience } from '@/types/cv'
 
 function parseDuration(durationStr?: string | null, presentLabel: string = 'Present'): { startDate: Date | null; endDate: Date | null; displayDuration: string } {
@@ -236,89 +236,44 @@ export function ExperiencesSection() {
     return result
   }, [sortedExperiences, groupBy, academicLabel, industryLabel])
 
-  if (experiences.length === 0) {
-    return (
-      <section className="w-full min-h-screen flex items-center justify-center bg-muted/20 px-4 py-16">
-        <Card className="max-w-md w-full">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Briefcase className="h-5 w-5" />
-              {t.empty.no_experience}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              {t.empty.no_experiences_added}
+  return (
+    <SectionWrapper
+      id="experience"
+      title={t.sections.experiences}
+      icon={<Briefcase size={32} weight="duotone" />}
+      isEmpty={experiences.length === 0}
+      emptyMessage={t.empty.no_experiences_added}
+      subtitle={t.sectionSubtitles.experiences}
+      className="bg-gradient-to-b from-muted/30 to-background"
+    >
+      {/* View toggle buttons */}
+      <div className="flex items-center justify-end gap-2 mb-6 -mt-4">
+        <Button
+          variant={groupBy === 'none' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setGroupBy('none')}
+        >
+          {t.actions.timeline}
+        </Button>
+        <Button
+          variant={groupBy === 'category' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setGroupBy('category')}
+        >
+          {t.actions.by_category}
+        </Button>
+      </div>
+
+      {/* Filter empty state - shown when there's data but filter returns nothing */}
+      {filteredExperiences.length === 0 ? (
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm text-muted-foreground text-center">
+              {t.empty.no_experiences_filter}
             </p>
           </CardContent>
         </Card>
-      </section>
-    )
-  }
-
-  if (filteredExperiences.length === 0) {
-    return (
-      <section id="experience" className="w-full min-h-screen bg-gradient-to-b from-muted/30 to-background px-4 py-16 md:py-24">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-3">
-                <Briefcase className="h-8 w-8 text-primary" />
-                {t.sections.experiences}
-              </h2>
-              <p className="text-muted-foreground">
-                {t.sectionSubtitles.experiences}
-              </p>
-            </div>
-            <Separator />
-          </div>
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-sm text-muted-foreground text-center">
-                {t.empty.no_experiences_filter}
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-    )
-  }
-
-  return (
-    <section id="experience" className="w-full min-h-screen bg-gradient-to-b from-muted/30 to-background px-4 py-16 md:py-24">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="space-y-2">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-3">
-                <Briefcase className="h-8 w-8 text-primary" />
-                {t.sections.experiences}
-              </h2>
-              <p className="text-muted-foreground">
-                {t.sectionSubtitles.experiences}
-              </p>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <Button
-                variant={groupBy === 'none' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setGroupBy('none')}
-              >
-                {t.actions.timeline}
-              </Button>
-              <Button
-                variant={groupBy === 'category' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setGroupBy('category')}
-              >
-                {t.actions.by_category}
-              </Button>
-            </div>
-          </div>
-          <Separator />
-        </div>
-
+      ) : (
         <div className="space-y-8">
           {Object.entries(grouped).map(([groupName, exps]) => (
             <div key={groupName} className="space-y-4">
@@ -347,7 +302,7 @@ export function ExperiencesSection() {
             </div>
           ))}
         </div>
-      </div>
-    </section>
+      )}
+    </SectionWrapper>
   )
 }

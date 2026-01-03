@@ -23,6 +23,7 @@ import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { detectMediaType } from '@/utils/mediaDetector'
 import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
+import { SectionWrapper } from '@/components/composites/SectionWrapper'
 import type { Language, LanguageCertification } from '@/types/cv'
 import { useTranslation } from '@/context/LanguageContext'
 
@@ -354,48 +355,26 @@ export function LanguagesSection() {
     rootMargin: '0px 0px -50px 0px',
   })
   
-  if (languages.length === 0) {
-    return (
-      <section className="py-16 bg-muted/30" aria-labelledby="languages-heading">
-        <div className="container max-w-6xl px-4">
-          <div className="text-center">
-            <Translate size={48} weight="duotone" className="mx-auto mb-4 text-muted-foreground" />
-            <h2 id="languages-heading" className="text-3xl font-bold mb-2">
-              {t.sections.languages}
-            </h2>
-            <p className="text-muted-foreground">{t.empty.no_languages}</p>
-          </div>
-        </div>
-      </section>
-    )
-  }
-  
   return (
-    <section id="languages" className="py-16 bg-muted/30" aria-labelledby="languages-heading">
-      <div className="container max-w-6xl px-4">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-            <Translate size={32} weight="duotone" className="text-primary" />
+    <SectionWrapper
+      id="languages"
+      title={t.sections.languages}
+      icon={<Translate size={32} weight="duotone" />}
+      isEmpty={languages.length === 0}
+      emptyMessage={t.empty.no_languages}
+      subtitle={t.languages_section?.description}
+      className="bg-muted/30"
+    >
+      <div 
+        ref={containerRef as React.RefObject<HTMLDivElement>}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        {languages.map((lang, idx) => (
+          <div key={idx} style={getItemStyle(idx)}>
+            <LanguageCard language={lang} />
           </div>
-          <h2 id="languages-heading" className="text-4xl font-bold mb-3">
-            {t.sections.languages}
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t.languages_section?.description}
-          </p>
-        </div>
-        
-        <div 
-          ref={containerRef as React.RefObject<HTMLDivElement>}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {languages.map((lang, idx) => (
-            <div key={idx} style={getItemStyle(idx)}>
-              <LanguageCard language={lang} />
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
-    </section>
+    </SectionWrapper>
   )
 }

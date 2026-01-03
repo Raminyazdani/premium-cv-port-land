@@ -23,6 +23,7 @@ export const STORAGE_KEYS = {
   FOCUS_FILTER: 'cv-focus-filter',
   LANGUAGE: 'cv-language',
   THEME: 'cv-theme',
+  SHOW_EMPTY_SECTIONS: 'cv-show-empty-sections',
 } as const
 
 export const DEFAULT_VALUES = {

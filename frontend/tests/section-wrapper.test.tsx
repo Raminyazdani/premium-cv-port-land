@@ -5,22 +5,38 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { SectionWrapper } from '@/components/composites/SectionWrapper'
 import { LanguageProvider } from '@/context/LanguageContext'
+import { EmptySectionsProvider } from '@/context/EmptySectionsContext'
 
 // Simple test icon component
 function TestIcon() {
   return <svg data-testid="test-icon" />
 }
 
-// Helper function to render with providers
+// Helper function to render with providers (default: hide empty sections)
 function renderWithProviders(ui: React.ReactElement) {
   return render(
-    <LanguageProvider>{ui}</LanguageProvider>
+    <LanguageProvider>
+      <EmptySectionsProvider>
+        {ui}
+      </EmptySectionsProvider>
+    </LanguageProvider>
+  )
+}
+
+// Helper function to render with providers showing empty sections
+function renderWithEmptyVisible(ui: React.ReactElement) {
+  return render(
+    <LanguageProvider>
+      <EmptySectionsProvider initialShowEmpty={true}>
+        {ui}
+      </EmptySectionsProvider>
+    </LanguageProvider>
   )
 }
 
 describe('SectionWrapper', () => {
-  describe('Empty State', () => {
-    it('shows empty state when isEmpty is true', () => {
+  describe('Empty State with emptyBehavior="show"', () => {
+    it('shows empty state when isEmpty is true and emptyBehavior is "show"', () => {
       renderWithProviders(
         <SectionWrapper
           id="test-section"
@@ -28,6 +44,7 @@ describe('SectionWrapper', () => {
           icon={<TestIcon />}
           isEmpty={true}
           emptyMessage="No items found"
+          emptyBehavior="show"
         >
           <div>Content</div>
         </SectionWrapper>
@@ -50,6 +67,7 @@ describe('SectionWrapper', () => {
           title="Test Title"
           icon={<TestIcon />}
           isEmpty={true}
+          emptyBehavior="show"
         >
           <div>Content</div>
         </SectionWrapper>
@@ -57,6 +75,63 @@ describe('SectionWrapper', () => {
 
       expect(screen.getByRole('heading', { name: 'Test Title' })).toBeInTheDocument()
       expect(screen.queryByText('Content')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('Empty State with emptyBehavior="hide"', () => {
+    it('hides section when isEmpty is true and emptyBehavior is "hide"', () => {
+      const { container } = renderWithEmptyVisible(
+        <SectionWrapper
+          id="test-section"
+          title="Test Title"
+          icon={<TestIcon />}
+          isEmpty={true}
+          emptyMessage="No items found"
+          emptyBehavior="hide"
+        >
+          <div>Content</div>
+        </SectionWrapper>
+      )
+
+      // Check section is NOT displayed
+      expect(container.querySelector('section')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('Empty State with emptyBehavior="auto" (default)', () => {
+    it('hides section by default when isEmpty is true and showEmptySections is false', () => {
+      const { container } = renderWithProviders(
+        <SectionWrapper
+          id="test-section"
+          title="Test Title"
+          icon={<TestIcon />}
+          isEmpty={true}
+          emptyMessage="No items found"
+        >
+          <div>Content</div>
+        </SectionWrapper>
+      )
+
+      // Check section is NOT displayed (default behavior is hide)
+      expect(container.querySelector('section')).not.toBeInTheDocument()
+    })
+
+    it('shows empty state when isEmpty is true and showEmptySections context is true', () => {
+      renderWithEmptyVisible(
+        <SectionWrapper
+          id="test-section"
+          title="Test Title"
+          icon={<TestIcon />}
+          isEmpty={true}
+          emptyMessage="No items found"
+        >
+          <div>Content</div>
+        </SectionWrapper>
+      )
+
+      // Check empty state IS displayed
+      expect(screen.getByRole('heading', { name: 'Test Title' })).toBeInTheDocument()
+      expect(screen.getByText('No items found')).toBeInTheDocument()
     })
   })
 
@@ -161,14 +236,16 @@ describe('SectionWrapper', () => {
 
       const { container } = render(
         <LanguageProvider>
-          <SectionWrapper
-            id="test-section"
-            title="Test Title"
-            icon={<TestIcon />}
-            isEmpty={false}
-          >
-            <div>Content</div>
-          </SectionWrapper>
+          <EmptySectionsProvider>
+            <SectionWrapper
+              id="test-section"
+              title="Test Title"
+              icon={<TestIcon />}
+              isEmpty={false}
+            >
+              <div>Content</div>
+            </SectionWrapper>
+          </EmptySectionsProvider>
         </LanguageProvider>
       )
 
@@ -186,14 +263,16 @@ describe('SectionWrapper', () => {
 
       const { container } = render(
         <LanguageProvider>
-          <SectionWrapper
-            id="test-section"
-            title="Test Title"
-            icon={<TestIcon />}
-            isEmpty={false}
-          >
-            <div>Content</div>
-          </SectionWrapper>
+          <EmptySectionsProvider>
+            <SectionWrapper
+              id="test-section"
+              title="Test Title"
+              icon={<TestIcon />}
+              isEmpty={false}
+            >
+              <div>Content</div>
+            </SectionWrapper>
+          </EmptySectionsProvider>
         </LanguageProvider>
       )
 

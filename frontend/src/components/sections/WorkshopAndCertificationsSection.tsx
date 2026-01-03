@@ -21,9 +21,11 @@ import {
 } from '@phosphor-icons/react'
 import { useCV } from '@/context/CVDataContext'
 import { useFilter, shouldShowEntry } from '@/context/FilterContext'
+import { useTranslation } from '@/context/LanguageContext'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
+import { SectionWrapper } from '@/components/composites/SectionWrapper'
 import type { WorkshopIssuer, Certification } from '@/types/cv'
 import { 
   formatDateSafe, 
@@ -191,6 +193,7 @@ function IssuerAccordion({ issuer, searchQuery, selectedFilters, showCertifiedOn
 export function WorkshopAndCertificationsSection() {
   const cvData = useCV()
   const workshopsData = cvData.workshop_and_certifications ?? []
+  const t = useTranslation()
   
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
@@ -262,19 +265,20 @@ export function WorkshopAndCertificationsSection() {
   
   const hasActiveFilters = searchQuery.trim() !== '' || selectedFilters.size > 0 || showCertifiedOnly
   
+  // Use SectionWrapper for standardized empty state handling
   if (workshopsData.length === 0) {
     return (
-      <section className="py-16 bg-muted/30" aria-labelledby="workshops-heading">
-        <div className="container max-w-6xl px-4">
-          <div className="text-center">
-            <CertificateIcon size={48} weight="duotone" className="mx-auto mb-4 text-muted-foreground" />
-            <h2 id="workshops-heading" className="text-3xl font-bold mb-2">
-              Workshops & Certifications
-            </h2>
-            <p className="text-muted-foreground">No certifications available</p>
-          </div>
-        </div>
-      </section>
+      <SectionWrapper
+        id="certifications"
+        title={t.sections.certifications}
+        icon={<CertificateIcon size={32} weight="duotone" />}
+        isEmpty={true}
+        emptyMessage={t.empty.no_certifications}
+        className="bg-muted/30"
+      >
+        {/* Children required by SectionWrapper but not rendered when isEmpty */}
+        <div />
+      </SectionWrapper>
     )
   }
   

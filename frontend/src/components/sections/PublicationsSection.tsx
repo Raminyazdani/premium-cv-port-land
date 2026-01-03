@@ -20,6 +20,7 @@ import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
 import { detectMediaType } from '@/utils/mediaDetector'
+import { SectionWrapper } from '@/components/composites/SectionWrapper'
 import type { Publication } from '@/types/cv'
 import type { UIStrings } from '@/i18n'
 
@@ -275,15 +276,19 @@ export function PublicationsSection() {
     setSearchQuery('')
   }
 
+  // Use SectionWrapper for standardized empty state handling
   if (publications.length === 0) {
     return (
-      <section id="publications" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="text-center">
-          <BookOpen className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <h2 className="text-2xl font-bold mb-2">Publications</h2>
-          <p className="text-muted-foreground">No publications available.</p>
-        </div>
-      </section>
+      <SectionWrapper
+        id="publications"
+        title={t.sections.publications}
+        icon={<BookOpen size={32} weight="duotone" />}
+        isEmpty={true}
+        emptyMessage={t.empty.no_publications}
+      >
+        {/* Children required by SectionWrapper but not rendered when isEmpty */}
+        <div />
+      </SectionWrapper>
     )
   }
 

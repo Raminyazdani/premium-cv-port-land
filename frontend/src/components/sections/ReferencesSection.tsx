@@ -18,6 +18,7 @@ import { useFilter, shouldShowEntry } from '@/context/FilterContext'
 import { MediaThumbnail } from '@/components/MediaThumbnail'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
+import { SectionWrapper } from '@/components/composites/SectionWrapper'
 import type { Reference } from '@/types/cv'
 import type { UIStrings } from '@/i18n'
 import { toast } from 'sonner'
@@ -178,25 +179,20 @@ export function ReferencesSection() {
     shouldShowEntry(reference.type_key, selectedFocus)
   )
 
-  if (filteredReferences.length === 0) {
-    return null
-  }
-
   return (
-    <section id="references" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-3 flex items-center gap-3">
-          <UserCircle weight="duotone" className="text-primary" size={36} />
-          {t.sections.references}
-        </h2>
-        <p className="text-muted-foreground max-w-2xl">
-          {t.sectionSubtitles.references}
+    <SectionWrapper
+      id="references"
+      title={t.sections.references}
+      icon={<UserCircle size={32} weight="duotone" />}
+      isEmpty={filteredReferences.length === 0}
+      emptyMessage={t.empty.no_references}
+      subtitle={t.sectionSubtitles.references}
+    >
+      {/* Privacy notice */}
+      <div className="mb-8 p-3 bg-muted/50 rounded-lg border border-border -mt-4">
+        <p className="text-sm text-muted-foreground italic">
+          {t.references.privacy_notice}
         </p>
-        <div className="mt-4 p-3 bg-muted/50 rounded-lg border border-border">
-          <p className="text-sm text-muted-foreground italic">
-            {t.references.privacy_notice}
-          </p>
-        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -219,6 +215,6 @@ export function ReferencesSection() {
         currentIndex={mediaModal.currentIndex}
         onNavigate={mediaModal.navigateToIndex}
       />
-    </section>
+    </SectionWrapper>
   )
 }

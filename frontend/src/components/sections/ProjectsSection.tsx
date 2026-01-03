@@ -15,6 +15,7 @@ import { useStaggeredScrollAnimation } from '@/hooks/use-scroll-animation'
 import { MediaModal } from '@/components/MediaModal'
 import { useMediaModal } from '@/hooks/use-media-modal'
 import { useTranslation } from '@/context/LanguageContext'
+import { SectionWrapper } from '@/components/composites/SectionWrapper'
 import type { Project } from '@/types/cv'
 import { safeString, safeUrl, safeArray, isImageUrl } from '@/utils/dataValidation'
 import { logger } from '@/lib/logger'
@@ -254,23 +255,21 @@ export function ProjectsSection() {
 
   const hasActiveFilters = searchQuery !== '' || selectedDomains.size > 0 || hasLinkFilter !== null
 
+  // Use SectionWrapper for standardized empty state handling
   if (projects.length === 0) {
     return (
-      <section className="w-full min-h-screen flex items-center justify-center bg-muted/20 px-4 py-16">
-        <Card className="max-w-md w-full">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Folder className="h-5 w-5" />
-              {t.sections.projects}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              {t.empty.no_projects}
-            </p>
-          </CardContent>
-        </Card>
-      </section>
+      <SectionWrapper
+        id="projects"
+        title={t.sections.projects}
+        icon={<Folder size={32} weight="duotone" />}
+        isEmpty={true}
+        emptyMessage={t.empty.no_projects}
+        subtitle={t.sectionSubtitles.projects}
+        className="bg-gradient-to-b from-background via-muted/20 to-background"
+      >
+        {/* Children required by SectionWrapper but not rendered when isEmpty */}
+        <div />
+      </SectionWrapper>
     )
   }
 
