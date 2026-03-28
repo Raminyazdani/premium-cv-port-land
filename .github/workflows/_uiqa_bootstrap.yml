@@ -81,10 +81,10 @@ jobs:
       # Phase 1: Setup Environment
       # ========================================
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ inputs.node-version }}
           cache: 'npm'
@@ -256,7 +256,7 @@ jobs:
       # ========================================
       - name: Upload server logs (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: server-logs
           path: |
@@ -266,7 +266,7 @@ jobs:
           
       - name: Upload build artifacts (on failure)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-output-debug
           path: ${{ inputs.working-directory }}/dist/
