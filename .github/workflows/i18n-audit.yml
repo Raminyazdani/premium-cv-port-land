@@ -23,10 +23,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'npm'
@@ -40,7 +40,7 @@ jobs:
         continue-on-error: true # Don't fail the job, just report findings
         
       - name: Upload i18n audit report (Markdown)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: i18n-audit-report
@@ -48,7 +48,7 @@ jobs:
           retention-days: 30
           
       - name: Upload i18n audit report (JSON)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: i18n-audit-json
@@ -94,10 +94,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'npm'
@@ -117,7 +117,7 @@ jobs:
         continue-on-error: true
         
       - name: Upload language switch screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: i18n-screenshots
@@ -125,7 +125,7 @@ jobs:
           retention-days: 14
           
       - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: i18n-playwright-report
